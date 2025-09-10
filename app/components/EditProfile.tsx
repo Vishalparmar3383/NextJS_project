@@ -16,7 +16,7 @@ type User = {
     created_at?: string;
 };
 
-export default function EditProfile({ userRole }: {userRole?:string}) {
+export default function EditProfile({ userRole }: { userRole?: string }) {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [updating, setUpdating] = useState(false);
@@ -37,32 +37,34 @@ export default function EditProfile({ userRole }: {userRole?:string}) {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const userRes = await fetch(`/api/${userRole}/account`);
-                const user = await userRes.json();
-                if (!userRes.ok) {
-                    console.error('Error fetching user:', user.error);
+                const res = await fetch(`/api/${userRole}/account`);
+                const json = await res.json();
+                if (!res.ok) {
+                    console.error('Error fetching user:', json.error);
                     return;
                 }
-                setUser(user);
-                // Populate form with user data
+                // Unpack nested user for librarian endpoint, or top‐level for patron
+                const payload = json.user ?? json;
+                setUser(payload);
                 setForm({
-                    name: user.name || '',
-                    email: user.email || '',
-                    gender: user.gender || 'male',
-                    phone_number: user.phone_number || '',
-                    birth_date: user.birth_date ? new Date(user.birth_date).toISOString().split('T')[0] : '',
-                    address: user.address || '',
+                    name: payload.name || '',
+                    email: payload.email || '',
+                    gender: payload.gender || 'male',
+                    phone_number: payload.phone_number || '',
+                    birth_date: payload.birth_date
+                        ? new Date(payload.birth_date).toISOString().slice(0, 10)
+                        : '',
+                    address: payload.address || '',
                 });
-
             } catch (err) {
                 console.error('Failed to fetch user', err);
             } finally {
                 setLoading(false);
             }
         };
-
         fetchUser();
-    }, []);
+    }, [userRole]);
+
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -87,9 +89,9 @@ export default function EditProfile({ userRole }: {userRole?:string}) {
             if (res.ok) {
                 setMessage('Profile updated successfully!');
                 setStatus('success');
-                
+
                 setTimeout(() => {
-                    router.push('/'+userRole+'/account');
+                    router.push('/' + userRole + '/account');
                 }, 2000);
             } else {
                 setMessage(data.error || 'Something went wrong.');
@@ -136,7 +138,7 @@ export default function EditProfile({ userRole }: {userRole?:string}) {
             <div className="max-w-4xl mx-auto">
                 {/* Header */}
                 <div className="mb-6">
-                    <Link 
+                    <Link
                         href={`/${userRole}/account`}
                         className="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-medium transition-colors duration-200"
                     >

@@ -9,13 +9,13 @@ export async function GET() {
     const prisma = new PrismaClient();
 
     try {
-        const [totalPatrons, totalLibrarians, totalBooks] = await Promise.all([
+        const [totalPatrons, totalLibrarians, totalItems] = await Promise.all([
             prisma.users.count({ where: { role: 'patron' } }),
             prisma.users.count({ where: { role: 'librarian' } }),
-            prisma.books.count({ where: { record_status: record_status.active } }),
+            prisma.library_items.count({ where: { record_status: record_status.active } }),
         ]);
 
-        // ✅ Issue and return counts from notifications
+        // Issue and return counts for items today
         const [issuedToday, returnedToday] = await Promise.all([
             prisma.notifications.count({
                 where: {
@@ -33,7 +33,7 @@ export async function GET() {
             }),
         ]);
 
-        // ✅ Recent activity from notifications
+        // Recent approved notifications (activity) for items today
         const recentActivity = await prisma.notifications.findMany({
             where: {
                 status: notifications_status.approved,
@@ -44,15 +44,15 @@ export async function GET() {
             },
             orderBy: { created_at: 'desc' },
             include: {
-                books: { select: { title: true } },
-                users_notifications_from_user_idTousers: { select: { name: true } }, // librarian
-                users_notifications_to_user_idTousers: { select: { name: true } },   // patron
+                library_items: { select: { title: true } },
+                users_notifications_from_user_idTousers: { select: { name: true } }, // librarian (issuer)
+                users_notifications_to_user_idTousers: { select: { name: true } },   // patron (recipient)
             },
         });
 
-        // Map to keep UI format same as before
+        // Format for UI, fallback to 'Unknown' if data missing
         const formattedActivity = recentActivity.map(act => ({
-            bookTitle: act.books?.title || 'Unknown Book',
+            itemTitle: act.library_items?.title || 'Unknown Item',
             userName:
                 act.users_notifications_to_user_idTousers?.name ||
                 act.users_notifications_from_user_idTousers?.name ||
@@ -61,11 +61,10 @@ export async function GET() {
             date: act.created_at,
         }));
 
-
         return NextResponse.json({
             totalPatrons,
             totalLibrarians,
-            totalBooks,
+            totalItems,
             issuedToday,
             returnedToday,
             formattedActivity

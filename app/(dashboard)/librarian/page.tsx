@@ -9,24 +9,26 @@ interface SummaryStats {
     issued: number;
     pending: number;
     overdueCount: number;
-    totalFinesUnpaid: number;
-    collectedFines: number;
+    totalItems: number;
+    finesUnpaid: number;
+    finesCollected: number;
 }
 
 interface Genre {
     genre: string;
 }
 
-interface TopBorrowedBook {
-    book_id: number;
-    _count: {
-        book_id: number;
-    };
-    book_details?: {
-        book_id: number;
+interface TopBorrowedItem {
+    item: {
+        item_id: number;
         title: string;
         author: string;
+        genre?: string;
+        image_url?: string;
+        location?: string;
+        record_status: string;
     };
+    borrowCount: number;
 }
 
 interface ChartData {
@@ -38,12 +40,17 @@ interface ChartData {
 interface DashboardData {
     success: boolean;
     summary: SummaryStats;
-    genres: Genre[];
-    topBorrowedBooks: TopBorrowedBook[];
+    genres: string[];
+    topBorrowedItems?: TopBorrowedItem[];
     chartData: ChartData;
 }
 
-const StatCard = ({ title, value, subtitle, color = "blue" }: {
+const StatCard = ({
+    title,
+    value,
+    subtitle,
+    color = "blue"
+}: {
     title: string;
     value: number | string;
     subtitle?: string;
@@ -60,9 +67,9 @@ const StatCard = ({ title, value, subtitle, color = "blue" }: {
 
     return (
         <div className={`p-3 sm:p-4 rounded-lg border ${colorClasses[color as keyof typeof colorClasses]}`}>
-            <h3 className="text-xs sm:text-sm font-medium opacity-75">{title}</h3>
+            <h3 className="text-xs sm:text-sm font-medium">{title}</h3>
             <p className="text-lg sm:text-2xl font-bold mt-1">{value}</p>
-            {subtitle && <p className="text-xs mt-1 opacity-75">{subtitle}</p>}
+            {subtitle && <p className="text-xs mt-1">{subtitle}</p>}
         </div>
     );
 };
@@ -98,8 +105,6 @@ export default function DashboardPage() {
         }
     };
 
-
-
     if (loading) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -132,61 +137,35 @@ export default function DashboardPage() {
         return <div>No data available</div>;
     }
 
-    // Prepare chart data for recharts
     const chartData = data.chartData.days.map((day, index) => ({
         date: day,
         issued: data.chartData.issued[index],
         returned: data.chartData.returned[index],
     }));
 
-    // Sort top borrowed books by count (descending)
-    const sortedTopBooks = [...data.topBorrowedBooks].sort((a, b) => b._count.book_id - a._count.book_id);
+    const sortedTopItems = Array.isArray(data.topBorrowedItems)
+        ? [...data.topBorrowedItems].sort((a, b) => b.borrowCount - a.borrowCount)
+        : [];
 
     return (
         <div className="min-h-screen bg-gray-50 p-2 sm:p-4">
             <div className="max-w-7xl mx-auto">
-                <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Library Dashboard</h1>
+                <h1 className="text-xl sm:text-2xl font-bold mb-3">Library Dashboard</h1>
 
                 {/* Summary Statistics */}
-                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-4 mb-4 sm:mb-6">
-                    <StatCard
-                        title="Available Books"
-                        value={data.summary.available}
-                        color="green"
-                    />
-                    <StatCard
-                        title="Issued Books"
-                        value={data.summary.issued}
-                        color="blue"
-                    />
-                    <StatCard
-                        title="Pending Requests"
-                        value={data.summary.pending}
-                        color="yellow"
-                    />
-                    <StatCard
-                        title="Overdue Books"
-                        value={data.summary.overdueCount}
-                        color="red"
-                    />
-                    <StatCard
-                        title="Unpaid Fines"
-                        value={`₹${data.summary.totalFinesUnpaid.toFixed(2)}`}
-                        color="red"
-                    />
-                    <StatCard
-                        title="Collected Fines"
-                        value={`₹${data.summary.collectedFines.toFixed(2)}`}
-                        subtitle="Last 30 days"
-                        color="green"
-                    />
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-4 mb-4">
+                    <StatCard title="Available Items" value={data.summary.available} color="green" />
+                    <StatCard title="Issued Items" value={data.summary.issued} color="blue" />
+                    <StatCard title="Pending Requests" value={data.summary.pending} color="yellow" />
+                    <StatCard title="Overdue Items" value={data.summary.overdueCount} color="red" />
+                    <StatCard title="Unpaid Fines" value={`₹${(data.summary.finesUnpaid ?? 0).toFixed(2)}`} color="red" />
+                    <StatCard title="Collected Fines" value={`₹${(data.summary.finesCollected ?? 0).toFixed(2)}`} subtitle="Last 30 days" color="green" />
                 </div>
 
-                {/* Charts Section */}
-                <div className="overflow-x-auto grid grid-cols-1 xl:grid-cols-2 gap-3 sm:gap-6 mb-4 sm:mb-6">
-                    {/* Transactions Chart */}
-                    <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border">
-                        <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3">Daily Transactions (Last 30 Days)</h2>
+                {/* Charts */}
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-3 sm:gap-6 mb-4">
+                    <div className="bg-white p-3 rounded shadow border">
+                        <h2 className="mb-2 text-lg font-semibold">Daily Transactions (Last 30 Days)</h2>
                         <ResponsiveContainer width="100%" height={250}>
                             <LineChart data={chartData}>
                                 <CartesianGrid strokeDasharray="3 3" />
@@ -194,127 +173,91 @@ export default function DashboardPage() {
                                     dataKey="date"
                                     tick={{ fontSize: 12 }}
                                     tickFormatter={(value) => {
-                                        const date = new Date(value);
-                                        return `${date.getMonth() + 1}/${date.getDate()}`;
+                                        const d = new Date(value);
+                                        return `${d.getMonth() + 1}/${d.getDate()}`;
                                     }}
                                 />
                                 <YAxis />
                                 <Tooltip
-                                    labelFormatter={(value) => `Date: ${value}`}
+                                    labelFormatter={(label) => `Date: ${label}`}
                                     formatter={(value, name) => {
-                                        if (name === 'issued') return [value, 'Books Issued'];
-                                        if (name === 'returned') return [value, 'Books Returned'];
-                                        return [value, name]; // fallback to original name
+                                        if (name === 'issued') return [value, 'Items Issued'];
+                                        if (name === 'returned') return [value, 'Items Returned'];
+                                        return [value, name];
                                     }}
                                 />
-
                                 <Legend />
-                                <Line
-                                    type="monotone"
-                                    dataKey="issued"
-                                    stroke="#3B82F6"
-                                    strokeWidth={2}
-                                    name="Books Issued"
-                                />
-                                <Line
-                                    type="monotone"
-                                    dataKey="returned"
-                                    stroke="#10B981"
-                                    strokeWidth={2}
-                                    name="Books Returned"
-                                />
+                                <Line type="monotone" dataKey="issued" stroke="#3B82F6" strokeWidth={2} name="Items Issued" />
+                                <Line type="monotone" dataKey="returned" stroke="#10B981" strokeWidth={2} name="Items Returned" />
                             </LineChart>
                         </ResponsiveContainer>
                     </div>
 
-                    {/* Top Borrowed Books */}
-                    <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border">
-                        <div className="flex items-center mb-2 sm:mb-3">
-                            <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600 mr-2" />
-                            <h2 className="text-base sm:text-lg font-semibold text-gray-900">Top Borrowed Books</h2>
+                    <div className="bg-white p-3 rounded shadow border">
+                        <div className="flex items-center mb-3">
+                            <TrendingUp className="w-5 h-5 text-purple-600 mr-2" />
+                            <h2 className="text-lg font-semibold">Top Borrowed Items</h2>
                         </div>
-
-                        {sortedTopBooks.length > 0 ? (
-                            <div className="space-y-2 max-h-64 sm:max-h-80 overflow-y-auto">
-                                {sortedTopBooks.slice(0, 10).map((book, index) => (
-                                    <div
-                                        key={book.book_id}
-                                        className="flex items-center justify-between p-2 sm:p-3 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg border border-purple-100 hover:shadow-sm transition-shadow"
-                                    >
+                        {sortedTopItems.length > 0 ? (
+                            <div className="space-y-2 max-h-64 overflow-y-auto">
+                                {sortedTopItems.slice(0, 10).map((borrowedItem, i) => (
+                                    <div key={borrowedItem.item.item_id} className="flex justify-between items-center p-2 rounded border border-purple-100 bg-gradient-to-r from-purple-50 to-indigo-50 hover:shadow-sm transition-shadow">
                                         <div className="flex items-center space-x-3 flex-1 min-w-0">
-                                            <div className={`
-                                                flex items-center justify-center w-6 h-6 rounded-full text-white font-bold text-xs flex-shrink-0
-                                                ${index === 0 ? 'bg-yellow-500' :
-                                                    index === 1 ? 'bg-gray-400' :
-                                                        index === 2 ? 'bg-amber-600' : 'bg-purple-500'}
-                                            `}>
-                                                {index + 1}
-                                            </div>
+                                            <div className={`flex items-center justify-center w-6 h-6 rounded-full text-white font-bold text-xs flex-shrink-0 ${i === 0 ? 'bg-yellow-500' : i === 1 ? 'bg-gray-400' : i === 2 ? 'bg-amber-600' : 'bg-purple-500'
+                                                }`}>{i + 1}</div>
                                             <BookOpen className="w-4 h-4 text-purple-600 flex-shrink-0" />
-                                            <div className="min-w-0 flex-1">
+                                            <div className="truncate">
                                                 <div className="font-medium text-gray-900 text-sm truncate">
-                                                    {book.book_details?.title || `Book ID: ${book.book_id}`}
+                                                    {borrowedItem.item.title || `Item ID: ${borrowedItem.item.item_id}`}
                                                 </div>
-                                                {book.book_details?.author && (
-                                                    <div className="text-xs text-gray-500 truncate">
-                                                        by {book.book_details.author}
+                                                <div className="text-xs text-gray-500 truncate">
+                                                    by {borrowedItem.item.author}
+                                                </div>
+                                                {borrowedItem.item.genre && (
+                                                    <div className="text-xs text-purple-600 truncate">
+                                                        {borrowedItem.item.genre}
                                                     </div>
                                                 )}
                                             </div>
                                         </div>
-                                        <div className="text-right flex-shrink-0 ml-3">
-                                            <div className="text-sm font-bold text-purple-700">
-                                                {book._count.book_id}
-                                            </div>
-                                            <div className="text-xs text-gray-500">
-                                                borrows
-                                            </div>
+                                        <div className="ml-3 flex-shrink-0 text-right">
+                                            <div className="font-bold text-purple-700">{borrowedItem.borrowCount}</div>
+                                            <div className="text-xs text-gray-500">borrows</div>
                                         </div>
                                     </div>
                                 ))}
-
-                                {/* Summary at bottom */}
-                                <div className="mt-3 pt-3 border-t border-gray-200">
-                                    <div className="grid grid-cols-2 gap-3 text-xs">
-                                        <div className="bg-blue-50 p-2 rounded text-center">
-                                            <div className="font-semibold text-blue-700">Total Books</div>
-                                            <div className="text-blue-600 font-bold">{sortedTopBooks.length}</div>
-                                        </div>
-                                        <div className="bg-green-50 p-2 rounded text-center">
-                                            <div className="font-semibold text-green-700">Total Borrows</div>
-                                            <div className="text-green-600 font-bold">
-                                                {sortedTopBooks.reduce((sum, book) => sum + book._count.book_id, 0)}
-                                            </div>
+                                <div className="mt-3 pt-3 border-t grid grid-cols-2 gap-3 text-xs">
+                                    <div className="bg-blue-50 rounded p-2 text-center">
+                                        <div className="font-semibold text-blue-700">Total Items</div>
+                                        <div className="text-blue-600 font-bold">{sortedTopItems.length}</div>
+                                    </div>
+                                    <div className="bg-green-50 rounded p-2 text-center">
+                                        <div className="font-semibold text-green-700">Total Borrows</div>
+                                        <div className="text-green-600 font-bold">
+                                            {sortedTopItems.reduce((acc, borrowedItem) => acc + borrowedItem.borrowCount, 0)}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         ) : (
-                            <div className="flex flex-col items-center justify-center h-32 sm:h-48 text-gray-500">
-                                <BookOpen className="w-6 h-6 sm:w-8 sm:h-8 mb-2 opacity-50" />
-                                <p className="text-xs sm:text-sm font-medium">No borrowing data available</p>
-                                <p className="text-xs">No books have been borrowed recently</p>
+                            <div className="h-32 flex flex-col items-center justify-center text-gray-500">
+                                <BookOpen className="w-6 h-6 mb-2 opacity-50" />
+                                <p className="text-sm">No borrowing data available</p>
                             </div>
                         )}
                     </div>
                 </div>
 
-                {/* Genres Section */}
-                <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm border">
-                    <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3">Available Genres</h2>
-                    {data.genres.length > 0 ? (
+                <div className="bg-white p-3 rounded shadow border">
+                    <h2 className="mb-2 text-lg font-semibold">Available Genres</h2>
+                    {data.genres.length ? (
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
-                            {data.genres.map((genre, index) => (
-                                <div
-                                    key={index}
-                                    className="px-2 sm:px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs sm:text-sm text-center font-medium"
-                                >
-                                    {genre.genre}
-                                </div>
+                            {data.genres.map((genre, idx) => (
+                                <div key={idx} className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs text-center font-medium">{genre}</div>
                             ))}
                         </div>
                     ) : (
-                        <p className="text-gray-500 text-xs sm:text-sm">No genres available</p>
+                        <p className="text-gray-500 text-xs">No genres available</p>
                     )}
                 </div>
             </div>

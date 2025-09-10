@@ -81,9 +81,9 @@ export default function AdminDashboard() {
                         bgGradient="from-purple-50 to-purple-100"
                     />
                     <Card
-                        title="Total Books"
-                        value={data.totalBooks}
-                        icon="📚"
+                        title="Total Items"
+                        value={data.totalItems}
+                        icon="📦"
                         gradient="from-emerald-500 to-emerald-600"
                         bgGradient="from-emerald-50 to-emerald-100"
                     />
@@ -111,7 +111,7 @@ export default function AdminDashboard() {
                         </div>
                         <div>
                             <h2 className="text-xl font-semibold text-slate-800">Recent Activity</h2>
-                            <p className="text-slate-600 text-sm">Latest book transactions and user activities</p>
+                            <p className="text-slate-600 text-sm">Latest item transactions and user activities</p>
                         </div>
                     </div>
 
@@ -119,7 +119,7 @@ export default function AdminDashboard() {
                         {(data?.formattedActivity ?? []).map((activity: any, i: number) => {
                             const isIssue = activity.type === 'issue';
                             const userName = activity.userName || 'Unknown User';
-                            const bookTitle = activity.bookTitle || 'Unknown Book';
+                            const itemTitle = activity.itemTitle || 'Unknown Item';
                             const dateStr = activity.date
                                 ? new Date(activity.date).toLocaleString()
                                 : 'Unknown Date';
@@ -136,7 +136,6 @@ export default function AdminDashboard() {
                                         >
                                             {isIssue ? '📤' : '📥'}
                                         </div>
-
                                         {/* Text */}
                                         <div className="flex-1 min-w-0">
                                             <div className="flex flex-wrap items-center gap-1 text-sm">
@@ -151,9 +150,9 @@ export default function AdminDashboard() {
                                                 >
                                                     {isIssue ? 'issued' : 'returned'}
                                                 </span>
-                                                <span className="text-slate-600">the book</span>
+                                                <span className="text-slate-600">the item</span>
                                                 <span className="font-semibold text-slate-800 bg-slate-100 px-2 py-1 rounded-md text-xs">
-                                                    {bookTitle}
+                                                    {itemTitle}
                                                 </span>
                                             </div>
                                             <div className="flex items-center gap-2 mt-2">
@@ -166,7 +165,7 @@ export default function AdminDashboard() {
                                 </div>
                             );
                         })}
-                        
+
                         {(data?.formattedActivity?.length ?? 0) === 0 && (
                             <div className="text-center py-12">
                                 <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">

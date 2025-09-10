@@ -1,58 +1,60 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@/generated/prisma';
 import { withRoleAuth } from '@/app/utils/authMiddleware';
-import { differenceInDays } from 'date-fns';
 
 const prisma = new PrismaClient();
 
-export const GET = withRoleAuth(['librarian'])(async (req) => {
-    const librarianId = req.user!.userId;
+export const GET = withRoleAuth(['librarian'])(
+    async (req) => {
+        const userId = req.user!.userId;
 
-    // Fetch fines linked to books managed by this librarian
-    const finesData = await prisma.fines.findMany({
-        where: {
-            book_tran_history: {
-                books: {
-                    librarian_id: librarianId,
+        try {
+            const fines = await prisma.fines.findMany({
+                where:
+                {
+                    item_tran_history: {
+                        library_items: {
+                            librarian_id: userId,
+                        },
+                    },
                 },
-            },
-        },
-        include: {
-            users: {
-                select: { name: true },
-            },
-            book_tran_history: {
-                select: {
-                    date_due: true,
-                    date_returned: true,
-                    books: { select: { title: true } },
+                include: {
+                    users: true,
+                    item_tran_history: {
+                        include: {
+                            library_items: true,
+                        },
+                    },
                 },
-            },
-        },
-    });
+                orderBy: {
+                    created_at: 'desc',
+                },
+            });
 
-    // Map and add late days if needed
-    const fines = finesData.map((fine) => {
-        const dateDue = fine.book_tran_history?.date_due;
-        const dateReturned = fine.book_tran_history?.date_returned;
-        let lateDays = 0;
-        if (dateDue && dateReturned) {
-            lateDays = Math.max(differenceInDays(dateReturned, dateDue), 0) + 1;
+            const formattedFines = fines.map((fine) => {
+                const dateDue = fine.item_tran_history?.date_due || null;
+                const dateReturned = fine.item_tran_history?.date_returned || null;
+
+                return {
+                    fine_id: fine.fine_id,
+                    user: fine.users?.name || null,
+                    book: fine.item_tran_history?.library_items?.title || null,
+                    amount: fine.amount,
+                    reason: fine.reason,
+                    status: fine.status,
+                    date_due: dateDue,
+                    date_returned: dateReturned,
+                    created_at: fine.created_at,
+                    paid_at: fine.paid_at,
+                };
+            });
+
+            return NextResponse.json({ success: true, data: formattedFines });
+        } catch (error) {
+            console.error('Error fetching fines:', error);
+            return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
+        } finally {
+            await prisma.$disconnect();
         }
-        return {
-            fine_id: fine.fine_id,
-            user: fine.users?.name,
-            book: fine.book_tran_history?.books?.title,
-            amount: fine.amount,
-            reason: fine.reason,
-            status: fine.status,
-            date_due: dateDue,
-            date_returned: dateReturned,
-            lateDays,
-            created_at: fine.created_at,
-            paid_at: fine.paid_at,
-        };
-    });
-
-    return NextResponse.json(fines);
-});
+    }
+);

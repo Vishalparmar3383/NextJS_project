@@ -13,6 +13,12 @@ export default function LoginForm() {
     const [role, setRole] = useState("patron");
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const getDashboardPath = (role: string) => {
+        if (role === "patron") return "/patron/items";
+        if (role === "admin") return "/admin";
+        if (role === "librarian") return "/librarian";
+        return "/";
+    };
 
     const router = useRouter();
 
@@ -28,7 +34,7 @@ export default function LoginForm() {
         try {
             console.log('Attempting login with:', { email, role });
             const { user, token } = await login(email, password, role);
-            
+
             console.log('Login successful:', { user, token: token ? 'exists' : 'missing' });
             setMessage('Login successful! Redirecting...');
             setStatus('success');
@@ -41,9 +47,9 @@ export default function LoginForm() {
             // Redirect after a short delay to show success message
             setTimeout(() => {
                 console.log('Redirecting to:', `/${role}`);
-                router.push(`/${role}`);
+                router.push(`http://localhost:3000/${getDashboardPath(role)}`);
             }, 1000);
-            
+
         } catch (error: unknown) {
             console.error('Login error:', error);
             const errorMessage = error instanceof Error ? error.message : 'Login failed. Please try again.';
@@ -232,9 +238,8 @@ export default function LoginForm() {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className={`group relative w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${
-                                isLoading ? 'opacity-75 cursor-not-allowed' : ''
-                            }`}
+                            className={`group relative w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-semibold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden ${isLoading ? 'opacity-75 cursor-not-allowed' : ''
+                                }`}
                         >
                             <span className="relative z-10 flex items-center justify-center space-x-2">
                                 {isLoading ? (

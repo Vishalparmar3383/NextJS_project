@@ -1,11 +1,29 @@
-/* eslint-disable @next/next/no-img-element */
 'use client';
-
 import React, { useEffect, useState } from 'react';
-import { BookOpen, User, Calendar, Tag, Image, Hash, Package, FileText } from 'lucide-react';
+import { BookOpen, User, Calendar, Tag, Image, Hash, Package, FileText, Clock } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 
-const initialForm = {
+interface FormData {
+  title: string;
+  author: string;
+  isbn: string;
+  year: string;
+  genre: string;
+  image_url: string;
+  description: string;
+  publisher: string;
+  language: string;
+  pages: string;
+  duration: string;
+  format: string;
+  subject: string;
+  keywords: string;
+  quantity: string;
+  location: string;
+  item_type: string;
+}
+
+const initialForm: FormData = {
   title: '',
   author: '',
   isbn: '',
@@ -13,66 +31,83 @@ const initialForm = {
   genre: '',
   image_url: '',
   description: '',
-  quantity: '',
+  publisher: '',
+  language: '',
+  pages: '',
+  duration: '',
+  format: '',
+  subject: '',
+  keywords: '',
+  quantity: '1',
+  location: '',
+  item_type: 'book',
 };
 
-const years = Array.from({ length: 100 }, (_, i) =>
+const years = Array.from({ length: 200 }, (_, i) =>
   String(new Date().getFullYear() - i)
 );
 
-export default function BookForm({ isEdit = false }: { isEdit?: boolean }) {
-  const params = useParams();
-  const bookId = isEdit ? params?.id : null;
+const itemTypes = [
+  { value: 'book', label: 'Book' },
+  { value: 'journal', label: 'Journal' },
+  { value: 'multimedia', label: 'Multimedia' },
+  { value: 'newspaper', label: 'Newspaper' },
+  { value: 'magazine', label: 'Magazine' },
+  { value: 'thesis', label: 'Thesis' },
+  { value: 'report', label: 'Report' },
+  { value: 'other', label: 'Other' },
+];
 
-  const [form, setForm] = useState(initialForm);
+export default function ItemForm({ isEdit = false }: { isEdit?: boolean }) {
+  const params = useParams();
+  const itemId = isEdit && params?.id ? String(params.id) : null;
+  const [form, setForm] = useState<FormData>(initialForm);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const router = useRouter();
 
-  // Load book data if editing
   useEffect(() => {
-    const fetchBook = async () => {
-      if (!isEdit || !bookId) return;
-
+    const fetchItem = async () => {
+      if (!isEdit || !itemId) return;
       try {
-        console.log('Fetching book with ID:', bookId);
-        const res = await fetch(`/api/librarian/books/${bookId}`);
-        console.log('Fetch response status:', res.status);
-
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-
+        const res = await fetch(`/api/librarian/items/${itemId}`);
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
-        console.log('Fetched book data:', data);
-
-        if (data.success && data.book) {
-          const book = data.book;
+        if (data.success && data.item) {
+          const item = data.item;
           setForm({
-            title: book.title || '',
-            author: book.author || '',
-            isbn: book.isbn || '',
-            year: book.year?.toString() || '',
-            genre: book.genre || '',
-            image_url: book.image_url || '',
-            description: book.description || '',
-            quantity: book.quantity?.toString() || '1',
+            title: item.title || '',
+            author: item.author || '',
+            isbn: item.isbn || '',
+            year: item.year?.toString() || '',
+            genre: item.genre || '',
+            image_url: item.image_url || '',
+            description: item.description || '',
+            publisher: item.publisher || '',
+            language: item.language || '',
+            pages: item.pages?.toString() || '',
+            duration: item.duration?.toString() || '',
+            format: item.format || '',
+            subject: item.subject || '',
+            keywords: item.keywords || '',
+            quantity: item.totalCopies?.toString(),
+            location: item.location || '',
+            item_type: item.item_type,
           });
-          console.log('Form set with book data:', book);
         } else {
-          setMessage('❌ Failed to load book.');
-          console.error('Failed to load book:', data);
+          setMessage('❌ Failed to load item.');
         }
       } catch (error) {
-        console.error('Error loading book:', error);
-        setMessage('❌ Error loading book.');
+        console.error('Error loading item:', error);
+        setMessage('❌ Error loading item.');
       }
     };
+    fetchItem();
+  }, [isEdit, itemId]);
 
-    fetchBook();
-  }, [isEdit, bookId]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
     setForm(f => ({ ...f, [e.target.name]: e.target.value }));
   };
 
@@ -80,50 +115,84 @@ export default function BookForm({ isEdit = false }: { isEdit?: boolean }) {
     e.preventDefault();
     setLoading(true);
     setMessage('');
-
+    
     try {
-      // Prepare the request body
+      if (!form.title.trim()) {
+        setMessage('❌ Title is required');
+        setLoading(false);
+        return;
+      }
+      
+      if (!form.author.trim()) {
+        setMessage('❌ Author is required');
+        setLoading(false);
+        return;
+      }
+      
+      if (!form.quantity || Number(form.quantity) < 1) {
+        setMessage('❌ Quantity must be at least 1');
+        setLoading(false);
+        return;
+      }
+
+      if (!form.item_type) {
+        setMessage('❌ Item type is required');
+        setLoading(false);
+        return;
+      }
+
       const requestBody = {
-        ...form,
+        title: form.title.trim(),
+        author: form.author.trim(),
+        isbn: form.isbn.trim() || null,
         year: form.year ? Number(form.year) : null,
-        quantity: Number(form.quantity) || 1,
+        genre: form.genre.trim() || null,
+        image_url: form.image_url.trim() || null,
+        description: form.description.trim() || null,
+        publisher: form.publisher.trim() || null,
+        language: form.language.trim() || null,
+        pages: form.pages ? Number(form.pages) : null,
+        duration: form.duration ? Number(form.duration) : null,
+        format: form.format.trim() || null,
+        subject: form.subject.trim() || null,
+        keywords: form.keywords.trim() || null,
+        quantity: Number(form.quantity),
+        location: form.location.trim() || null,
+        item_type: form.item_type,
       };
 
-      console.log('Submitting form data:', requestBody);
-      console.log('Edit mode:', isEdit, 'Book ID:', bookId);
-
-      const response = await fetch(isEdit ? `/api/librarian/books/${bookId}/edit` : '/api/librarian/books/add', {
-        method: isEdit ? 'PUT' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestBody),
-      });
-
-      console.log('Response status:', response.status);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log('Response data:', data);
-
-      if (data.success) {
-        setMessage(isEdit ? '✅ Book updated!' : '✅ Book and copies added!');
-        if (isEdit) {
-          // Optionally redirect or reset form after edit
-          setTimeout(() => {
-            setForm(initialForm)
-            router.replace(`/librarian/books/${bookId}`);
-          }, 0);
+      const response = await fetch(
+        isEdit ? `/api/librarian/items/${itemId}/edit` : '/api/librarian/items/add',
+        {
+          method: isEdit ? 'PUT' : 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(requestBody),
         }
-        if (!isEdit) setForm(initialForm);
+      );
+      
+      const data = await response.json();
+
+      console.log("::: ",data)
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${data.message || 'Unknown error'}`);
+      }
+      
+      if (data.success) {
+        setMessage(isEdit ? '✅ Item updated!' : '✅ Item added!');
+        if (isEdit) {
+          setTimeout(() => {
+            router.replace(`/librarian/items/${itemId}`);
+          }, 1500);
+        } else {
+          setForm(initialForm);
+        }
       } else {
         setMessage(data.message || '❌ Operation failed.');
-        console.error('API Error:', data);
       }
     } catch (error) {
-      console.error('Network Error:', error);
-      setMessage('❌ Network error. Please check your connection.');
+      console.error('Submit Error:', error);
+      setMessage(`❌ Error: ${error instanceof Error ? error.message : 'Network error'}`);
     }
     setLoading(false);
   };
@@ -131,31 +200,33 @@ export default function BookForm({ isEdit = false }: { isEdit?: boolean }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-8 px-4">
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-2xl mb-4 shadow-lg">
-            <BookOpen className="w-8 h-8 text-white" />
+        <form onSubmit={handleSubmit} className="space-y-8 bg-white/70 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-8">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-2xl mb-4 shadow-lg">
+              <BookOpen className="w-8 h-8 text-white" />
+            </div>
+            <h1 className="text-4xl font-bold text-slate-800 mb-2">
+              {isEdit ? 'Edit Item' : 'Add New Item'}
+            </h1>
+            <p className="text-slate-600 text-lg">Manage your library collection</p>
           </div>
-          <h1 className="text-4xl font-bold text-slate-800 mb-2">{isEdit ? "Edit Book" : "Add New Book"}</h1>
-          <p className="text-slate-600 text-lg">Expand your library collection</p>
-        </div>
 
-        <div className="bg-white/70 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-8 space-y-8">
-          {/* Main Info Grid */}
+          {/* Main grid inputs */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Title */}
             <div className="lg:col-span-2">
               <label className="flex items-center text-sm font-semibold text-slate-700 mb-3">
                 <BookOpen className="w-4 h-4 mr-2 text-indigo-600" />
-                Book Title *
+                Title *
               </label>
               <input
                 name="title"
                 value={form.title}
                 onChange={handleChange}
                 required
+                placeholder="Enter the title..."
                 className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 outline-none transition-all duration-200 text-slate-800 placeholder-slate-400"
-                placeholder="Enter the book title..."
               />
             </div>
 
@@ -170,22 +241,42 @@ export default function BookForm({ isEdit = false }: { isEdit?: boolean }) {
                 value={form.author}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 outline-none transition-all duration-200 text-slate-800 placeholder-slate-400"
                 placeholder="Author name..."
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 outline-none transition-all duration-200 text-slate-800 placeholder-slate-400"
               />
+            </div>
+
+            {/* Item Type */}
+            <div>
+              <label className="flex items-center text-sm font-semibold text-slate-700 mb-3">
+                <Package className="w-4 h-4 mr-2 text-indigo-600" />
+                Item Type *
+              </label>
+              <select
+                name="item_type"
+                value={form.item_type}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 outline-none transition-all duration-200 text-slate-800"
+              >
+                {itemTypes.map(type => (
+                  <option key={type.value} value={type.value}>
+                    {type.label}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Year */}
             <div>
               <label className="flex items-center text-sm font-semibold text-slate-700 mb-3">
                 <Calendar className="w-4 h-4 mr-2 text-indigo-600" />
-                Publication Year *
+                Year
               </label>
               <select
                 name="year"
                 value={form.year}
                 onChange={handleChange}
-                required
                 className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 outline-none transition-all duration-200 text-slate-800"
               >
                 <option value="">Select year...</option>
@@ -193,21 +284,6 @@ export default function BookForm({ isEdit = false }: { isEdit?: boolean }) {
                   <option key={y} value={y}>{y}</option>
                 ))}
               </select>
-            </div>
-
-            {/* ISBN */}
-            <div>
-              <label className="flex items-center text-sm font-semibold text-slate-700 mb-3">
-                <Hash className="w-4 h-4 mr-2 text-indigo-600" />
-                ISBN
-              </label>
-              <input
-                name="isbn"
-                value={form.isbn}
-                onChange={handleChange}
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 outline-none transition-all duration-200 text-slate-800 placeholder-slate-400"
-                placeholder="978-3-16-148410-0"
-              />
             </div>
 
             {/* Genre */}
@@ -220,15 +296,139 @@ export default function BookForm({ isEdit = false }: { isEdit?: boolean }) {
                 name="genre"
                 value={form.genre}
                 onChange={handleChange}
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 outline-none transition-all duration-200 text-slate-800 placeholder-slate-400"
                 placeholder="Fiction, Mystery, Romance..."
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 outline-none transition-all duration-200 text-slate-800 placeholder-slate-400"
+              />
+            </div>
+
+            {/* ISBN */}
+            <div>
+              <label className="flex items-center text-sm font-semibold text-slate-700 mb-3">
+                <Hash className="w-4 h-4 mr-2 text-indigo-600" />
+                ISBN
+              </label>
+              <input
+                name="isbn"
+                value={form.isbn}
+                onChange={handleChange}
+                placeholder="978-3-16-148410-0"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 outline-none transition-all duration-200 text-slate-800 placeholder-slate-400"
+              />
+            </div>
+
+            {/* Location */}
+            <div>
+              <label className="flex items-center text-sm font-semibold text-slate-700 mb-3">
+                <Package className="w-4 h-4 mr-2 text-indigo-600" />
+                Location
+              </label>
+              <input
+                name="location"
+                value={form.location}
+                onChange={handleChange}
+                placeholder="Library shelf or section"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 outline-none transition-all duration-200 text-slate-800 placeholder-slate-400"
+              />
+            </div>
+
+            {/* Publisher */}
+            <div>
+              <label className="flex items-center text-sm font-semibold text-slate-700 mb-3">
+                <FileText className="w-4 h-4 mr-2 text-indigo-600" />
+                Publisher
+              </label>
+              <input
+                name="publisher"
+                value={form.publisher}
+                onChange={handleChange}
+                placeholder="Publisher name"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 outline-none transition-all duration-200 text-slate-800 placeholder-slate-400"
+              />
+            </div>
+
+            {/* Language */}
+            <div>
+              <label className="flex items-center text-sm font-semibold text-slate-700 mb-3">
+                <Tag className="w-4 h-4 mr-2 text-indigo-600" />
+                Language
+              </label>
+              <input
+                name="language"
+                value={form.language}
+                onChange={handleChange}
+                placeholder="e.g., English, Spanish"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 outline-none transition-all duration-200 text-slate-800 placeholder-slate-400"
+              />
+            </div>
+
+            {/* Pages */}
+            <div>
+              <label className="flex items-center text-sm font-semibold text-slate-700 mb-3">
+                <FileText className="w-4 h-4 mr-2 text-indigo-600" />
+                Pages
+              </label>
+              <input
+                name="pages"
+                type="number"
+                min={1}
+                value={form.pages}
+                onChange={handleChange}
+                placeholder="Number of pages"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 outline-none transition-all duration-200 text-slate-800 placeholder-slate-400"
+              />
+            </div>
+
+            {/* Duration */}
+            <div>
+              <label className="flex items-center text-sm font-semibold text-slate-700 mb-3">
+                <Clock className="w-4 h-4 mr-2 text-indigo-600" />
+                Duration (minutes)
+              </label>
+              <input
+                name="duration"
+                type="number"
+                min={0}
+                value={form.duration}
+                onChange={handleChange}
+                placeholder="For multimedia items"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 outline-none transition-all duration-200 text-slate-800 placeholder-slate-400"
+              />
+            </div>
+
+            {/* Format */}
+            <div>
+              <label className="flex items-center text-sm font-semibold text-slate-700 mb-3">
+                <Package className="w-4 h-4 mr-2 text-indigo-600" />
+                Format (DVD, CD, etc.)
+              </label>
+              <input
+                name="format"
+                value={form.format}
+                onChange={handleChange}
+                placeholder="Format for multimedia"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 outline-none transition-all duration-200 text-slate-800 placeholder-slate-400"
+              />
+            </div>
+
+            {/* Subject */}
+            <div>
+              <label className="flex items-center text-sm font-semibold text-slate-700 mb-3">
+                <Tag className="w-4 h-4 mr-2 text-indigo-600" />
+                Subject
+              </label>
+              <input
+                name="subject"
+                value={form.subject}
+                onChange={handleChange}
+                placeholder="Subject category"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 outline-none transition-all duration-200 text-slate-800 placeholder-slate-400"
               />
             </div>
 
             {/* Quantity */}
             <div>
               <label className="flex items-center text-sm font-semibold text-slate-700 mb-3">
-                <Package className="w-4 h-4 mr-2 text-indigo-600" />
+                <Hash className="w-4 h-4 mr-2 text-indigo-600" />
                 Quantity *
               </label>
               <input
@@ -238,40 +438,54 @@ export default function BookForm({ isEdit = false }: { isEdit?: boolean }) {
                 value={form.quantity}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 outline-none transition-all duration-200 text-slate-800 placeholder-slate-400"
-                placeholder="How many copies?"
+                placeholder="Number of copies"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 outline-none transition-all duration-200 text-slate-800 placeholder-gray-400"
               />
             </div>
 
-            {/* Image URL */}
-            <div>
+            {/* Keywords */}
+            <div className="lg:col-span-2">
               <label className="flex items-center text-sm font-semibold text-slate-700 mb-3">
-                <Image className="w-4 h-4 mr-2 text-indigo-600" />
-                Cover Image URL
+                <Tag className="w-4 h-4 mr-2 text-indigo-600" />
+                Keywords (comma-separated)
               </label>
-              <input
-                name="image_url"
-                value={form.image_url}
+              <textarea
+                name="keywords"
+                value={form.keywords}
                 onChange={handleChange}
+                rows={3}
+                placeholder="Keyword1, keyword2, keyword3"
                 className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 outline-none transition-all duration-200 text-slate-800 placeholder-slate-400"
-                placeholder="https://example.com/book-cover.jpg"
               />
             </div>
-
-            {/* Image Preview */}
-            {form.image_url && (
-              <div className="flex justify-center items-center p-4 bg-slate-50/50 rounded-xl border-2 border-dashed border-slate-200">
-                <div className="text-center">
-                  <img
-                    src={form.image_url}
-                    alt="Book cover preview"
-                    className="rounded-lg w-32 h-40 object-cover shadow-lg mx-auto mb-2 border border-slate-200"
-                  />
-                  <p className="text-xs text-slate-500">Cover Preview</p>
-                </div>
-              </div>
-            )}
           </div>
+
+          {/* Image URL */}
+          <div>
+            <label className="flex items-center text-sm font-semibold text-slate-700 mb-3">
+              <Image className="w-4 h-4 mr-2 text-indigo-600" />
+              Cover Image URL
+            </label>
+            <input
+              name="image_url"
+              value={form.image_url}
+              onChange={handleChange}
+              className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 outline-none transition-all duration-200 text-slate-800 placeholder-slate-400"
+              placeholder="https://example.com/book-cover.jpg"
+            />
+          </div>
+
+          {/* Image Preview */}
+          {form.image_url && (
+            <div className="flex justify-center items-center p-4 bg-slate-50/50 rounded-xl border-2 border-dashed border-slate-200 mt-4">
+              <img
+                src={form.image_url}
+                alt="Item cover preview"
+                className="rounded-lg w-32 h-40 object-cover shadow-lg mx-auto mb-2 border border-slate-200"
+              />
+              <p className="text-xs text-slate-500">Cover Preview</p>
+            </div>
+          )}
 
           {/* Description */}
           <div>
@@ -284,8 +498,8 @@ export default function BookForm({ isEdit = false }: { isEdit?: boolean }) {
               value={form.description}
               onChange={handleChange}
               rows={4}
+              placeholder="Brief description or summary..."
               className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white/50 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 outline-none transition-all duration-200 text-slate-800 placeholder-slate-400 resize-none"
-              placeholder="Brief description or summary of the book..."
             />
           </div>
 
@@ -293,7 +507,6 @@ export default function BookForm({ isEdit = false }: { isEdit?: boolean }) {
           <div className="flex justify-center pt-4">
             <button
               type="submit"
-              onClick={handleSubmit}
               disabled={loading}
               className="group relative px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl hover:from-indigo-700 hover:to-purple-700 transform hover:scale-[1.02] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none min-w-[160px]"
             >
@@ -306,7 +519,7 @@ export default function BookForm({ isEdit = false }: { isEdit?: boolean }) {
                 ) : (
                   <>
                     <BookOpen className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-200" />
-                    {isEdit ? "Edit Book" : "Add Book"}
+                    {isEdit ? "Edit Item" : "Add Item"}
                   </>
                 )}
               </span>
@@ -315,14 +528,16 @@ export default function BookForm({ isEdit = false }: { isEdit?: boolean }) {
 
           {/* Message */}
           {message && (
-            <div className={`text-center p-4 rounded-xl font-medium transition-all duration-300 ${message.startsWith('✅')
-              ? 'bg-green-50 text-green-700 border border-green-200'
-              : 'bg-red-50 text-red-700 border border-red-200'
-              }`}>
+            <div
+              className={`text-center p-4 rounded-xl font-medium transition-all duration-300 ${message.startsWith('✅')
+                ? 'bg-green-50 text-green-700 border border-green-200'
+                : 'bg-red-50 text-red-700 border border-red-200'
+                }`}
+            >
               {message}
             </div>
           )}
-        </div>
+        </form>
       </div>
     </div>
   );

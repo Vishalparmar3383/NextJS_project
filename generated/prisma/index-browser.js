@@ -120,17 +120,17 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.Book_tranScalarFieldEnum = {
+exports.Prisma.Item_tranScalarFieldEnum = {
   tran_id: 'tran_id',
-  book_id: 'book_id',
+  item_id: 'item_id',
   status: 'status',
   user_id: 'user_id',
   record_status: 'record_status'
 };
 
-exports.Prisma.Book_tran_historyScalarFieldEnum = {
+exports.Prisma.Item_tran_historyScalarFieldEnum = {
   id: 'id',
-  book_id: 'book_id',
+  item_id: 'item_id',
   tran_id: 'tran_id',
   status: 'status',
   requested_by: 'requested_by',
@@ -143,8 +143,8 @@ exports.Prisma.Book_tran_historyScalarFieldEnum = {
   remarks: 'remarks'
 };
 
-exports.Prisma.BooksScalarFieldEnum = {
-  book_id: 'book_id',
+exports.Prisma.Library_itemsScalarFieldEnum = {
+  item_id: 'item_id',
   title: 'title',
   author: 'author',
   isbn: 'isbn',
@@ -153,6 +153,15 @@ exports.Prisma.BooksScalarFieldEnum = {
   image_url: 'image_url',
   description: 'description',
   librarian_id: 'librarian_id',
+  item_type: 'item_type',
+  location: 'location',
+  publisher: 'publisher',
+  language: 'language',
+  pages: 'pages',
+  duration: 'duration',
+  format: 'format',
+  subject: 'subject',
+  keywords: 'keywords',
   created_at: 'created_at',
   updated_at: 'updated_at',
   record_status: 'record_status'
@@ -161,7 +170,7 @@ exports.Prisma.BooksScalarFieldEnum = {
 exports.Prisma.FinesScalarFieldEnum = {
   fine_id: 'fine_id',
   user_id: 'user_id',
-  book_tran_history_id: 'book_tran_history_id',
+  item_tran_history_id: 'item_tran_history_id',
   amount: 'amount',
   reason: 'reason',
   status: 'status',
@@ -179,10 +188,11 @@ exports.Prisma.LogsScalarFieldEnum = {
 exports.Prisma.NotificationsScalarFieldEnum = {
   notification_id: 'notification_id',
   type: 'type',
-  book_id: 'book_id',
+  item_id: 'item_id',
   from_user_id: 'from_user_id',
   to_user_id: 'to_user_id',
   tran_id: 'tran_id',
+  reservation_id: 'reservation_id',
   status: 'status',
   message: 'message',
   created_at: 'created_at',
@@ -192,7 +202,7 @@ exports.Prisma.NotificationsScalarFieldEnum = {
 exports.Prisma.User_wishlistScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
-  book_id: 'book_id',
+  item_id: 'item_id',
   created_at: 'created_at'
 };
 
@@ -221,6 +231,23 @@ exports.Prisma.Contact_usScalarFieldEnum = {
   created_at: 'created_at'
 };
 
+exports.Prisma.System_configScalarFieldEnum = {
+  config_id: 'config_id',
+  config_key: 'config_key',
+  config_value: 'config_value',
+  description: 'description',
+  updated_at: 'updated_at'
+};
+
+exports.Prisma.Library_cardsScalarFieldEnum = {
+  card_id: 'card_id',
+  user_id: 'user_id',
+  card_number: 'card_number',
+  issued_at: 'issued_at',
+  expires_at: 'expires_at',
+  status: 'status'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -231,17 +258,23 @@ exports.Prisma.NullsOrder = {
   last: 'last'
 };
 
-exports.Prisma.book_tran_historyOrderByRelevanceFieldEnum = {
+exports.Prisma.item_tran_historyOrderByRelevanceFieldEnum = {
   remarks: 'remarks'
 };
 
-exports.Prisma.booksOrderByRelevanceFieldEnum = {
+exports.Prisma.library_itemsOrderByRelevanceFieldEnum = {
   title: 'title',
   author: 'author',
   isbn: 'isbn',
   genre: 'genre',
   image_url: 'image_url',
-  description: 'description'
+  description: 'description',
+  location: 'location',
+  publisher: 'publisher',
+  language: 'language',
+  format: 'format',
+  subject: 'subject',
+  keywords: 'keywords'
 };
 
 exports.Prisma.finesOrderByRelevanceFieldEnum = {
@@ -271,9 +304,22 @@ exports.Prisma.contact_usOrderByRelevanceFieldEnum = {
   subject: 'subject',
   message: 'message'
 };
-exports.book_tran_status = exports.$Enums.book_tran_status = {
+
+exports.Prisma.system_configOrderByRelevanceFieldEnum = {
+  config_key: 'config_key',
+  config_value: 'config_value',
+  description: 'description'
+};
+
+exports.Prisma.library_cardsOrderByRelevanceFieldEnum = {
+  card_number: 'card_number'
+};
+exports.item_tran_status = exports.$Enums.item_tran_status = {
   available: 'available',
-  not_available: 'not_available'
+  not_available: 'not_available',
+  reserved: 'reserved',
+  lost: 'lost',
+  damaged: 'damaged'
 };
 
 exports.record_status = exports.$Enums.record_status = {
@@ -281,11 +327,23 @@ exports.record_status = exports.$Enums.record_status = {
   inactive: 'inactive'
 };
 
-exports.book_tran_history_status = exports.$Enums.book_tran_history_status = {
+exports.item_tran_history_status = exports.$Enums.item_tran_history_status = {
   issued: 'issued',
   returned: 'returned',
   pending: 'pending',
-  rejected: 'rejected'
+  rejected: 'rejected',
+  overdue: 'overdue'
+};
+
+exports.library_item_type = exports.$Enums.library_item_type = {
+  book: 'book',
+  journal: 'journal',
+  multimedia: 'multimedia',
+  newspaper: 'newspaper',
+  magazine: 'magazine',
+  thesis: 'thesis',
+  report: 'report',
+  other: 'other'
 };
 
 exports.fines_status = exports.$Enums.fines_status = {
@@ -295,7 +353,15 @@ exports.fines_status = exports.$Enums.fines_status = {
 
 exports.notifications_type = exports.$Enums.notifications_type = {
   issue: 'issue',
-  return: 'return'
+  return: 'return',
+  overdue: 'overdue',
+  reservation_available: 'reservation_available',
+  reservation_expired: 'reservation_expired',
+  fine_due: 'fine_due',
+  system_maintenance: 'system_maintenance',
+  new_item_added: 'new_item_added',
+  item_damaged: 'item_damaged',
+  item_lost: 'item_lost'
 };
 
 exports.notifications_status = exports.$Enums.notifications_status = {
@@ -321,16 +387,25 @@ exports.gender = exports.$Enums.gender = {
   other: 'other'
 };
 
+exports.card_status = exports.$Enums.card_status = {
+  active: 'active',
+  expired: 'expired',
+  suspended: 'suspended',
+  cancelled: 'cancelled'
+};
+
 exports.Prisma.ModelName = {
-  book_tran: 'book_tran',
-  book_tran_history: 'book_tran_history',
-  books: 'books',
+  item_tran: 'item_tran',
+  item_tran_history: 'item_tran_history',
+  library_items: 'library_items',
   fines: 'fines',
   logs: 'logs',
   notifications: 'notifications',
   user_wishlist: 'user_wishlist',
   users: 'users',
-  contact_us: 'contact_us'
+  contact_us: 'contact_us',
+  system_config: 'system_config',
+  library_cards: 'library_cards'
 };
 
 /**

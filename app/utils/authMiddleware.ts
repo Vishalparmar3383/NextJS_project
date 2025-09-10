@@ -1,17 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { NextRequest, NextResponse } from 'next/server';
-import { verifyToken } from './jwt';
+import { verifyToken } from '@/app/utils/jwt';
+import { NextResponse } from 'next/server';
 
-export interface AuthenticatedRequest extends NextRequest {
-    user?: {
-        userId: number;
-        email: string;
-        role: string;
-    };
-}
-
-export function withAuth(handler: (req: AuthenticatedRequest, context?: any) => Promise<NextResponse>) {
-    return async (req: AuthenticatedRequest, context?: any) => {
+export function withAuth(handler: (req: Request & { user?: any }, context?: any) => Promise<NextResponse>) {
+    return async (req: any, context?: any) => {
         try {
             const token = req.cookies.get('authToken')?.value;
 
@@ -36,8 +27,8 @@ export function withAuth(handler: (req: AuthenticatedRequest, context?: any) => 
 }
 
 export function withRoleAuth(allowedRoles: string[]) {
-    return (handler: (req: AuthenticatedRequest, context?: any) => Promise<NextResponse>) => {
-        return withAuth(async (req: AuthenticatedRequest, context?: any) => {
+    return (handler: (req: any, context?: any) => Promise<NextResponse>) => {
+        return withAuth(async (req: any, context?: any) => {
             if (!req.user) {
                 return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
             }

@@ -9,12 +9,13 @@ import {
     Contact2
 } from 'lucide-react';
 import ConfirmDialog from '@/app/components/ConfirmDialog';
+import { logout } from '@/app/utils/authClient';
 
 const rolesConfig = {
     patron: {
         title: 'Patron Panel',
         nav: [
-            { name: 'Books', href: '/patron', icon: BookOpen },
+            { name: 'Library Items', href: '/patron/items', icon: BookOpen },
             { name: 'Wishlist', href: '/patron/wishlist', icon: Heart },
             { name: 'History', href: '/patron/history', icon: History },
             { name: 'Return', href: '/patron/return', icon: RotateCcw },
@@ -29,7 +30,7 @@ const rolesConfig = {
         title: 'Librarian Panel',
         nav: [
             { name: 'Dashboard', href: '/librarian', icon: BarChart3 },
-            { name: 'Books', href: '/librarian/books', icon: BookOpen },
+            { name: 'Items', href: '/librarian/items', icon: BookOpen },
             { name: 'Issue', href: '/librarian/issue', icon: FileText },
             { name: 'Return', href: '/librarian/return', icon: RotateCcw },
             { name: 'Reservations', href: '/librarian/reservations', icon: CalendarDays },
@@ -92,11 +93,14 @@ export default function Navbar({
 
     const confirmLogout = async () => {
         try {
-            await fetch('/api/auth/logout', { method: 'POST' });
+            await logout();
             localStorage.clear();
             window.location.href = '/login';
         } catch (err) {
             console.error('Logout failed:', err);
+            // Even if logout fails, clear local storage and redirect
+            localStorage.clear();
+            window.location.href = '/login';
         }
     };
 

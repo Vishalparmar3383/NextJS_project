@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
-
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, User, Mail, Shield, Calendar, BookOpen, DollarSign, Heart, AlertCircle, Clock, Check, X } from 'lucide-react';
@@ -20,11 +19,11 @@ interface Patron {
         status: string;
         created_at: string;
     }[];
-    book_tran: any[];
-    book_tran_history_book_tran_history_requested_byTousers: any[];
+    item_tran: any[];
+    item_tran_history_item_tran_history_requested_byTousers: any[];
     user_wishlist: {
         id: number;
-        books: {
+        library_items: {
             title: string | null;
             author: string;
         } | null;
@@ -40,10 +39,10 @@ interface Patron {
         totalIssued: number;
         totalReturned: number;
         totalFines: string;
-        currentIssuedBooks: {
+        currentIssuedItems: {
             id: number;
             date_due: string | null;
-            books: {
+            library_items: {
                 title: string | null;
             } | null;
         }[];
@@ -71,7 +70,6 @@ export default function PatronDetailsPage() {
                 setLoading(false);
             }
         }
-
         fetchPatron();
     }, [id]);
 
@@ -81,10 +79,8 @@ export default function PatronDetailsPage() {
             inactive: { bg: 'bg-gray-100', text: 'text-gray-800', icon: X },
             suspended: { bg: 'bg-red-100', text: 'text-red-800', icon: X },
         };
-
         const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.inactive;
         const Icon = config.icon;
-
         return (
             <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${config.bg} ${config.text}`}>
                 <Icon className="w-3 h-3" />
@@ -101,9 +97,7 @@ export default function PatronDetailsPage() {
             student: 'bg-indigo-100 text-indigo-800',
             faculty: 'bg-emerald-100 text-emerald-800',
         };
-
         const colorClass = roleColors[role as keyof typeof roleColors] || 'bg-gray-100 text-gray-800';
-
         return (
             <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${colorClass}`}>
                 <Shield className="w-3 h-3" />
@@ -164,7 +158,6 @@ export default function PatronDetailsPage() {
                         <p className="text-gray-600 mt-1">User ID: #{patron.user_id}</p>
                     </div>
                 </div>
-
                 {/* Profile Header Card */}
                 <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
                     <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6">
@@ -198,7 +191,6 @@ export default function PatronDetailsPage() {
                         </div>
                     </div>
                 </div>
-
                 {/* Stats Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
@@ -208,11 +200,10 @@ export default function PatronDetailsPage() {
                             </div>
                             <div>
                                 <p className="text-2xl font-bold text-gray-900">{patron.stats.totalIssued}</p>
-                                <p className="text-gray-600 text-sm">Books Issued</p>
+                                <p className="text-gray-600 text-sm">Items Issued</p>
                             </div>
                         </div>
                     </div>
-
                     <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
                         <div className="flex items-center gap-3">
                             <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
@@ -220,11 +211,10 @@ export default function PatronDetailsPage() {
                             </div>
                             <div>
                                 <p className="text-2xl font-bold text-gray-900">{patron.stats.totalReturned}</p>
-                                <p className="text-gray-600 text-sm">Books Returned</p>
+                                <p className="text-gray-600 text-sm">Items Returned</p>
                             </div>
                         </div>
                     </div>
-
                     <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
                         <div className="flex items-center gap-3">
                             <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
@@ -237,35 +227,33 @@ export default function PatronDetailsPage() {
                         </div>
                     </div>
                 </div>
-
                 {/* Content Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    {/* Currently Issued Books */}
+                    {/* Currently Issued Items */}
                     <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
                         <div className="flex items-center gap-3 mb-6">
                             <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
                                 <BookOpen className="w-5 h-5 text-blue-600" />
                             </div>
-                            <h3 className="text-xl font-semibold text-gray-900">Currently Issued Books</h3>
+                            <h3 className="text-xl font-semibold text-gray-900">Currently Issued Items</h3>
                         </div>
-
-                        {patron.stats.currentIssuedBooks.length > 0 ? (
+                        {patron.stats.currentIssuedItems.length > 0 ? (
                             <div className="space-y-4">
-                                {patron.stats.currentIssuedBooks.map((book) => (
-                                    <div key={book.id} className="border border-gray-200 rounded-lg p-4">
+                                {patron.stats.currentIssuedItems.map((item) => (
+                                    <div key={item.id} className="border border-gray-200 rounded-lg p-4">
                                         <h4 className="font-medium text-gray-900 mb-2">
-                                            {book.books?.title || 'Unknown Title'}
+                                            {item.library_items?.title || 'Unknown Title'}
                                         </h4>
                                         <div className="flex items-center gap-2">
                                             <Clock className="w-4 h-4 text-gray-400" />
-                                            <span className={`text-sm ${isOverdue(book.date_due)
+                                            <span className={`text-sm ${isOverdue(item.date_due)
                                                 ? 'text-red-600 font-medium'
                                                 : 'text-gray-600'
                                                 }`}>
-                                                Due: {book.date_due
-                                                    ? new Date(book.date_due).toLocaleDateString()
+                                                Due: {item.date_due
+                                                    ? new Date(item.date_due).toLocaleDateString()
                                                     : 'N/A'}
-                                                {isOverdue(book.date_due) && ' (Overdue)'}
+                                                {isOverdue(item.date_due) && ' (Overdue)'}
                                             </span>
                                         </div>
                                     </div>
@@ -274,11 +262,10 @@ export default function PatronDetailsPage() {
                         ) : (
                             <div className="text-center py-8 text-gray-500">
                                 <BookOpen className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-                                <p>No currently issued books</p>
+                                <p>No currently issued items</p>
                             </div>
                         )}
                     </div>
-
                     {/* Wishlist */}
                     <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
                         <div className="flex items-center gap-3 mb-6">
@@ -287,16 +274,15 @@ export default function PatronDetailsPage() {
                             </div>
                             <h3 className="text-xl font-semibold text-gray-900">Wishlist</h3>
                         </div>
-
                         {patron.user_wishlist.length > 0 ? (
                             <div className="space-y-3">
                                 {patron.user_wishlist.map((item) => (
                                     <div key={item.id} className="border border-gray-200 rounded-lg p-4">
                                         <h4 className="font-medium text-gray-900">
-                                            {item.books?.title || 'Unknown Title'}
+                                            {item.library_items?.title || 'Unknown Title'}
                                         </h4>
                                         <p className="text-gray-600 text-sm">
-                                            by {item.books?.author || 'Unknown Author'}
+                                            by {item.library_items?.author || 'Unknown Author'}
                                         </p>
                                     </div>
                                 ))}
@@ -304,12 +290,11 @@ export default function PatronDetailsPage() {
                         ) : (
                             <div className="text-center py-8 text-gray-500">
                                 <Heart className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-                                <p>No books in wishlist</p>
+                                <p>No items in wishlist</p>
                             </div>
                         )}
                     </div>
                 </div>
-
                 {/* Fines Section */}
                 <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
                     <div className="flex items-center gap-3 mb-6">
@@ -318,7 +303,6 @@ export default function PatronDetailsPage() {
                         </div>
                         <h3 className="text-xl font-semibold text-gray-900">Fines</h3>
                     </div>
-
                     {patron.fines.length > 0 ? (
                         <div className="space-y-3">
                             {patron.fines.map((fine) => (
@@ -348,7 +332,6 @@ export default function PatronDetailsPage() {
                         </div>
                     )}
                 </div>
-
                 {/* Activity Logs */}
                 <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
                     <div className="flex items-center gap-3 mb-6">
@@ -357,7 +340,6 @@ export default function PatronDetailsPage() {
                         </div>
                         <h3 className="text-xl font-semibold text-gray-900">Recent Activity</h3>
                     </div>
-
                     {patron.logs.length > 0 ? (
                         <div className="space-y-4">
                             {patron.logs.slice(0, 10).map((log) => (

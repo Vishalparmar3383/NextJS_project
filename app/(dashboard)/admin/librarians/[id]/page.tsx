@@ -20,22 +20,22 @@ import {
     Inbox
 } from 'lucide-react';
 
-interface Book {
-    book_id: number;
+interface Item {
+    item_id: number;
     title: string;
     author: string;
     genre: string;
     year: number;
-    _count:{
-        book_tran:number;
+    _count: {
+        item_tran: number;
     };
 }
 
 interface Transaction {
     tran_id: number;
     status: string;
-    books: { title: string };
-    users_book_tran_history_requested_byTousers: { name: string };
+    library_items: { title: string };
+    users_item_tran_history_requested_byTousers: { name: string };
     approved_at: string;
 }
 
@@ -60,12 +60,12 @@ interface LibrarianData {
         role: string;
     };
     summary: {
-        totalBooksManaged: number;
+        totalItemsManaged: number;
         totalApprovedTransactions: number;
         totalLogs: number;
         totalNotifications: number;
     };
-    booksManaged: Book[];
+    itemsManaged: Item[];
     approvedTransactions: Transaction[];
     logs: Log[];
     notifications: {
@@ -150,8 +150,7 @@ export default function LibrarianDetailsPage() {
         );
     }
 
-    const { user, summary, booksManaged, approvedTransactions, logs, notifications } = data;
-    console.log("log : ",logs);
+    const { user, summary, itemsManaged, approvedTransactions, logs, notifications } = data!;
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50">
@@ -195,6 +194,7 @@ export default function LibrarianDetailsPage() {
                     </div>
                 </div>
 
+
                 {/* Stats Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
@@ -203,8 +203,8 @@ export default function LibrarianDetailsPage() {
                                 <BookOpen className="w-6 h-6 text-blue-600" />
                             </div>
                             <div>
-                                <p className="text-2xl font-bold text-gray-900">{summary.totalBooksManaged}</p>
-                                <p className="text-gray-600 text-sm">Books Managed</p>
+                                <p className="text-2xl font-bold text-gray-900">{summary.totalItemsManaged}</p>
+                                <p className="text-gray-600 text-sm">Items Managed</p>
                             </div>
                         </div>
                     </div>
@@ -246,39 +246,39 @@ export default function LibrarianDetailsPage() {
                     </div>
                 </div>
 
-                {/* Books Managed */}
+                {/* Items Managed */}
                 <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
                     <div className="flex items-center gap-3 mb-6">
                         <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
                             <BookOpen className="w-5 h-5 text-blue-600" />
                         </div>
-                        <h3 className="text-xl font-semibold text-gray-900">Books Managed</h3>
+                        <h3 className="text-xl font-semibold text-gray-900">Items Managed</h3>
                     </div>
 
-                    {booksManaged.length > 0 ? (
+                    {itemsManaged.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {booksManaged.map(book => (
-                                <div key={book.book_id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                            {itemsManaged.map(item => (
+                                <div key={item.item_id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
                                     <div className="flex justify-between items-start mb-3">
                                         <h4 className="font-semibold text-gray-900 text-lg leading-tight">
-                                            {book.title}
+                                            {item.title}
                                         </h4>
-                                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getGenreColor(book.genre)}`}>
-                                            {book.genre}
+                                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getGenreColor(item.genre)}`}>
+                                            {item.genre}
                                         </span>
                                     </div>
                                     <div className="space-y-2 text-sm text-gray-600">
                                         <p className="flex items-center gap-2">
                                             <Users className="w-4 h-4" />
-                                            {book.author}
+                                            {item.author}
                                         </p>
                                         <p className="flex items-center gap-2">
                                             <Calendar className="w-4 h-4" />
-                                            {book.year}
+                                            {item.year}
                                         </p>
                                         <p className="flex items-center gap-2">
                                             <Hash className="w-4 h-4" />
-                                            Quantity: {book._count.book_tran}
+                                            Quantity: {item._count.item_tran}
                                         </p>
                                     </div>
                                 </div>
@@ -287,7 +287,7 @@ export default function LibrarianDetailsPage() {
                     ) : (
                         <div className="text-center py-8 text-gray-500">
                             <BookOpen className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-                            <p>No books managed</p>
+                            <p>No items managed</p>
                         </div>
                     )}
                 </div>
@@ -307,9 +307,9 @@ export default function LibrarianDetailsPage() {
                                 <div key={tran.tran_id} className="border border-gray-200 rounded-lg p-4">
                                     <div className="flex justify-between items-start mb-3">
                                         <div className="flex-1">
-                                            <h4 className="font-medium text-gray-900">{tran.books.title}</h4>
+                                            <h4 className="font-medium text-gray-900">{tran.library_items.title}</h4>
                                             <p className="text-gray-600 text-sm">
-                                                Requested by: {tran.users_book_tran_history_requested_byTousers.name}
+                                                Requested by: {tran.users_item_tran_history_requested_byTousers.name}
                                             </p>
                                         </div>
                                         <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(tran.status)}`}>
@@ -382,7 +382,6 @@ export default function LibrarianDetailsPage() {
                                             </p>
                                         </div>
                                     ))}
-
                                 </div>
                             ) : (
                                 <p className="text-gray-500 text-sm">No notifications sent</p>
@@ -408,7 +407,6 @@ export default function LibrarianDetailsPage() {
                                             </p>
                                         </div>
                                     ))}
-
                                 </div>
                             ) : (
                                 <p className="text-gray-500 text-sm">No notifications received</p>

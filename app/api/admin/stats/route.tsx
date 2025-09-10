@@ -15,7 +15,7 @@ export async function GET() {
     try {
         const now = new Date();
 
-        // ========== EXISTING METRICS (Enhanced) ==========
+        // ========== EXISTING METRICS (Item-Focused) ==========
         const monthlyActivity: Array<{
             label: string;
             issued: number;
@@ -42,13 +42,13 @@ export async function GET() {
                 newLibrarians,
                 finesCollected,
             ] = await Promise.all([
-                prisma.book_tran_history.count({
+                prisma.item_tran_history.count({
                     where: { status: 'issued', date_issued: { gte: monthStart, lte: monthEnd } },
                 }),
-                prisma.book_tran_history.count({
+                prisma.item_tran_history.count({
                     where: { status: 'returned', date_returned: { gte: monthStart, lte: monthEnd } },
                 }),
-                prisma.book_tran_history.count({
+                prisma.item_tran_history.count({
                     where: { status: 'pending', requested_at: { gte: monthStart, lte: monthEnd } },
                 }),
                 prisma.users.count({
@@ -79,24 +79,24 @@ export async function GET() {
             });
         }
 
-        // Top 5 most borrowed books
-        const topBooks = await prisma.book_tran_history.groupBy({
-            by: ['book_id'],
-            _count: { book_id: true },
-            orderBy: { _count: { book_id: 'desc' } },
+        // Top 5 most borrowed items
+        const topItems = await prisma.item_tran_history.groupBy({
+            by: ['item_id'],
+            _count: { item_id: true },
+            orderBy: { _count: { item_id: 'desc' } },
             take: 5,
         });
-        const topBookDetails = await prisma.books.findMany({
-            where: { book_id: { in: topBooks.map((b) => b.book_id!) } },
-            select: { book_id: true, title: true, author: true, genre: true },
+        const topItemDetails = await prisma.library_items.findMany({
+            where: { item_id: { in: topItems.map((b) => b.item_id!) } },
+            select: { item_id: true, title: true, author: true, genre: true },
         });
-        const topBorrowed = topBooks.map((b) => {
-            const book = topBookDetails.find((t) => t.book_id === b.book_id);
+        const topBorrowed = topItems.map((b) => {
+            const item = topItemDetails.find((t) => t.item_id === b.item_id);
             return {
-                title: book?.title || 'Unknown',
-                author: book?.author || 'Unknown',
-                genre: book?.genre || 'Unknown',
-                count: b._count.book_id,
+                title: item?.title || 'Unknown',
+                author: item?.author || 'Unknown',
+                genre: item?.genre || 'Unknown',
+                count: b._count.item_id,
             };
         });
 
@@ -110,7 +110,7 @@ export async function GET() {
                 by: ['role'],
                 _count: { role: true },
             }),
-            prisma.book_tran_history
+            prisma.item_tran_history
                 .groupBy({
                     by: ['requested_by'],
                     _count: { requested_by: true },
@@ -136,37 +136,37 @@ export async function GET() {
                 }),
         ]);
 
-        // ========== NEW BOOK ANALYTICS ==========
+        // ========== ITEM ANALYTICS ==========
         const [genreDist, mostFavorited, availability, monthlyAdds] =
             await Promise.all([
-                prisma.books.groupBy({
+                prisma.library_items.groupBy({
                     by: ['genre'],
                     _count: { genre: true },
                     orderBy: { _count: { genre: 'desc' } },
                 }),
                 prisma.user_wishlist
                     .groupBy({
-                        by: ['book_id'],
-                        _count: { book_id: true },
-                        orderBy: { _count: { book_id: 'desc' } },
+                        by: ['item_id'],
+                        _count: { item_id: true },
+                        orderBy: { _count: { item_id: 'desc' } },
                         take: 5,
                     })
                     .then(async (res) => {
-                        const ids = res.map((r) => r.book_id!);
-                        const books = await prisma.books.findMany({
-                            where: { book_id: { in: ids } },
-                            select: { book_id: true, title: true, author: true },
+                        const ids = res.map((r) => r.item_id!);
+                        const items = await prisma.library_items.findMany({
+                            where: { item_id: { in: ids } },
+                            select: { item_id: true, title: true, author: true },
                         });
                         return res.map((r) => {
-                            const b = books.find((b) => b.book_id === r.book_id);
+                            const b = items.find((b) => b.item_id === r.item_id);
                             return {
                                 title: b?.title || 'Unknown',
                                 author: b?.author || 'Unknown',
-                                favoriteCount: r._count.book_id,
+                                favoriteCount: r._count.item_id,
                             };
                         });
                     }),
-                prisma.book_tran.groupBy({
+                prisma.item_tran.groupBy({
                     by: ['status'],
                     _count: { status: true },
                 }),
@@ -174,7 +174,7 @@ export async function GET() {
                     Array.from({ length: 6 }, async (_, i) => {
                         const mStart = startOfMonth(subMonths(now, 5 - i));
                         const mEnd = endOfMonth(subMonths(now, 5 - i));
-                        const cnt = await prisma.books.count({
+                        const cnt = await prisma.library_items.count({
                             where: { created_at: { gte: mStart, lte: mEnd } },
                         });
                         return {
@@ -242,8 +242,8 @@ export async function GET() {
         ]);
 
         // ========== SYSTEM ACTIVITY ANALYTICS ==========
-        const [overdueBooks, weeklyActivity, recentLogs] = await Promise.all([
-            prisma.book_tran_history.count({
+        const [overdueItems, weeklyActivity, recentLogs] = await Promise.all([
+            prisma.item_tran_history.count({
                 where: { status: 'issued', date_due: { lt: now } },
             }),
             Promise.all(
@@ -251,10 +251,10 @@ export async function GET() {
                     const dStart = startOfDay(subDays(now, 6 - i));
                     const dEnd = endOfDay(subDays(now, 6 - i));
                     const [iss, ret] = await Promise.all([
-                        prisma.book_tran_history.count({
+                        prisma.item_tran_history.count({
                             where: { status: 'issued', date_issued: { gte: dStart, lte: dEnd } },
                         }),
-                        prisma.book_tran_history.count({
+                        prisma.item_tran_history.count({
                             where: { status: 'returned', date_returned: { gte: dStart, lte: dEnd } },
                         }),
                     ]);
@@ -267,8 +267,7 @@ export async function GET() {
         ]);
 
         // ========== LIBRARIAN PERFORMANCE ==========
-        // REMOVE genreSpecialization AND related fetch
-        const librarianStats = await prisma.book_tran_history
+        const librarianStats = await prisma.item_tran_history
             .groupBy({
                 by: ['approved_by'],
                 where: { approved_by: { not: null } },
@@ -292,7 +291,7 @@ export async function GET() {
             });
 
         // ========== EXISTING CALCULATIONS ==========
-        const returnedRecords = await prisma.book_tran_history.findMany({
+        const returnedRecords = await prisma.item_tran_history.findMany({
             where: { status: 'returned', date_issued: { not: null }, date_returned: { not: null } },
             select: { date_issued: true, date_returned: true },
         });
@@ -305,15 +304,15 @@ export async function GET() {
             : 0;
 
         const [
-            totalBooks,
+            totalItems,
             totalUsers,
             totalFineAggregate,
             activeTransactions,
         ] = await Promise.all([
-            prisma.books.count({where:{record_status:'active'}}),
+            prisma.library_items.count({ where: { record_status: 'active' } }),
             prisma.users.count(),
             prisma.fines.aggregate({ _sum: { amount: true } }),
-            prisma.book_tran_history.count({ where: { status: 'issued' } }),
+            prisma.item_tran_history.count({ where: { status: 'issued' } }),
         ]);
 
         // ========== RETURN RESPONSE ==========
@@ -329,12 +328,12 @@ export async function GET() {
                 totalUsers,
             },
 
-            bookAnalytics: {
+            itemAnalytics: {
                 genreDistribution: genreDist,
                 mostFavorited,
                 availability,
                 monthlyAdditions: monthlyAdds,
-                totalBooks,
+                totalItems,
             },
 
             fineManagement: {
@@ -351,7 +350,7 @@ export async function GET() {
             },
 
             systemActivity: {
-                overdueBooks,
+                overdueItems,
                 weeklyActivity,
                 recentLogsCount: recentLogs,
                 activeTransactions,
@@ -359,7 +358,6 @@ export async function GET() {
 
             librarianPerformance: {
                 approvalStats: librarianStats,
-                // genreSpecialization removed
             },
         });
     } catch (err) {

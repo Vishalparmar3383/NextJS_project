@@ -1,70 +1,72 @@
 import { NextResponse } from 'next/server';
-import { withRoleAuth, AuthenticatedRequest } from '@/app/utils/authMiddleware';
+import { withRoleAuth } from '@/app/utils/authMiddleware';
 import { PrismaClient } from '@/generated/prisma';
 
-export const GET = withRoleAuth(['patron'])(async (req: AuthenticatedRequest) => {
+export const GET = withRoleAuth(['patron'])(async (req) => {
+    const prisma = new PrismaClient();
     try {
-        const prisma = new PrismaClient();
-        
-        if (!req.user) {
-            return NextResponse.json({ success: false, error: 'User not logged in' }, { status: 401 });
-        }
+        const userId = req.user!.userId;
 
-        // Get transaction history
-        const history = await prisma.book_tran_history.findMany({
+        const borrowHistory = await prisma.item_tran_history.findMany({
             where: {
-                requested_by: req.user.userId,
-                books: {
-                    isNot: null,
-                },
+                requested_by: userId
             },
-            orderBy: { date_issued: 'desc' },
             include: {
-                book_tran: {
-                    include: {
-                        books: {
-                            select: {
-                                book_id: true,
-                                title: true,
-                                author: true,
-                                genre: true,
-                                year: true,
-                                image_url: true,
-                            },
-                        },
-                    },
+                library_items: {
+                    select: {
+                        item_id: true,
+                        title: true,
+                        author: true,
+                        item_type: true,
+                        image_url: true,
+                        location: true
+                    }
                 },
+                users_item_tran_history_approved_byTousers: {
+                    select: {
+                        name: true,
+                        email: true
+                    }
+                },
+                fines:true
             },
-        });
-
-        const fines = await prisma.fines.findMany({
-            where: { user_id: req.user.userId },
-        });
-
-        // Map of transaction ID → fine details (amount and status)
-        const fineMap = new Map<number, { amount: number; status: string | null }>();
-        fines.forEach((fine) => {
-            if (fine.book_tran_history_id !== null && fine.amount !== null) {
-                fineMap.set(fine.book_tran_history_id, {
-                    amount: Number(fine.amount),
-                    status: fine.status,
-                });
+            orderBy: {
+                requested_at: 'desc'
             }
         });
 
-        const enrichedHistory = history.map((entry) => ({
-            ...entry,
-            ...(entry.id !== null && fineMap.has(entry.id)
-                ? {
-                    fine: fineMap.get(entry.id)?.amount,
-                    fineStatus: fineMap.get(entry.id)?.status,
-                }
-                : {}),
+        const formattedHistory = borrowHistory.map(history => ({
+            id: history.id,
+            item: {
+                item_id: history.library_items?.item_id,
+                title: history.library_items?.title,
+                author: history.library_items?.author,
+                item_type: history.library_items?.item_type,
+                image_url: history.library_items?.image_url,
+                location: history.library_items?.location
+            },
+            status: history.status,
+            requested_at: history.requested_at,
+            approved_at: history.approved_at,
+            date_issued: history.date_issued,
+            date_due: history.date_due,
+            date_returned: history.date_returned,
+            approved_by: history.users_item_tran_history_approved_byTousers ? {
+                name: history.users_item_tran_history_approved_byTousers.name,
+                email: history.users_item_tran_history_approved_byTousers.email
+            } : null,
+            remarks: history.remarks
         }));
 
-        return NextResponse.json({ success: true, history: enrichedHistory });
+        return NextResponse.json({ success: true, borrowHistory: formattedHistory });
     } catch (error) {
-        console.error('[ERROR] /api/patron/history:', error);
-        return NextResponse.json({ success: false, error: 'Server error' }, { status: 500 });
+        console.error('Error fetching borrow history:', error);
+        return NextResponse.json({
+            success: false,
+            message: 'Failed to fetch borrow history',
+            error: error instanceof Error ? error.message : 'Unknown error'
+        }, { status: 500 });
+    } finally {
+        await prisma.$disconnect();
     }
 });

@@ -14,20 +14,20 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
 
 
 /**
- * Model book_tran
+ * Model item_tran
  * 
  */
-export type book_tran = $Result.DefaultSelection<Prisma.$book_tranPayload>
+export type item_tran = $Result.DefaultSelection<Prisma.$item_tranPayload>
 /**
- * Model book_tran_history
+ * Model item_tran_history
  * 
  */
-export type book_tran_history = $Result.DefaultSelection<Prisma.$book_tran_historyPayload>
+export type item_tran_history = $Result.DefaultSelection<Prisma.$item_tran_historyPayload>
 /**
- * Model books
+ * Model library_items
  * 
  */
-export type books = $Result.DefaultSelection<Prisma.$booksPayload>
+export type library_items = $Result.DefaultSelection<Prisma.$library_itemsPayload>
 /**
  * Model fines
  * 
@@ -58,6 +58,16 @@ export type users = $Result.DefaultSelection<Prisma.$usersPayload>
  * 
  */
 export type contact_us = $Result.DefaultSelection<Prisma.$contact_usPayload>
+/**
+ * Model system_config
+ * 
+ */
+export type system_config = $Result.DefaultSelection<Prisma.$system_configPayload>
+/**
+ * Model library_cards
+ * 
+ */
+export type library_cards = $Result.DefaultSelection<Prisma.$library_cardsPayload>
 
 /**
  * Enums
@@ -73,28 +83,18 @@ export type record_status = (typeof record_status)[keyof typeof record_status]
 
 export const notifications_type: {
   issue: 'issue',
-  return: 'return'
+  return: 'return',
+  overdue: 'overdue',
+  reservation_available: 'reservation_available',
+  reservation_expired: 'reservation_expired',
+  fine_due: 'fine_due',
+  system_maintenance: 'system_maintenance',
+  new_item_added: 'new_item_added',
+  item_damaged: 'item_damaged',
+  item_lost: 'item_lost'
 };
 
 export type notifications_type = (typeof notifications_type)[keyof typeof notifications_type]
-
-
-export const book_tran_status: {
-  available: 'available',
-  not_available: 'not_available'
-};
-
-export type book_tran_status = (typeof book_tran_status)[keyof typeof book_tran_status]
-
-
-export const book_tran_history_status: {
-  issued: 'issued',
-  returned: 'returned',
-  pending: 'pending',
-  rejected: 'rejected'
-};
-
-export type book_tran_history_status = (typeof book_tran_history_status)[keyof typeof book_tran_history_status]
 
 
 export const users_role: {
@@ -139,6 +139,63 @@ export const gender: {
 
 export type gender = (typeof gender)[keyof typeof gender]
 
+
+export const library_item_type: {
+  book: 'book',
+  journal: 'journal',
+  multimedia: 'multimedia',
+  newspaper: 'newspaper',
+  magazine: 'magazine',
+  thesis: 'thesis',
+  report: 'report',
+  other: 'other'
+};
+
+export type library_item_type = (typeof library_item_type)[keyof typeof library_item_type]
+
+
+export const item_tran_status: {
+  available: 'available',
+  not_available: 'not_available',
+  reserved: 'reserved',
+  lost: 'lost',
+  damaged: 'damaged'
+};
+
+export type item_tran_status = (typeof item_tran_status)[keyof typeof item_tran_status]
+
+
+export const item_tran_history_status: {
+  issued: 'issued',
+  returned: 'returned',
+  pending: 'pending',
+  rejected: 'rejected',
+  overdue: 'overdue'
+};
+
+export type item_tran_history_status = (typeof item_tran_history_status)[keyof typeof item_tran_history_status]
+
+
+export const reservation_status: {
+  pending: 'pending',
+  active: 'active',
+  expired: 'expired',
+  cancelled: 'cancelled',
+  fulfilled: 'fulfilled'
+};
+
+export type reservation_status = (typeof reservation_status)[keyof typeof reservation_status]
+
+
+export const card_status: {
+  active: 'active',
+  expired: 'expired',
+  suspended: 'suspended',
+  cancelled: 'cancelled'
+};
+
+export type card_status = (typeof card_status)[keyof typeof card_status]
+
 }
 
 export type record_status = $Enums.record_status
@@ -148,14 +205,6 @@ export const record_status: typeof $Enums.record_status
 export type notifications_type = $Enums.notifications_type
 
 export const notifications_type: typeof $Enums.notifications_type
-
-export type book_tran_status = $Enums.book_tran_status
-
-export const book_tran_status: typeof $Enums.book_tran_status
-
-export type book_tran_history_status = $Enums.book_tran_history_status
-
-export const book_tran_history_status: typeof $Enums.book_tran_history_status
 
 export type users_role = $Enums.users_role
 
@@ -177,6 +226,26 @@ export type gender = $Enums.gender
 
 export const gender: typeof $Enums.gender
 
+export type library_item_type = $Enums.library_item_type
+
+export const library_item_type: typeof $Enums.library_item_type
+
+export type item_tran_status = $Enums.item_tran_status
+
+export const item_tran_status: typeof $Enums.item_tran_status
+
+export type item_tran_history_status = $Enums.item_tran_history_status
+
+export const item_tran_history_status: typeof $Enums.item_tran_history_status
+
+export type reservation_status = $Enums.reservation_status
+
+export const reservation_status: typeof $Enums.reservation_status
+
+export type card_status = $Enums.card_status
+
+export const card_status: typeof $Enums.card_status
+
 /**
  * ##  Prisma Client ʲˢ
  *
@@ -184,8 +253,8 @@ export const gender: typeof $Enums.gender
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Book_trans
- * const book_trans = await prisma.book_tran.findMany()
+ * // Fetch zero or more Item_trans
+ * const item_trans = await prisma.item_tran.findMany()
  * ```
  *
  *
@@ -205,8 +274,8 @@ export class PrismaClient<
    * @example
    * ```
    * const prisma = new PrismaClient()
-   * // Fetch zero or more Book_trans
-   * const book_trans = await prisma.book_tran.findMany()
+   * // Fetch zero or more Item_trans
+   * const item_trans = await prisma.item_tran.findMany()
    * ```
    *
    *
@@ -296,34 +365,34 @@ export class PrismaClient<
   }>>
 
       /**
-   * `prisma.book_tran`: Exposes CRUD operations for the **book_tran** model.
+   * `prisma.item_tran`: Exposes CRUD operations for the **item_tran** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Book_trans
-    * const book_trans = await prisma.book_tran.findMany()
+    * // Fetch zero or more Item_trans
+    * const item_trans = await prisma.item_tran.findMany()
     * ```
     */
-  get book_tran(): Prisma.book_tranDelegate<ExtArgs, ClientOptions>;
+  get item_tran(): Prisma.item_tranDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.book_tran_history`: Exposes CRUD operations for the **book_tran_history** model.
+   * `prisma.item_tran_history`: Exposes CRUD operations for the **item_tran_history** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Book_tran_histories
-    * const book_tran_histories = await prisma.book_tran_history.findMany()
+    * // Fetch zero or more Item_tran_histories
+    * const item_tran_histories = await prisma.item_tran_history.findMany()
     * ```
     */
-  get book_tran_history(): Prisma.book_tran_historyDelegate<ExtArgs, ClientOptions>;
+  get item_tran_history(): Prisma.item_tran_historyDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.books`: Exposes CRUD operations for the **books** model.
+   * `prisma.library_items`: Exposes CRUD operations for the **library_items** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Books
-    * const books = await prisma.books.findMany()
+    * // Fetch zero or more Library_items
+    * const library_items = await prisma.library_items.findMany()
     * ```
     */
-  get books(): Prisma.booksDelegate<ExtArgs, ClientOptions>;
+  get library_items(): Prisma.library_itemsDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.fines`: Exposes CRUD operations for the **fines** model.
@@ -384,6 +453,26 @@ export class PrismaClient<
     * ```
     */
   get contact_us(): Prisma.contact_usDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.system_config`: Exposes CRUD operations for the **system_config** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more System_configs
+    * const system_configs = await prisma.system_config.findMany()
+    * ```
+    */
+  get system_config(): Prisma.system_configDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.library_cards`: Exposes CRUD operations for the **library_cards** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Library_cards
+    * const library_cards = await prisma.library_cards.findMany()
+    * ```
+    */
+  get library_cards(): Prisma.library_cardsDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -824,15 +913,17 @@ export namespace Prisma {
 
 
   export const ModelName: {
-    book_tran: 'book_tran',
-    book_tran_history: 'book_tran_history',
-    books: 'books',
+    item_tran: 'item_tran',
+    item_tran_history: 'item_tran_history',
+    library_items: 'library_items',
     fines: 'fines',
     logs: 'logs',
     notifications: 'notifications',
     user_wishlist: 'user_wishlist',
     users: 'users',
-    contact_us: 'contact_us'
+    contact_us: 'contact_us',
+    system_config: 'system_config',
+    library_cards: 'library_cards'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -851,205 +942,205 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "book_tran" | "book_tran_history" | "books" | "fines" | "logs" | "notifications" | "user_wishlist" | "users" | "contact_us"
+      modelProps: "item_tran" | "item_tran_history" | "library_items" | "fines" | "logs" | "notifications" | "user_wishlist" | "users" | "contact_us" | "system_config" | "library_cards"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
-      book_tran: {
-        payload: Prisma.$book_tranPayload<ExtArgs>
-        fields: Prisma.book_tranFieldRefs
+      item_tran: {
+        payload: Prisma.$item_tranPayload<ExtArgs>
+        fields: Prisma.item_tranFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.book_tranFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$book_tranPayload> | null
+            args: Prisma.item_tranFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$item_tranPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.book_tranFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$book_tranPayload>
+            args: Prisma.item_tranFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$item_tranPayload>
           }
           findFirst: {
-            args: Prisma.book_tranFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$book_tranPayload> | null
+            args: Prisma.item_tranFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$item_tranPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.book_tranFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$book_tranPayload>
+            args: Prisma.item_tranFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$item_tranPayload>
           }
           findMany: {
-            args: Prisma.book_tranFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$book_tranPayload>[]
+            args: Prisma.item_tranFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$item_tranPayload>[]
           }
           create: {
-            args: Prisma.book_tranCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$book_tranPayload>
+            args: Prisma.item_tranCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$item_tranPayload>
           }
           createMany: {
-            args: Prisma.book_tranCreateManyArgs<ExtArgs>
+            args: Prisma.item_tranCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           delete: {
-            args: Prisma.book_tranDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$book_tranPayload>
+            args: Prisma.item_tranDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$item_tranPayload>
           }
           update: {
-            args: Prisma.book_tranUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$book_tranPayload>
+            args: Prisma.item_tranUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$item_tranPayload>
           }
           deleteMany: {
-            args: Prisma.book_tranDeleteManyArgs<ExtArgs>
+            args: Prisma.item_tranDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.book_tranUpdateManyArgs<ExtArgs>
+            args: Prisma.item_tranUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           upsert: {
-            args: Prisma.book_tranUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$book_tranPayload>
+            args: Prisma.item_tranUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$item_tranPayload>
           }
           aggregate: {
-            args: Prisma.Book_tranAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateBook_tran>
+            args: Prisma.Item_tranAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateItem_tran>
           }
           groupBy: {
-            args: Prisma.book_tranGroupByArgs<ExtArgs>
-            result: $Utils.Optional<Book_tranGroupByOutputType>[]
+            args: Prisma.item_tranGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Item_tranGroupByOutputType>[]
           }
           count: {
-            args: Prisma.book_tranCountArgs<ExtArgs>
-            result: $Utils.Optional<Book_tranCountAggregateOutputType> | number
+            args: Prisma.item_tranCountArgs<ExtArgs>
+            result: $Utils.Optional<Item_tranCountAggregateOutputType> | number
           }
         }
       }
-      book_tran_history: {
-        payload: Prisma.$book_tran_historyPayload<ExtArgs>
-        fields: Prisma.book_tran_historyFieldRefs
+      item_tran_history: {
+        payload: Prisma.$item_tran_historyPayload<ExtArgs>
+        fields: Prisma.item_tran_historyFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.book_tran_historyFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$book_tran_historyPayload> | null
+            args: Prisma.item_tran_historyFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$item_tran_historyPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.book_tran_historyFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$book_tran_historyPayload>
+            args: Prisma.item_tran_historyFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$item_tran_historyPayload>
           }
           findFirst: {
-            args: Prisma.book_tran_historyFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$book_tran_historyPayload> | null
+            args: Prisma.item_tran_historyFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$item_tran_historyPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.book_tran_historyFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$book_tran_historyPayload>
+            args: Prisma.item_tran_historyFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$item_tran_historyPayload>
           }
           findMany: {
-            args: Prisma.book_tran_historyFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$book_tran_historyPayload>[]
+            args: Prisma.item_tran_historyFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$item_tran_historyPayload>[]
           }
           create: {
-            args: Prisma.book_tran_historyCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$book_tran_historyPayload>
+            args: Prisma.item_tran_historyCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$item_tran_historyPayload>
           }
           createMany: {
-            args: Prisma.book_tran_historyCreateManyArgs<ExtArgs>
+            args: Prisma.item_tran_historyCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           delete: {
-            args: Prisma.book_tran_historyDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$book_tran_historyPayload>
+            args: Prisma.item_tran_historyDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$item_tran_historyPayload>
           }
           update: {
-            args: Prisma.book_tran_historyUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$book_tran_historyPayload>
+            args: Prisma.item_tran_historyUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$item_tran_historyPayload>
           }
           deleteMany: {
-            args: Prisma.book_tran_historyDeleteManyArgs<ExtArgs>
+            args: Prisma.item_tran_historyDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.book_tran_historyUpdateManyArgs<ExtArgs>
+            args: Prisma.item_tran_historyUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           upsert: {
-            args: Prisma.book_tran_historyUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$book_tran_historyPayload>
+            args: Prisma.item_tran_historyUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$item_tran_historyPayload>
           }
           aggregate: {
-            args: Prisma.Book_tran_historyAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateBook_tran_history>
+            args: Prisma.Item_tran_historyAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateItem_tran_history>
           }
           groupBy: {
-            args: Prisma.book_tran_historyGroupByArgs<ExtArgs>
-            result: $Utils.Optional<Book_tran_historyGroupByOutputType>[]
+            args: Prisma.item_tran_historyGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Item_tran_historyGroupByOutputType>[]
           }
           count: {
-            args: Prisma.book_tran_historyCountArgs<ExtArgs>
-            result: $Utils.Optional<Book_tran_historyCountAggregateOutputType> | number
+            args: Prisma.item_tran_historyCountArgs<ExtArgs>
+            result: $Utils.Optional<Item_tran_historyCountAggregateOutputType> | number
           }
         }
       }
-      books: {
-        payload: Prisma.$booksPayload<ExtArgs>
-        fields: Prisma.booksFieldRefs
+      library_items: {
+        payload: Prisma.$library_itemsPayload<ExtArgs>
+        fields: Prisma.library_itemsFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.booksFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$booksPayload> | null
+            args: Prisma.library_itemsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$library_itemsPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.booksFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$booksPayload>
+            args: Prisma.library_itemsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$library_itemsPayload>
           }
           findFirst: {
-            args: Prisma.booksFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$booksPayload> | null
+            args: Prisma.library_itemsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$library_itemsPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.booksFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$booksPayload>
+            args: Prisma.library_itemsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$library_itemsPayload>
           }
           findMany: {
-            args: Prisma.booksFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$booksPayload>[]
+            args: Prisma.library_itemsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$library_itemsPayload>[]
           }
           create: {
-            args: Prisma.booksCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$booksPayload>
+            args: Prisma.library_itemsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$library_itemsPayload>
           }
           createMany: {
-            args: Prisma.booksCreateManyArgs<ExtArgs>
+            args: Prisma.library_itemsCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           delete: {
-            args: Prisma.booksDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$booksPayload>
+            args: Prisma.library_itemsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$library_itemsPayload>
           }
           update: {
-            args: Prisma.booksUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$booksPayload>
+            args: Prisma.library_itemsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$library_itemsPayload>
           }
           deleteMany: {
-            args: Prisma.booksDeleteManyArgs<ExtArgs>
+            args: Prisma.library_itemsDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.booksUpdateManyArgs<ExtArgs>
+            args: Prisma.library_itemsUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           upsert: {
-            args: Prisma.booksUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$booksPayload>
+            args: Prisma.library_itemsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$library_itemsPayload>
           }
           aggregate: {
-            args: Prisma.BooksAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateBooks>
+            args: Prisma.Library_itemsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLibrary_items>
           }
           groupBy: {
-            args: Prisma.booksGroupByArgs<ExtArgs>
-            result: $Utils.Optional<BooksGroupByOutputType>[]
+            args: Prisma.library_itemsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Library_itemsGroupByOutputType>[]
           }
           count: {
-            args: Prisma.booksCountArgs<ExtArgs>
-            result: $Utils.Optional<BooksCountAggregateOutputType> | number
+            args: Prisma.library_itemsCountArgs<ExtArgs>
+            result: $Utils.Optional<Library_itemsCountAggregateOutputType> | number
           }
         }
       }
@@ -1449,6 +1540,138 @@ export namespace Prisma {
           }
         }
       }
+      system_config: {
+        payload: Prisma.$system_configPayload<ExtArgs>
+        fields: Prisma.system_configFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.system_configFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$system_configPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.system_configFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$system_configPayload>
+          }
+          findFirst: {
+            args: Prisma.system_configFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$system_configPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.system_configFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$system_configPayload>
+          }
+          findMany: {
+            args: Prisma.system_configFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$system_configPayload>[]
+          }
+          create: {
+            args: Prisma.system_configCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$system_configPayload>
+          }
+          createMany: {
+            args: Prisma.system_configCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.system_configDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$system_configPayload>
+          }
+          update: {
+            args: Prisma.system_configUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$system_configPayload>
+          }
+          deleteMany: {
+            args: Prisma.system_configDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.system_configUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.system_configUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$system_configPayload>
+          }
+          aggregate: {
+            args: Prisma.System_configAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSystem_config>
+          }
+          groupBy: {
+            args: Prisma.system_configGroupByArgs<ExtArgs>
+            result: $Utils.Optional<System_configGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.system_configCountArgs<ExtArgs>
+            result: $Utils.Optional<System_configCountAggregateOutputType> | number
+          }
+        }
+      }
+      library_cards: {
+        payload: Prisma.$library_cardsPayload<ExtArgs>
+        fields: Prisma.library_cardsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.library_cardsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$library_cardsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.library_cardsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$library_cardsPayload>
+          }
+          findFirst: {
+            args: Prisma.library_cardsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$library_cardsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.library_cardsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$library_cardsPayload>
+          }
+          findMany: {
+            args: Prisma.library_cardsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$library_cardsPayload>[]
+          }
+          create: {
+            args: Prisma.library_cardsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$library_cardsPayload>
+          }
+          createMany: {
+            args: Prisma.library_cardsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.library_cardsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$library_cardsPayload>
+          }
+          update: {
+            args: Prisma.library_cardsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$library_cardsPayload>
+          }
+          deleteMany: {
+            args: Prisma.library_cardsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.library_cardsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.library_cardsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$library_cardsPayload>
+          }
+          aggregate: {
+            args: Prisma.Library_cardsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLibrary_cards>
+          }
+          groupBy: {
+            args: Prisma.library_cardsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Library_cardsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.library_cardsCountArgs<ExtArgs>
+            result: $Utils.Optional<Library_cardsCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1541,15 +1764,17 @@ export namespace Prisma {
     omit?: Prisma.GlobalOmitConfig
   }
   export type GlobalOmitConfig = {
-    book_tran?: book_tranOmit
-    book_tran_history?: book_tran_historyOmit
-    books?: booksOmit
+    item_tran?: item_tranOmit
+    item_tran_history?: item_tran_historyOmit
+    library_items?: library_itemsOmit
     fines?: finesOmit
     logs?: logsOmit
     notifications?: notificationsOmit
     user_wishlist?: user_wishlistOmit
     users?: usersOmit
     contact_us?: contact_usOmit
+    system_config?: system_configOmit
+    library_cards?: library_cardsOmit
   }
 
   /* Types for Logging */
@@ -1626,130 +1851,130 @@ export namespace Prisma {
 
 
   /**
-   * Count Type Book_tranCountOutputType
+   * Count Type Item_tranCountOutputType
    */
 
-  export type Book_tranCountOutputType = {
-    book_tran_history: number
+  export type Item_tranCountOutputType = {
+    item_tran_history: number
     notifications: number
   }
 
-  export type Book_tranCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    book_tran_history?: boolean | Book_tranCountOutputTypeCountBook_tran_historyArgs
-    notifications?: boolean | Book_tranCountOutputTypeCountNotificationsArgs
+  export type Item_tranCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    item_tran_history?: boolean | Item_tranCountOutputTypeCountItem_tran_historyArgs
+    notifications?: boolean | Item_tranCountOutputTypeCountNotificationsArgs
   }
 
   // Custom InputTypes
   /**
-   * Book_tranCountOutputType without action
+   * Item_tranCountOutputType without action
    */
-  export type Book_tranCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Item_tranCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Book_tranCountOutputType
+     * Select specific fields to fetch from the Item_tranCountOutputType
      */
-    select?: Book_tranCountOutputTypeSelect<ExtArgs> | null
+    select?: Item_tranCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * Book_tranCountOutputType without action
+   * Item_tranCountOutputType without action
    */
-  export type Book_tranCountOutputTypeCountBook_tran_historyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: book_tran_historyWhereInput
+  export type Item_tranCountOutputTypeCountItem_tran_historyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: item_tran_historyWhereInput
   }
 
   /**
-   * Book_tranCountOutputType without action
+   * Item_tranCountOutputType without action
    */
-  export type Book_tranCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Item_tranCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: notificationsWhereInput
   }
 
 
   /**
-   * Count Type Book_tran_historyCountOutputType
+   * Count Type Item_tran_historyCountOutputType
    */
 
-  export type Book_tran_historyCountOutputType = {
+  export type Item_tran_historyCountOutputType = {
     fines: number
   }
 
-  export type Book_tran_historyCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    fines?: boolean | Book_tran_historyCountOutputTypeCountFinesArgs
+  export type Item_tran_historyCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fines?: boolean | Item_tran_historyCountOutputTypeCountFinesArgs
   }
 
   // Custom InputTypes
   /**
-   * Book_tran_historyCountOutputType without action
+   * Item_tran_historyCountOutputType without action
    */
-  export type Book_tran_historyCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Item_tran_historyCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Book_tran_historyCountOutputType
+     * Select specific fields to fetch from the Item_tran_historyCountOutputType
      */
-    select?: Book_tran_historyCountOutputTypeSelect<ExtArgs> | null
+    select?: Item_tran_historyCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * Book_tran_historyCountOutputType without action
+   * Item_tran_historyCountOutputType without action
    */
-  export type Book_tran_historyCountOutputTypeCountFinesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Item_tran_historyCountOutputTypeCountFinesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: finesWhereInput
   }
 
 
   /**
-   * Count Type BooksCountOutputType
+   * Count Type Library_itemsCountOutputType
    */
 
-  export type BooksCountOutputType = {
-    book_tran: number
-    book_tran_history: number
+  export type Library_itemsCountOutputType = {
+    item_tran: number
+    item_tran_history: number
     notifications: number
     user_wishlist: number
   }
 
-  export type BooksCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    book_tran?: boolean | BooksCountOutputTypeCountBook_tranArgs
-    book_tran_history?: boolean | BooksCountOutputTypeCountBook_tran_historyArgs
-    notifications?: boolean | BooksCountOutputTypeCountNotificationsArgs
-    user_wishlist?: boolean | BooksCountOutputTypeCountUser_wishlistArgs
+  export type Library_itemsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    item_tran?: boolean | Library_itemsCountOutputTypeCountItem_tranArgs
+    item_tran_history?: boolean | Library_itemsCountOutputTypeCountItem_tran_historyArgs
+    notifications?: boolean | Library_itemsCountOutputTypeCountNotificationsArgs
+    user_wishlist?: boolean | Library_itemsCountOutputTypeCountUser_wishlistArgs
   }
 
   // Custom InputTypes
   /**
-   * BooksCountOutputType without action
+   * Library_itemsCountOutputType without action
    */
-  export type BooksCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Library_itemsCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the BooksCountOutputType
+     * Select specific fields to fetch from the Library_itemsCountOutputType
      */
-    select?: BooksCountOutputTypeSelect<ExtArgs> | null
+    select?: Library_itemsCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * BooksCountOutputType without action
+   * Library_itemsCountOutputType without action
    */
-  export type BooksCountOutputTypeCountBook_tranArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: book_tranWhereInput
+  export type Library_itemsCountOutputTypeCountItem_tranArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: item_tranWhereInput
   }
 
   /**
-   * BooksCountOutputType without action
+   * Library_itemsCountOutputType without action
    */
-  export type BooksCountOutputTypeCountBook_tran_historyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: book_tran_historyWhereInput
+  export type Library_itemsCountOutputTypeCountItem_tran_historyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: item_tran_historyWhereInput
   }
 
   /**
-   * BooksCountOutputType without action
+   * Library_itemsCountOutputType without action
    */
-  export type BooksCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Library_itemsCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: notificationsWhereInput
   }
 
   /**
-   * BooksCountOutputType without action
+   * Library_itemsCountOutputType without action
    */
-  export type BooksCountOutputTypeCountUser_wishlistArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Library_itemsCountOutputTypeCountUser_wishlistArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: user_wishlistWhereInput
   }
 
@@ -1759,25 +1984,27 @@ export namespace Prisma {
    */
 
   export type UsersCountOutputType = {
-    book_tran: number
-    book_tran_history_book_tran_history_requested_byTousers: number
-    book_tran_history_book_tran_history_approved_byTousers: number
+    item_tran: number
+    item_tran_history_item_tran_history_requested_byTousers: number
+    item_tran_history_item_tran_history_approved_byTousers: number
     fines: number
     logs: number
     notifications_notifications_from_user_idTousers: number
     notifications_notifications_to_user_idTousers: number
     user_wishlist: number
+    library_cards: number
   }
 
   export type UsersCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    book_tran?: boolean | UsersCountOutputTypeCountBook_tranArgs
-    book_tran_history_book_tran_history_requested_byTousers?: boolean | UsersCountOutputTypeCountBook_tran_history_book_tran_history_requested_byTousersArgs
-    book_tran_history_book_tran_history_approved_byTousers?: boolean | UsersCountOutputTypeCountBook_tran_history_book_tran_history_approved_byTousersArgs
+    item_tran?: boolean | UsersCountOutputTypeCountItem_tranArgs
+    item_tran_history_item_tran_history_requested_byTousers?: boolean | UsersCountOutputTypeCountItem_tran_history_item_tran_history_requested_byTousersArgs
+    item_tran_history_item_tran_history_approved_byTousers?: boolean | UsersCountOutputTypeCountItem_tran_history_item_tran_history_approved_byTousersArgs
     fines?: boolean | UsersCountOutputTypeCountFinesArgs
     logs?: boolean | UsersCountOutputTypeCountLogsArgs
     notifications_notifications_from_user_idTousers?: boolean | UsersCountOutputTypeCountNotifications_notifications_from_user_idTousersArgs
     notifications_notifications_to_user_idTousers?: boolean | UsersCountOutputTypeCountNotifications_notifications_to_user_idTousersArgs
     user_wishlist?: boolean | UsersCountOutputTypeCountUser_wishlistArgs
+    library_cards?: boolean | UsersCountOutputTypeCountLibrary_cardsArgs
   }
 
   // Custom InputTypes
@@ -1794,22 +2021,22 @@ export namespace Prisma {
   /**
    * UsersCountOutputType without action
    */
-  export type UsersCountOutputTypeCountBook_tranArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: book_tranWhereInput
+  export type UsersCountOutputTypeCountItem_tranArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: item_tranWhereInput
   }
 
   /**
    * UsersCountOutputType without action
    */
-  export type UsersCountOutputTypeCountBook_tran_history_book_tran_history_requested_byTousersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: book_tran_historyWhereInput
+  export type UsersCountOutputTypeCountItem_tran_history_item_tran_history_requested_byTousersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: item_tran_historyWhereInput
   }
 
   /**
    * UsersCountOutputType without action
    */
-  export type UsersCountOutputTypeCountBook_tran_history_book_tran_history_approved_byTousersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: book_tran_historyWhereInput
+  export type UsersCountOutputTypeCountItem_tran_history_item_tran_history_approved_byTousersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: item_tran_historyWhereInput
   }
 
   /**
@@ -1847,54 +2074,61 @@ export namespace Prisma {
     where?: user_wishlistWhereInput
   }
 
+  /**
+   * UsersCountOutputType without action
+   */
+  export type UsersCountOutputTypeCountLibrary_cardsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: library_cardsWhereInput
+  }
+
 
   /**
    * Models
    */
 
   /**
-   * Model book_tran
+   * Model item_tran
    */
 
-  export type AggregateBook_tran = {
-    _count: Book_tranCountAggregateOutputType | null
-    _avg: Book_tranAvgAggregateOutputType | null
-    _sum: Book_tranSumAggregateOutputType | null
-    _min: Book_tranMinAggregateOutputType | null
-    _max: Book_tranMaxAggregateOutputType | null
+  export type AggregateItem_tran = {
+    _count: Item_tranCountAggregateOutputType | null
+    _avg: Item_tranAvgAggregateOutputType | null
+    _sum: Item_tranSumAggregateOutputType | null
+    _min: Item_tranMinAggregateOutputType | null
+    _max: Item_tranMaxAggregateOutputType | null
   }
 
-  export type Book_tranAvgAggregateOutputType = {
+  export type Item_tranAvgAggregateOutputType = {
     tran_id: number | null
-    book_id: number | null
+    item_id: number | null
     user_id: number | null
   }
 
-  export type Book_tranSumAggregateOutputType = {
+  export type Item_tranSumAggregateOutputType = {
     tran_id: number | null
-    book_id: number | null
+    item_id: number | null
     user_id: number | null
   }
 
-  export type Book_tranMinAggregateOutputType = {
+  export type Item_tranMinAggregateOutputType = {
     tran_id: number | null
-    book_id: number | null
-    status: $Enums.book_tran_status | null
-    user_id: number | null
-    record_status: $Enums.record_status | null
-  }
-
-  export type Book_tranMaxAggregateOutputType = {
-    tran_id: number | null
-    book_id: number | null
-    status: $Enums.book_tran_status | null
+    item_id: number | null
+    status: $Enums.item_tran_status | null
     user_id: number | null
     record_status: $Enums.record_status | null
   }
 
-  export type Book_tranCountAggregateOutputType = {
+  export type Item_tranMaxAggregateOutputType = {
+    tran_id: number | null
+    item_id: number | null
+    status: $Enums.item_tran_status | null
+    user_id: number | null
+    record_status: $Enums.record_status | null
+  }
+
+  export type Item_tranCountAggregateOutputType = {
     tran_id: number
-    book_id: number
+    item_id: number
     status: number
     user_id: number
     record_status: number
@@ -1902,339 +2136,339 @@ export namespace Prisma {
   }
 
 
-  export type Book_tranAvgAggregateInputType = {
+  export type Item_tranAvgAggregateInputType = {
     tran_id?: true
-    book_id?: true
+    item_id?: true
     user_id?: true
   }
 
-  export type Book_tranSumAggregateInputType = {
+  export type Item_tranSumAggregateInputType = {
     tran_id?: true
-    book_id?: true
+    item_id?: true
     user_id?: true
   }
 
-  export type Book_tranMinAggregateInputType = {
+  export type Item_tranMinAggregateInputType = {
     tran_id?: true
-    book_id?: true
+    item_id?: true
     status?: true
     user_id?: true
     record_status?: true
   }
 
-  export type Book_tranMaxAggregateInputType = {
+  export type Item_tranMaxAggregateInputType = {
     tran_id?: true
-    book_id?: true
+    item_id?: true
     status?: true
     user_id?: true
     record_status?: true
   }
 
-  export type Book_tranCountAggregateInputType = {
+  export type Item_tranCountAggregateInputType = {
     tran_id?: true
-    book_id?: true
+    item_id?: true
     status?: true
     user_id?: true
     record_status?: true
     _all?: true
   }
 
-  export type Book_tranAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Item_tranAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which book_tran to aggregate.
+     * Filter which item_tran to aggregate.
      */
-    where?: book_tranWhereInput
+    where?: item_tranWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of book_trans to fetch.
+     * Determine the order of item_trans to fetch.
      */
-    orderBy?: book_tranOrderByWithRelationInput | book_tranOrderByWithRelationInput[]
+    orderBy?: item_tranOrderByWithRelationInput | item_tranOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: book_tranWhereUniqueInput
+    cursor?: item_tranWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` book_trans from the position of the cursor.
+     * Take `±n` item_trans from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` book_trans.
+     * Skip the first `n` item_trans.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned book_trans
+     * Count returned item_trans
     **/
-    _count?: true | Book_tranCountAggregateInputType
+    _count?: true | Item_tranCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: Book_tranAvgAggregateInputType
+    _avg?: Item_tranAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: Book_tranSumAggregateInputType
+    _sum?: Item_tranSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: Book_tranMinAggregateInputType
+    _min?: Item_tranMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: Book_tranMaxAggregateInputType
+    _max?: Item_tranMaxAggregateInputType
   }
 
-  export type GetBook_tranAggregateType<T extends Book_tranAggregateArgs> = {
-        [P in keyof T & keyof AggregateBook_tran]: P extends '_count' | 'count'
+  export type GetItem_tranAggregateType<T extends Item_tranAggregateArgs> = {
+        [P in keyof T & keyof AggregateItem_tran]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateBook_tran[P]>
-      : GetScalarType<T[P], AggregateBook_tran[P]>
+        : GetScalarType<T[P], AggregateItem_tran[P]>
+      : GetScalarType<T[P], AggregateItem_tran[P]>
   }
 
 
 
 
-  export type book_tranGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: book_tranWhereInput
-    orderBy?: book_tranOrderByWithAggregationInput | book_tranOrderByWithAggregationInput[]
-    by: Book_tranScalarFieldEnum[] | Book_tranScalarFieldEnum
-    having?: book_tranScalarWhereWithAggregatesInput
+  export type item_tranGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: item_tranWhereInput
+    orderBy?: item_tranOrderByWithAggregationInput | item_tranOrderByWithAggregationInput[]
+    by: Item_tranScalarFieldEnum[] | Item_tranScalarFieldEnum
+    having?: item_tranScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: Book_tranCountAggregateInputType | true
-    _avg?: Book_tranAvgAggregateInputType
-    _sum?: Book_tranSumAggregateInputType
-    _min?: Book_tranMinAggregateInputType
-    _max?: Book_tranMaxAggregateInputType
+    _count?: Item_tranCountAggregateInputType | true
+    _avg?: Item_tranAvgAggregateInputType
+    _sum?: Item_tranSumAggregateInputType
+    _min?: Item_tranMinAggregateInputType
+    _max?: Item_tranMaxAggregateInputType
   }
 
-  export type Book_tranGroupByOutputType = {
+  export type Item_tranGroupByOutputType = {
     tran_id: number
-    book_id: number | null
-    status: $Enums.book_tran_status | null
+    item_id: number | null
+    status: $Enums.item_tran_status | null
     user_id: number | null
     record_status: $Enums.record_status | null
-    _count: Book_tranCountAggregateOutputType | null
-    _avg: Book_tranAvgAggregateOutputType | null
-    _sum: Book_tranSumAggregateOutputType | null
-    _min: Book_tranMinAggregateOutputType | null
-    _max: Book_tranMaxAggregateOutputType | null
+    _count: Item_tranCountAggregateOutputType | null
+    _avg: Item_tranAvgAggregateOutputType | null
+    _sum: Item_tranSumAggregateOutputType | null
+    _min: Item_tranMinAggregateOutputType | null
+    _max: Item_tranMaxAggregateOutputType | null
   }
 
-  type GetBook_tranGroupByPayload<T extends book_tranGroupByArgs> = Prisma.PrismaPromise<
+  type GetItem_tranGroupByPayload<T extends item_tranGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<Book_tranGroupByOutputType, T['by']> &
+      PickEnumerable<Item_tranGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof Book_tranGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof Item_tranGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], Book_tranGroupByOutputType[P]>
-            : GetScalarType<T[P], Book_tranGroupByOutputType[P]>
+              : GetScalarType<T[P], Item_tranGroupByOutputType[P]>
+            : GetScalarType<T[P], Item_tranGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type book_tranSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type item_tranSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     tran_id?: boolean
-    book_id?: boolean
+    item_id?: boolean
     status?: boolean
     user_id?: boolean
     record_status?: boolean
-    books?: boolean | book_tran$booksArgs<ExtArgs>
-    users?: boolean | book_tran$usersArgs<ExtArgs>
-    book_tran_history?: boolean | book_tran$book_tran_historyArgs<ExtArgs>
-    notifications?: boolean | book_tran$notificationsArgs<ExtArgs>
-    _count?: boolean | Book_tranCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["book_tran"]>
+    library_items?: boolean | item_tran$library_itemsArgs<ExtArgs>
+    users?: boolean | item_tran$usersArgs<ExtArgs>
+    item_tran_history?: boolean | item_tran$item_tran_historyArgs<ExtArgs>
+    notifications?: boolean | item_tran$notificationsArgs<ExtArgs>
+    _count?: boolean | Item_tranCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["item_tran"]>
 
 
 
-  export type book_tranSelectScalar = {
+  export type item_tranSelectScalar = {
     tran_id?: boolean
-    book_id?: boolean
+    item_id?: boolean
     status?: boolean
     user_id?: boolean
     record_status?: boolean
   }
 
-  export type book_tranOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"tran_id" | "book_id" | "status" | "user_id" | "record_status", ExtArgs["result"]["book_tran"]>
-  export type book_tranInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    books?: boolean | book_tran$booksArgs<ExtArgs>
-    users?: boolean | book_tran$usersArgs<ExtArgs>
-    book_tran_history?: boolean | book_tran$book_tran_historyArgs<ExtArgs>
-    notifications?: boolean | book_tran$notificationsArgs<ExtArgs>
-    _count?: boolean | Book_tranCountOutputTypeDefaultArgs<ExtArgs>
+  export type item_tranOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"tran_id" | "item_id" | "status" | "user_id" | "record_status", ExtArgs["result"]["item_tran"]>
+  export type item_tranInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    library_items?: boolean | item_tran$library_itemsArgs<ExtArgs>
+    users?: boolean | item_tran$usersArgs<ExtArgs>
+    item_tran_history?: boolean | item_tran$item_tran_historyArgs<ExtArgs>
+    notifications?: boolean | item_tran$notificationsArgs<ExtArgs>
+    _count?: boolean | Item_tranCountOutputTypeDefaultArgs<ExtArgs>
   }
 
-  export type $book_tranPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "book_tran"
+  export type $item_tranPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "item_tran"
     objects: {
-      books: Prisma.$booksPayload<ExtArgs> | null
+      library_items: Prisma.$library_itemsPayload<ExtArgs> | null
       users: Prisma.$usersPayload<ExtArgs> | null
-      book_tran_history: Prisma.$book_tran_historyPayload<ExtArgs>[]
+      item_tran_history: Prisma.$item_tran_historyPayload<ExtArgs>[]
       notifications: Prisma.$notificationsPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       tran_id: number
-      book_id: number | null
-      status: $Enums.book_tran_status | null
+      item_id: number | null
+      status: $Enums.item_tran_status | null
       user_id: number | null
       record_status: $Enums.record_status | null
-    }, ExtArgs["result"]["book_tran"]>
+    }, ExtArgs["result"]["item_tran"]>
     composites: {}
   }
 
-  type book_tranGetPayload<S extends boolean | null | undefined | book_tranDefaultArgs> = $Result.GetResult<Prisma.$book_tranPayload, S>
+  type item_tranGetPayload<S extends boolean | null | undefined | item_tranDefaultArgs> = $Result.GetResult<Prisma.$item_tranPayload, S>
 
-  type book_tranCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<book_tranFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: Book_tranCountAggregateInputType | true
+  type item_tranCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<item_tranFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Item_tranCountAggregateInputType | true
     }
 
-  export interface book_tranDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['book_tran'], meta: { name: 'book_tran' } }
+  export interface item_tranDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['item_tran'], meta: { name: 'item_tran' } }
     /**
-     * Find zero or one Book_tran that matches the filter.
-     * @param {book_tranFindUniqueArgs} args - Arguments to find a Book_tran
+     * Find zero or one Item_tran that matches the filter.
+     * @param {item_tranFindUniqueArgs} args - Arguments to find a Item_tran
      * @example
-     * // Get one Book_tran
-     * const book_tran = await prisma.book_tran.findUnique({
+     * // Get one Item_tran
+     * const item_tran = await prisma.item_tran.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends book_tranFindUniqueArgs>(args: SelectSubset<T, book_tranFindUniqueArgs<ExtArgs>>): Prisma__book_tranClient<$Result.GetResult<Prisma.$book_tranPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends item_tranFindUniqueArgs>(args: SelectSubset<T, item_tranFindUniqueArgs<ExtArgs>>): Prisma__item_tranClient<$Result.GetResult<Prisma.$item_tranPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one Book_tran that matches the filter or throw an error with `error.code='P2025'`
+     * Find one Item_tran that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {book_tranFindUniqueOrThrowArgs} args - Arguments to find a Book_tran
+     * @param {item_tranFindUniqueOrThrowArgs} args - Arguments to find a Item_tran
      * @example
-     * // Get one Book_tran
-     * const book_tran = await prisma.book_tran.findUniqueOrThrow({
+     * // Get one Item_tran
+     * const item_tran = await prisma.item_tran.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends book_tranFindUniqueOrThrowArgs>(args: SelectSubset<T, book_tranFindUniqueOrThrowArgs<ExtArgs>>): Prisma__book_tranClient<$Result.GetResult<Prisma.$book_tranPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends item_tranFindUniqueOrThrowArgs>(args: SelectSubset<T, item_tranFindUniqueOrThrowArgs<ExtArgs>>): Prisma__item_tranClient<$Result.GetResult<Prisma.$item_tranPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Book_tran that matches the filter.
+     * Find the first Item_tran that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {book_tranFindFirstArgs} args - Arguments to find a Book_tran
+     * @param {item_tranFindFirstArgs} args - Arguments to find a Item_tran
      * @example
-     * // Get one Book_tran
-     * const book_tran = await prisma.book_tran.findFirst({
+     * // Get one Item_tran
+     * const item_tran = await prisma.item_tran.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends book_tranFindFirstArgs>(args?: SelectSubset<T, book_tranFindFirstArgs<ExtArgs>>): Prisma__book_tranClient<$Result.GetResult<Prisma.$book_tranPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends item_tranFindFirstArgs>(args?: SelectSubset<T, item_tranFindFirstArgs<ExtArgs>>): Prisma__item_tranClient<$Result.GetResult<Prisma.$item_tranPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Book_tran that matches the filter or
+     * Find the first Item_tran that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {book_tranFindFirstOrThrowArgs} args - Arguments to find a Book_tran
+     * @param {item_tranFindFirstOrThrowArgs} args - Arguments to find a Item_tran
      * @example
-     * // Get one Book_tran
-     * const book_tran = await prisma.book_tran.findFirstOrThrow({
+     * // Get one Item_tran
+     * const item_tran = await prisma.item_tran.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends book_tranFindFirstOrThrowArgs>(args?: SelectSubset<T, book_tranFindFirstOrThrowArgs<ExtArgs>>): Prisma__book_tranClient<$Result.GetResult<Prisma.$book_tranPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends item_tranFindFirstOrThrowArgs>(args?: SelectSubset<T, item_tranFindFirstOrThrowArgs<ExtArgs>>): Prisma__item_tranClient<$Result.GetResult<Prisma.$item_tranPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more Book_trans that matches the filter.
+     * Find zero or more Item_trans that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {book_tranFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {item_tranFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Book_trans
-     * const book_trans = await prisma.book_tran.findMany()
+     * // Get all Item_trans
+     * const item_trans = await prisma.item_tran.findMany()
      * 
-     * // Get first 10 Book_trans
-     * const book_trans = await prisma.book_tran.findMany({ take: 10 })
+     * // Get first 10 Item_trans
+     * const item_trans = await prisma.item_tran.findMany({ take: 10 })
      * 
      * // Only select the `tran_id`
-     * const book_tranWithTran_idOnly = await prisma.book_tran.findMany({ select: { tran_id: true } })
+     * const item_tranWithTran_idOnly = await prisma.item_tran.findMany({ select: { tran_id: true } })
      * 
      */
-    findMany<T extends book_tranFindManyArgs>(args?: SelectSubset<T, book_tranFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$book_tranPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends item_tranFindManyArgs>(args?: SelectSubset<T, item_tranFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$item_tranPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a Book_tran.
-     * @param {book_tranCreateArgs} args - Arguments to create a Book_tran.
+     * Create a Item_tran.
+     * @param {item_tranCreateArgs} args - Arguments to create a Item_tran.
      * @example
-     * // Create one Book_tran
-     * const Book_tran = await prisma.book_tran.create({
+     * // Create one Item_tran
+     * const Item_tran = await prisma.item_tran.create({
      *   data: {
-     *     // ... data to create a Book_tran
+     *     // ... data to create a Item_tran
      *   }
      * })
      * 
      */
-    create<T extends book_tranCreateArgs>(args: SelectSubset<T, book_tranCreateArgs<ExtArgs>>): Prisma__book_tranClient<$Result.GetResult<Prisma.$book_tranPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends item_tranCreateArgs>(args: SelectSubset<T, item_tranCreateArgs<ExtArgs>>): Prisma__item_tranClient<$Result.GetResult<Prisma.$item_tranPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many Book_trans.
-     * @param {book_tranCreateManyArgs} args - Arguments to create many Book_trans.
+     * Create many Item_trans.
+     * @param {item_tranCreateManyArgs} args - Arguments to create many Item_trans.
      * @example
-     * // Create many Book_trans
-     * const book_tran = await prisma.book_tran.createMany({
+     * // Create many Item_trans
+     * const item_tran = await prisma.item_tran.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends book_tranCreateManyArgs>(args?: SelectSubset<T, book_tranCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends item_tranCreateManyArgs>(args?: SelectSubset<T, item_tranCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Delete a Book_tran.
-     * @param {book_tranDeleteArgs} args - Arguments to delete one Book_tran.
+     * Delete a Item_tran.
+     * @param {item_tranDeleteArgs} args - Arguments to delete one Item_tran.
      * @example
-     * // Delete one Book_tran
-     * const Book_tran = await prisma.book_tran.delete({
+     * // Delete one Item_tran
+     * const Item_tran = await prisma.item_tran.delete({
      *   where: {
-     *     // ... filter to delete one Book_tran
+     *     // ... filter to delete one Item_tran
      *   }
      * })
      * 
      */
-    delete<T extends book_tranDeleteArgs>(args: SelectSubset<T, book_tranDeleteArgs<ExtArgs>>): Prisma__book_tranClient<$Result.GetResult<Prisma.$book_tranPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends item_tranDeleteArgs>(args: SelectSubset<T, item_tranDeleteArgs<ExtArgs>>): Prisma__item_tranClient<$Result.GetResult<Prisma.$item_tranPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one Book_tran.
-     * @param {book_tranUpdateArgs} args - Arguments to update one Book_tran.
+     * Update one Item_tran.
+     * @param {item_tranUpdateArgs} args - Arguments to update one Item_tran.
      * @example
-     * // Update one Book_tran
-     * const book_tran = await prisma.book_tran.update({
+     * // Update one Item_tran
+     * const item_tran = await prisma.item_tran.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -2244,30 +2478,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends book_tranUpdateArgs>(args: SelectSubset<T, book_tranUpdateArgs<ExtArgs>>): Prisma__book_tranClient<$Result.GetResult<Prisma.$book_tranPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends item_tranUpdateArgs>(args: SelectSubset<T, item_tranUpdateArgs<ExtArgs>>): Prisma__item_tranClient<$Result.GetResult<Prisma.$item_tranPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more Book_trans.
-     * @param {book_tranDeleteManyArgs} args - Arguments to filter Book_trans to delete.
+     * Delete zero or more Item_trans.
+     * @param {item_tranDeleteManyArgs} args - Arguments to filter Item_trans to delete.
      * @example
-     * // Delete a few Book_trans
-     * const { count } = await prisma.book_tran.deleteMany({
+     * // Delete a few Item_trans
+     * const { count } = await prisma.item_tran.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends book_tranDeleteManyArgs>(args?: SelectSubset<T, book_tranDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends item_tranDeleteManyArgs>(args?: SelectSubset<T, item_tranDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Book_trans.
+     * Update zero or more Item_trans.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {book_tranUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {item_tranUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Book_trans
-     * const book_tran = await prisma.book_tran.updateMany({
+     * // Update many Item_trans
+     * const item_tran = await prisma.item_tran.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -2277,56 +2511,56 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends book_tranUpdateManyArgs>(args: SelectSubset<T, book_tranUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends item_tranUpdateManyArgs>(args: SelectSubset<T, item_tranUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one Book_tran.
-     * @param {book_tranUpsertArgs} args - Arguments to update or create a Book_tran.
+     * Create or update one Item_tran.
+     * @param {item_tranUpsertArgs} args - Arguments to update or create a Item_tran.
      * @example
-     * // Update or create a Book_tran
-     * const book_tran = await prisma.book_tran.upsert({
+     * // Update or create a Item_tran
+     * const item_tran = await prisma.item_tran.upsert({
      *   create: {
-     *     // ... data to create a Book_tran
+     *     // ... data to create a Item_tran
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Book_tran we want to update
+     *     // ... the filter for the Item_tran we want to update
      *   }
      * })
      */
-    upsert<T extends book_tranUpsertArgs>(args: SelectSubset<T, book_tranUpsertArgs<ExtArgs>>): Prisma__book_tranClient<$Result.GetResult<Prisma.$book_tranPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends item_tranUpsertArgs>(args: SelectSubset<T, item_tranUpsertArgs<ExtArgs>>): Prisma__item_tranClient<$Result.GetResult<Prisma.$item_tranPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of Book_trans.
+     * Count the number of Item_trans.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {book_tranCountArgs} args - Arguments to filter Book_trans to count.
+     * @param {item_tranCountArgs} args - Arguments to filter Item_trans to count.
      * @example
-     * // Count the number of Book_trans
-     * const count = await prisma.book_tran.count({
+     * // Count the number of Item_trans
+     * const count = await prisma.item_tran.count({
      *   where: {
-     *     // ... the filter for the Book_trans we want to count
+     *     // ... the filter for the Item_trans we want to count
      *   }
      * })
     **/
-    count<T extends book_tranCountArgs>(
-      args?: Subset<T, book_tranCountArgs>,
+    count<T extends item_tranCountArgs>(
+      args?: Subset<T, item_tranCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], Book_tranCountAggregateOutputType>
+          : GetScalarType<T['select'], Item_tranCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Book_tran.
+     * Allows you to perform aggregations operations on a Item_tran.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {Book_tranAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {Item_tranAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -2346,13 +2580,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends Book_tranAggregateArgs>(args: Subset<T, Book_tranAggregateArgs>): Prisma.PrismaPromise<GetBook_tranAggregateType<T>>
+    aggregate<T extends Item_tranAggregateArgs>(args: Subset<T, Item_tranAggregateArgs>): Prisma.PrismaPromise<GetItem_tranAggregateType<T>>
 
     /**
-     * Group by Book_tran.
+     * Group by Item_tran.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {book_tranGroupByArgs} args - Group by arguments.
+     * @param {item_tranGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -2367,14 +2601,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends book_tranGroupByArgs,
+      T extends item_tranGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: book_tranGroupByArgs['orderBy'] }
-        : { orderBy?: book_tranGroupByArgs['orderBy'] },
+        ? { orderBy: item_tranGroupByArgs['orderBy'] }
+        : { orderBy?: item_tranGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -2423,25 +2657,25 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, book_tranGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBook_tranGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, item_tranGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetItem_tranGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the book_tran model
+   * Fields of the item_tran model
    */
-  readonly fields: book_tranFieldRefs;
+  readonly fields: item_tranFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for book_tran.
+   * The delegate class that acts as a "Promise-like" for item_tran.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__book_tranClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__item_tranClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    books<T extends book_tran$booksArgs<ExtArgs> = {}>(args?: Subset<T, book_tran$booksArgs<ExtArgs>>): Prisma__booksClient<$Result.GetResult<Prisma.$booksPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    users<T extends book_tran$usersArgs<ExtArgs> = {}>(args?: Subset<T, book_tran$usersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    book_tran_history<T extends book_tran$book_tran_historyArgs<ExtArgs> = {}>(args?: Subset<T, book_tran$book_tran_historyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$book_tran_historyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    notifications<T extends book_tran$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, book_tran$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$notificationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    library_items<T extends item_tran$library_itemsArgs<ExtArgs> = {}>(args?: Subset<T, item_tran$library_itemsArgs<ExtArgs>>): Prisma__library_itemsClient<$Result.GetResult<Prisma.$library_itemsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    users<T extends item_tran$usersArgs<ExtArgs> = {}>(args?: Subset<T, item_tran$usersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    item_tran_history<T extends item_tran$item_tran_historyArgs<ExtArgs> = {}>(args?: Subset<T, item_tran$item_tran_historyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$item_tran_historyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    notifications<T extends item_tran$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, item_tran$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$notificationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2468,379 +2702,379 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the book_tran model
+   * Fields of the item_tran model
    */
-  interface book_tranFieldRefs {
-    readonly tran_id: FieldRef<"book_tran", 'Int'>
-    readonly book_id: FieldRef<"book_tran", 'Int'>
-    readonly status: FieldRef<"book_tran", 'book_tran_status'>
-    readonly user_id: FieldRef<"book_tran", 'Int'>
-    readonly record_status: FieldRef<"book_tran", 'record_status'>
+  interface item_tranFieldRefs {
+    readonly tran_id: FieldRef<"item_tran", 'Int'>
+    readonly item_id: FieldRef<"item_tran", 'Int'>
+    readonly status: FieldRef<"item_tran", 'item_tran_status'>
+    readonly user_id: FieldRef<"item_tran", 'Int'>
+    readonly record_status: FieldRef<"item_tran", 'record_status'>
   }
     
 
   // Custom InputTypes
   /**
-   * book_tran findUnique
+   * item_tran findUnique
    */
-  export type book_tranFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tranFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran
+     * Select specific fields to fetch from the item_tran
      */
-    select?: book_tranSelect<ExtArgs> | null
+    select?: item_tranSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran
+     * Omit specific fields from the item_tran
      */
-    omit?: book_tranOmit<ExtArgs> | null
+    omit?: item_tranOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tranInclude<ExtArgs> | null
+    include?: item_tranInclude<ExtArgs> | null
     /**
-     * Filter, which book_tran to fetch.
+     * Filter, which item_tran to fetch.
      */
-    where: book_tranWhereUniqueInput
+    where: item_tranWhereUniqueInput
   }
 
   /**
-   * book_tran findUniqueOrThrow
+   * item_tran findUniqueOrThrow
    */
-  export type book_tranFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tranFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran
+     * Select specific fields to fetch from the item_tran
      */
-    select?: book_tranSelect<ExtArgs> | null
+    select?: item_tranSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran
+     * Omit specific fields from the item_tran
      */
-    omit?: book_tranOmit<ExtArgs> | null
+    omit?: item_tranOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tranInclude<ExtArgs> | null
+    include?: item_tranInclude<ExtArgs> | null
     /**
-     * Filter, which book_tran to fetch.
+     * Filter, which item_tran to fetch.
      */
-    where: book_tranWhereUniqueInput
+    where: item_tranWhereUniqueInput
   }
 
   /**
-   * book_tran findFirst
+   * item_tran findFirst
    */
-  export type book_tranFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tranFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran
+     * Select specific fields to fetch from the item_tran
      */
-    select?: book_tranSelect<ExtArgs> | null
+    select?: item_tranSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran
+     * Omit specific fields from the item_tran
      */
-    omit?: book_tranOmit<ExtArgs> | null
+    omit?: item_tranOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tranInclude<ExtArgs> | null
+    include?: item_tranInclude<ExtArgs> | null
     /**
-     * Filter, which book_tran to fetch.
+     * Filter, which item_tran to fetch.
      */
-    where?: book_tranWhereInput
+    where?: item_tranWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of book_trans to fetch.
+     * Determine the order of item_trans to fetch.
      */
-    orderBy?: book_tranOrderByWithRelationInput | book_tranOrderByWithRelationInput[]
+    orderBy?: item_tranOrderByWithRelationInput | item_tranOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for book_trans.
+     * Sets the position for searching for item_trans.
      */
-    cursor?: book_tranWhereUniqueInput
+    cursor?: item_tranWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` book_trans from the position of the cursor.
+     * Take `±n` item_trans from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` book_trans.
+     * Skip the first `n` item_trans.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of book_trans.
+     * Filter by unique combinations of item_trans.
      */
-    distinct?: Book_tranScalarFieldEnum | Book_tranScalarFieldEnum[]
+    distinct?: Item_tranScalarFieldEnum | Item_tranScalarFieldEnum[]
   }
 
   /**
-   * book_tran findFirstOrThrow
+   * item_tran findFirstOrThrow
    */
-  export type book_tranFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tranFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran
+     * Select specific fields to fetch from the item_tran
      */
-    select?: book_tranSelect<ExtArgs> | null
+    select?: item_tranSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran
+     * Omit specific fields from the item_tran
      */
-    omit?: book_tranOmit<ExtArgs> | null
+    omit?: item_tranOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tranInclude<ExtArgs> | null
+    include?: item_tranInclude<ExtArgs> | null
     /**
-     * Filter, which book_tran to fetch.
+     * Filter, which item_tran to fetch.
      */
-    where?: book_tranWhereInput
+    where?: item_tranWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of book_trans to fetch.
+     * Determine the order of item_trans to fetch.
      */
-    orderBy?: book_tranOrderByWithRelationInput | book_tranOrderByWithRelationInput[]
+    orderBy?: item_tranOrderByWithRelationInput | item_tranOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for book_trans.
+     * Sets the position for searching for item_trans.
      */
-    cursor?: book_tranWhereUniqueInput
+    cursor?: item_tranWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` book_trans from the position of the cursor.
+     * Take `±n` item_trans from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` book_trans.
+     * Skip the first `n` item_trans.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of book_trans.
+     * Filter by unique combinations of item_trans.
      */
-    distinct?: Book_tranScalarFieldEnum | Book_tranScalarFieldEnum[]
+    distinct?: Item_tranScalarFieldEnum | Item_tranScalarFieldEnum[]
   }
 
   /**
-   * book_tran findMany
+   * item_tran findMany
    */
-  export type book_tranFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tranFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran
+     * Select specific fields to fetch from the item_tran
      */
-    select?: book_tranSelect<ExtArgs> | null
+    select?: item_tranSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran
+     * Omit specific fields from the item_tran
      */
-    omit?: book_tranOmit<ExtArgs> | null
+    omit?: item_tranOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tranInclude<ExtArgs> | null
+    include?: item_tranInclude<ExtArgs> | null
     /**
-     * Filter, which book_trans to fetch.
+     * Filter, which item_trans to fetch.
      */
-    where?: book_tranWhereInput
+    where?: item_tranWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of book_trans to fetch.
+     * Determine the order of item_trans to fetch.
      */
-    orderBy?: book_tranOrderByWithRelationInput | book_tranOrderByWithRelationInput[]
+    orderBy?: item_tranOrderByWithRelationInput | item_tranOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing book_trans.
+     * Sets the position for listing item_trans.
      */
-    cursor?: book_tranWhereUniqueInput
+    cursor?: item_tranWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` book_trans from the position of the cursor.
+     * Take `±n` item_trans from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` book_trans.
+     * Skip the first `n` item_trans.
      */
     skip?: number
-    distinct?: Book_tranScalarFieldEnum | Book_tranScalarFieldEnum[]
+    distinct?: Item_tranScalarFieldEnum | Item_tranScalarFieldEnum[]
   }
 
   /**
-   * book_tran create
+   * item_tran create
    */
-  export type book_tranCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tranCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran
+     * Select specific fields to fetch from the item_tran
      */
-    select?: book_tranSelect<ExtArgs> | null
+    select?: item_tranSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran
+     * Omit specific fields from the item_tran
      */
-    omit?: book_tranOmit<ExtArgs> | null
+    omit?: item_tranOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tranInclude<ExtArgs> | null
+    include?: item_tranInclude<ExtArgs> | null
     /**
-     * The data needed to create a book_tran.
+     * The data needed to create a item_tran.
      */
-    data?: XOR<book_tranCreateInput, book_tranUncheckedCreateInput>
+    data?: XOR<item_tranCreateInput, item_tranUncheckedCreateInput>
   }
 
   /**
-   * book_tran createMany
+   * item_tran createMany
    */
-  export type book_tranCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tranCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many book_trans.
+     * The data used to create many item_trans.
      */
-    data: book_tranCreateManyInput | book_tranCreateManyInput[]
+    data: item_tranCreateManyInput | item_tranCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * book_tran update
+   * item_tran update
    */
-  export type book_tranUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tranUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran
+     * Select specific fields to fetch from the item_tran
      */
-    select?: book_tranSelect<ExtArgs> | null
+    select?: item_tranSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran
+     * Omit specific fields from the item_tran
      */
-    omit?: book_tranOmit<ExtArgs> | null
+    omit?: item_tranOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tranInclude<ExtArgs> | null
+    include?: item_tranInclude<ExtArgs> | null
     /**
-     * The data needed to update a book_tran.
+     * The data needed to update a item_tran.
      */
-    data: XOR<book_tranUpdateInput, book_tranUncheckedUpdateInput>
+    data: XOR<item_tranUpdateInput, item_tranUncheckedUpdateInput>
     /**
-     * Choose, which book_tran to update.
+     * Choose, which item_tran to update.
      */
-    where: book_tranWhereUniqueInput
+    where: item_tranWhereUniqueInput
   }
 
   /**
-   * book_tran updateMany
+   * item_tran updateMany
    */
-  export type book_tranUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tranUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update book_trans.
+     * The data used to update item_trans.
      */
-    data: XOR<book_tranUpdateManyMutationInput, book_tranUncheckedUpdateManyInput>
+    data: XOR<item_tranUpdateManyMutationInput, item_tranUncheckedUpdateManyInput>
     /**
-     * Filter which book_trans to update
+     * Filter which item_trans to update
      */
-    where?: book_tranWhereInput
+    where?: item_tranWhereInput
     /**
-     * Limit how many book_trans to update.
+     * Limit how many item_trans to update.
      */
     limit?: number
   }
 
   /**
-   * book_tran upsert
+   * item_tran upsert
    */
-  export type book_tranUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tranUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran
+     * Select specific fields to fetch from the item_tran
      */
-    select?: book_tranSelect<ExtArgs> | null
+    select?: item_tranSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran
+     * Omit specific fields from the item_tran
      */
-    omit?: book_tranOmit<ExtArgs> | null
+    omit?: item_tranOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tranInclude<ExtArgs> | null
+    include?: item_tranInclude<ExtArgs> | null
     /**
-     * The filter to search for the book_tran to update in case it exists.
+     * The filter to search for the item_tran to update in case it exists.
      */
-    where: book_tranWhereUniqueInput
+    where: item_tranWhereUniqueInput
     /**
-     * In case the book_tran found by the `where` argument doesn't exist, create a new book_tran with this data.
+     * In case the item_tran found by the `where` argument doesn't exist, create a new item_tran with this data.
      */
-    create: XOR<book_tranCreateInput, book_tranUncheckedCreateInput>
+    create: XOR<item_tranCreateInput, item_tranUncheckedCreateInput>
     /**
-     * In case the book_tran was found with the provided `where` argument, update it with this data.
+     * In case the item_tran was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<book_tranUpdateInput, book_tranUncheckedUpdateInput>
+    update: XOR<item_tranUpdateInput, item_tranUncheckedUpdateInput>
   }
 
   /**
-   * book_tran delete
+   * item_tran delete
    */
-  export type book_tranDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tranDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran
+     * Select specific fields to fetch from the item_tran
      */
-    select?: book_tranSelect<ExtArgs> | null
+    select?: item_tranSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran
+     * Omit specific fields from the item_tran
      */
-    omit?: book_tranOmit<ExtArgs> | null
+    omit?: item_tranOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tranInclude<ExtArgs> | null
+    include?: item_tranInclude<ExtArgs> | null
     /**
-     * Filter which book_tran to delete.
+     * Filter which item_tran to delete.
      */
-    where: book_tranWhereUniqueInput
+    where: item_tranWhereUniqueInput
   }
 
   /**
-   * book_tran deleteMany
+   * item_tran deleteMany
    */
-  export type book_tranDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tranDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which book_trans to delete
+     * Filter which item_trans to delete
      */
-    where?: book_tranWhereInput
+    where?: item_tranWhereInput
     /**
-     * Limit how many book_trans to delete.
+     * Limit how many item_trans to delete.
      */
     limit?: number
   }
 
   /**
-   * book_tran.books
+   * item_tran.library_items
    */
-  export type book_tran$booksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tran$library_itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the books
+     * Select specific fields to fetch from the library_items
      */
-    select?: booksSelect<ExtArgs> | null
+    select?: library_itemsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the books
+     * Omit specific fields from the library_items
      */
-    omit?: booksOmit<ExtArgs> | null
+    omit?: library_itemsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: booksInclude<ExtArgs> | null
-    where?: booksWhereInput
+    include?: library_itemsInclude<ExtArgs> | null
+    where?: library_itemsWhereInput
   }
 
   /**
-   * book_tran.users
+   * item_tran.users
    */
-  export type book_tran$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tran$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the users
      */
@@ -2857,33 +3091,33 @@ export namespace Prisma {
   }
 
   /**
-   * book_tran.book_tran_history
+   * item_tran.item_tran_history
    */
-  export type book_tran$book_tran_historyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tran$item_tran_historyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran_history
+     * Select specific fields to fetch from the item_tran_history
      */
-    select?: book_tran_historySelect<ExtArgs> | null
+    select?: item_tran_historySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran_history
+     * Omit specific fields from the item_tran_history
      */
-    omit?: book_tran_historyOmit<ExtArgs> | null
+    omit?: item_tran_historyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tran_historyInclude<ExtArgs> | null
-    where?: book_tran_historyWhereInput
-    orderBy?: book_tran_historyOrderByWithRelationInput | book_tran_historyOrderByWithRelationInput[]
-    cursor?: book_tran_historyWhereUniqueInput
+    include?: item_tran_historyInclude<ExtArgs> | null
+    where?: item_tran_historyWhereInput
+    orderBy?: item_tran_historyOrderByWithRelationInput | item_tran_historyOrderByWithRelationInput[]
+    cursor?: item_tran_historyWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Book_tran_historyScalarFieldEnum | Book_tran_historyScalarFieldEnum[]
+    distinct?: Item_tran_historyScalarFieldEnum | Item_tran_historyScalarFieldEnum[]
   }
 
   /**
-   * book_tran.notifications
+   * item_tran.notifications
    */
-  export type book_tran$notificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tran$notificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the notifications
      */
@@ -2905,72 +3139,57 @@ export namespace Prisma {
   }
 
   /**
-   * book_tran without action
+   * item_tran without action
    */
-  export type book_tranDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tranDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran
+     * Select specific fields to fetch from the item_tran
      */
-    select?: book_tranSelect<ExtArgs> | null
+    select?: item_tranSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran
+     * Omit specific fields from the item_tran
      */
-    omit?: book_tranOmit<ExtArgs> | null
+    omit?: item_tranOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tranInclude<ExtArgs> | null
+    include?: item_tranInclude<ExtArgs> | null
   }
 
 
   /**
-   * Model book_tran_history
+   * Model item_tran_history
    */
 
-  export type AggregateBook_tran_history = {
-    _count: Book_tran_historyCountAggregateOutputType | null
-    _avg: Book_tran_historyAvgAggregateOutputType | null
-    _sum: Book_tran_historySumAggregateOutputType | null
-    _min: Book_tran_historyMinAggregateOutputType | null
-    _max: Book_tran_historyMaxAggregateOutputType | null
+  export type AggregateItem_tran_history = {
+    _count: Item_tran_historyCountAggregateOutputType | null
+    _avg: Item_tran_historyAvgAggregateOutputType | null
+    _sum: Item_tran_historySumAggregateOutputType | null
+    _min: Item_tran_historyMinAggregateOutputType | null
+    _max: Item_tran_historyMaxAggregateOutputType | null
   }
 
-  export type Book_tran_historyAvgAggregateOutputType = {
+  export type Item_tran_historyAvgAggregateOutputType = {
     id: number | null
-    book_id: number | null
+    item_id: number | null
     tran_id: number | null
     requested_by: number | null
     approved_by: number | null
   }
 
-  export type Book_tran_historySumAggregateOutputType = {
+  export type Item_tran_historySumAggregateOutputType = {
     id: number | null
-    book_id: number | null
+    item_id: number | null
     tran_id: number | null
     requested_by: number | null
     approved_by: number | null
   }
 
-  export type Book_tran_historyMinAggregateOutputType = {
+  export type Item_tran_historyMinAggregateOutputType = {
     id: number | null
-    book_id: number | null
+    item_id: number | null
     tran_id: number | null
-    status: $Enums.book_tran_history_status | null
-    requested_by: number | null
-    approved_by: number | null
-    requested_at: Date | null
-    approved_at: Date | null
-    date_issued: Date | null
-    date_due: Date | null
-    date_returned: Date | null
-    remarks: string | null
-  }
-
-  export type Book_tran_historyMaxAggregateOutputType = {
-    id: number | null
-    book_id: number | null
-    tran_id: number | null
-    status: $Enums.book_tran_history_status | null
+    status: $Enums.item_tran_history_status | null
     requested_by: number | null
     approved_by: number | null
     requested_at: Date | null
@@ -2981,9 +3200,24 @@ export namespace Prisma {
     remarks: string | null
   }
 
-  export type Book_tran_historyCountAggregateOutputType = {
+  export type Item_tran_historyMaxAggregateOutputType = {
+    id: number | null
+    item_id: number | null
+    tran_id: number | null
+    status: $Enums.item_tran_history_status | null
+    requested_by: number | null
+    approved_by: number | null
+    requested_at: Date | null
+    approved_at: Date | null
+    date_issued: Date | null
+    date_due: Date | null
+    date_returned: Date | null
+    remarks: string | null
+  }
+
+  export type Item_tran_historyCountAggregateOutputType = {
     id: number
-    book_id: number
+    item_id: number
     tran_id: number
     status: number
     requested_by: number
@@ -2998,40 +3232,25 @@ export namespace Prisma {
   }
 
 
-  export type Book_tran_historyAvgAggregateInputType = {
+  export type Item_tran_historyAvgAggregateInputType = {
     id?: true
-    book_id?: true
+    item_id?: true
     tran_id?: true
     requested_by?: true
     approved_by?: true
   }
 
-  export type Book_tran_historySumAggregateInputType = {
+  export type Item_tran_historySumAggregateInputType = {
     id?: true
-    book_id?: true
+    item_id?: true
     tran_id?: true
     requested_by?: true
     approved_by?: true
   }
 
-  export type Book_tran_historyMinAggregateInputType = {
+  export type Item_tran_historyMinAggregateInputType = {
     id?: true
-    book_id?: true
-    tran_id?: true
-    status?: true
-    requested_by?: true
-    approved_by?: true
-    requested_at?: true
-    approved_at?: true
-    date_issued?: true
-    date_due?: true
-    date_returned?: true
-    remarks?: true
-  }
-
-  export type Book_tran_historyMaxAggregateInputType = {
-    id?: true
-    book_id?: true
+    item_id?: true
     tran_id?: true
     status?: true
     requested_by?: true
@@ -3044,9 +3263,24 @@ export namespace Prisma {
     remarks?: true
   }
 
-  export type Book_tran_historyCountAggregateInputType = {
+  export type Item_tran_historyMaxAggregateInputType = {
     id?: true
-    book_id?: true
+    item_id?: true
+    tran_id?: true
+    status?: true
+    requested_by?: true
+    approved_by?: true
+    requested_at?: true
+    approved_at?: true
+    date_issued?: true
+    date_due?: true
+    date_returned?: true
+    remarks?: true
+  }
+
+  export type Item_tran_historyCountAggregateInputType = {
+    id?: true
+    item_id?: true
     tran_id?: true
     status?: true
     requested_by?: true
@@ -3060,97 +3294,97 @@ export namespace Prisma {
     _all?: true
   }
 
-  export type Book_tran_historyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Item_tran_historyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which book_tran_history to aggregate.
+     * Filter which item_tran_history to aggregate.
      */
-    where?: book_tran_historyWhereInput
+    where?: item_tran_historyWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of book_tran_histories to fetch.
+     * Determine the order of item_tran_histories to fetch.
      */
-    orderBy?: book_tran_historyOrderByWithRelationInput | book_tran_historyOrderByWithRelationInput[]
+    orderBy?: item_tran_historyOrderByWithRelationInput | item_tran_historyOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: book_tran_historyWhereUniqueInput
+    cursor?: item_tran_historyWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` book_tran_histories from the position of the cursor.
+     * Take `±n` item_tran_histories from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` book_tran_histories.
+     * Skip the first `n` item_tran_histories.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned book_tran_histories
+     * Count returned item_tran_histories
     **/
-    _count?: true | Book_tran_historyCountAggregateInputType
+    _count?: true | Item_tran_historyCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: Book_tran_historyAvgAggregateInputType
+    _avg?: Item_tran_historyAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: Book_tran_historySumAggregateInputType
+    _sum?: Item_tran_historySumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: Book_tran_historyMinAggregateInputType
+    _min?: Item_tran_historyMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: Book_tran_historyMaxAggregateInputType
+    _max?: Item_tran_historyMaxAggregateInputType
   }
 
-  export type GetBook_tran_historyAggregateType<T extends Book_tran_historyAggregateArgs> = {
-        [P in keyof T & keyof AggregateBook_tran_history]: P extends '_count' | 'count'
+  export type GetItem_tran_historyAggregateType<T extends Item_tran_historyAggregateArgs> = {
+        [P in keyof T & keyof AggregateItem_tran_history]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateBook_tran_history[P]>
-      : GetScalarType<T[P], AggregateBook_tran_history[P]>
+        : GetScalarType<T[P], AggregateItem_tran_history[P]>
+      : GetScalarType<T[P], AggregateItem_tran_history[P]>
   }
 
 
 
 
-  export type book_tran_historyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: book_tran_historyWhereInput
-    orderBy?: book_tran_historyOrderByWithAggregationInput | book_tran_historyOrderByWithAggregationInput[]
-    by: Book_tran_historyScalarFieldEnum[] | Book_tran_historyScalarFieldEnum
-    having?: book_tran_historyScalarWhereWithAggregatesInput
+  export type item_tran_historyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: item_tran_historyWhereInput
+    orderBy?: item_tran_historyOrderByWithAggregationInput | item_tran_historyOrderByWithAggregationInput[]
+    by: Item_tran_historyScalarFieldEnum[] | Item_tran_historyScalarFieldEnum
+    having?: item_tran_historyScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: Book_tran_historyCountAggregateInputType | true
-    _avg?: Book_tran_historyAvgAggregateInputType
-    _sum?: Book_tran_historySumAggregateInputType
-    _min?: Book_tran_historyMinAggregateInputType
-    _max?: Book_tran_historyMaxAggregateInputType
+    _count?: Item_tran_historyCountAggregateInputType | true
+    _avg?: Item_tran_historyAvgAggregateInputType
+    _sum?: Item_tran_historySumAggregateInputType
+    _min?: Item_tran_historyMinAggregateInputType
+    _max?: Item_tran_historyMaxAggregateInputType
   }
 
-  export type Book_tran_historyGroupByOutputType = {
+  export type Item_tran_historyGroupByOutputType = {
     id: number
-    book_id: number | null
+    item_id: number | null
     tran_id: number | null
-    status: $Enums.book_tran_history_status
+    status: $Enums.item_tran_history_status
     requested_by: number | null
     approved_by: number | null
     requested_at: Date | null
@@ -3159,30 +3393,30 @@ export namespace Prisma {
     date_due: Date | null
     date_returned: Date | null
     remarks: string | null
-    _count: Book_tran_historyCountAggregateOutputType | null
-    _avg: Book_tran_historyAvgAggregateOutputType | null
-    _sum: Book_tran_historySumAggregateOutputType | null
-    _min: Book_tran_historyMinAggregateOutputType | null
-    _max: Book_tran_historyMaxAggregateOutputType | null
+    _count: Item_tran_historyCountAggregateOutputType | null
+    _avg: Item_tran_historyAvgAggregateOutputType | null
+    _sum: Item_tran_historySumAggregateOutputType | null
+    _min: Item_tran_historyMinAggregateOutputType | null
+    _max: Item_tran_historyMaxAggregateOutputType | null
   }
 
-  type GetBook_tran_historyGroupByPayload<T extends book_tran_historyGroupByArgs> = Prisma.PrismaPromise<
+  type GetItem_tran_historyGroupByPayload<T extends item_tran_historyGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<Book_tran_historyGroupByOutputType, T['by']> &
+      PickEnumerable<Item_tran_historyGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof Book_tran_historyGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof Item_tran_historyGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], Book_tran_historyGroupByOutputType[P]>
-            : GetScalarType<T[P], Book_tran_historyGroupByOutputType[P]>
+              : GetScalarType<T[P], Item_tran_historyGroupByOutputType[P]>
+            : GetScalarType<T[P], Item_tran_historyGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type book_tran_historySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type item_tran_historySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    book_id?: boolean
+    item_id?: boolean
     tran_id?: boolean
     status?: boolean
     requested_by?: boolean
@@ -3193,19 +3427,19 @@ export namespace Prisma {
     date_due?: boolean
     date_returned?: boolean
     remarks?: boolean
-    books?: boolean | book_tran_history$booksArgs<ExtArgs>
-    book_tran?: boolean | book_tran_history$book_tranArgs<ExtArgs>
-    users_book_tran_history_requested_byTousers?: boolean | book_tran_history$users_book_tran_history_requested_byTousersArgs<ExtArgs>
-    users_book_tran_history_approved_byTousers?: boolean | book_tran_history$users_book_tran_history_approved_byTousersArgs<ExtArgs>
-    fines?: boolean | book_tran_history$finesArgs<ExtArgs>
-    _count?: boolean | Book_tran_historyCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["book_tran_history"]>
+    library_items?: boolean | item_tran_history$library_itemsArgs<ExtArgs>
+    item_tran?: boolean | item_tran_history$item_tranArgs<ExtArgs>
+    users_item_tran_history_requested_byTousers?: boolean | item_tran_history$users_item_tran_history_requested_byTousersArgs<ExtArgs>
+    users_item_tran_history_approved_byTousers?: boolean | item_tran_history$users_item_tran_history_approved_byTousersArgs<ExtArgs>
+    fines?: boolean | item_tran_history$finesArgs<ExtArgs>
+    _count?: boolean | Item_tran_historyCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["item_tran_history"]>
 
 
 
-  export type book_tran_historySelectScalar = {
+  export type item_tran_historySelectScalar = {
     id?: boolean
-    book_id?: boolean
+    item_id?: boolean
     tran_id?: boolean
     status?: boolean
     requested_by?: boolean
@@ -3218,30 +3452,30 @@ export namespace Prisma {
     remarks?: boolean
   }
 
-  export type book_tran_historyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "book_id" | "tran_id" | "status" | "requested_by" | "approved_by" | "requested_at" | "approved_at" | "date_issued" | "date_due" | "date_returned" | "remarks", ExtArgs["result"]["book_tran_history"]>
-  export type book_tran_historyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    books?: boolean | book_tran_history$booksArgs<ExtArgs>
-    book_tran?: boolean | book_tran_history$book_tranArgs<ExtArgs>
-    users_book_tran_history_requested_byTousers?: boolean | book_tran_history$users_book_tran_history_requested_byTousersArgs<ExtArgs>
-    users_book_tran_history_approved_byTousers?: boolean | book_tran_history$users_book_tran_history_approved_byTousersArgs<ExtArgs>
-    fines?: boolean | book_tran_history$finesArgs<ExtArgs>
-    _count?: boolean | Book_tran_historyCountOutputTypeDefaultArgs<ExtArgs>
+  export type item_tran_historyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "item_id" | "tran_id" | "status" | "requested_by" | "approved_by" | "requested_at" | "approved_at" | "date_issued" | "date_due" | "date_returned" | "remarks", ExtArgs["result"]["item_tran_history"]>
+  export type item_tran_historyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    library_items?: boolean | item_tran_history$library_itemsArgs<ExtArgs>
+    item_tran?: boolean | item_tran_history$item_tranArgs<ExtArgs>
+    users_item_tran_history_requested_byTousers?: boolean | item_tran_history$users_item_tran_history_requested_byTousersArgs<ExtArgs>
+    users_item_tran_history_approved_byTousers?: boolean | item_tran_history$users_item_tran_history_approved_byTousersArgs<ExtArgs>
+    fines?: boolean | item_tran_history$finesArgs<ExtArgs>
+    _count?: boolean | Item_tran_historyCountOutputTypeDefaultArgs<ExtArgs>
   }
 
-  export type $book_tran_historyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "book_tran_history"
+  export type $item_tran_historyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "item_tran_history"
     objects: {
-      books: Prisma.$booksPayload<ExtArgs> | null
-      book_tran: Prisma.$book_tranPayload<ExtArgs> | null
-      users_book_tran_history_requested_byTousers: Prisma.$usersPayload<ExtArgs> | null
-      users_book_tran_history_approved_byTousers: Prisma.$usersPayload<ExtArgs> | null
+      library_items: Prisma.$library_itemsPayload<ExtArgs> | null
+      item_tran: Prisma.$item_tranPayload<ExtArgs> | null
+      users_item_tran_history_requested_byTousers: Prisma.$usersPayload<ExtArgs> | null
+      users_item_tran_history_approved_byTousers: Prisma.$usersPayload<ExtArgs> | null
       fines: Prisma.$finesPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      book_id: number | null
+      item_id: number | null
       tran_id: number | null
-      status: $Enums.book_tran_history_status
+      status: $Enums.item_tran_history_status
       requested_by: number | null
       approved_by: number | null
       requested_at: Date | null
@@ -3250,143 +3484,143 @@ export namespace Prisma {
       date_due: Date | null
       date_returned: Date | null
       remarks: string | null
-    }, ExtArgs["result"]["book_tran_history"]>
+    }, ExtArgs["result"]["item_tran_history"]>
     composites: {}
   }
 
-  type book_tran_historyGetPayload<S extends boolean | null | undefined | book_tran_historyDefaultArgs> = $Result.GetResult<Prisma.$book_tran_historyPayload, S>
+  type item_tran_historyGetPayload<S extends boolean | null | undefined | item_tran_historyDefaultArgs> = $Result.GetResult<Prisma.$item_tran_historyPayload, S>
 
-  type book_tran_historyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<book_tran_historyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: Book_tran_historyCountAggregateInputType | true
+  type item_tran_historyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<item_tran_historyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Item_tran_historyCountAggregateInputType | true
     }
 
-  export interface book_tran_historyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['book_tran_history'], meta: { name: 'book_tran_history' } }
+  export interface item_tran_historyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['item_tran_history'], meta: { name: 'item_tran_history' } }
     /**
-     * Find zero or one Book_tran_history that matches the filter.
-     * @param {book_tran_historyFindUniqueArgs} args - Arguments to find a Book_tran_history
+     * Find zero or one Item_tran_history that matches the filter.
+     * @param {item_tran_historyFindUniqueArgs} args - Arguments to find a Item_tran_history
      * @example
-     * // Get one Book_tran_history
-     * const book_tran_history = await prisma.book_tran_history.findUnique({
+     * // Get one Item_tran_history
+     * const item_tran_history = await prisma.item_tran_history.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends book_tran_historyFindUniqueArgs>(args: SelectSubset<T, book_tran_historyFindUniqueArgs<ExtArgs>>): Prisma__book_tran_historyClient<$Result.GetResult<Prisma.$book_tran_historyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends item_tran_historyFindUniqueArgs>(args: SelectSubset<T, item_tran_historyFindUniqueArgs<ExtArgs>>): Prisma__item_tran_historyClient<$Result.GetResult<Prisma.$item_tran_historyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one Book_tran_history that matches the filter or throw an error with `error.code='P2025'`
+     * Find one Item_tran_history that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {book_tran_historyFindUniqueOrThrowArgs} args - Arguments to find a Book_tran_history
+     * @param {item_tran_historyFindUniqueOrThrowArgs} args - Arguments to find a Item_tran_history
      * @example
-     * // Get one Book_tran_history
-     * const book_tran_history = await prisma.book_tran_history.findUniqueOrThrow({
+     * // Get one Item_tran_history
+     * const item_tran_history = await prisma.item_tran_history.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends book_tran_historyFindUniqueOrThrowArgs>(args: SelectSubset<T, book_tran_historyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__book_tran_historyClient<$Result.GetResult<Prisma.$book_tran_historyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends item_tran_historyFindUniqueOrThrowArgs>(args: SelectSubset<T, item_tran_historyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__item_tran_historyClient<$Result.GetResult<Prisma.$item_tran_historyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Book_tran_history that matches the filter.
+     * Find the first Item_tran_history that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {book_tran_historyFindFirstArgs} args - Arguments to find a Book_tran_history
+     * @param {item_tran_historyFindFirstArgs} args - Arguments to find a Item_tran_history
      * @example
-     * // Get one Book_tran_history
-     * const book_tran_history = await prisma.book_tran_history.findFirst({
+     * // Get one Item_tran_history
+     * const item_tran_history = await prisma.item_tran_history.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends book_tran_historyFindFirstArgs>(args?: SelectSubset<T, book_tran_historyFindFirstArgs<ExtArgs>>): Prisma__book_tran_historyClient<$Result.GetResult<Prisma.$book_tran_historyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends item_tran_historyFindFirstArgs>(args?: SelectSubset<T, item_tran_historyFindFirstArgs<ExtArgs>>): Prisma__item_tran_historyClient<$Result.GetResult<Prisma.$item_tran_historyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Book_tran_history that matches the filter or
+     * Find the first Item_tran_history that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {book_tran_historyFindFirstOrThrowArgs} args - Arguments to find a Book_tran_history
+     * @param {item_tran_historyFindFirstOrThrowArgs} args - Arguments to find a Item_tran_history
      * @example
-     * // Get one Book_tran_history
-     * const book_tran_history = await prisma.book_tran_history.findFirstOrThrow({
+     * // Get one Item_tran_history
+     * const item_tran_history = await prisma.item_tran_history.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends book_tran_historyFindFirstOrThrowArgs>(args?: SelectSubset<T, book_tran_historyFindFirstOrThrowArgs<ExtArgs>>): Prisma__book_tran_historyClient<$Result.GetResult<Prisma.$book_tran_historyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends item_tran_historyFindFirstOrThrowArgs>(args?: SelectSubset<T, item_tran_historyFindFirstOrThrowArgs<ExtArgs>>): Prisma__item_tran_historyClient<$Result.GetResult<Prisma.$item_tran_historyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more Book_tran_histories that matches the filter.
+     * Find zero or more Item_tran_histories that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {book_tran_historyFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {item_tran_historyFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Book_tran_histories
-     * const book_tran_histories = await prisma.book_tran_history.findMany()
+     * // Get all Item_tran_histories
+     * const item_tran_histories = await prisma.item_tran_history.findMany()
      * 
-     * // Get first 10 Book_tran_histories
-     * const book_tran_histories = await prisma.book_tran_history.findMany({ take: 10 })
+     * // Get first 10 Item_tran_histories
+     * const item_tran_histories = await prisma.item_tran_history.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const book_tran_historyWithIdOnly = await prisma.book_tran_history.findMany({ select: { id: true } })
+     * const item_tran_historyWithIdOnly = await prisma.item_tran_history.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends book_tran_historyFindManyArgs>(args?: SelectSubset<T, book_tran_historyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$book_tran_historyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends item_tran_historyFindManyArgs>(args?: SelectSubset<T, item_tran_historyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$item_tran_historyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a Book_tran_history.
-     * @param {book_tran_historyCreateArgs} args - Arguments to create a Book_tran_history.
+     * Create a Item_tran_history.
+     * @param {item_tran_historyCreateArgs} args - Arguments to create a Item_tran_history.
      * @example
-     * // Create one Book_tran_history
-     * const Book_tran_history = await prisma.book_tran_history.create({
+     * // Create one Item_tran_history
+     * const Item_tran_history = await prisma.item_tran_history.create({
      *   data: {
-     *     // ... data to create a Book_tran_history
+     *     // ... data to create a Item_tran_history
      *   }
      * })
      * 
      */
-    create<T extends book_tran_historyCreateArgs>(args: SelectSubset<T, book_tran_historyCreateArgs<ExtArgs>>): Prisma__book_tran_historyClient<$Result.GetResult<Prisma.$book_tran_historyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends item_tran_historyCreateArgs>(args: SelectSubset<T, item_tran_historyCreateArgs<ExtArgs>>): Prisma__item_tran_historyClient<$Result.GetResult<Prisma.$item_tran_historyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many Book_tran_histories.
-     * @param {book_tran_historyCreateManyArgs} args - Arguments to create many Book_tran_histories.
+     * Create many Item_tran_histories.
+     * @param {item_tran_historyCreateManyArgs} args - Arguments to create many Item_tran_histories.
      * @example
-     * // Create many Book_tran_histories
-     * const book_tran_history = await prisma.book_tran_history.createMany({
+     * // Create many Item_tran_histories
+     * const item_tran_history = await prisma.item_tran_history.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends book_tran_historyCreateManyArgs>(args?: SelectSubset<T, book_tran_historyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends item_tran_historyCreateManyArgs>(args?: SelectSubset<T, item_tran_historyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Delete a Book_tran_history.
-     * @param {book_tran_historyDeleteArgs} args - Arguments to delete one Book_tran_history.
+     * Delete a Item_tran_history.
+     * @param {item_tran_historyDeleteArgs} args - Arguments to delete one Item_tran_history.
      * @example
-     * // Delete one Book_tran_history
-     * const Book_tran_history = await prisma.book_tran_history.delete({
+     * // Delete one Item_tran_history
+     * const Item_tran_history = await prisma.item_tran_history.delete({
      *   where: {
-     *     // ... filter to delete one Book_tran_history
+     *     // ... filter to delete one Item_tran_history
      *   }
      * })
      * 
      */
-    delete<T extends book_tran_historyDeleteArgs>(args: SelectSubset<T, book_tran_historyDeleteArgs<ExtArgs>>): Prisma__book_tran_historyClient<$Result.GetResult<Prisma.$book_tran_historyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends item_tran_historyDeleteArgs>(args: SelectSubset<T, item_tran_historyDeleteArgs<ExtArgs>>): Prisma__item_tran_historyClient<$Result.GetResult<Prisma.$item_tran_historyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one Book_tran_history.
-     * @param {book_tran_historyUpdateArgs} args - Arguments to update one Book_tran_history.
+     * Update one Item_tran_history.
+     * @param {item_tran_historyUpdateArgs} args - Arguments to update one Item_tran_history.
      * @example
-     * // Update one Book_tran_history
-     * const book_tran_history = await prisma.book_tran_history.update({
+     * // Update one Item_tran_history
+     * const item_tran_history = await prisma.item_tran_history.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -3396,30 +3630,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends book_tran_historyUpdateArgs>(args: SelectSubset<T, book_tran_historyUpdateArgs<ExtArgs>>): Prisma__book_tran_historyClient<$Result.GetResult<Prisma.$book_tran_historyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends item_tran_historyUpdateArgs>(args: SelectSubset<T, item_tran_historyUpdateArgs<ExtArgs>>): Prisma__item_tran_historyClient<$Result.GetResult<Prisma.$item_tran_historyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more Book_tran_histories.
-     * @param {book_tran_historyDeleteManyArgs} args - Arguments to filter Book_tran_histories to delete.
+     * Delete zero or more Item_tran_histories.
+     * @param {item_tran_historyDeleteManyArgs} args - Arguments to filter Item_tran_histories to delete.
      * @example
-     * // Delete a few Book_tran_histories
-     * const { count } = await prisma.book_tran_history.deleteMany({
+     * // Delete a few Item_tran_histories
+     * const { count } = await prisma.item_tran_history.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends book_tran_historyDeleteManyArgs>(args?: SelectSubset<T, book_tran_historyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends item_tran_historyDeleteManyArgs>(args?: SelectSubset<T, item_tran_historyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Book_tran_histories.
+     * Update zero or more Item_tran_histories.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {book_tran_historyUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {item_tran_historyUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Book_tran_histories
-     * const book_tran_history = await prisma.book_tran_history.updateMany({
+     * // Update many Item_tran_histories
+     * const item_tran_history = await prisma.item_tran_history.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -3429,56 +3663,56 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends book_tran_historyUpdateManyArgs>(args: SelectSubset<T, book_tran_historyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends item_tran_historyUpdateManyArgs>(args: SelectSubset<T, item_tran_historyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one Book_tran_history.
-     * @param {book_tran_historyUpsertArgs} args - Arguments to update or create a Book_tran_history.
+     * Create or update one Item_tran_history.
+     * @param {item_tran_historyUpsertArgs} args - Arguments to update or create a Item_tran_history.
      * @example
-     * // Update or create a Book_tran_history
-     * const book_tran_history = await prisma.book_tran_history.upsert({
+     * // Update or create a Item_tran_history
+     * const item_tran_history = await prisma.item_tran_history.upsert({
      *   create: {
-     *     // ... data to create a Book_tran_history
+     *     // ... data to create a Item_tran_history
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Book_tran_history we want to update
+     *     // ... the filter for the Item_tran_history we want to update
      *   }
      * })
      */
-    upsert<T extends book_tran_historyUpsertArgs>(args: SelectSubset<T, book_tran_historyUpsertArgs<ExtArgs>>): Prisma__book_tran_historyClient<$Result.GetResult<Prisma.$book_tran_historyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends item_tran_historyUpsertArgs>(args: SelectSubset<T, item_tran_historyUpsertArgs<ExtArgs>>): Prisma__item_tran_historyClient<$Result.GetResult<Prisma.$item_tran_historyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of Book_tran_histories.
+     * Count the number of Item_tran_histories.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {book_tran_historyCountArgs} args - Arguments to filter Book_tran_histories to count.
+     * @param {item_tran_historyCountArgs} args - Arguments to filter Item_tran_histories to count.
      * @example
-     * // Count the number of Book_tran_histories
-     * const count = await prisma.book_tran_history.count({
+     * // Count the number of Item_tran_histories
+     * const count = await prisma.item_tran_history.count({
      *   where: {
-     *     // ... the filter for the Book_tran_histories we want to count
+     *     // ... the filter for the Item_tran_histories we want to count
      *   }
      * })
     **/
-    count<T extends book_tran_historyCountArgs>(
-      args?: Subset<T, book_tran_historyCountArgs>,
+    count<T extends item_tran_historyCountArgs>(
+      args?: Subset<T, item_tran_historyCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], Book_tran_historyCountAggregateOutputType>
+          : GetScalarType<T['select'], Item_tran_historyCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Book_tran_history.
+     * Allows you to perform aggregations operations on a Item_tran_history.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {Book_tran_historyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {Item_tran_historyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -3498,13 +3732,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends Book_tran_historyAggregateArgs>(args: Subset<T, Book_tran_historyAggregateArgs>): Prisma.PrismaPromise<GetBook_tran_historyAggregateType<T>>
+    aggregate<T extends Item_tran_historyAggregateArgs>(args: Subset<T, Item_tran_historyAggregateArgs>): Prisma.PrismaPromise<GetItem_tran_historyAggregateType<T>>
 
     /**
-     * Group by Book_tran_history.
+     * Group by Item_tran_history.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {book_tran_historyGroupByArgs} args - Group by arguments.
+     * @param {item_tran_historyGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -3519,14 +3753,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends book_tran_historyGroupByArgs,
+      T extends item_tran_historyGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: book_tran_historyGroupByArgs['orderBy'] }
-        : { orderBy?: book_tran_historyGroupByArgs['orderBy'] },
+        ? { orderBy: item_tran_historyGroupByArgs['orderBy'] }
+        : { orderBy?: item_tran_historyGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -3575,26 +3809,26 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, book_tran_historyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBook_tran_historyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, item_tran_historyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetItem_tran_historyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the book_tran_history model
+   * Fields of the item_tran_history model
    */
-  readonly fields: book_tran_historyFieldRefs;
+  readonly fields: item_tran_historyFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for book_tran_history.
+   * The delegate class that acts as a "Promise-like" for item_tran_history.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__book_tran_historyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__item_tran_historyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    books<T extends book_tran_history$booksArgs<ExtArgs> = {}>(args?: Subset<T, book_tran_history$booksArgs<ExtArgs>>): Prisma__booksClient<$Result.GetResult<Prisma.$booksPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    book_tran<T extends book_tran_history$book_tranArgs<ExtArgs> = {}>(args?: Subset<T, book_tran_history$book_tranArgs<ExtArgs>>): Prisma__book_tranClient<$Result.GetResult<Prisma.$book_tranPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    users_book_tran_history_requested_byTousers<T extends book_tran_history$users_book_tran_history_requested_byTousersArgs<ExtArgs> = {}>(args?: Subset<T, book_tran_history$users_book_tran_history_requested_byTousersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    users_book_tran_history_approved_byTousers<T extends book_tran_history$users_book_tran_history_approved_byTousersArgs<ExtArgs> = {}>(args?: Subset<T, book_tran_history$users_book_tran_history_approved_byTousersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    fines<T extends book_tran_history$finesArgs<ExtArgs> = {}>(args?: Subset<T, book_tran_history$finesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$finesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    library_items<T extends item_tran_history$library_itemsArgs<ExtArgs> = {}>(args?: Subset<T, item_tran_history$library_itemsArgs<ExtArgs>>): Prisma__library_itemsClient<$Result.GetResult<Prisma.$library_itemsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    item_tran<T extends item_tran_history$item_tranArgs<ExtArgs> = {}>(args?: Subset<T, item_tran_history$item_tranArgs<ExtArgs>>): Prisma__item_tranClient<$Result.GetResult<Prisma.$item_tranPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    users_item_tran_history_requested_byTousers<T extends item_tran_history$users_item_tran_history_requested_byTousersArgs<ExtArgs> = {}>(args?: Subset<T, item_tran_history$users_item_tran_history_requested_byTousersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    users_item_tran_history_approved_byTousers<T extends item_tran_history$users_item_tran_history_approved_byTousersArgs<ExtArgs> = {}>(args?: Subset<T, item_tran_history$users_item_tran_history_approved_byTousersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    fines<T extends item_tran_history$finesArgs<ExtArgs> = {}>(args?: Subset<T, item_tran_history$finesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$finesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3621,405 +3855,405 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the book_tran_history model
+   * Fields of the item_tran_history model
    */
-  interface book_tran_historyFieldRefs {
-    readonly id: FieldRef<"book_tran_history", 'Int'>
-    readonly book_id: FieldRef<"book_tran_history", 'Int'>
-    readonly tran_id: FieldRef<"book_tran_history", 'Int'>
-    readonly status: FieldRef<"book_tran_history", 'book_tran_history_status'>
-    readonly requested_by: FieldRef<"book_tran_history", 'Int'>
-    readonly approved_by: FieldRef<"book_tran_history", 'Int'>
-    readonly requested_at: FieldRef<"book_tran_history", 'DateTime'>
-    readonly approved_at: FieldRef<"book_tran_history", 'DateTime'>
-    readonly date_issued: FieldRef<"book_tran_history", 'DateTime'>
-    readonly date_due: FieldRef<"book_tran_history", 'DateTime'>
-    readonly date_returned: FieldRef<"book_tran_history", 'DateTime'>
-    readonly remarks: FieldRef<"book_tran_history", 'String'>
+  interface item_tran_historyFieldRefs {
+    readonly id: FieldRef<"item_tran_history", 'Int'>
+    readonly item_id: FieldRef<"item_tran_history", 'Int'>
+    readonly tran_id: FieldRef<"item_tran_history", 'Int'>
+    readonly status: FieldRef<"item_tran_history", 'item_tran_history_status'>
+    readonly requested_by: FieldRef<"item_tran_history", 'Int'>
+    readonly approved_by: FieldRef<"item_tran_history", 'Int'>
+    readonly requested_at: FieldRef<"item_tran_history", 'DateTime'>
+    readonly approved_at: FieldRef<"item_tran_history", 'DateTime'>
+    readonly date_issued: FieldRef<"item_tran_history", 'DateTime'>
+    readonly date_due: FieldRef<"item_tran_history", 'DateTime'>
+    readonly date_returned: FieldRef<"item_tran_history", 'DateTime'>
+    readonly remarks: FieldRef<"item_tran_history", 'String'>
   }
     
 
   // Custom InputTypes
   /**
-   * book_tran_history findUnique
+   * item_tran_history findUnique
    */
-  export type book_tran_historyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tran_historyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran_history
+     * Select specific fields to fetch from the item_tran_history
      */
-    select?: book_tran_historySelect<ExtArgs> | null
+    select?: item_tran_historySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran_history
+     * Omit specific fields from the item_tran_history
      */
-    omit?: book_tran_historyOmit<ExtArgs> | null
+    omit?: item_tran_historyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tran_historyInclude<ExtArgs> | null
+    include?: item_tran_historyInclude<ExtArgs> | null
     /**
-     * Filter, which book_tran_history to fetch.
+     * Filter, which item_tran_history to fetch.
      */
-    where: book_tran_historyWhereUniqueInput
+    where: item_tran_historyWhereUniqueInput
   }
 
   /**
-   * book_tran_history findUniqueOrThrow
+   * item_tran_history findUniqueOrThrow
    */
-  export type book_tran_historyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tran_historyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran_history
+     * Select specific fields to fetch from the item_tran_history
      */
-    select?: book_tran_historySelect<ExtArgs> | null
+    select?: item_tran_historySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran_history
+     * Omit specific fields from the item_tran_history
      */
-    omit?: book_tran_historyOmit<ExtArgs> | null
+    omit?: item_tran_historyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tran_historyInclude<ExtArgs> | null
+    include?: item_tran_historyInclude<ExtArgs> | null
     /**
-     * Filter, which book_tran_history to fetch.
+     * Filter, which item_tran_history to fetch.
      */
-    where: book_tran_historyWhereUniqueInput
+    where: item_tran_historyWhereUniqueInput
   }
 
   /**
-   * book_tran_history findFirst
+   * item_tran_history findFirst
    */
-  export type book_tran_historyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tran_historyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran_history
+     * Select specific fields to fetch from the item_tran_history
      */
-    select?: book_tran_historySelect<ExtArgs> | null
+    select?: item_tran_historySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran_history
+     * Omit specific fields from the item_tran_history
      */
-    omit?: book_tran_historyOmit<ExtArgs> | null
+    omit?: item_tran_historyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tran_historyInclude<ExtArgs> | null
+    include?: item_tran_historyInclude<ExtArgs> | null
     /**
-     * Filter, which book_tran_history to fetch.
+     * Filter, which item_tran_history to fetch.
      */
-    where?: book_tran_historyWhereInput
+    where?: item_tran_historyWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of book_tran_histories to fetch.
+     * Determine the order of item_tran_histories to fetch.
      */
-    orderBy?: book_tran_historyOrderByWithRelationInput | book_tran_historyOrderByWithRelationInput[]
+    orderBy?: item_tran_historyOrderByWithRelationInput | item_tran_historyOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for book_tran_histories.
+     * Sets the position for searching for item_tran_histories.
      */
-    cursor?: book_tran_historyWhereUniqueInput
+    cursor?: item_tran_historyWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` book_tran_histories from the position of the cursor.
+     * Take `±n` item_tran_histories from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` book_tran_histories.
+     * Skip the first `n` item_tran_histories.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of book_tran_histories.
+     * Filter by unique combinations of item_tran_histories.
      */
-    distinct?: Book_tran_historyScalarFieldEnum | Book_tran_historyScalarFieldEnum[]
+    distinct?: Item_tran_historyScalarFieldEnum | Item_tran_historyScalarFieldEnum[]
   }
 
   /**
-   * book_tran_history findFirstOrThrow
+   * item_tran_history findFirstOrThrow
    */
-  export type book_tran_historyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tran_historyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran_history
+     * Select specific fields to fetch from the item_tran_history
      */
-    select?: book_tran_historySelect<ExtArgs> | null
+    select?: item_tran_historySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran_history
+     * Omit specific fields from the item_tran_history
      */
-    omit?: book_tran_historyOmit<ExtArgs> | null
+    omit?: item_tran_historyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tran_historyInclude<ExtArgs> | null
+    include?: item_tran_historyInclude<ExtArgs> | null
     /**
-     * Filter, which book_tran_history to fetch.
+     * Filter, which item_tran_history to fetch.
      */
-    where?: book_tran_historyWhereInput
+    where?: item_tran_historyWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of book_tran_histories to fetch.
+     * Determine the order of item_tran_histories to fetch.
      */
-    orderBy?: book_tran_historyOrderByWithRelationInput | book_tran_historyOrderByWithRelationInput[]
+    orderBy?: item_tran_historyOrderByWithRelationInput | item_tran_historyOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for book_tran_histories.
+     * Sets the position for searching for item_tran_histories.
      */
-    cursor?: book_tran_historyWhereUniqueInput
+    cursor?: item_tran_historyWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` book_tran_histories from the position of the cursor.
+     * Take `±n` item_tran_histories from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` book_tran_histories.
+     * Skip the first `n` item_tran_histories.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of book_tran_histories.
+     * Filter by unique combinations of item_tran_histories.
      */
-    distinct?: Book_tran_historyScalarFieldEnum | Book_tran_historyScalarFieldEnum[]
+    distinct?: Item_tran_historyScalarFieldEnum | Item_tran_historyScalarFieldEnum[]
   }
 
   /**
-   * book_tran_history findMany
+   * item_tran_history findMany
    */
-  export type book_tran_historyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tran_historyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran_history
+     * Select specific fields to fetch from the item_tran_history
      */
-    select?: book_tran_historySelect<ExtArgs> | null
+    select?: item_tran_historySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran_history
+     * Omit specific fields from the item_tran_history
      */
-    omit?: book_tran_historyOmit<ExtArgs> | null
+    omit?: item_tran_historyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tran_historyInclude<ExtArgs> | null
+    include?: item_tran_historyInclude<ExtArgs> | null
     /**
-     * Filter, which book_tran_histories to fetch.
+     * Filter, which item_tran_histories to fetch.
      */
-    where?: book_tran_historyWhereInput
+    where?: item_tran_historyWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of book_tran_histories to fetch.
+     * Determine the order of item_tran_histories to fetch.
      */
-    orderBy?: book_tran_historyOrderByWithRelationInput | book_tran_historyOrderByWithRelationInput[]
+    orderBy?: item_tran_historyOrderByWithRelationInput | item_tran_historyOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing book_tran_histories.
+     * Sets the position for listing item_tran_histories.
      */
-    cursor?: book_tran_historyWhereUniqueInput
+    cursor?: item_tran_historyWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` book_tran_histories from the position of the cursor.
+     * Take `±n` item_tran_histories from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` book_tran_histories.
+     * Skip the first `n` item_tran_histories.
      */
     skip?: number
-    distinct?: Book_tran_historyScalarFieldEnum | Book_tran_historyScalarFieldEnum[]
+    distinct?: Item_tran_historyScalarFieldEnum | Item_tran_historyScalarFieldEnum[]
   }
 
   /**
-   * book_tran_history create
+   * item_tran_history create
    */
-  export type book_tran_historyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tran_historyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran_history
+     * Select specific fields to fetch from the item_tran_history
      */
-    select?: book_tran_historySelect<ExtArgs> | null
+    select?: item_tran_historySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran_history
+     * Omit specific fields from the item_tran_history
      */
-    omit?: book_tran_historyOmit<ExtArgs> | null
+    omit?: item_tran_historyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tran_historyInclude<ExtArgs> | null
+    include?: item_tran_historyInclude<ExtArgs> | null
     /**
-     * The data needed to create a book_tran_history.
+     * The data needed to create a item_tran_history.
      */
-    data?: XOR<book_tran_historyCreateInput, book_tran_historyUncheckedCreateInput>
+    data?: XOR<item_tran_historyCreateInput, item_tran_historyUncheckedCreateInput>
   }
 
   /**
-   * book_tran_history createMany
+   * item_tran_history createMany
    */
-  export type book_tran_historyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tran_historyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many book_tran_histories.
+     * The data used to create many item_tran_histories.
      */
-    data: book_tran_historyCreateManyInput | book_tran_historyCreateManyInput[]
+    data: item_tran_historyCreateManyInput | item_tran_historyCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * book_tran_history update
+   * item_tran_history update
    */
-  export type book_tran_historyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tran_historyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran_history
+     * Select specific fields to fetch from the item_tran_history
      */
-    select?: book_tran_historySelect<ExtArgs> | null
+    select?: item_tran_historySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran_history
+     * Omit specific fields from the item_tran_history
      */
-    omit?: book_tran_historyOmit<ExtArgs> | null
+    omit?: item_tran_historyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tran_historyInclude<ExtArgs> | null
+    include?: item_tran_historyInclude<ExtArgs> | null
     /**
-     * The data needed to update a book_tran_history.
+     * The data needed to update a item_tran_history.
      */
-    data: XOR<book_tran_historyUpdateInput, book_tran_historyUncheckedUpdateInput>
+    data: XOR<item_tran_historyUpdateInput, item_tran_historyUncheckedUpdateInput>
     /**
-     * Choose, which book_tran_history to update.
+     * Choose, which item_tran_history to update.
      */
-    where: book_tran_historyWhereUniqueInput
+    where: item_tran_historyWhereUniqueInput
   }
 
   /**
-   * book_tran_history updateMany
+   * item_tran_history updateMany
    */
-  export type book_tran_historyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tran_historyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update book_tran_histories.
+     * The data used to update item_tran_histories.
      */
-    data: XOR<book_tran_historyUpdateManyMutationInput, book_tran_historyUncheckedUpdateManyInput>
+    data: XOR<item_tran_historyUpdateManyMutationInput, item_tran_historyUncheckedUpdateManyInput>
     /**
-     * Filter which book_tran_histories to update
+     * Filter which item_tran_histories to update
      */
-    where?: book_tran_historyWhereInput
+    where?: item_tran_historyWhereInput
     /**
-     * Limit how many book_tran_histories to update.
+     * Limit how many item_tran_histories to update.
      */
     limit?: number
   }
 
   /**
-   * book_tran_history upsert
+   * item_tran_history upsert
    */
-  export type book_tran_historyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tran_historyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran_history
+     * Select specific fields to fetch from the item_tran_history
      */
-    select?: book_tran_historySelect<ExtArgs> | null
+    select?: item_tran_historySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran_history
+     * Omit specific fields from the item_tran_history
      */
-    omit?: book_tran_historyOmit<ExtArgs> | null
+    omit?: item_tran_historyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tran_historyInclude<ExtArgs> | null
+    include?: item_tran_historyInclude<ExtArgs> | null
     /**
-     * The filter to search for the book_tran_history to update in case it exists.
+     * The filter to search for the item_tran_history to update in case it exists.
      */
-    where: book_tran_historyWhereUniqueInput
+    where: item_tran_historyWhereUniqueInput
     /**
-     * In case the book_tran_history found by the `where` argument doesn't exist, create a new book_tran_history with this data.
+     * In case the item_tran_history found by the `where` argument doesn't exist, create a new item_tran_history with this data.
      */
-    create: XOR<book_tran_historyCreateInput, book_tran_historyUncheckedCreateInput>
+    create: XOR<item_tran_historyCreateInput, item_tran_historyUncheckedCreateInput>
     /**
-     * In case the book_tran_history was found with the provided `where` argument, update it with this data.
+     * In case the item_tran_history was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<book_tran_historyUpdateInput, book_tran_historyUncheckedUpdateInput>
+    update: XOR<item_tran_historyUpdateInput, item_tran_historyUncheckedUpdateInput>
   }
 
   /**
-   * book_tran_history delete
+   * item_tran_history delete
    */
-  export type book_tran_historyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tran_historyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran_history
+     * Select specific fields to fetch from the item_tran_history
      */
-    select?: book_tran_historySelect<ExtArgs> | null
+    select?: item_tran_historySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran_history
+     * Omit specific fields from the item_tran_history
      */
-    omit?: book_tran_historyOmit<ExtArgs> | null
+    omit?: item_tran_historyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tran_historyInclude<ExtArgs> | null
+    include?: item_tran_historyInclude<ExtArgs> | null
     /**
-     * Filter which book_tran_history to delete.
+     * Filter which item_tran_history to delete.
      */
-    where: book_tran_historyWhereUniqueInput
+    where: item_tran_historyWhereUniqueInput
   }
 
   /**
-   * book_tran_history deleteMany
+   * item_tran_history deleteMany
    */
-  export type book_tran_historyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tran_historyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which book_tran_histories to delete
+     * Filter which item_tran_histories to delete
      */
-    where?: book_tran_historyWhereInput
+    where?: item_tran_historyWhereInput
     /**
-     * Limit how many book_tran_histories to delete.
+     * Limit how many item_tran_histories to delete.
      */
     limit?: number
   }
 
   /**
-   * book_tran_history.books
+   * item_tran_history.library_items
    */
-  export type book_tran_history$booksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tran_history$library_itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the books
+     * Select specific fields to fetch from the library_items
      */
-    select?: booksSelect<ExtArgs> | null
+    select?: library_itemsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the books
+     * Omit specific fields from the library_items
      */
-    omit?: booksOmit<ExtArgs> | null
+    omit?: library_itemsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: booksInclude<ExtArgs> | null
-    where?: booksWhereInput
+    include?: library_itemsInclude<ExtArgs> | null
+    where?: library_itemsWhereInput
   }
 
   /**
-   * book_tran_history.book_tran
+   * item_tran_history.item_tran
    */
-  export type book_tran_history$book_tranArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tran_history$item_tranArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran
+     * Select specific fields to fetch from the item_tran
      */
-    select?: book_tranSelect<ExtArgs> | null
+    select?: item_tranSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran
+     * Omit specific fields from the item_tran
      */
-    omit?: book_tranOmit<ExtArgs> | null
+    omit?: item_tranOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tranInclude<ExtArgs> | null
-    where?: book_tranWhereInput
+    include?: item_tranInclude<ExtArgs> | null
+    where?: item_tranWhereInput
   }
 
   /**
-   * book_tran_history.users_book_tran_history_requested_byTousers
+   * item_tran_history.users_item_tran_history_requested_byTousers
    */
-  export type book_tran_history$users_book_tran_history_requested_byTousersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tran_history$users_item_tran_history_requested_byTousersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the users
      */
@@ -4036,9 +4270,9 @@ export namespace Prisma {
   }
 
   /**
-   * book_tran_history.users_book_tran_history_approved_byTousers
+   * item_tran_history.users_item_tran_history_approved_byTousers
    */
-  export type book_tran_history$users_book_tran_history_approved_byTousersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tran_history$users_item_tran_history_approved_byTousersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the users
      */
@@ -4055,9 +4289,9 @@ export namespace Prisma {
   }
 
   /**
-   * book_tran_history.fines
+   * item_tran_history.fines
    */
-  export type book_tran_history$finesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tran_history$finesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the fines
      */
@@ -4079,50 +4313,54 @@ export namespace Prisma {
   }
 
   /**
-   * book_tran_history without action
+   * item_tran_history without action
    */
-  export type book_tran_historyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tran_historyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran_history
+     * Select specific fields to fetch from the item_tran_history
      */
-    select?: book_tran_historySelect<ExtArgs> | null
+    select?: item_tran_historySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran_history
+     * Omit specific fields from the item_tran_history
      */
-    omit?: book_tran_historyOmit<ExtArgs> | null
+    omit?: item_tran_historyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tran_historyInclude<ExtArgs> | null
+    include?: item_tran_historyInclude<ExtArgs> | null
   }
 
 
   /**
-   * Model books
+   * Model library_items
    */
 
-  export type AggregateBooks = {
-    _count: BooksCountAggregateOutputType | null
-    _avg: BooksAvgAggregateOutputType | null
-    _sum: BooksSumAggregateOutputType | null
-    _min: BooksMinAggregateOutputType | null
-    _max: BooksMaxAggregateOutputType | null
+  export type AggregateLibrary_items = {
+    _count: Library_itemsCountAggregateOutputType | null
+    _avg: Library_itemsAvgAggregateOutputType | null
+    _sum: Library_itemsSumAggregateOutputType | null
+    _min: Library_itemsMinAggregateOutputType | null
+    _max: Library_itemsMaxAggregateOutputType | null
   }
 
-  export type BooksAvgAggregateOutputType = {
-    book_id: number | null
+  export type Library_itemsAvgAggregateOutputType = {
+    item_id: number | null
     year: number | null
     librarian_id: number | null
+    pages: number | null
+    duration: number | null
   }
 
-  export type BooksSumAggregateOutputType = {
-    book_id: number | null
+  export type Library_itemsSumAggregateOutputType = {
+    item_id: number | null
     year: number | null
     librarian_id: number | null
+    pages: number | null
+    duration: number | null
   }
 
-  export type BooksMinAggregateOutputType = {
-    book_id: number | null
+  export type Library_itemsMinAggregateOutputType = {
+    item_id: number | null
     title: string | null
     author: string | null
     isbn: string | null
@@ -4131,13 +4369,22 @@ export namespace Prisma {
     image_url: string | null
     description: string | null
     librarian_id: number | null
+    item_type: $Enums.library_item_type | null
+    location: string | null
+    publisher: string | null
+    language: string | null
+    pages: number | null
+    duration: number | null
+    format: string | null
+    subject: string | null
+    keywords: string | null
     created_at: Date | null
     updated_at: Date | null
     record_status: $Enums.record_status | null
   }
 
-  export type BooksMaxAggregateOutputType = {
-    book_id: number | null
+  export type Library_itemsMaxAggregateOutputType = {
+    item_id: number | null
     title: string | null
     author: string | null
     isbn: string | null
@@ -4146,13 +4393,22 @@ export namespace Prisma {
     image_url: string | null
     description: string | null
     librarian_id: number | null
+    item_type: $Enums.library_item_type | null
+    location: string | null
+    publisher: string | null
+    language: string | null
+    pages: number | null
+    duration: number | null
+    format: string | null
+    subject: string | null
+    keywords: string | null
     created_at: Date | null
     updated_at: Date | null
     record_status: $Enums.record_status | null
   }
 
-  export type BooksCountAggregateOutputType = {
-    book_id: number
+  export type Library_itemsCountAggregateOutputType = {
+    item_id: number
     title: number
     author: number
     isbn: number
@@ -4161,6 +4417,15 @@ export namespace Prisma {
     image_url: number
     description: number
     librarian_id: number
+    item_type: number
+    location: number
+    publisher: number
+    language: number
+    pages: number
+    duration: number
+    format: number
+    subject: number
+    keywords: number
     created_at: number
     updated_at: number
     record_status: number
@@ -4168,20 +4433,24 @@ export namespace Prisma {
   }
 
 
-  export type BooksAvgAggregateInputType = {
-    book_id?: true
+  export type Library_itemsAvgAggregateInputType = {
+    item_id?: true
     year?: true
     librarian_id?: true
+    pages?: true
+    duration?: true
   }
 
-  export type BooksSumAggregateInputType = {
-    book_id?: true
+  export type Library_itemsSumAggregateInputType = {
+    item_id?: true
     year?: true
     librarian_id?: true
+    pages?: true
+    duration?: true
   }
 
-  export type BooksMinAggregateInputType = {
-    book_id?: true
+  export type Library_itemsMinAggregateInputType = {
+    item_id?: true
     title?: true
     author?: true
     isbn?: true
@@ -4190,13 +4459,22 @@ export namespace Prisma {
     image_url?: true
     description?: true
     librarian_id?: true
+    item_type?: true
+    location?: true
+    publisher?: true
+    language?: true
+    pages?: true
+    duration?: true
+    format?: true
+    subject?: true
+    keywords?: true
     created_at?: true
     updated_at?: true
     record_status?: true
   }
 
-  export type BooksMaxAggregateInputType = {
-    book_id?: true
+  export type Library_itemsMaxAggregateInputType = {
+    item_id?: true
     title?: true
     author?: true
     isbn?: true
@@ -4205,13 +4483,22 @@ export namespace Prisma {
     image_url?: true
     description?: true
     librarian_id?: true
+    item_type?: true
+    location?: true
+    publisher?: true
+    language?: true
+    pages?: true
+    duration?: true
+    format?: true
+    subject?: true
+    keywords?: true
     created_at?: true
     updated_at?: true
     record_status?: true
   }
 
-  export type BooksCountAggregateInputType = {
-    book_id?: true
+  export type Library_itemsCountAggregateInputType = {
+    item_id?: true
     title?: true
     author?: true
     isbn?: true
@@ -4220,100 +4507,109 @@ export namespace Prisma {
     image_url?: true
     description?: true
     librarian_id?: true
+    item_type?: true
+    location?: true
+    publisher?: true
+    language?: true
+    pages?: true
+    duration?: true
+    format?: true
+    subject?: true
+    keywords?: true
     created_at?: true
     updated_at?: true
     record_status?: true
     _all?: true
   }
 
-  export type BooksAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Library_itemsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which books to aggregate.
+     * Filter which library_items to aggregate.
      */
-    where?: booksWhereInput
+    where?: library_itemsWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of books to fetch.
+     * Determine the order of library_items to fetch.
      */
-    orderBy?: booksOrderByWithRelationInput | booksOrderByWithRelationInput[]
+    orderBy?: library_itemsOrderByWithRelationInput | library_itemsOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: booksWhereUniqueInput
+    cursor?: library_itemsWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` books from the position of the cursor.
+     * Take `±n` library_items from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` books.
+     * Skip the first `n` library_items.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned books
+     * Count returned library_items
     **/
-    _count?: true | BooksCountAggregateInputType
+    _count?: true | Library_itemsCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: BooksAvgAggregateInputType
+    _avg?: Library_itemsAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: BooksSumAggregateInputType
+    _sum?: Library_itemsSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: BooksMinAggregateInputType
+    _min?: Library_itemsMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: BooksMaxAggregateInputType
+    _max?: Library_itemsMaxAggregateInputType
   }
 
-  export type GetBooksAggregateType<T extends BooksAggregateArgs> = {
-        [P in keyof T & keyof AggregateBooks]: P extends '_count' | 'count'
+  export type GetLibrary_itemsAggregateType<T extends Library_itemsAggregateArgs> = {
+        [P in keyof T & keyof AggregateLibrary_items]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateBooks[P]>
-      : GetScalarType<T[P], AggregateBooks[P]>
+        : GetScalarType<T[P], AggregateLibrary_items[P]>
+      : GetScalarType<T[P], AggregateLibrary_items[P]>
   }
 
 
 
 
-  export type booksGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: booksWhereInput
-    orderBy?: booksOrderByWithAggregationInput | booksOrderByWithAggregationInput[]
-    by: BooksScalarFieldEnum[] | BooksScalarFieldEnum
-    having?: booksScalarWhereWithAggregatesInput
+  export type library_itemsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: library_itemsWhereInput
+    orderBy?: library_itemsOrderByWithAggregationInput | library_itemsOrderByWithAggregationInput[]
+    by: Library_itemsScalarFieldEnum[] | Library_itemsScalarFieldEnum
+    having?: library_itemsScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: BooksCountAggregateInputType | true
-    _avg?: BooksAvgAggregateInputType
-    _sum?: BooksSumAggregateInputType
-    _min?: BooksMinAggregateInputType
-    _max?: BooksMaxAggregateInputType
+    _count?: Library_itemsCountAggregateInputType | true
+    _avg?: Library_itemsAvgAggregateInputType
+    _sum?: Library_itemsSumAggregateInputType
+    _min?: Library_itemsMinAggregateInputType
+    _max?: Library_itemsMaxAggregateInputType
   }
 
-  export type BooksGroupByOutputType = {
-    book_id: number
+  export type Library_itemsGroupByOutputType = {
+    item_id: number
     title: string | null
     author: string
     isbn: string | null
@@ -4322,32 +4618,41 @@ export namespace Prisma {
     image_url: string | null
     description: string | null
     librarian_id: number | null
+    item_type: $Enums.library_item_type
+    location: string | null
+    publisher: string | null
+    language: string | null
+    pages: number | null
+    duration: number | null
+    format: string | null
+    subject: string | null
+    keywords: string | null
     created_at: Date | null
     updated_at: Date | null
     record_status: $Enums.record_status | null
-    _count: BooksCountAggregateOutputType | null
-    _avg: BooksAvgAggregateOutputType | null
-    _sum: BooksSumAggregateOutputType | null
-    _min: BooksMinAggregateOutputType | null
-    _max: BooksMaxAggregateOutputType | null
+    _count: Library_itemsCountAggregateOutputType | null
+    _avg: Library_itemsAvgAggregateOutputType | null
+    _sum: Library_itemsSumAggregateOutputType | null
+    _min: Library_itemsMinAggregateOutputType | null
+    _max: Library_itemsMaxAggregateOutputType | null
   }
 
-  type GetBooksGroupByPayload<T extends booksGroupByArgs> = Prisma.PrismaPromise<
+  type GetLibrary_itemsGroupByPayload<T extends library_itemsGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<BooksGroupByOutputType, T['by']> &
+      PickEnumerable<Library_itemsGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof BooksGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof Library_itemsGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], BooksGroupByOutputType[P]>
-            : GetScalarType<T[P], BooksGroupByOutputType[P]>
+              : GetScalarType<T[P], Library_itemsGroupByOutputType[P]>
+            : GetScalarType<T[P], Library_itemsGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type booksSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    book_id?: boolean
+  export type library_itemsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    item_id?: boolean
     title?: boolean
     author?: boolean
     isbn?: boolean
@@ -4356,20 +4661,29 @@ export namespace Prisma {
     image_url?: boolean
     description?: boolean
     librarian_id?: boolean
+    item_type?: boolean
+    location?: boolean
+    publisher?: boolean
+    language?: boolean
+    pages?: boolean
+    duration?: boolean
+    format?: boolean
+    subject?: boolean
+    keywords?: boolean
     created_at?: boolean
     updated_at?: boolean
     record_status?: boolean
-    book_tran?: boolean | books$book_tranArgs<ExtArgs>
-    book_tran_history?: boolean | books$book_tran_historyArgs<ExtArgs>
-    notifications?: boolean | books$notificationsArgs<ExtArgs>
-    user_wishlist?: boolean | books$user_wishlistArgs<ExtArgs>
-    _count?: boolean | BooksCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["books"]>
+    item_tran?: boolean | library_items$item_tranArgs<ExtArgs>
+    item_tran_history?: boolean | library_items$item_tran_historyArgs<ExtArgs>
+    notifications?: boolean | library_items$notificationsArgs<ExtArgs>
+    user_wishlist?: boolean | library_items$user_wishlistArgs<ExtArgs>
+    _count?: boolean | Library_itemsCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["library_items"]>
 
 
 
-  export type booksSelectScalar = {
-    book_id?: boolean
+  export type library_itemsSelectScalar = {
+    item_id?: boolean
     title?: boolean
     author?: boolean
     isbn?: boolean
@@ -4378,30 +4692,39 @@ export namespace Prisma {
     image_url?: boolean
     description?: boolean
     librarian_id?: boolean
+    item_type?: boolean
+    location?: boolean
+    publisher?: boolean
+    language?: boolean
+    pages?: boolean
+    duration?: boolean
+    format?: boolean
+    subject?: boolean
+    keywords?: boolean
     created_at?: boolean
     updated_at?: boolean
     record_status?: boolean
   }
 
-  export type booksOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"book_id" | "title" | "author" | "isbn" | "year" | "genre" | "image_url" | "description" | "librarian_id" | "created_at" | "updated_at" | "record_status", ExtArgs["result"]["books"]>
-  export type booksInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    book_tran?: boolean | books$book_tranArgs<ExtArgs>
-    book_tran_history?: boolean | books$book_tran_historyArgs<ExtArgs>
-    notifications?: boolean | books$notificationsArgs<ExtArgs>
-    user_wishlist?: boolean | books$user_wishlistArgs<ExtArgs>
-    _count?: boolean | BooksCountOutputTypeDefaultArgs<ExtArgs>
+  export type library_itemsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"item_id" | "title" | "author" | "isbn" | "year" | "genre" | "image_url" | "description" | "librarian_id" | "item_type" | "location" | "publisher" | "language" | "pages" | "duration" | "format" | "subject" | "keywords" | "created_at" | "updated_at" | "record_status", ExtArgs["result"]["library_items"]>
+  export type library_itemsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    item_tran?: boolean | library_items$item_tranArgs<ExtArgs>
+    item_tran_history?: boolean | library_items$item_tran_historyArgs<ExtArgs>
+    notifications?: boolean | library_items$notificationsArgs<ExtArgs>
+    user_wishlist?: boolean | library_items$user_wishlistArgs<ExtArgs>
+    _count?: boolean | Library_itemsCountOutputTypeDefaultArgs<ExtArgs>
   }
 
-  export type $booksPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "books"
+  export type $library_itemsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "library_items"
     objects: {
-      book_tran: Prisma.$book_tranPayload<ExtArgs>[]
-      book_tran_history: Prisma.$book_tran_historyPayload<ExtArgs>[]
+      item_tran: Prisma.$item_tranPayload<ExtArgs>[]
+      item_tran_history: Prisma.$item_tran_historyPayload<ExtArgs>[]
       notifications: Prisma.$notificationsPayload<ExtArgs>[]
       user_wishlist: Prisma.$user_wishlistPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
-      book_id: number
+      item_id: number
       title: string | null
       author: string
       isbn: string | null
@@ -4410,146 +4733,155 @@ export namespace Prisma {
       image_url: string | null
       description: string | null
       librarian_id: number | null
+      item_type: $Enums.library_item_type
+      location: string | null
+      publisher: string | null
+      language: string | null
+      pages: number | null
+      duration: number | null
+      format: string | null
+      subject: string | null
+      keywords: string | null
       created_at: Date | null
       updated_at: Date | null
       record_status: $Enums.record_status | null
-    }, ExtArgs["result"]["books"]>
+    }, ExtArgs["result"]["library_items"]>
     composites: {}
   }
 
-  type booksGetPayload<S extends boolean | null | undefined | booksDefaultArgs> = $Result.GetResult<Prisma.$booksPayload, S>
+  type library_itemsGetPayload<S extends boolean | null | undefined | library_itemsDefaultArgs> = $Result.GetResult<Prisma.$library_itemsPayload, S>
 
-  type booksCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<booksFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: BooksCountAggregateInputType | true
+  type library_itemsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<library_itemsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Library_itemsCountAggregateInputType | true
     }
 
-  export interface booksDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['books'], meta: { name: 'books' } }
+  export interface library_itemsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['library_items'], meta: { name: 'library_items' } }
     /**
-     * Find zero or one Books that matches the filter.
-     * @param {booksFindUniqueArgs} args - Arguments to find a Books
+     * Find zero or one Library_items that matches the filter.
+     * @param {library_itemsFindUniqueArgs} args - Arguments to find a Library_items
      * @example
-     * // Get one Books
-     * const books = await prisma.books.findUnique({
+     * // Get one Library_items
+     * const library_items = await prisma.library_items.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends booksFindUniqueArgs>(args: SelectSubset<T, booksFindUniqueArgs<ExtArgs>>): Prisma__booksClient<$Result.GetResult<Prisma.$booksPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends library_itemsFindUniqueArgs>(args: SelectSubset<T, library_itemsFindUniqueArgs<ExtArgs>>): Prisma__library_itemsClient<$Result.GetResult<Prisma.$library_itemsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one Books that matches the filter or throw an error with `error.code='P2025'`
+     * Find one Library_items that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {booksFindUniqueOrThrowArgs} args - Arguments to find a Books
+     * @param {library_itemsFindUniqueOrThrowArgs} args - Arguments to find a Library_items
      * @example
-     * // Get one Books
-     * const books = await prisma.books.findUniqueOrThrow({
+     * // Get one Library_items
+     * const library_items = await prisma.library_items.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends booksFindUniqueOrThrowArgs>(args: SelectSubset<T, booksFindUniqueOrThrowArgs<ExtArgs>>): Prisma__booksClient<$Result.GetResult<Prisma.$booksPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends library_itemsFindUniqueOrThrowArgs>(args: SelectSubset<T, library_itemsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__library_itemsClient<$Result.GetResult<Prisma.$library_itemsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Books that matches the filter.
+     * Find the first Library_items that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {booksFindFirstArgs} args - Arguments to find a Books
+     * @param {library_itemsFindFirstArgs} args - Arguments to find a Library_items
      * @example
-     * // Get one Books
-     * const books = await prisma.books.findFirst({
+     * // Get one Library_items
+     * const library_items = await prisma.library_items.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends booksFindFirstArgs>(args?: SelectSubset<T, booksFindFirstArgs<ExtArgs>>): Prisma__booksClient<$Result.GetResult<Prisma.$booksPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends library_itemsFindFirstArgs>(args?: SelectSubset<T, library_itemsFindFirstArgs<ExtArgs>>): Prisma__library_itemsClient<$Result.GetResult<Prisma.$library_itemsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Books that matches the filter or
+     * Find the first Library_items that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {booksFindFirstOrThrowArgs} args - Arguments to find a Books
+     * @param {library_itemsFindFirstOrThrowArgs} args - Arguments to find a Library_items
      * @example
-     * // Get one Books
-     * const books = await prisma.books.findFirstOrThrow({
+     * // Get one Library_items
+     * const library_items = await prisma.library_items.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends booksFindFirstOrThrowArgs>(args?: SelectSubset<T, booksFindFirstOrThrowArgs<ExtArgs>>): Prisma__booksClient<$Result.GetResult<Prisma.$booksPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends library_itemsFindFirstOrThrowArgs>(args?: SelectSubset<T, library_itemsFindFirstOrThrowArgs<ExtArgs>>): Prisma__library_itemsClient<$Result.GetResult<Prisma.$library_itemsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more Books that matches the filter.
+     * Find zero or more Library_items that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {booksFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {library_itemsFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Books
-     * const books = await prisma.books.findMany()
+     * // Get all Library_items
+     * const library_items = await prisma.library_items.findMany()
      * 
-     * // Get first 10 Books
-     * const books = await prisma.books.findMany({ take: 10 })
+     * // Get first 10 Library_items
+     * const library_items = await prisma.library_items.findMany({ take: 10 })
      * 
-     * // Only select the `book_id`
-     * const booksWithBook_idOnly = await prisma.books.findMany({ select: { book_id: true } })
+     * // Only select the `item_id`
+     * const library_itemsWithItem_idOnly = await prisma.library_items.findMany({ select: { item_id: true } })
      * 
      */
-    findMany<T extends booksFindManyArgs>(args?: SelectSubset<T, booksFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$booksPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends library_itemsFindManyArgs>(args?: SelectSubset<T, library_itemsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$library_itemsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a Books.
-     * @param {booksCreateArgs} args - Arguments to create a Books.
+     * Create a Library_items.
+     * @param {library_itemsCreateArgs} args - Arguments to create a Library_items.
      * @example
-     * // Create one Books
-     * const Books = await prisma.books.create({
+     * // Create one Library_items
+     * const Library_items = await prisma.library_items.create({
      *   data: {
-     *     // ... data to create a Books
+     *     // ... data to create a Library_items
      *   }
      * })
      * 
      */
-    create<T extends booksCreateArgs>(args: SelectSubset<T, booksCreateArgs<ExtArgs>>): Prisma__booksClient<$Result.GetResult<Prisma.$booksPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends library_itemsCreateArgs>(args: SelectSubset<T, library_itemsCreateArgs<ExtArgs>>): Prisma__library_itemsClient<$Result.GetResult<Prisma.$library_itemsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many Books.
-     * @param {booksCreateManyArgs} args - Arguments to create many Books.
+     * Create many Library_items.
+     * @param {library_itemsCreateManyArgs} args - Arguments to create many Library_items.
      * @example
-     * // Create many Books
-     * const books = await prisma.books.createMany({
+     * // Create many Library_items
+     * const library_items = await prisma.library_items.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends booksCreateManyArgs>(args?: SelectSubset<T, booksCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends library_itemsCreateManyArgs>(args?: SelectSubset<T, library_itemsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Delete a Books.
-     * @param {booksDeleteArgs} args - Arguments to delete one Books.
+     * Delete a Library_items.
+     * @param {library_itemsDeleteArgs} args - Arguments to delete one Library_items.
      * @example
-     * // Delete one Books
-     * const Books = await prisma.books.delete({
+     * // Delete one Library_items
+     * const Library_items = await prisma.library_items.delete({
      *   where: {
-     *     // ... filter to delete one Books
+     *     // ... filter to delete one Library_items
      *   }
      * })
      * 
      */
-    delete<T extends booksDeleteArgs>(args: SelectSubset<T, booksDeleteArgs<ExtArgs>>): Prisma__booksClient<$Result.GetResult<Prisma.$booksPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends library_itemsDeleteArgs>(args: SelectSubset<T, library_itemsDeleteArgs<ExtArgs>>): Prisma__library_itemsClient<$Result.GetResult<Prisma.$library_itemsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one Books.
-     * @param {booksUpdateArgs} args - Arguments to update one Books.
+     * Update one Library_items.
+     * @param {library_itemsUpdateArgs} args - Arguments to update one Library_items.
      * @example
-     * // Update one Books
-     * const books = await prisma.books.update({
+     * // Update one Library_items
+     * const library_items = await prisma.library_items.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -4559,30 +4891,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends booksUpdateArgs>(args: SelectSubset<T, booksUpdateArgs<ExtArgs>>): Prisma__booksClient<$Result.GetResult<Prisma.$booksPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends library_itemsUpdateArgs>(args: SelectSubset<T, library_itemsUpdateArgs<ExtArgs>>): Prisma__library_itemsClient<$Result.GetResult<Prisma.$library_itemsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more Books.
-     * @param {booksDeleteManyArgs} args - Arguments to filter Books to delete.
+     * Delete zero or more Library_items.
+     * @param {library_itemsDeleteManyArgs} args - Arguments to filter Library_items to delete.
      * @example
-     * // Delete a few Books
-     * const { count } = await prisma.books.deleteMany({
+     * // Delete a few Library_items
+     * const { count } = await prisma.library_items.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends booksDeleteManyArgs>(args?: SelectSubset<T, booksDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends library_itemsDeleteManyArgs>(args?: SelectSubset<T, library_itemsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Books.
+     * Update zero or more Library_items.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {booksUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {library_itemsUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Books
-     * const books = await prisma.books.updateMany({
+     * // Update many Library_items
+     * const library_items = await prisma.library_items.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -4592,56 +4924,56 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends booksUpdateManyArgs>(args: SelectSubset<T, booksUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends library_itemsUpdateManyArgs>(args: SelectSubset<T, library_itemsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one Books.
-     * @param {booksUpsertArgs} args - Arguments to update or create a Books.
+     * Create or update one Library_items.
+     * @param {library_itemsUpsertArgs} args - Arguments to update or create a Library_items.
      * @example
-     * // Update or create a Books
-     * const books = await prisma.books.upsert({
+     * // Update or create a Library_items
+     * const library_items = await prisma.library_items.upsert({
      *   create: {
-     *     // ... data to create a Books
+     *     // ... data to create a Library_items
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Books we want to update
+     *     // ... the filter for the Library_items we want to update
      *   }
      * })
      */
-    upsert<T extends booksUpsertArgs>(args: SelectSubset<T, booksUpsertArgs<ExtArgs>>): Prisma__booksClient<$Result.GetResult<Prisma.$booksPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends library_itemsUpsertArgs>(args: SelectSubset<T, library_itemsUpsertArgs<ExtArgs>>): Prisma__library_itemsClient<$Result.GetResult<Prisma.$library_itemsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of Books.
+     * Count the number of Library_items.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {booksCountArgs} args - Arguments to filter Books to count.
+     * @param {library_itemsCountArgs} args - Arguments to filter Library_items to count.
      * @example
-     * // Count the number of Books
-     * const count = await prisma.books.count({
+     * // Count the number of Library_items
+     * const count = await prisma.library_items.count({
      *   where: {
-     *     // ... the filter for the Books we want to count
+     *     // ... the filter for the Library_items we want to count
      *   }
      * })
     **/
-    count<T extends booksCountArgs>(
-      args?: Subset<T, booksCountArgs>,
+    count<T extends library_itemsCountArgs>(
+      args?: Subset<T, library_itemsCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], BooksCountAggregateOutputType>
+          : GetScalarType<T['select'], Library_itemsCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Books.
+     * Allows you to perform aggregations operations on a Library_items.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BooksAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {Library_itemsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -4661,13 +4993,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends BooksAggregateArgs>(args: Subset<T, BooksAggregateArgs>): Prisma.PrismaPromise<GetBooksAggregateType<T>>
+    aggregate<T extends Library_itemsAggregateArgs>(args: Subset<T, Library_itemsAggregateArgs>): Prisma.PrismaPromise<GetLibrary_itemsAggregateType<T>>
 
     /**
-     * Group by Books.
+     * Group by Library_items.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {booksGroupByArgs} args - Group by arguments.
+     * @param {library_itemsGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -4682,14 +5014,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends booksGroupByArgs,
+      T extends library_itemsGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: booksGroupByArgs['orderBy'] }
-        : { orderBy?: booksGroupByArgs['orderBy'] },
+        ? { orderBy: library_itemsGroupByArgs['orderBy'] }
+        : { orderBy?: library_itemsGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -4738,25 +5070,25 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, booksGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBooksGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, library_itemsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLibrary_itemsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the books model
+   * Fields of the library_items model
    */
-  readonly fields: booksFieldRefs;
+  readonly fields: library_itemsFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for books.
+   * The delegate class that acts as a "Promise-like" for library_items.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__booksClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__library_itemsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    book_tran<T extends books$book_tranArgs<ExtArgs> = {}>(args?: Subset<T, books$book_tranArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$book_tranPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    book_tran_history<T extends books$book_tran_historyArgs<ExtArgs> = {}>(args?: Subset<T, books$book_tran_historyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$book_tran_historyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    notifications<T extends books$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, books$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$notificationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    user_wishlist<T extends books$user_wishlistArgs<ExtArgs> = {}>(args?: Subset<T, books$user_wishlistArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$user_wishlistPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    item_tran<T extends library_items$item_tranArgs<ExtArgs> = {}>(args?: Subset<T, library_items$item_tranArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$item_tranPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    item_tran_history<T extends library_items$item_tran_historyArgs<ExtArgs> = {}>(args?: Subset<T, library_items$item_tran_historyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$item_tran_historyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    notifications<T extends library_items$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, library_items$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$notificationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    user_wishlist<T extends library_items$user_wishlistArgs<ExtArgs> = {}>(args?: Subset<T, library_items$user_wishlistArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$user_wishlistPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4783,415 +5115,424 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the books model
+   * Fields of the library_items model
    */
-  interface booksFieldRefs {
-    readonly book_id: FieldRef<"books", 'Int'>
-    readonly title: FieldRef<"books", 'String'>
-    readonly author: FieldRef<"books", 'String'>
-    readonly isbn: FieldRef<"books", 'String'>
-    readonly year: FieldRef<"books", 'Int'>
-    readonly genre: FieldRef<"books", 'String'>
-    readonly image_url: FieldRef<"books", 'String'>
-    readonly description: FieldRef<"books", 'String'>
-    readonly librarian_id: FieldRef<"books", 'Int'>
-    readonly created_at: FieldRef<"books", 'DateTime'>
-    readonly updated_at: FieldRef<"books", 'DateTime'>
-    readonly record_status: FieldRef<"books", 'record_status'>
+  interface library_itemsFieldRefs {
+    readonly item_id: FieldRef<"library_items", 'Int'>
+    readonly title: FieldRef<"library_items", 'String'>
+    readonly author: FieldRef<"library_items", 'String'>
+    readonly isbn: FieldRef<"library_items", 'String'>
+    readonly year: FieldRef<"library_items", 'Int'>
+    readonly genre: FieldRef<"library_items", 'String'>
+    readonly image_url: FieldRef<"library_items", 'String'>
+    readonly description: FieldRef<"library_items", 'String'>
+    readonly librarian_id: FieldRef<"library_items", 'Int'>
+    readonly item_type: FieldRef<"library_items", 'library_item_type'>
+    readonly location: FieldRef<"library_items", 'String'>
+    readonly publisher: FieldRef<"library_items", 'String'>
+    readonly language: FieldRef<"library_items", 'String'>
+    readonly pages: FieldRef<"library_items", 'Int'>
+    readonly duration: FieldRef<"library_items", 'Int'>
+    readonly format: FieldRef<"library_items", 'String'>
+    readonly subject: FieldRef<"library_items", 'String'>
+    readonly keywords: FieldRef<"library_items", 'String'>
+    readonly created_at: FieldRef<"library_items", 'DateTime'>
+    readonly updated_at: FieldRef<"library_items", 'DateTime'>
+    readonly record_status: FieldRef<"library_items", 'record_status'>
   }
     
 
   // Custom InputTypes
   /**
-   * books findUnique
+   * library_items findUnique
    */
-  export type booksFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type library_itemsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the books
+     * Select specific fields to fetch from the library_items
      */
-    select?: booksSelect<ExtArgs> | null
+    select?: library_itemsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the books
+     * Omit specific fields from the library_items
      */
-    omit?: booksOmit<ExtArgs> | null
+    omit?: library_itemsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: booksInclude<ExtArgs> | null
+    include?: library_itemsInclude<ExtArgs> | null
     /**
-     * Filter, which books to fetch.
+     * Filter, which library_items to fetch.
      */
-    where: booksWhereUniqueInput
+    where: library_itemsWhereUniqueInput
   }
 
   /**
-   * books findUniqueOrThrow
+   * library_items findUniqueOrThrow
    */
-  export type booksFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type library_itemsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the books
+     * Select specific fields to fetch from the library_items
      */
-    select?: booksSelect<ExtArgs> | null
+    select?: library_itemsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the books
+     * Omit specific fields from the library_items
      */
-    omit?: booksOmit<ExtArgs> | null
+    omit?: library_itemsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: booksInclude<ExtArgs> | null
+    include?: library_itemsInclude<ExtArgs> | null
     /**
-     * Filter, which books to fetch.
+     * Filter, which library_items to fetch.
      */
-    where: booksWhereUniqueInput
+    where: library_itemsWhereUniqueInput
   }
 
   /**
-   * books findFirst
+   * library_items findFirst
    */
-  export type booksFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type library_itemsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the books
+     * Select specific fields to fetch from the library_items
      */
-    select?: booksSelect<ExtArgs> | null
+    select?: library_itemsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the books
+     * Omit specific fields from the library_items
      */
-    omit?: booksOmit<ExtArgs> | null
+    omit?: library_itemsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: booksInclude<ExtArgs> | null
+    include?: library_itemsInclude<ExtArgs> | null
     /**
-     * Filter, which books to fetch.
+     * Filter, which library_items to fetch.
      */
-    where?: booksWhereInput
+    where?: library_itemsWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of books to fetch.
+     * Determine the order of library_items to fetch.
      */
-    orderBy?: booksOrderByWithRelationInput | booksOrderByWithRelationInput[]
+    orderBy?: library_itemsOrderByWithRelationInput | library_itemsOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for books.
+     * Sets the position for searching for library_items.
      */
-    cursor?: booksWhereUniqueInput
+    cursor?: library_itemsWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` books from the position of the cursor.
+     * Take `±n` library_items from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` books.
+     * Skip the first `n` library_items.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of books.
+     * Filter by unique combinations of library_items.
      */
-    distinct?: BooksScalarFieldEnum | BooksScalarFieldEnum[]
+    distinct?: Library_itemsScalarFieldEnum | Library_itemsScalarFieldEnum[]
   }
 
   /**
-   * books findFirstOrThrow
+   * library_items findFirstOrThrow
    */
-  export type booksFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type library_itemsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the books
+     * Select specific fields to fetch from the library_items
      */
-    select?: booksSelect<ExtArgs> | null
+    select?: library_itemsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the books
+     * Omit specific fields from the library_items
      */
-    omit?: booksOmit<ExtArgs> | null
+    omit?: library_itemsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: booksInclude<ExtArgs> | null
+    include?: library_itemsInclude<ExtArgs> | null
     /**
-     * Filter, which books to fetch.
+     * Filter, which library_items to fetch.
      */
-    where?: booksWhereInput
+    where?: library_itemsWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of books to fetch.
+     * Determine the order of library_items to fetch.
      */
-    orderBy?: booksOrderByWithRelationInput | booksOrderByWithRelationInput[]
+    orderBy?: library_itemsOrderByWithRelationInput | library_itemsOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for books.
+     * Sets the position for searching for library_items.
      */
-    cursor?: booksWhereUniqueInput
+    cursor?: library_itemsWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` books from the position of the cursor.
+     * Take `±n` library_items from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` books.
+     * Skip the first `n` library_items.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of books.
+     * Filter by unique combinations of library_items.
      */
-    distinct?: BooksScalarFieldEnum | BooksScalarFieldEnum[]
+    distinct?: Library_itemsScalarFieldEnum | Library_itemsScalarFieldEnum[]
   }
 
   /**
-   * books findMany
+   * library_items findMany
    */
-  export type booksFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type library_itemsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the books
+     * Select specific fields to fetch from the library_items
      */
-    select?: booksSelect<ExtArgs> | null
+    select?: library_itemsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the books
+     * Omit specific fields from the library_items
      */
-    omit?: booksOmit<ExtArgs> | null
+    omit?: library_itemsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: booksInclude<ExtArgs> | null
+    include?: library_itemsInclude<ExtArgs> | null
     /**
-     * Filter, which books to fetch.
+     * Filter, which library_items to fetch.
      */
-    where?: booksWhereInput
+    where?: library_itemsWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of books to fetch.
+     * Determine the order of library_items to fetch.
      */
-    orderBy?: booksOrderByWithRelationInput | booksOrderByWithRelationInput[]
+    orderBy?: library_itemsOrderByWithRelationInput | library_itemsOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing books.
+     * Sets the position for listing library_items.
      */
-    cursor?: booksWhereUniqueInput
+    cursor?: library_itemsWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` books from the position of the cursor.
+     * Take `±n` library_items from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` books.
+     * Skip the first `n` library_items.
      */
     skip?: number
-    distinct?: BooksScalarFieldEnum | BooksScalarFieldEnum[]
+    distinct?: Library_itemsScalarFieldEnum | Library_itemsScalarFieldEnum[]
   }
 
   /**
-   * books create
+   * library_items create
    */
-  export type booksCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type library_itemsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the books
+     * Select specific fields to fetch from the library_items
      */
-    select?: booksSelect<ExtArgs> | null
+    select?: library_itemsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the books
+     * Omit specific fields from the library_items
      */
-    omit?: booksOmit<ExtArgs> | null
+    omit?: library_itemsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: booksInclude<ExtArgs> | null
+    include?: library_itemsInclude<ExtArgs> | null
     /**
-     * The data needed to create a books.
+     * The data needed to create a library_items.
      */
-    data: XOR<booksCreateInput, booksUncheckedCreateInput>
+    data: XOR<library_itemsCreateInput, library_itemsUncheckedCreateInput>
   }
 
   /**
-   * books createMany
+   * library_items createMany
    */
-  export type booksCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type library_itemsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many books.
+     * The data used to create many library_items.
      */
-    data: booksCreateManyInput | booksCreateManyInput[]
+    data: library_itemsCreateManyInput | library_itemsCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * books update
+   * library_items update
    */
-  export type booksUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type library_itemsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the books
+     * Select specific fields to fetch from the library_items
      */
-    select?: booksSelect<ExtArgs> | null
+    select?: library_itemsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the books
+     * Omit specific fields from the library_items
      */
-    omit?: booksOmit<ExtArgs> | null
+    omit?: library_itemsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: booksInclude<ExtArgs> | null
+    include?: library_itemsInclude<ExtArgs> | null
     /**
-     * The data needed to update a books.
+     * The data needed to update a library_items.
      */
-    data: XOR<booksUpdateInput, booksUncheckedUpdateInput>
+    data: XOR<library_itemsUpdateInput, library_itemsUncheckedUpdateInput>
     /**
-     * Choose, which books to update.
+     * Choose, which library_items to update.
      */
-    where: booksWhereUniqueInput
+    where: library_itemsWhereUniqueInput
   }
 
   /**
-   * books updateMany
+   * library_items updateMany
    */
-  export type booksUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type library_itemsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update books.
+     * The data used to update library_items.
      */
-    data: XOR<booksUpdateManyMutationInput, booksUncheckedUpdateManyInput>
+    data: XOR<library_itemsUpdateManyMutationInput, library_itemsUncheckedUpdateManyInput>
     /**
-     * Filter which books to update
+     * Filter which library_items to update
      */
-    where?: booksWhereInput
+    where?: library_itemsWhereInput
     /**
-     * Limit how many books to update.
+     * Limit how many library_items to update.
      */
     limit?: number
   }
 
   /**
-   * books upsert
+   * library_items upsert
    */
-  export type booksUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type library_itemsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the books
+     * Select specific fields to fetch from the library_items
      */
-    select?: booksSelect<ExtArgs> | null
+    select?: library_itemsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the books
+     * Omit specific fields from the library_items
      */
-    omit?: booksOmit<ExtArgs> | null
+    omit?: library_itemsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: booksInclude<ExtArgs> | null
+    include?: library_itemsInclude<ExtArgs> | null
     /**
-     * The filter to search for the books to update in case it exists.
+     * The filter to search for the library_items to update in case it exists.
      */
-    where: booksWhereUniqueInput
+    where: library_itemsWhereUniqueInput
     /**
-     * In case the books found by the `where` argument doesn't exist, create a new books with this data.
+     * In case the library_items found by the `where` argument doesn't exist, create a new library_items with this data.
      */
-    create: XOR<booksCreateInput, booksUncheckedCreateInput>
+    create: XOR<library_itemsCreateInput, library_itemsUncheckedCreateInput>
     /**
-     * In case the books was found with the provided `where` argument, update it with this data.
+     * In case the library_items was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<booksUpdateInput, booksUncheckedUpdateInput>
+    update: XOR<library_itemsUpdateInput, library_itemsUncheckedUpdateInput>
   }
 
   /**
-   * books delete
+   * library_items delete
    */
-  export type booksDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type library_itemsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the books
+     * Select specific fields to fetch from the library_items
      */
-    select?: booksSelect<ExtArgs> | null
+    select?: library_itemsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the books
+     * Omit specific fields from the library_items
      */
-    omit?: booksOmit<ExtArgs> | null
+    omit?: library_itemsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: booksInclude<ExtArgs> | null
+    include?: library_itemsInclude<ExtArgs> | null
     /**
-     * Filter which books to delete.
+     * Filter which library_items to delete.
      */
-    where: booksWhereUniqueInput
+    where: library_itemsWhereUniqueInput
   }
 
   /**
-   * books deleteMany
+   * library_items deleteMany
    */
-  export type booksDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type library_itemsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which books to delete
+     * Filter which library_items to delete
      */
-    where?: booksWhereInput
+    where?: library_itemsWhereInput
     /**
-     * Limit how many books to delete.
+     * Limit how many library_items to delete.
      */
     limit?: number
   }
 
   /**
-   * books.book_tran
+   * library_items.item_tran
    */
-  export type books$book_tranArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type library_items$item_tranArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran
+     * Select specific fields to fetch from the item_tran
      */
-    select?: book_tranSelect<ExtArgs> | null
+    select?: item_tranSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran
+     * Omit specific fields from the item_tran
      */
-    omit?: book_tranOmit<ExtArgs> | null
+    omit?: item_tranOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tranInclude<ExtArgs> | null
-    where?: book_tranWhereInput
-    orderBy?: book_tranOrderByWithRelationInput | book_tranOrderByWithRelationInput[]
-    cursor?: book_tranWhereUniqueInput
+    include?: item_tranInclude<ExtArgs> | null
+    where?: item_tranWhereInput
+    orderBy?: item_tranOrderByWithRelationInput | item_tranOrderByWithRelationInput[]
+    cursor?: item_tranWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Book_tranScalarFieldEnum | Book_tranScalarFieldEnum[]
+    distinct?: Item_tranScalarFieldEnum | Item_tranScalarFieldEnum[]
   }
 
   /**
-   * books.book_tran_history
+   * library_items.item_tran_history
    */
-  export type books$book_tran_historyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type library_items$item_tran_historyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran_history
+     * Select specific fields to fetch from the item_tran_history
      */
-    select?: book_tran_historySelect<ExtArgs> | null
+    select?: item_tran_historySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran_history
+     * Omit specific fields from the item_tran_history
      */
-    omit?: book_tran_historyOmit<ExtArgs> | null
+    omit?: item_tran_historyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tran_historyInclude<ExtArgs> | null
-    where?: book_tran_historyWhereInput
-    orderBy?: book_tran_historyOrderByWithRelationInput | book_tran_historyOrderByWithRelationInput[]
-    cursor?: book_tran_historyWhereUniqueInput
+    include?: item_tran_historyInclude<ExtArgs> | null
+    where?: item_tran_historyWhereInput
+    orderBy?: item_tran_historyOrderByWithRelationInput | item_tran_historyOrderByWithRelationInput[]
+    cursor?: item_tran_historyWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Book_tran_historyScalarFieldEnum | Book_tran_historyScalarFieldEnum[]
+    distinct?: Item_tran_historyScalarFieldEnum | Item_tran_historyScalarFieldEnum[]
   }
 
   /**
-   * books.notifications
+   * library_items.notifications
    */
-  export type books$notificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type library_items$notificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the notifications
      */
@@ -5213,9 +5554,9 @@ export namespace Prisma {
   }
 
   /**
-   * books.user_wishlist
+   * library_items.user_wishlist
    */
-  export type books$user_wishlistArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type library_items$user_wishlistArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the user_wishlist
      */
@@ -5237,21 +5578,21 @@ export namespace Prisma {
   }
 
   /**
-   * books without action
+   * library_items without action
    */
-  export type booksDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type library_itemsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the books
+     * Select specific fields to fetch from the library_items
      */
-    select?: booksSelect<ExtArgs> | null
+    select?: library_itemsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the books
+     * Omit specific fields from the library_items
      */
-    omit?: booksOmit<ExtArgs> | null
+    omit?: library_itemsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: booksInclude<ExtArgs> | null
+    include?: library_itemsInclude<ExtArgs> | null
   }
 
 
@@ -5270,21 +5611,21 @@ export namespace Prisma {
   export type FinesAvgAggregateOutputType = {
     fine_id: number | null
     user_id: number | null
-    book_tran_history_id: number | null
+    item_tran_history_id: number | null
     amount: Decimal | null
   }
 
   export type FinesSumAggregateOutputType = {
     fine_id: number | null
     user_id: number | null
-    book_tran_history_id: number | null
+    item_tran_history_id: number | null
     amount: Decimal | null
   }
 
   export type FinesMinAggregateOutputType = {
     fine_id: number | null
     user_id: number | null
-    book_tran_history_id: number | null
+    item_tran_history_id: number | null
     amount: Decimal | null
     reason: string | null
     status: $Enums.fines_status | null
@@ -5295,7 +5636,7 @@ export namespace Prisma {
   export type FinesMaxAggregateOutputType = {
     fine_id: number | null
     user_id: number | null
-    book_tran_history_id: number | null
+    item_tran_history_id: number | null
     amount: Decimal | null
     reason: string | null
     status: $Enums.fines_status | null
@@ -5306,7 +5647,7 @@ export namespace Prisma {
   export type FinesCountAggregateOutputType = {
     fine_id: number
     user_id: number
-    book_tran_history_id: number
+    item_tran_history_id: number
     amount: number
     reason: number
     status: number
@@ -5319,21 +5660,21 @@ export namespace Prisma {
   export type FinesAvgAggregateInputType = {
     fine_id?: true
     user_id?: true
-    book_tran_history_id?: true
+    item_tran_history_id?: true
     amount?: true
   }
 
   export type FinesSumAggregateInputType = {
     fine_id?: true
     user_id?: true
-    book_tran_history_id?: true
+    item_tran_history_id?: true
     amount?: true
   }
 
   export type FinesMinAggregateInputType = {
     fine_id?: true
     user_id?: true
-    book_tran_history_id?: true
+    item_tran_history_id?: true
     amount?: true
     reason?: true
     status?: true
@@ -5344,7 +5685,7 @@ export namespace Prisma {
   export type FinesMaxAggregateInputType = {
     fine_id?: true
     user_id?: true
-    book_tran_history_id?: true
+    item_tran_history_id?: true
     amount?: true
     reason?: true
     status?: true
@@ -5355,7 +5696,7 @@ export namespace Prisma {
   export type FinesCountAggregateInputType = {
     fine_id?: true
     user_id?: true
-    book_tran_history_id?: true
+    item_tran_history_id?: true
     amount?: true
     reason?: true
     status?: true
@@ -5453,7 +5794,7 @@ export namespace Prisma {
   export type FinesGroupByOutputType = {
     fine_id: number
     user_id: number | null
-    book_tran_history_id: number | null
+    item_tran_history_id: number | null
     amount: Decimal | null
     reason: string | null
     status: $Enums.fines_status | null
@@ -5483,14 +5824,14 @@ export namespace Prisma {
   export type finesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     fine_id?: boolean
     user_id?: boolean
-    book_tran_history_id?: boolean
+    item_tran_history_id?: boolean
     amount?: boolean
     reason?: boolean
     status?: boolean
     created_at?: boolean
     paid_at?: boolean
     users?: boolean | fines$usersArgs<ExtArgs>
-    book_tran_history?: boolean | fines$book_tran_historyArgs<ExtArgs>
+    item_tran_history?: boolean | fines$item_tran_historyArgs<ExtArgs>
   }, ExtArgs["result"]["fines"]>
 
 
@@ -5498,7 +5839,7 @@ export namespace Prisma {
   export type finesSelectScalar = {
     fine_id?: boolean
     user_id?: boolean
-    book_tran_history_id?: boolean
+    item_tran_history_id?: boolean
     amount?: boolean
     reason?: boolean
     status?: boolean
@@ -5506,22 +5847,22 @@ export namespace Prisma {
     paid_at?: boolean
   }
 
-  export type finesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"fine_id" | "user_id" | "book_tran_history_id" | "amount" | "reason" | "status" | "created_at" | "paid_at", ExtArgs["result"]["fines"]>
+  export type finesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"fine_id" | "user_id" | "item_tran_history_id" | "amount" | "reason" | "status" | "created_at" | "paid_at", ExtArgs["result"]["fines"]>
   export type finesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | fines$usersArgs<ExtArgs>
-    book_tran_history?: boolean | fines$book_tran_historyArgs<ExtArgs>
+    item_tran_history?: boolean | fines$item_tran_historyArgs<ExtArgs>
   }
 
   export type $finesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "fines"
     objects: {
       users: Prisma.$usersPayload<ExtArgs> | null
-      book_tran_history: Prisma.$book_tran_historyPayload<ExtArgs> | null
+      item_tran_history: Prisma.$item_tran_historyPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       fine_id: number
       user_id: number | null
-      book_tran_history_id: number | null
+      item_tran_history_id: number | null
       amount: Prisma.Decimal | null
       reason: string | null
       status: $Enums.fines_status | null
@@ -5868,7 +6209,7 @@ export namespace Prisma {
   export interface Prisma__finesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     users<T extends fines$usersArgs<ExtArgs> = {}>(args?: Subset<T, fines$usersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    book_tran_history<T extends fines$book_tran_historyArgs<ExtArgs> = {}>(args?: Subset<T, fines$book_tran_historyArgs<ExtArgs>>): Prisma__book_tran_historyClient<$Result.GetResult<Prisma.$book_tran_historyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    item_tran_history<T extends fines$item_tran_historyArgs<ExtArgs> = {}>(args?: Subset<T, fines$item_tran_historyArgs<ExtArgs>>): Prisma__item_tran_historyClient<$Result.GetResult<Prisma.$item_tran_historyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5900,7 +6241,7 @@ export namespace Prisma {
   interface finesFieldRefs {
     readonly fine_id: FieldRef<"fines", 'Int'>
     readonly user_id: FieldRef<"fines", 'Int'>
-    readonly book_tran_history_id: FieldRef<"fines", 'Int'>
+    readonly item_tran_history_id: FieldRef<"fines", 'Int'>
     readonly amount: FieldRef<"fines", 'Decimal'>
     readonly reason: FieldRef<"fines", 'String'>
     readonly status: FieldRef<"fines", 'fines_status'>
@@ -6268,22 +6609,22 @@ export namespace Prisma {
   }
 
   /**
-   * fines.book_tran_history
+   * fines.item_tran_history
    */
-  export type fines$book_tran_historyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type fines$item_tran_historyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran_history
+     * Select specific fields to fetch from the item_tran_history
      */
-    select?: book_tran_historySelect<ExtArgs> | null
+    select?: item_tran_historySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran_history
+     * Omit specific fields from the item_tran_history
      */
-    omit?: book_tran_historyOmit<ExtArgs> | null
+    omit?: item_tran_historyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tran_historyInclude<ExtArgs> | null
-    where?: book_tran_historyWhereInput
+    include?: item_tran_historyInclude<ExtArgs> | null
+    where?: item_tran_historyWhereInput
   }
 
   /**
@@ -7275,27 +7616,30 @@ export namespace Prisma {
 
   export type NotificationsAvgAggregateOutputType = {
     notification_id: number | null
-    book_id: number | null
+    item_id: number | null
     from_user_id: number | null
     to_user_id: number | null
     tran_id: number | null
+    reservation_id: number | null
   }
 
   export type NotificationsSumAggregateOutputType = {
     notification_id: number | null
-    book_id: number | null
+    item_id: number | null
     from_user_id: number | null
     to_user_id: number | null
     tran_id: number | null
+    reservation_id: number | null
   }
 
   export type NotificationsMinAggregateOutputType = {
     notification_id: number | null
     type: $Enums.notifications_type | null
-    book_id: number | null
+    item_id: number | null
     from_user_id: number | null
     to_user_id: number | null
     tran_id: number | null
+    reservation_id: number | null
     status: $Enums.notifications_status | null
     message: string | null
     created_at: Date | null
@@ -7305,10 +7649,11 @@ export namespace Prisma {
   export type NotificationsMaxAggregateOutputType = {
     notification_id: number | null
     type: $Enums.notifications_type | null
-    book_id: number | null
+    item_id: number | null
     from_user_id: number | null
     to_user_id: number | null
     tran_id: number | null
+    reservation_id: number | null
     status: $Enums.notifications_status | null
     message: string | null
     created_at: Date | null
@@ -7318,10 +7663,11 @@ export namespace Prisma {
   export type NotificationsCountAggregateOutputType = {
     notification_id: number
     type: number
-    book_id: number
+    item_id: number
     from_user_id: number
     to_user_id: number
     tran_id: number
+    reservation_id: number
     status: number
     message: number
     created_at: number
@@ -7332,27 +7678,30 @@ export namespace Prisma {
 
   export type NotificationsAvgAggregateInputType = {
     notification_id?: true
-    book_id?: true
+    item_id?: true
     from_user_id?: true
     to_user_id?: true
     tran_id?: true
+    reservation_id?: true
   }
 
   export type NotificationsSumAggregateInputType = {
     notification_id?: true
-    book_id?: true
+    item_id?: true
     from_user_id?: true
     to_user_id?: true
     tran_id?: true
+    reservation_id?: true
   }
 
   export type NotificationsMinAggregateInputType = {
     notification_id?: true
     type?: true
-    book_id?: true
+    item_id?: true
     from_user_id?: true
     to_user_id?: true
     tran_id?: true
+    reservation_id?: true
     status?: true
     message?: true
     created_at?: true
@@ -7362,10 +7711,11 @@ export namespace Prisma {
   export type NotificationsMaxAggregateInputType = {
     notification_id?: true
     type?: true
-    book_id?: true
+    item_id?: true
     from_user_id?: true
     to_user_id?: true
     tran_id?: true
+    reservation_id?: true
     status?: true
     message?: true
     created_at?: true
@@ -7375,10 +7725,11 @@ export namespace Prisma {
   export type NotificationsCountAggregateInputType = {
     notification_id?: true
     type?: true
-    book_id?: true
+    item_id?: true
     from_user_id?: true
     to_user_id?: true
     tran_id?: true
+    reservation_id?: true
     status?: true
     message?: true
     created_at?: true
@@ -7475,10 +7826,11 @@ export namespace Prisma {
   export type NotificationsGroupByOutputType = {
     notification_id: number
     type: $Enums.notifications_type | null
-    book_id: number | null
+    item_id: number | null
     from_user_id: number | null
     to_user_id: number | null
     tran_id: number | null
+    reservation_id: number | null
     status: $Enums.notifications_status | null
     message: string | null
     created_at: Date | null
@@ -7507,18 +7859,19 @@ export namespace Prisma {
   export type notificationsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     notification_id?: boolean
     type?: boolean
-    book_id?: boolean
+    item_id?: boolean
     from_user_id?: boolean
     to_user_id?: boolean
     tran_id?: boolean
+    reservation_id?: boolean
     status?: boolean
     message?: boolean
     created_at?: boolean
     resolved_at?: boolean
-    books?: boolean | notifications$booksArgs<ExtArgs>
+    library_items?: boolean | notifications$library_itemsArgs<ExtArgs>
     users_notifications_from_user_idTousers?: boolean | notifications$users_notifications_from_user_idTousersArgs<ExtArgs>
     users_notifications_to_user_idTousers?: boolean | notifications$users_notifications_to_user_idTousersArgs<ExtArgs>
-    book_tran?: boolean | notifications$book_tranArgs<ExtArgs>
+    item_tran?: boolean | notifications$item_tranArgs<ExtArgs>
   }, ExtArgs["result"]["notifications"]>
 
 
@@ -7526,39 +7879,41 @@ export namespace Prisma {
   export type notificationsSelectScalar = {
     notification_id?: boolean
     type?: boolean
-    book_id?: boolean
+    item_id?: boolean
     from_user_id?: boolean
     to_user_id?: boolean
     tran_id?: boolean
+    reservation_id?: boolean
     status?: boolean
     message?: boolean
     created_at?: boolean
     resolved_at?: boolean
   }
 
-  export type notificationsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"notification_id" | "type" | "book_id" | "from_user_id" | "to_user_id" | "tran_id" | "status" | "message" | "created_at" | "resolved_at", ExtArgs["result"]["notifications"]>
+  export type notificationsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"notification_id" | "type" | "item_id" | "from_user_id" | "to_user_id" | "tran_id" | "reservation_id" | "status" | "message" | "created_at" | "resolved_at", ExtArgs["result"]["notifications"]>
   export type notificationsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    books?: boolean | notifications$booksArgs<ExtArgs>
+    library_items?: boolean | notifications$library_itemsArgs<ExtArgs>
     users_notifications_from_user_idTousers?: boolean | notifications$users_notifications_from_user_idTousersArgs<ExtArgs>
     users_notifications_to_user_idTousers?: boolean | notifications$users_notifications_to_user_idTousersArgs<ExtArgs>
-    book_tran?: boolean | notifications$book_tranArgs<ExtArgs>
+    item_tran?: boolean | notifications$item_tranArgs<ExtArgs>
   }
 
   export type $notificationsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "notifications"
     objects: {
-      books: Prisma.$booksPayload<ExtArgs> | null
+      library_items: Prisma.$library_itemsPayload<ExtArgs> | null
       users_notifications_from_user_idTousers: Prisma.$usersPayload<ExtArgs> | null
       users_notifications_to_user_idTousers: Prisma.$usersPayload<ExtArgs> | null
-      book_tran: Prisma.$book_tranPayload<ExtArgs> | null
+      item_tran: Prisma.$item_tranPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       notification_id: number
       type: $Enums.notifications_type | null
-      book_id: number | null
+      item_id: number | null
       from_user_id: number | null
       to_user_id: number | null
       tran_id: number | null
+      reservation_id: number | null
       status: $Enums.notifications_status | null
       message: string | null
       created_at: Date | null
@@ -7903,10 +8258,10 @@ export namespace Prisma {
    */
   export interface Prisma__notificationsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    books<T extends notifications$booksArgs<ExtArgs> = {}>(args?: Subset<T, notifications$booksArgs<ExtArgs>>): Prisma__booksClient<$Result.GetResult<Prisma.$booksPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    library_items<T extends notifications$library_itemsArgs<ExtArgs> = {}>(args?: Subset<T, notifications$library_itemsArgs<ExtArgs>>): Prisma__library_itemsClient<$Result.GetResult<Prisma.$library_itemsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     users_notifications_from_user_idTousers<T extends notifications$users_notifications_from_user_idTousersArgs<ExtArgs> = {}>(args?: Subset<T, notifications$users_notifications_from_user_idTousersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     users_notifications_to_user_idTousers<T extends notifications$users_notifications_to_user_idTousersArgs<ExtArgs> = {}>(args?: Subset<T, notifications$users_notifications_to_user_idTousersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    book_tran<T extends notifications$book_tranArgs<ExtArgs> = {}>(args?: Subset<T, notifications$book_tranArgs<ExtArgs>>): Prisma__book_tranClient<$Result.GetResult<Prisma.$book_tranPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    item_tran<T extends notifications$item_tranArgs<ExtArgs> = {}>(args?: Subset<T, notifications$item_tranArgs<ExtArgs>>): Prisma__item_tranClient<$Result.GetResult<Prisma.$item_tranPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7938,10 +8293,11 @@ export namespace Prisma {
   interface notificationsFieldRefs {
     readonly notification_id: FieldRef<"notifications", 'Int'>
     readonly type: FieldRef<"notifications", 'notifications_type'>
-    readonly book_id: FieldRef<"notifications", 'Int'>
+    readonly item_id: FieldRef<"notifications", 'Int'>
     readonly from_user_id: FieldRef<"notifications", 'Int'>
     readonly to_user_id: FieldRef<"notifications", 'Int'>
     readonly tran_id: FieldRef<"notifications", 'Int'>
+    readonly reservation_id: FieldRef<"notifications", 'Int'>
     readonly status: FieldRef<"notifications", 'notifications_status'>
     readonly message: FieldRef<"notifications", 'String'>
     readonly created_at: FieldRef<"notifications", 'DateTime'>
@@ -8289,22 +8645,22 @@ export namespace Prisma {
   }
 
   /**
-   * notifications.books
+   * notifications.library_items
    */
-  export type notifications$booksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type notifications$library_itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the books
+     * Select specific fields to fetch from the library_items
      */
-    select?: booksSelect<ExtArgs> | null
+    select?: library_itemsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the books
+     * Omit specific fields from the library_items
      */
-    omit?: booksOmit<ExtArgs> | null
+    omit?: library_itemsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: booksInclude<ExtArgs> | null
-    where?: booksWhereInput
+    include?: library_itemsInclude<ExtArgs> | null
+    where?: library_itemsWhereInput
   }
 
   /**
@@ -8346,22 +8702,22 @@ export namespace Prisma {
   }
 
   /**
-   * notifications.book_tran
+   * notifications.item_tran
    */
-  export type notifications$book_tranArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type notifications$item_tranArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran
+     * Select specific fields to fetch from the item_tran
      */
-    select?: book_tranSelect<ExtArgs> | null
+    select?: item_tranSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran
+     * Omit specific fields from the item_tran
      */
-    omit?: book_tranOmit<ExtArgs> | null
+    omit?: item_tranOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tranInclude<ExtArgs> | null
-    where?: book_tranWhereInput
+    include?: item_tranInclude<ExtArgs> | null
+    where?: item_tranWhereInput
   }
 
   /**
@@ -8398,33 +8754,33 @@ export namespace Prisma {
   export type User_wishlistAvgAggregateOutputType = {
     id: number | null
     user_id: number | null
-    book_id: number | null
+    item_id: number | null
   }
 
   export type User_wishlistSumAggregateOutputType = {
     id: number | null
     user_id: number | null
-    book_id: number | null
+    item_id: number | null
   }
 
   export type User_wishlistMinAggregateOutputType = {
     id: number | null
     user_id: number | null
-    book_id: number | null
+    item_id: number | null
     created_at: Date | null
   }
 
   export type User_wishlistMaxAggregateOutputType = {
     id: number | null
     user_id: number | null
-    book_id: number | null
+    item_id: number | null
     created_at: Date | null
   }
 
   export type User_wishlistCountAggregateOutputType = {
     id: number
     user_id: number
-    book_id: number
+    item_id: number
     created_at: number
     _all: number
   }
@@ -8433,33 +8789,33 @@ export namespace Prisma {
   export type User_wishlistAvgAggregateInputType = {
     id?: true
     user_id?: true
-    book_id?: true
+    item_id?: true
   }
 
   export type User_wishlistSumAggregateInputType = {
     id?: true
     user_id?: true
-    book_id?: true
+    item_id?: true
   }
 
   export type User_wishlistMinAggregateInputType = {
     id?: true
     user_id?: true
-    book_id?: true
+    item_id?: true
     created_at?: true
   }
 
   export type User_wishlistMaxAggregateInputType = {
     id?: true
     user_id?: true
-    book_id?: true
+    item_id?: true
     created_at?: true
   }
 
   export type User_wishlistCountAggregateInputType = {
     id?: true
     user_id?: true
-    book_id?: true
+    item_id?: true
     created_at?: true
     _all?: true
   }
@@ -8553,7 +8909,7 @@ export namespace Prisma {
   export type User_wishlistGroupByOutputType = {
     id: number
     user_id: number | null
-    book_id: number | null
+    item_id: number | null
     created_at: Date | null
     _count: User_wishlistCountAggregateOutputType | null
     _avg: User_wishlistAvgAggregateOutputType | null
@@ -8579,10 +8935,10 @@ export namespace Prisma {
   export type user_wishlistSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     user_id?: boolean
-    book_id?: boolean
+    item_id?: boolean
     created_at?: boolean
     users?: boolean | user_wishlist$usersArgs<ExtArgs>
-    books?: boolean | user_wishlist$booksArgs<ExtArgs>
+    library_items?: boolean | user_wishlist$library_itemsArgs<ExtArgs>
   }, ExtArgs["result"]["user_wishlist"]>
 
 
@@ -8590,26 +8946,26 @@ export namespace Prisma {
   export type user_wishlistSelectScalar = {
     id?: boolean
     user_id?: boolean
-    book_id?: boolean
+    item_id?: boolean
     created_at?: boolean
   }
 
-  export type user_wishlistOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "book_id" | "created_at", ExtArgs["result"]["user_wishlist"]>
+  export type user_wishlistOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "item_id" | "created_at", ExtArgs["result"]["user_wishlist"]>
   export type user_wishlistInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | user_wishlist$usersArgs<ExtArgs>
-    books?: boolean | user_wishlist$booksArgs<ExtArgs>
+    library_items?: boolean | user_wishlist$library_itemsArgs<ExtArgs>
   }
 
   export type $user_wishlistPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "user_wishlist"
     objects: {
       users: Prisma.$usersPayload<ExtArgs> | null
-      books: Prisma.$booksPayload<ExtArgs> | null
+      library_items: Prisma.$library_itemsPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       user_id: number | null
-      book_id: number | null
+      item_id: number | null
       created_at: Date | null
     }, ExtArgs["result"]["user_wishlist"]>
     composites: {}
@@ -8952,7 +9308,7 @@ export namespace Prisma {
   export interface Prisma__user_wishlistClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     users<T extends user_wishlist$usersArgs<ExtArgs> = {}>(args?: Subset<T, user_wishlist$usersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    books<T extends user_wishlist$booksArgs<ExtArgs> = {}>(args?: Subset<T, user_wishlist$booksArgs<ExtArgs>>): Prisma__booksClient<$Result.GetResult<Prisma.$booksPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    library_items<T extends user_wishlist$library_itemsArgs<ExtArgs> = {}>(args?: Subset<T, user_wishlist$library_itemsArgs<ExtArgs>>): Prisma__library_itemsClient<$Result.GetResult<Prisma.$library_itemsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8984,7 +9340,7 @@ export namespace Prisma {
   interface user_wishlistFieldRefs {
     readonly id: FieldRef<"user_wishlist", 'Int'>
     readonly user_id: FieldRef<"user_wishlist", 'Int'>
-    readonly book_id: FieldRef<"user_wishlist", 'Int'>
+    readonly item_id: FieldRef<"user_wishlist", 'Int'>
     readonly created_at: FieldRef<"user_wishlist", 'DateTime'>
   }
     
@@ -9348,22 +9704,22 @@ export namespace Prisma {
   }
 
   /**
-   * user_wishlist.books
+   * user_wishlist.library_items
    */
-  export type user_wishlist$booksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type user_wishlist$library_itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the books
+     * Select specific fields to fetch from the library_items
      */
-    select?: booksSelect<ExtArgs> | null
+    select?: library_itemsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the books
+     * Omit specific fields from the library_items
      */
-    omit?: booksOmit<ExtArgs> | null
+    omit?: library_itemsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: booksInclude<ExtArgs> | null
-    where?: booksWhereInput
+    include?: library_itemsInclude<ExtArgs> | null
+    where?: library_itemsWhereInput
   }
 
   /**
@@ -9647,14 +10003,15 @@ export namespace Prisma {
     birth_date?: boolean
     address?: boolean
     profile_image_url?: boolean
-    book_tran?: boolean | users$book_tranArgs<ExtArgs>
-    book_tran_history_book_tran_history_requested_byTousers?: boolean | users$book_tran_history_book_tran_history_requested_byTousersArgs<ExtArgs>
-    book_tran_history_book_tran_history_approved_byTousers?: boolean | users$book_tran_history_book_tran_history_approved_byTousersArgs<ExtArgs>
+    item_tran?: boolean | users$item_tranArgs<ExtArgs>
+    item_tran_history_item_tran_history_requested_byTousers?: boolean | users$item_tran_history_item_tran_history_requested_byTousersArgs<ExtArgs>
+    item_tran_history_item_tran_history_approved_byTousers?: boolean | users$item_tran_history_item_tran_history_approved_byTousersArgs<ExtArgs>
     fines?: boolean | users$finesArgs<ExtArgs>
     logs?: boolean | users$logsArgs<ExtArgs>
     notifications_notifications_from_user_idTousers?: boolean | users$notifications_notifications_from_user_idTousersArgs<ExtArgs>
     notifications_notifications_to_user_idTousers?: boolean | users$notifications_notifications_to_user_idTousersArgs<ExtArgs>
     user_wishlist?: boolean | users$user_wishlistArgs<ExtArgs>
+    library_cards?: boolean | users$library_cardsArgs<ExtArgs>
     _count?: boolean | UsersCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["users"]>
 
@@ -9678,28 +10035,30 @@ export namespace Prisma {
 
   export type usersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"user_id" | "name" | "email" | "password_hash" | "role" | "status" | "created_at" | "updated_at" | "gender" | "phone_number" | "birth_date" | "address" | "profile_image_url", ExtArgs["result"]["users"]>
   export type usersInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    book_tran?: boolean | users$book_tranArgs<ExtArgs>
-    book_tran_history_book_tran_history_requested_byTousers?: boolean | users$book_tran_history_book_tran_history_requested_byTousersArgs<ExtArgs>
-    book_tran_history_book_tran_history_approved_byTousers?: boolean | users$book_tran_history_book_tran_history_approved_byTousersArgs<ExtArgs>
+    item_tran?: boolean | users$item_tranArgs<ExtArgs>
+    item_tran_history_item_tran_history_requested_byTousers?: boolean | users$item_tran_history_item_tran_history_requested_byTousersArgs<ExtArgs>
+    item_tran_history_item_tran_history_approved_byTousers?: boolean | users$item_tran_history_item_tran_history_approved_byTousersArgs<ExtArgs>
     fines?: boolean | users$finesArgs<ExtArgs>
     logs?: boolean | users$logsArgs<ExtArgs>
     notifications_notifications_from_user_idTousers?: boolean | users$notifications_notifications_from_user_idTousersArgs<ExtArgs>
     notifications_notifications_to_user_idTousers?: boolean | users$notifications_notifications_to_user_idTousersArgs<ExtArgs>
     user_wishlist?: boolean | users$user_wishlistArgs<ExtArgs>
+    library_cards?: boolean | users$library_cardsArgs<ExtArgs>
     _count?: boolean | UsersCountOutputTypeDefaultArgs<ExtArgs>
   }
 
   export type $usersPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "users"
     objects: {
-      book_tran: Prisma.$book_tranPayload<ExtArgs>[]
-      book_tran_history_book_tran_history_requested_byTousers: Prisma.$book_tran_historyPayload<ExtArgs>[]
-      book_tran_history_book_tran_history_approved_byTousers: Prisma.$book_tran_historyPayload<ExtArgs>[]
+      item_tran: Prisma.$item_tranPayload<ExtArgs>[]
+      item_tran_history_item_tran_history_requested_byTousers: Prisma.$item_tran_historyPayload<ExtArgs>[]
+      item_tran_history_item_tran_history_approved_byTousers: Prisma.$item_tran_historyPayload<ExtArgs>[]
       fines: Prisma.$finesPayload<ExtArgs>[]
       logs: Prisma.$logsPayload<ExtArgs>[]
       notifications_notifications_from_user_idTousers: Prisma.$notificationsPayload<ExtArgs>[]
       notifications_notifications_to_user_idTousers: Prisma.$notificationsPayload<ExtArgs>[]
       user_wishlist: Prisma.$user_wishlistPayload<ExtArgs>[]
+      library_cards: Prisma.$library_cardsPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       user_id: number
@@ -10055,14 +10414,15 @@ export namespace Prisma {
    */
   export interface Prisma__usersClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    book_tran<T extends users$book_tranArgs<ExtArgs> = {}>(args?: Subset<T, users$book_tranArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$book_tranPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    book_tran_history_book_tran_history_requested_byTousers<T extends users$book_tran_history_book_tran_history_requested_byTousersArgs<ExtArgs> = {}>(args?: Subset<T, users$book_tran_history_book_tran_history_requested_byTousersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$book_tran_historyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    book_tran_history_book_tran_history_approved_byTousers<T extends users$book_tran_history_book_tran_history_approved_byTousersArgs<ExtArgs> = {}>(args?: Subset<T, users$book_tran_history_book_tran_history_approved_byTousersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$book_tran_historyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    item_tran<T extends users$item_tranArgs<ExtArgs> = {}>(args?: Subset<T, users$item_tranArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$item_tranPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    item_tran_history_item_tran_history_requested_byTousers<T extends users$item_tran_history_item_tran_history_requested_byTousersArgs<ExtArgs> = {}>(args?: Subset<T, users$item_tran_history_item_tran_history_requested_byTousersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$item_tran_historyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    item_tran_history_item_tran_history_approved_byTousers<T extends users$item_tran_history_item_tran_history_approved_byTousersArgs<ExtArgs> = {}>(args?: Subset<T, users$item_tran_history_item_tran_history_approved_byTousersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$item_tran_historyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     fines<T extends users$finesArgs<ExtArgs> = {}>(args?: Subset<T, users$finesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$finesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     logs<T extends users$logsArgs<ExtArgs> = {}>(args?: Subset<T, users$logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$logsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications_notifications_from_user_idTousers<T extends users$notifications_notifications_from_user_idTousersArgs<ExtArgs> = {}>(args?: Subset<T, users$notifications_notifications_from_user_idTousersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$notificationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications_notifications_to_user_idTousers<T extends users$notifications_notifications_to_user_idTousersArgs<ExtArgs> = {}>(args?: Subset<T, users$notifications_notifications_to_user_idTousersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$notificationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     user_wishlist<T extends users$user_wishlistArgs<ExtArgs> = {}>(args?: Subset<T, users$user_wishlistArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$user_wishlistPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    library_cards<T extends users$library_cardsArgs<ExtArgs> = {}>(args?: Subset<T, users$library_cardsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$library_cardsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10448,75 +10808,75 @@ export namespace Prisma {
   }
 
   /**
-   * users.book_tran
+   * users.item_tran
    */
-  export type users$book_tranArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type users$item_tranArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran
+     * Select specific fields to fetch from the item_tran
      */
-    select?: book_tranSelect<ExtArgs> | null
+    select?: item_tranSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran
+     * Omit specific fields from the item_tran
      */
-    omit?: book_tranOmit<ExtArgs> | null
+    omit?: item_tranOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tranInclude<ExtArgs> | null
-    where?: book_tranWhereInput
-    orderBy?: book_tranOrderByWithRelationInput | book_tranOrderByWithRelationInput[]
-    cursor?: book_tranWhereUniqueInput
+    include?: item_tranInclude<ExtArgs> | null
+    where?: item_tranWhereInput
+    orderBy?: item_tranOrderByWithRelationInput | item_tranOrderByWithRelationInput[]
+    cursor?: item_tranWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Book_tranScalarFieldEnum | Book_tranScalarFieldEnum[]
+    distinct?: Item_tranScalarFieldEnum | Item_tranScalarFieldEnum[]
   }
 
   /**
-   * users.book_tran_history_book_tran_history_requested_byTousers
+   * users.item_tran_history_item_tran_history_requested_byTousers
    */
-  export type users$book_tran_history_book_tran_history_requested_byTousersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type users$item_tran_history_item_tran_history_requested_byTousersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran_history
+     * Select specific fields to fetch from the item_tran_history
      */
-    select?: book_tran_historySelect<ExtArgs> | null
+    select?: item_tran_historySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran_history
+     * Omit specific fields from the item_tran_history
      */
-    omit?: book_tran_historyOmit<ExtArgs> | null
+    omit?: item_tran_historyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tran_historyInclude<ExtArgs> | null
-    where?: book_tran_historyWhereInput
-    orderBy?: book_tran_historyOrderByWithRelationInput | book_tran_historyOrderByWithRelationInput[]
-    cursor?: book_tran_historyWhereUniqueInput
+    include?: item_tran_historyInclude<ExtArgs> | null
+    where?: item_tran_historyWhereInput
+    orderBy?: item_tran_historyOrderByWithRelationInput | item_tran_historyOrderByWithRelationInput[]
+    cursor?: item_tran_historyWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Book_tran_historyScalarFieldEnum | Book_tran_historyScalarFieldEnum[]
+    distinct?: Item_tran_historyScalarFieldEnum | Item_tran_historyScalarFieldEnum[]
   }
 
   /**
-   * users.book_tran_history_book_tran_history_approved_byTousers
+   * users.item_tran_history_item_tran_history_approved_byTousers
    */
-  export type users$book_tran_history_book_tran_history_approved_byTousersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type users$item_tran_history_item_tran_history_approved_byTousersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the book_tran_history
+     * Select specific fields to fetch from the item_tran_history
      */
-    select?: book_tran_historySelect<ExtArgs> | null
+    select?: item_tran_historySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the book_tran_history
+     * Omit specific fields from the item_tran_history
      */
-    omit?: book_tran_historyOmit<ExtArgs> | null
+    omit?: item_tran_historyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: book_tran_historyInclude<ExtArgs> | null
-    where?: book_tran_historyWhereInput
-    orderBy?: book_tran_historyOrderByWithRelationInput | book_tran_historyOrderByWithRelationInput[]
-    cursor?: book_tran_historyWhereUniqueInput
+    include?: item_tran_historyInclude<ExtArgs> | null
+    where?: item_tran_historyWhereInput
+    orderBy?: item_tran_historyOrderByWithRelationInput | item_tran_historyOrderByWithRelationInput[]
+    cursor?: item_tran_historyWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Book_tran_historyScalarFieldEnum | Book_tran_historyScalarFieldEnum[]
+    distinct?: Item_tran_historyScalarFieldEnum | Item_tran_historyScalarFieldEnum[]
   }
 
   /**
@@ -10637,6 +10997,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: User_wishlistScalarFieldEnum | User_wishlistScalarFieldEnum[]
+  }
+
+  /**
+   * users.library_cards
+   */
+  export type users$library_cardsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the library_cards
+     */
+    select?: library_cardsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the library_cards
+     */
+    omit?: library_cardsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: library_cardsInclude<ExtArgs> | null
+    where?: library_cardsWhereInput
+    orderBy?: library_cardsOrderByWithRelationInput | library_cardsOrderByWithRelationInput[]
+    cursor?: library_cardsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Library_cardsScalarFieldEnum | Library_cardsScalarFieldEnum[]
   }
 
   /**
@@ -11586,6 +11970,1919 @@ export namespace Prisma {
 
 
   /**
+   * Model system_config
+   */
+
+  export type AggregateSystem_config = {
+    _count: System_configCountAggregateOutputType | null
+    _avg: System_configAvgAggregateOutputType | null
+    _sum: System_configSumAggregateOutputType | null
+    _min: System_configMinAggregateOutputType | null
+    _max: System_configMaxAggregateOutputType | null
+  }
+
+  export type System_configAvgAggregateOutputType = {
+    config_id: number | null
+  }
+
+  export type System_configSumAggregateOutputType = {
+    config_id: number | null
+  }
+
+  export type System_configMinAggregateOutputType = {
+    config_id: number | null
+    config_key: string | null
+    config_value: string | null
+    description: string | null
+    updated_at: Date | null
+  }
+
+  export type System_configMaxAggregateOutputType = {
+    config_id: number | null
+    config_key: string | null
+    config_value: string | null
+    description: string | null
+    updated_at: Date | null
+  }
+
+  export type System_configCountAggregateOutputType = {
+    config_id: number
+    config_key: number
+    config_value: number
+    description: number
+    updated_at: number
+    _all: number
+  }
+
+
+  export type System_configAvgAggregateInputType = {
+    config_id?: true
+  }
+
+  export type System_configSumAggregateInputType = {
+    config_id?: true
+  }
+
+  export type System_configMinAggregateInputType = {
+    config_id?: true
+    config_key?: true
+    config_value?: true
+    description?: true
+    updated_at?: true
+  }
+
+  export type System_configMaxAggregateInputType = {
+    config_id?: true
+    config_key?: true
+    config_value?: true
+    description?: true
+    updated_at?: true
+  }
+
+  export type System_configCountAggregateInputType = {
+    config_id?: true
+    config_key?: true
+    config_value?: true
+    description?: true
+    updated_at?: true
+    _all?: true
+  }
+
+  export type System_configAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which system_config to aggregate.
+     */
+    where?: system_configWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of system_configs to fetch.
+     */
+    orderBy?: system_configOrderByWithRelationInput | system_configOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: system_configWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` system_configs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` system_configs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned system_configs
+    **/
+    _count?: true | System_configCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: System_configAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: System_configSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: System_configMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: System_configMaxAggregateInputType
+  }
+
+  export type GetSystem_configAggregateType<T extends System_configAggregateArgs> = {
+        [P in keyof T & keyof AggregateSystem_config]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSystem_config[P]>
+      : GetScalarType<T[P], AggregateSystem_config[P]>
+  }
+
+
+
+
+  export type system_configGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: system_configWhereInput
+    orderBy?: system_configOrderByWithAggregationInput | system_configOrderByWithAggregationInput[]
+    by: System_configScalarFieldEnum[] | System_configScalarFieldEnum
+    having?: system_configScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: System_configCountAggregateInputType | true
+    _avg?: System_configAvgAggregateInputType
+    _sum?: System_configSumAggregateInputType
+    _min?: System_configMinAggregateInputType
+    _max?: System_configMaxAggregateInputType
+  }
+
+  export type System_configGroupByOutputType = {
+    config_id: number
+    config_key: string
+    config_value: string
+    description: string | null
+    updated_at: Date
+    _count: System_configCountAggregateOutputType | null
+    _avg: System_configAvgAggregateOutputType | null
+    _sum: System_configSumAggregateOutputType | null
+    _min: System_configMinAggregateOutputType | null
+    _max: System_configMaxAggregateOutputType | null
+  }
+
+  type GetSystem_configGroupByPayload<T extends system_configGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<System_configGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof System_configGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], System_configGroupByOutputType[P]>
+            : GetScalarType<T[P], System_configGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type system_configSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    config_id?: boolean
+    config_key?: boolean
+    config_value?: boolean
+    description?: boolean
+    updated_at?: boolean
+  }, ExtArgs["result"]["system_config"]>
+
+
+
+  export type system_configSelectScalar = {
+    config_id?: boolean
+    config_key?: boolean
+    config_value?: boolean
+    description?: boolean
+    updated_at?: boolean
+  }
+
+  export type system_configOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"config_id" | "config_key" | "config_value" | "description" | "updated_at", ExtArgs["result"]["system_config"]>
+
+  export type $system_configPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "system_config"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      config_id: number
+      config_key: string
+      config_value: string
+      description: string | null
+      updated_at: Date
+    }, ExtArgs["result"]["system_config"]>
+    composites: {}
+  }
+
+  type system_configGetPayload<S extends boolean | null | undefined | system_configDefaultArgs> = $Result.GetResult<Prisma.$system_configPayload, S>
+
+  type system_configCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<system_configFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: System_configCountAggregateInputType | true
+    }
+
+  export interface system_configDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['system_config'], meta: { name: 'system_config' } }
+    /**
+     * Find zero or one System_config that matches the filter.
+     * @param {system_configFindUniqueArgs} args - Arguments to find a System_config
+     * @example
+     * // Get one System_config
+     * const system_config = await prisma.system_config.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends system_configFindUniqueArgs>(args: SelectSubset<T, system_configFindUniqueArgs<ExtArgs>>): Prisma__system_configClient<$Result.GetResult<Prisma.$system_configPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one System_config that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {system_configFindUniqueOrThrowArgs} args - Arguments to find a System_config
+     * @example
+     * // Get one System_config
+     * const system_config = await prisma.system_config.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends system_configFindUniqueOrThrowArgs>(args: SelectSubset<T, system_configFindUniqueOrThrowArgs<ExtArgs>>): Prisma__system_configClient<$Result.GetResult<Prisma.$system_configPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first System_config that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {system_configFindFirstArgs} args - Arguments to find a System_config
+     * @example
+     * // Get one System_config
+     * const system_config = await prisma.system_config.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends system_configFindFirstArgs>(args?: SelectSubset<T, system_configFindFirstArgs<ExtArgs>>): Prisma__system_configClient<$Result.GetResult<Prisma.$system_configPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first System_config that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {system_configFindFirstOrThrowArgs} args - Arguments to find a System_config
+     * @example
+     * // Get one System_config
+     * const system_config = await prisma.system_config.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends system_configFindFirstOrThrowArgs>(args?: SelectSubset<T, system_configFindFirstOrThrowArgs<ExtArgs>>): Prisma__system_configClient<$Result.GetResult<Prisma.$system_configPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more System_configs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {system_configFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all System_configs
+     * const system_configs = await prisma.system_config.findMany()
+     * 
+     * // Get first 10 System_configs
+     * const system_configs = await prisma.system_config.findMany({ take: 10 })
+     * 
+     * // Only select the `config_id`
+     * const system_configWithConfig_idOnly = await prisma.system_config.findMany({ select: { config_id: true } })
+     * 
+     */
+    findMany<T extends system_configFindManyArgs>(args?: SelectSubset<T, system_configFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$system_configPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a System_config.
+     * @param {system_configCreateArgs} args - Arguments to create a System_config.
+     * @example
+     * // Create one System_config
+     * const System_config = await prisma.system_config.create({
+     *   data: {
+     *     // ... data to create a System_config
+     *   }
+     * })
+     * 
+     */
+    create<T extends system_configCreateArgs>(args: SelectSubset<T, system_configCreateArgs<ExtArgs>>): Prisma__system_configClient<$Result.GetResult<Prisma.$system_configPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many System_configs.
+     * @param {system_configCreateManyArgs} args - Arguments to create many System_configs.
+     * @example
+     * // Create many System_configs
+     * const system_config = await prisma.system_config.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends system_configCreateManyArgs>(args?: SelectSubset<T, system_configCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a System_config.
+     * @param {system_configDeleteArgs} args - Arguments to delete one System_config.
+     * @example
+     * // Delete one System_config
+     * const System_config = await prisma.system_config.delete({
+     *   where: {
+     *     // ... filter to delete one System_config
+     *   }
+     * })
+     * 
+     */
+    delete<T extends system_configDeleteArgs>(args: SelectSubset<T, system_configDeleteArgs<ExtArgs>>): Prisma__system_configClient<$Result.GetResult<Prisma.$system_configPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one System_config.
+     * @param {system_configUpdateArgs} args - Arguments to update one System_config.
+     * @example
+     * // Update one System_config
+     * const system_config = await prisma.system_config.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends system_configUpdateArgs>(args: SelectSubset<T, system_configUpdateArgs<ExtArgs>>): Prisma__system_configClient<$Result.GetResult<Prisma.$system_configPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more System_configs.
+     * @param {system_configDeleteManyArgs} args - Arguments to filter System_configs to delete.
+     * @example
+     * // Delete a few System_configs
+     * const { count } = await prisma.system_config.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends system_configDeleteManyArgs>(args?: SelectSubset<T, system_configDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more System_configs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {system_configUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many System_configs
+     * const system_config = await prisma.system_config.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends system_configUpdateManyArgs>(args: SelectSubset<T, system_configUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one System_config.
+     * @param {system_configUpsertArgs} args - Arguments to update or create a System_config.
+     * @example
+     * // Update or create a System_config
+     * const system_config = await prisma.system_config.upsert({
+     *   create: {
+     *     // ... data to create a System_config
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the System_config we want to update
+     *   }
+     * })
+     */
+    upsert<T extends system_configUpsertArgs>(args: SelectSubset<T, system_configUpsertArgs<ExtArgs>>): Prisma__system_configClient<$Result.GetResult<Prisma.$system_configPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of System_configs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {system_configCountArgs} args - Arguments to filter System_configs to count.
+     * @example
+     * // Count the number of System_configs
+     * const count = await prisma.system_config.count({
+     *   where: {
+     *     // ... the filter for the System_configs we want to count
+     *   }
+     * })
+    **/
+    count<T extends system_configCountArgs>(
+      args?: Subset<T, system_configCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], System_configCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a System_config.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {System_configAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends System_configAggregateArgs>(args: Subset<T, System_configAggregateArgs>): Prisma.PrismaPromise<GetSystem_configAggregateType<T>>
+
+    /**
+     * Group by System_config.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {system_configGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends system_configGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: system_configGroupByArgs['orderBy'] }
+        : { orderBy?: system_configGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, system_configGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSystem_configGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the system_config model
+   */
+  readonly fields: system_configFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for system_config.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__system_configClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the system_config model
+   */
+  interface system_configFieldRefs {
+    readonly config_id: FieldRef<"system_config", 'Int'>
+    readonly config_key: FieldRef<"system_config", 'String'>
+    readonly config_value: FieldRef<"system_config", 'String'>
+    readonly description: FieldRef<"system_config", 'String'>
+    readonly updated_at: FieldRef<"system_config", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * system_config findUnique
+   */
+  export type system_configFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the system_config
+     */
+    select?: system_configSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the system_config
+     */
+    omit?: system_configOmit<ExtArgs> | null
+    /**
+     * Filter, which system_config to fetch.
+     */
+    where: system_configWhereUniqueInput
+  }
+
+  /**
+   * system_config findUniqueOrThrow
+   */
+  export type system_configFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the system_config
+     */
+    select?: system_configSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the system_config
+     */
+    omit?: system_configOmit<ExtArgs> | null
+    /**
+     * Filter, which system_config to fetch.
+     */
+    where: system_configWhereUniqueInput
+  }
+
+  /**
+   * system_config findFirst
+   */
+  export type system_configFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the system_config
+     */
+    select?: system_configSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the system_config
+     */
+    omit?: system_configOmit<ExtArgs> | null
+    /**
+     * Filter, which system_config to fetch.
+     */
+    where?: system_configWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of system_configs to fetch.
+     */
+    orderBy?: system_configOrderByWithRelationInput | system_configOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for system_configs.
+     */
+    cursor?: system_configWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` system_configs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` system_configs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of system_configs.
+     */
+    distinct?: System_configScalarFieldEnum | System_configScalarFieldEnum[]
+  }
+
+  /**
+   * system_config findFirstOrThrow
+   */
+  export type system_configFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the system_config
+     */
+    select?: system_configSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the system_config
+     */
+    omit?: system_configOmit<ExtArgs> | null
+    /**
+     * Filter, which system_config to fetch.
+     */
+    where?: system_configWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of system_configs to fetch.
+     */
+    orderBy?: system_configOrderByWithRelationInput | system_configOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for system_configs.
+     */
+    cursor?: system_configWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` system_configs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` system_configs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of system_configs.
+     */
+    distinct?: System_configScalarFieldEnum | System_configScalarFieldEnum[]
+  }
+
+  /**
+   * system_config findMany
+   */
+  export type system_configFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the system_config
+     */
+    select?: system_configSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the system_config
+     */
+    omit?: system_configOmit<ExtArgs> | null
+    /**
+     * Filter, which system_configs to fetch.
+     */
+    where?: system_configWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of system_configs to fetch.
+     */
+    orderBy?: system_configOrderByWithRelationInput | system_configOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing system_configs.
+     */
+    cursor?: system_configWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` system_configs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` system_configs.
+     */
+    skip?: number
+    distinct?: System_configScalarFieldEnum | System_configScalarFieldEnum[]
+  }
+
+  /**
+   * system_config create
+   */
+  export type system_configCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the system_config
+     */
+    select?: system_configSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the system_config
+     */
+    omit?: system_configOmit<ExtArgs> | null
+    /**
+     * The data needed to create a system_config.
+     */
+    data: XOR<system_configCreateInput, system_configUncheckedCreateInput>
+  }
+
+  /**
+   * system_config createMany
+   */
+  export type system_configCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many system_configs.
+     */
+    data: system_configCreateManyInput | system_configCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * system_config update
+   */
+  export type system_configUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the system_config
+     */
+    select?: system_configSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the system_config
+     */
+    omit?: system_configOmit<ExtArgs> | null
+    /**
+     * The data needed to update a system_config.
+     */
+    data: XOR<system_configUpdateInput, system_configUncheckedUpdateInput>
+    /**
+     * Choose, which system_config to update.
+     */
+    where: system_configWhereUniqueInput
+  }
+
+  /**
+   * system_config updateMany
+   */
+  export type system_configUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update system_configs.
+     */
+    data: XOR<system_configUpdateManyMutationInput, system_configUncheckedUpdateManyInput>
+    /**
+     * Filter which system_configs to update
+     */
+    where?: system_configWhereInput
+    /**
+     * Limit how many system_configs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * system_config upsert
+   */
+  export type system_configUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the system_config
+     */
+    select?: system_configSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the system_config
+     */
+    omit?: system_configOmit<ExtArgs> | null
+    /**
+     * The filter to search for the system_config to update in case it exists.
+     */
+    where: system_configWhereUniqueInput
+    /**
+     * In case the system_config found by the `where` argument doesn't exist, create a new system_config with this data.
+     */
+    create: XOR<system_configCreateInput, system_configUncheckedCreateInput>
+    /**
+     * In case the system_config was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<system_configUpdateInput, system_configUncheckedUpdateInput>
+  }
+
+  /**
+   * system_config delete
+   */
+  export type system_configDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the system_config
+     */
+    select?: system_configSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the system_config
+     */
+    omit?: system_configOmit<ExtArgs> | null
+    /**
+     * Filter which system_config to delete.
+     */
+    where: system_configWhereUniqueInput
+  }
+
+  /**
+   * system_config deleteMany
+   */
+  export type system_configDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which system_configs to delete
+     */
+    where?: system_configWhereInput
+    /**
+     * Limit how many system_configs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * system_config without action
+   */
+  export type system_configDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the system_config
+     */
+    select?: system_configSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the system_config
+     */
+    omit?: system_configOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model library_cards
+   */
+
+  export type AggregateLibrary_cards = {
+    _count: Library_cardsCountAggregateOutputType | null
+    _avg: Library_cardsAvgAggregateOutputType | null
+    _sum: Library_cardsSumAggregateOutputType | null
+    _min: Library_cardsMinAggregateOutputType | null
+    _max: Library_cardsMaxAggregateOutputType | null
+  }
+
+  export type Library_cardsAvgAggregateOutputType = {
+    card_id: number | null
+    user_id: number | null
+  }
+
+  export type Library_cardsSumAggregateOutputType = {
+    card_id: number | null
+    user_id: number | null
+  }
+
+  export type Library_cardsMinAggregateOutputType = {
+    card_id: number | null
+    user_id: number | null
+    card_number: string | null
+    issued_at: Date | null
+    expires_at: Date | null
+    status: $Enums.card_status | null
+  }
+
+  export type Library_cardsMaxAggregateOutputType = {
+    card_id: number | null
+    user_id: number | null
+    card_number: string | null
+    issued_at: Date | null
+    expires_at: Date | null
+    status: $Enums.card_status | null
+  }
+
+  export type Library_cardsCountAggregateOutputType = {
+    card_id: number
+    user_id: number
+    card_number: number
+    issued_at: number
+    expires_at: number
+    status: number
+    _all: number
+  }
+
+
+  export type Library_cardsAvgAggregateInputType = {
+    card_id?: true
+    user_id?: true
+  }
+
+  export type Library_cardsSumAggregateInputType = {
+    card_id?: true
+    user_id?: true
+  }
+
+  export type Library_cardsMinAggregateInputType = {
+    card_id?: true
+    user_id?: true
+    card_number?: true
+    issued_at?: true
+    expires_at?: true
+    status?: true
+  }
+
+  export type Library_cardsMaxAggregateInputType = {
+    card_id?: true
+    user_id?: true
+    card_number?: true
+    issued_at?: true
+    expires_at?: true
+    status?: true
+  }
+
+  export type Library_cardsCountAggregateInputType = {
+    card_id?: true
+    user_id?: true
+    card_number?: true
+    issued_at?: true
+    expires_at?: true
+    status?: true
+    _all?: true
+  }
+
+  export type Library_cardsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which library_cards to aggregate.
+     */
+    where?: library_cardsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of library_cards to fetch.
+     */
+    orderBy?: library_cardsOrderByWithRelationInput | library_cardsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: library_cardsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` library_cards from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` library_cards.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned library_cards
+    **/
+    _count?: true | Library_cardsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Library_cardsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Library_cardsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Library_cardsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Library_cardsMaxAggregateInputType
+  }
+
+  export type GetLibrary_cardsAggregateType<T extends Library_cardsAggregateArgs> = {
+        [P in keyof T & keyof AggregateLibrary_cards]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLibrary_cards[P]>
+      : GetScalarType<T[P], AggregateLibrary_cards[P]>
+  }
+
+
+
+
+  export type library_cardsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: library_cardsWhereInput
+    orderBy?: library_cardsOrderByWithAggregationInput | library_cardsOrderByWithAggregationInput[]
+    by: Library_cardsScalarFieldEnum[] | Library_cardsScalarFieldEnum
+    having?: library_cardsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Library_cardsCountAggregateInputType | true
+    _avg?: Library_cardsAvgAggregateInputType
+    _sum?: Library_cardsSumAggregateInputType
+    _min?: Library_cardsMinAggregateInputType
+    _max?: Library_cardsMaxAggregateInputType
+  }
+
+  export type Library_cardsGroupByOutputType = {
+    card_id: number
+    user_id: number | null
+    card_number: string
+    issued_at: Date
+    expires_at: Date | null
+    status: $Enums.card_status
+    _count: Library_cardsCountAggregateOutputType | null
+    _avg: Library_cardsAvgAggregateOutputType | null
+    _sum: Library_cardsSumAggregateOutputType | null
+    _min: Library_cardsMinAggregateOutputType | null
+    _max: Library_cardsMaxAggregateOutputType | null
+  }
+
+  type GetLibrary_cardsGroupByPayload<T extends library_cardsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Library_cardsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Library_cardsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Library_cardsGroupByOutputType[P]>
+            : GetScalarType<T[P], Library_cardsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type library_cardsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    card_id?: boolean
+    user_id?: boolean
+    card_number?: boolean
+    issued_at?: boolean
+    expires_at?: boolean
+    status?: boolean
+    users?: boolean | library_cards$usersArgs<ExtArgs>
+  }, ExtArgs["result"]["library_cards"]>
+
+
+
+  export type library_cardsSelectScalar = {
+    card_id?: boolean
+    user_id?: boolean
+    card_number?: boolean
+    issued_at?: boolean
+    expires_at?: boolean
+    status?: boolean
+  }
+
+  export type library_cardsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"card_id" | "user_id" | "card_number" | "issued_at" | "expires_at" | "status", ExtArgs["result"]["library_cards"]>
+  export type library_cardsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    users?: boolean | library_cards$usersArgs<ExtArgs>
+  }
+
+  export type $library_cardsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "library_cards"
+    objects: {
+      users: Prisma.$usersPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      card_id: number
+      user_id: number | null
+      card_number: string
+      issued_at: Date
+      expires_at: Date | null
+      status: $Enums.card_status
+    }, ExtArgs["result"]["library_cards"]>
+    composites: {}
+  }
+
+  type library_cardsGetPayload<S extends boolean | null | undefined | library_cardsDefaultArgs> = $Result.GetResult<Prisma.$library_cardsPayload, S>
+
+  type library_cardsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<library_cardsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Library_cardsCountAggregateInputType | true
+    }
+
+  export interface library_cardsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['library_cards'], meta: { name: 'library_cards' } }
+    /**
+     * Find zero or one Library_cards that matches the filter.
+     * @param {library_cardsFindUniqueArgs} args - Arguments to find a Library_cards
+     * @example
+     * // Get one Library_cards
+     * const library_cards = await prisma.library_cards.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends library_cardsFindUniqueArgs>(args: SelectSubset<T, library_cardsFindUniqueArgs<ExtArgs>>): Prisma__library_cardsClient<$Result.GetResult<Prisma.$library_cardsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Library_cards that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {library_cardsFindUniqueOrThrowArgs} args - Arguments to find a Library_cards
+     * @example
+     * // Get one Library_cards
+     * const library_cards = await prisma.library_cards.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends library_cardsFindUniqueOrThrowArgs>(args: SelectSubset<T, library_cardsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__library_cardsClient<$Result.GetResult<Prisma.$library_cardsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Library_cards that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {library_cardsFindFirstArgs} args - Arguments to find a Library_cards
+     * @example
+     * // Get one Library_cards
+     * const library_cards = await prisma.library_cards.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends library_cardsFindFirstArgs>(args?: SelectSubset<T, library_cardsFindFirstArgs<ExtArgs>>): Prisma__library_cardsClient<$Result.GetResult<Prisma.$library_cardsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Library_cards that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {library_cardsFindFirstOrThrowArgs} args - Arguments to find a Library_cards
+     * @example
+     * // Get one Library_cards
+     * const library_cards = await prisma.library_cards.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends library_cardsFindFirstOrThrowArgs>(args?: SelectSubset<T, library_cardsFindFirstOrThrowArgs<ExtArgs>>): Prisma__library_cardsClient<$Result.GetResult<Prisma.$library_cardsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Library_cards that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {library_cardsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Library_cards
+     * const library_cards = await prisma.library_cards.findMany()
+     * 
+     * // Get first 10 Library_cards
+     * const library_cards = await prisma.library_cards.findMany({ take: 10 })
+     * 
+     * // Only select the `card_id`
+     * const library_cardsWithCard_idOnly = await prisma.library_cards.findMany({ select: { card_id: true } })
+     * 
+     */
+    findMany<T extends library_cardsFindManyArgs>(args?: SelectSubset<T, library_cardsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$library_cardsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Library_cards.
+     * @param {library_cardsCreateArgs} args - Arguments to create a Library_cards.
+     * @example
+     * // Create one Library_cards
+     * const Library_cards = await prisma.library_cards.create({
+     *   data: {
+     *     // ... data to create a Library_cards
+     *   }
+     * })
+     * 
+     */
+    create<T extends library_cardsCreateArgs>(args: SelectSubset<T, library_cardsCreateArgs<ExtArgs>>): Prisma__library_cardsClient<$Result.GetResult<Prisma.$library_cardsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Library_cards.
+     * @param {library_cardsCreateManyArgs} args - Arguments to create many Library_cards.
+     * @example
+     * // Create many Library_cards
+     * const library_cards = await prisma.library_cards.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends library_cardsCreateManyArgs>(args?: SelectSubset<T, library_cardsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Library_cards.
+     * @param {library_cardsDeleteArgs} args - Arguments to delete one Library_cards.
+     * @example
+     * // Delete one Library_cards
+     * const Library_cards = await prisma.library_cards.delete({
+     *   where: {
+     *     // ... filter to delete one Library_cards
+     *   }
+     * })
+     * 
+     */
+    delete<T extends library_cardsDeleteArgs>(args: SelectSubset<T, library_cardsDeleteArgs<ExtArgs>>): Prisma__library_cardsClient<$Result.GetResult<Prisma.$library_cardsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Library_cards.
+     * @param {library_cardsUpdateArgs} args - Arguments to update one Library_cards.
+     * @example
+     * // Update one Library_cards
+     * const library_cards = await prisma.library_cards.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends library_cardsUpdateArgs>(args: SelectSubset<T, library_cardsUpdateArgs<ExtArgs>>): Prisma__library_cardsClient<$Result.GetResult<Prisma.$library_cardsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Library_cards.
+     * @param {library_cardsDeleteManyArgs} args - Arguments to filter Library_cards to delete.
+     * @example
+     * // Delete a few Library_cards
+     * const { count } = await prisma.library_cards.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends library_cardsDeleteManyArgs>(args?: SelectSubset<T, library_cardsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Library_cards.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {library_cardsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Library_cards
+     * const library_cards = await prisma.library_cards.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends library_cardsUpdateManyArgs>(args: SelectSubset<T, library_cardsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Library_cards.
+     * @param {library_cardsUpsertArgs} args - Arguments to update or create a Library_cards.
+     * @example
+     * // Update or create a Library_cards
+     * const library_cards = await prisma.library_cards.upsert({
+     *   create: {
+     *     // ... data to create a Library_cards
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Library_cards we want to update
+     *   }
+     * })
+     */
+    upsert<T extends library_cardsUpsertArgs>(args: SelectSubset<T, library_cardsUpsertArgs<ExtArgs>>): Prisma__library_cardsClient<$Result.GetResult<Prisma.$library_cardsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Library_cards.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {library_cardsCountArgs} args - Arguments to filter Library_cards to count.
+     * @example
+     * // Count the number of Library_cards
+     * const count = await prisma.library_cards.count({
+     *   where: {
+     *     // ... the filter for the Library_cards we want to count
+     *   }
+     * })
+    **/
+    count<T extends library_cardsCountArgs>(
+      args?: Subset<T, library_cardsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Library_cardsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Library_cards.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Library_cardsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Library_cardsAggregateArgs>(args: Subset<T, Library_cardsAggregateArgs>): Prisma.PrismaPromise<GetLibrary_cardsAggregateType<T>>
+
+    /**
+     * Group by Library_cards.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {library_cardsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends library_cardsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: library_cardsGroupByArgs['orderBy'] }
+        : { orderBy?: library_cardsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, library_cardsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLibrary_cardsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the library_cards model
+   */
+  readonly fields: library_cardsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for library_cards.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__library_cardsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    users<T extends library_cards$usersArgs<ExtArgs> = {}>(args?: Subset<T, library_cards$usersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the library_cards model
+   */
+  interface library_cardsFieldRefs {
+    readonly card_id: FieldRef<"library_cards", 'Int'>
+    readonly user_id: FieldRef<"library_cards", 'Int'>
+    readonly card_number: FieldRef<"library_cards", 'String'>
+    readonly issued_at: FieldRef<"library_cards", 'DateTime'>
+    readonly expires_at: FieldRef<"library_cards", 'DateTime'>
+    readonly status: FieldRef<"library_cards", 'card_status'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * library_cards findUnique
+   */
+  export type library_cardsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the library_cards
+     */
+    select?: library_cardsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the library_cards
+     */
+    omit?: library_cardsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: library_cardsInclude<ExtArgs> | null
+    /**
+     * Filter, which library_cards to fetch.
+     */
+    where: library_cardsWhereUniqueInput
+  }
+
+  /**
+   * library_cards findUniqueOrThrow
+   */
+  export type library_cardsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the library_cards
+     */
+    select?: library_cardsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the library_cards
+     */
+    omit?: library_cardsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: library_cardsInclude<ExtArgs> | null
+    /**
+     * Filter, which library_cards to fetch.
+     */
+    where: library_cardsWhereUniqueInput
+  }
+
+  /**
+   * library_cards findFirst
+   */
+  export type library_cardsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the library_cards
+     */
+    select?: library_cardsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the library_cards
+     */
+    omit?: library_cardsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: library_cardsInclude<ExtArgs> | null
+    /**
+     * Filter, which library_cards to fetch.
+     */
+    where?: library_cardsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of library_cards to fetch.
+     */
+    orderBy?: library_cardsOrderByWithRelationInput | library_cardsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for library_cards.
+     */
+    cursor?: library_cardsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` library_cards from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` library_cards.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of library_cards.
+     */
+    distinct?: Library_cardsScalarFieldEnum | Library_cardsScalarFieldEnum[]
+  }
+
+  /**
+   * library_cards findFirstOrThrow
+   */
+  export type library_cardsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the library_cards
+     */
+    select?: library_cardsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the library_cards
+     */
+    omit?: library_cardsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: library_cardsInclude<ExtArgs> | null
+    /**
+     * Filter, which library_cards to fetch.
+     */
+    where?: library_cardsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of library_cards to fetch.
+     */
+    orderBy?: library_cardsOrderByWithRelationInput | library_cardsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for library_cards.
+     */
+    cursor?: library_cardsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` library_cards from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` library_cards.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of library_cards.
+     */
+    distinct?: Library_cardsScalarFieldEnum | Library_cardsScalarFieldEnum[]
+  }
+
+  /**
+   * library_cards findMany
+   */
+  export type library_cardsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the library_cards
+     */
+    select?: library_cardsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the library_cards
+     */
+    omit?: library_cardsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: library_cardsInclude<ExtArgs> | null
+    /**
+     * Filter, which library_cards to fetch.
+     */
+    where?: library_cardsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of library_cards to fetch.
+     */
+    orderBy?: library_cardsOrderByWithRelationInput | library_cardsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing library_cards.
+     */
+    cursor?: library_cardsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` library_cards from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` library_cards.
+     */
+    skip?: number
+    distinct?: Library_cardsScalarFieldEnum | Library_cardsScalarFieldEnum[]
+  }
+
+  /**
+   * library_cards create
+   */
+  export type library_cardsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the library_cards
+     */
+    select?: library_cardsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the library_cards
+     */
+    omit?: library_cardsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: library_cardsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a library_cards.
+     */
+    data: XOR<library_cardsCreateInput, library_cardsUncheckedCreateInput>
+  }
+
+  /**
+   * library_cards createMany
+   */
+  export type library_cardsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many library_cards.
+     */
+    data: library_cardsCreateManyInput | library_cardsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * library_cards update
+   */
+  export type library_cardsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the library_cards
+     */
+    select?: library_cardsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the library_cards
+     */
+    omit?: library_cardsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: library_cardsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a library_cards.
+     */
+    data: XOR<library_cardsUpdateInput, library_cardsUncheckedUpdateInput>
+    /**
+     * Choose, which library_cards to update.
+     */
+    where: library_cardsWhereUniqueInput
+  }
+
+  /**
+   * library_cards updateMany
+   */
+  export type library_cardsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update library_cards.
+     */
+    data: XOR<library_cardsUpdateManyMutationInput, library_cardsUncheckedUpdateManyInput>
+    /**
+     * Filter which library_cards to update
+     */
+    where?: library_cardsWhereInput
+    /**
+     * Limit how many library_cards to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * library_cards upsert
+   */
+  export type library_cardsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the library_cards
+     */
+    select?: library_cardsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the library_cards
+     */
+    omit?: library_cardsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: library_cardsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the library_cards to update in case it exists.
+     */
+    where: library_cardsWhereUniqueInput
+    /**
+     * In case the library_cards found by the `where` argument doesn't exist, create a new library_cards with this data.
+     */
+    create: XOR<library_cardsCreateInput, library_cardsUncheckedCreateInput>
+    /**
+     * In case the library_cards was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<library_cardsUpdateInput, library_cardsUncheckedUpdateInput>
+  }
+
+  /**
+   * library_cards delete
+   */
+  export type library_cardsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the library_cards
+     */
+    select?: library_cardsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the library_cards
+     */
+    omit?: library_cardsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: library_cardsInclude<ExtArgs> | null
+    /**
+     * Filter which library_cards to delete.
+     */
+    where: library_cardsWhereUniqueInput
+  }
+
+  /**
+   * library_cards deleteMany
+   */
+  export type library_cardsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which library_cards to delete
+     */
+    where?: library_cardsWhereInput
+    /**
+     * Limit how many library_cards to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * library_cards.users
+   */
+  export type library_cards$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the users
+     */
+    select?: usersSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the users
+     */
+    omit?: usersOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: usersInclude<ExtArgs> | null
+    where?: usersWhereInput
+  }
+
+  /**
+   * library_cards without action
+   */
+  export type library_cardsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the library_cards
+     */
+    select?: library_cardsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the library_cards
+     */
+    omit?: library_cardsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: library_cardsInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -11599,20 +13896,20 @@ export namespace Prisma {
   export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-  export const Book_tranScalarFieldEnum: {
+  export const Item_tranScalarFieldEnum: {
     tran_id: 'tran_id',
-    book_id: 'book_id',
+    item_id: 'item_id',
     status: 'status',
     user_id: 'user_id',
     record_status: 'record_status'
   };
 
-  export type Book_tranScalarFieldEnum = (typeof Book_tranScalarFieldEnum)[keyof typeof Book_tranScalarFieldEnum]
+  export type Item_tranScalarFieldEnum = (typeof Item_tranScalarFieldEnum)[keyof typeof Item_tranScalarFieldEnum]
 
 
-  export const Book_tran_historyScalarFieldEnum: {
+  export const Item_tran_historyScalarFieldEnum: {
     id: 'id',
-    book_id: 'book_id',
+    item_id: 'item_id',
     tran_id: 'tran_id',
     status: 'status',
     requested_by: 'requested_by',
@@ -11625,11 +13922,11 @@ export namespace Prisma {
     remarks: 'remarks'
   };
 
-  export type Book_tran_historyScalarFieldEnum = (typeof Book_tran_historyScalarFieldEnum)[keyof typeof Book_tran_historyScalarFieldEnum]
+  export type Item_tran_historyScalarFieldEnum = (typeof Item_tran_historyScalarFieldEnum)[keyof typeof Item_tran_historyScalarFieldEnum]
 
 
-  export const BooksScalarFieldEnum: {
-    book_id: 'book_id',
+  export const Library_itemsScalarFieldEnum: {
+    item_id: 'item_id',
     title: 'title',
     author: 'author',
     isbn: 'isbn',
@@ -11638,18 +13935,27 @@ export namespace Prisma {
     image_url: 'image_url',
     description: 'description',
     librarian_id: 'librarian_id',
+    item_type: 'item_type',
+    location: 'location',
+    publisher: 'publisher',
+    language: 'language',
+    pages: 'pages',
+    duration: 'duration',
+    format: 'format',
+    subject: 'subject',
+    keywords: 'keywords',
     created_at: 'created_at',
     updated_at: 'updated_at',
     record_status: 'record_status'
   };
 
-  export type BooksScalarFieldEnum = (typeof BooksScalarFieldEnum)[keyof typeof BooksScalarFieldEnum]
+  export type Library_itemsScalarFieldEnum = (typeof Library_itemsScalarFieldEnum)[keyof typeof Library_itemsScalarFieldEnum]
 
 
   export const FinesScalarFieldEnum: {
     fine_id: 'fine_id',
     user_id: 'user_id',
-    book_tran_history_id: 'book_tran_history_id',
+    item_tran_history_id: 'item_tran_history_id',
     amount: 'amount',
     reason: 'reason',
     status: 'status',
@@ -11673,10 +13979,11 @@ export namespace Prisma {
   export const NotificationsScalarFieldEnum: {
     notification_id: 'notification_id',
     type: 'type',
-    book_id: 'book_id',
+    item_id: 'item_id',
     from_user_id: 'from_user_id',
     to_user_id: 'to_user_id',
     tran_id: 'tran_id',
+    reservation_id: 'reservation_id',
     status: 'status',
     message: 'message',
     created_at: 'created_at',
@@ -11689,7 +13996,7 @@ export namespace Prisma {
   export const User_wishlistScalarFieldEnum: {
     id: 'id',
     user_id: 'user_id',
-    book_id: 'book_id',
+    item_id: 'item_id',
     created_at: 'created_at'
   };
 
@@ -11727,6 +14034,29 @@ export namespace Prisma {
   export type Contact_usScalarFieldEnum = (typeof Contact_usScalarFieldEnum)[keyof typeof Contact_usScalarFieldEnum]
 
 
+  export const System_configScalarFieldEnum: {
+    config_id: 'config_id',
+    config_key: 'config_key',
+    config_value: 'config_value',
+    description: 'description',
+    updated_at: 'updated_at'
+  };
+
+  export type System_configScalarFieldEnum = (typeof System_configScalarFieldEnum)[keyof typeof System_configScalarFieldEnum]
+
+
+  export const Library_cardsScalarFieldEnum: {
+    card_id: 'card_id',
+    user_id: 'user_id',
+    card_number: 'card_number',
+    issued_at: 'issued_at',
+    expires_at: 'expires_at',
+    status: 'status'
+  };
+
+  export type Library_cardsScalarFieldEnum = (typeof Library_cardsScalarFieldEnum)[keyof typeof Library_cardsScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -11743,23 +14073,29 @@ export namespace Prisma {
   export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
-  export const book_tran_historyOrderByRelevanceFieldEnum: {
+  export const item_tran_historyOrderByRelevanceFieldEnum: {
     remarks: 'remarks'
   };
 
-  export type book_tran_historyOrderByRelevanceFieldEnum = (typeof book_tran_historyOrderByRelevanceFieldEnum)[keyof typeof book_tran_historyOrderByRelevanceFieldEnum]
+  export type item_tran_historyOrderByRelevanceFieldEnum = (typeof item_tran_historyOrderByRelevanceFieldEnum)[keyof typeof item_tran_historyOrderByRelevanceFieldEnum]
 
 
-  export const booksOrderByRelevanceFieldEnum: {
+  export const library_itemsOrderByRelevanceFieldEnum: {
     title: 'title',
     author: 'author',
     isbn: 'isbn',
     genre: 'genre',
     image_url: 'image_url',
-    description: 'description'
+    description: 'description',
+    location: 'location',
+    publisher: 'publisher',
+    language: 'language',
+    format: 'format',
+    subject: 'subject',
+    keywords: 'keywords'
   };
 
-  export type booksOrderByRelevanceFieldEnum = (typeof booksOrderByRelevanceFieldEnum)[keyof typeof booksOrderByRelevanceFieldEnum]
+  export type library_itemsOrderByRelevanceFieldEnum = (typeof library_itemsOrderByRelevanceFieldEnum)[keyof typeof library_itemsOrderByRelevanceFieldEnum]
 
 
   export const finesOrderByRelevanceFieldEnum: {
@@ -11805,6 +14141,22 @@ export namespace Prisma {
   export type contact_usOrderByRelevanceFieldEnum = (typeof contact_usOrderByRelevanceFieldEnum)[keyof typeof contact_usOrderByRelevanceFieldEnum]
 
 
+  export const system_configOrderByRelevanceFieldEnum: {
+    config_key: 'config_key',
+    config_value: 'config_value',
+    description: 'description'
+  };
+
+  export type system_configOrderByRelevanceFieldEnum = (typeof system_configOrderByRelevanceFieldEnum)[keyof typeof system_configOrderByRelevanceFieldEnum]
+
+
+  export const library_cardsOrderByRelevanceFieldEnum: {
+    card_number: 'card_number'
+  };
+
+  export type library_cardsOrderByRelevanceFieldEnum = (typeof library_cardsOrderByRelevanceFieldEnum)[keyof typeof library_cardsOrderByRelevanceFieldEnum]
+
+
   /**
    * Field references
    */
@@ -11818,9 +14170,9 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'book_tran_status'
+   * Reference to a field of type 'item_tran_status'
    */
-  export type Enumbook_tran_statusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'book_tran_status'>
+  export type Enumitem_tran_statusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'item_tran_status'>
     
 
 
@@ -11832,9 +14184,9 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'book_tran_history_status'
+   * Reference to a field of type 'item_tran_history_status'
    */
-  export type Enumbook_tran_history_statusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'book_tran_history_status'>
+  export type Enumitem_tran_history_statusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'item_tran_history_status'>
     
 
 
@@ -11849,6 +14201,13 @@ export namespace Prisma {
    * Reference to a field of type 'String'
    */
   export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
+    
+
+
+  /**
+   * Reference to a field of type 'library_item_type'
+   */
+  export type Enumlibrary_item_typeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'library_item_type'>
     
 
 
@@ -11902,6 +14261,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'card_status'
+   */
+  export type Enumcard_statusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'card_status'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -11911,98 +14277,98 @@ export namespace Prisma {
    */
 
 
-  export type book_tranWhereInput = {
-    AND?: book_tranWhereInput | book_tranWhereInput[]
-    OR?: book_tranWhereInput[]
-    NOT?: book_tranWhereInput | book_tranWhereInput[]
-    tran_id?: IntFilter<"book_tran"> | number
-    book_id?: IntNullableFilter<"book_tran"> | number | null
-    status?: Enumbook_tran_statusNullableFilter<"book_tran"> | $Enums.book_tran_status | null
-    user_id?: IntNullableFilter<"book_tran"> | number | null
-    record_status?: Enumrecord_statusNullableFilter<"book_tran"> | $Enums.record_status | null
-    books?: XOR<BooksNullableScalarRelationFilter, booksWhereInput> | null
+  export type item_tranWhereInput = {
+    AND?: item_tranWhereInput | item_tranWhereInput[]
+    OR?: item_tranWhereInput[]
+    NOT?: item_tranWhereInput | item_tranWhereInput[]
+    tran_id?: IntFilter<"item_tran"> | number
+    item_id?: IntNullableFilter<"item_tran"> | number | null
+    status?: Enumitem_tran_statusNullableFilter<"item_tran"> | $Enums.item_tran_status | null
+    user_id?: IntNullableFilter<"item_tran"> | number | null
+    record_status?: Enumrecord_statusNullableFilter<"item_tran"> | $Enums.record_status | null
+    library_items?: XOR<Library_itemsNullableScalarRelationFilter, library_itemsWhereInput> | null
     users?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
-    book_tran_history?: Book_tran_historyListRelationFilter
+    item_tran_history?: Item_tran_historyListRelationFilter
     notifications?: NotificationsListRelationFilter
   }
 
-  export type book_tranOrderByWithRelationInput = {
+  export type item_tranOrderByWithRelationInput = {
     tran_id?: SortOrder
-    book_id?: SortOrderInput | SortOrder
+    item_id?: SortOrderInput | SortOrder
     status?: SortOrderInput | SortOrder
     user_id?: SortOrderInput | SortOrder
     record_status?: SortOrderInput | SortOrder
-    books?: booksOrderByWithRelationInput
+    library_items?: library_itemsOrderByWithRelationInput
     users?: usersOrderByWithRelationInput
-    book_tran_history?: book_tran_historyOrderByRelationAggregateInput
+    item_tran_history?: item_tran_historyOrderByRelationAggregateInput
     notifications?: notificationsOrderByRelationAggregateInput
   }
 
-  export type book_tranWhereUniqueInput = Prisma.AtLeast<{
+  export type item_tranWhereUniqueInput = Prisma.AtLeast<{
     tran_id?: number
-    AND?: book_tranWhereInput | book_tranWhereInput[]
-    OR?: book_tranWhereInput[]
-    NOT?: book_tranWhereInput | book_tranWhereInput[]
-    book_id?: IntNullableFilter<"book_tran"> | number | null
-    status?: Enumbook_tran_statusNullableFilter<"book_tran"> | $Enums.book_tran_status | null
-    user_id?: IntNullableFilter<"book_tran"> | number | null
-    record_status?: Enumrecord_statusNullableFilter<"book_tran"> | $Enums.record_status | null
-    books?: XOR<BooksNullableScalarRelationFilter, booksWhereInput> | null
+    AND?: item_tranWhereInput | item_tranWhereInput[]
+    OR?: item_tranWhereInput[]
+    NOT?: item_tranWhereInput | item_tranWhereInput[]
+    item_id?: IntNullableFilter<"item_tran"> | number | null
+    status?: Enumitem_tran_statusNullableFilter<"item_tran"> | $Enums.item_tran_status | null
+    user_id?: IntNullableFilter<"item_tran"> | number | null
+    record_status?: Enumrecord_statusNullableFilter<"item_tran"> | $Enums.record_status | null
+    library_items?: XOR<Library_itemsNullableScalarRelationFilter, library_itemsWhereInput> | null
     users?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
-    book_tran_history?: Book_tran_historyListRelationFilter
+    item_tran_history?: Item_tran_historyListRelationFilter
     notifications?: NotificationsListRelationFilter
   }, "tran_id">
 
-  export type book_tranOrderByWithAggregationInput = {
+  export type item_tranOrderByWithAggregationInput = {
     tran_id?: SortOrder
-    book_id?: SortOrderInput | SortOrder
+    item_id?: SortOrderInput | SortOrder
     status?: SortOrderInput | SortOrder
     user_id?: SortOrderInput | SortOrder
     record_status?: SortOrderInput | SortOrder
-    _count?: book_tranCountOrderByAggregateInput
-    _avg?: book_tranAvgOrderByAggregateInput
-    _max?: book_tranMaxOrderByAggregateInput
-    _min?: book_tranMinOrderByAggregateInput
-    _sum?: book_tranSumOrderByAggregateInput
+    _count?: item_tranCountOrderByAggregateInput
+    _avg?: item_tranAvgOrderByAggregateInput
+    _max?: item_tranMaxOrderByAggregateInput
+    _min?: item_tranMinOrderByAggregateInput
+    _sum?: item_tranSumOrderByAggregateInput
   }
 
-  export type book_tranScalarWhereWithAggregatesInput = {
-    AND?: book_tranScalarWhereWithAggregatesInput | book_tranScalarWhereWithAggregatesInput[]
-    OR?: book_tranScalarWhereWithAggregatesInput[]
-    NOT?: book_tranScalarWhereWithAggregatesInput | book_tranScalarWhereWithAggregatesInput[]
-    tran_id?: IntWithAggregatesFilter<"book_tran"> | number
-    book_id?: IntNullableWithAggregatesFilter<"book_tran"> | number | null
-    status?: Enumbook_tran_statusNullableWithAggregatesFilter<"book_tran"> | $Enums.book_tran_status | null
-    user_id?: IntNullableWithAggregatesFilter<"book_tran"> | number | null
-    record_status?: Enumrecord_statusNullableWithAggregatesFilter<"book_tran"> | $Enums.record_status | null
+  export type item_tranScalarWhereWithAggregatesInput = {
+    AND?: item_tranScalarWhereWithAggregatesInput | item_tranScalarWhereWithAggregatesInput[]
+    OR?: item_tranScalarWhereWithAggregatesInput[]
+    NOT?: item_tranScalarWhereWithAggregatesInput | item_tranScalarWhereWithAggregatesInput[]
+    tran_id?: IntWithAggregatesFilter<"item_tran"> | number
+    item_id?: IntNullableWithAggregatesFilter<"item_tran"> | number | null
+    status?: Enumitem_tran_statusNullableWithAggregatesFilter<"item_tran"> | $Enums.item_tran_status | null
+    user_id?: IntNullableWithAggregatesFilter<"item_tran"> | number | null
+    record_status?: Enumrecord_statusNullableWithAggregatesFilter<"item_tran"> | $Enums.record_status | null
   }
 
-  export type book_tran_historyWhereInput = {
-    AND?: book_tran_historyWhereInput | book_tran_historyWhereInput[]
-    OR?: book_tran_historyWhereInput[]
-    NOT?: book_tran_historyWhereInput | book_tran_historyWhereInput[]
-    id?: IntFilter<"book_tran_history"> | number
-    book_id?: IntNullableFilter<"book_tran_history"> | number | null
-    tran_id?: IntNullableFilter<"book_tran_history"> | number | null
-    status?: Enumbook_tran_history_statusFilter<"book_tran_history"> | $Enums.book_tran_history_status
-    requested_by?: IntNullableFilter<"book_tran_history"> | number | null
-    approved_by?: IntNullableFilter<"book_tran_history"> | number | null
-    requested_at?: DateTimeNullableFilter<"book_tran_history"> | Date | string | null
-    approved_at?: DateTimeNullableFilter<"book_tran_history"> | Date | string | null
-    date_issued?: DateTimeNullableFilter<"book_tran_history"> | Date | string | null
-    date_due?: DateTimeNullableFilter<"book_tran_history"> | Date | string | null
-    date_returned?: DateTimeNullableFilter<"book_tran_history"> | Date | string | null
-    remarks?: StringNullableFilter<"book_tran_history"> | string | null
-    books?: XOR<BooksNullableScalarRelationFilter, booksWhereInput> | null
-    book_tran?: XOR<Book_tranNullableScalarRelationFilter, book_tranWhereInput> | null
-    users_book_tran_history_requested_byTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
-    users_book_tran_history_approved_byTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
+  export type item_tran_historyWhereInput = {
+    AND?: item_tran_historyWhereInput | item_tran_historyWhereInput[]
+    OR?: item_tran_historyWhereInput[]
+    NOT?: item_tran_historyWhereInput | item_tran_historyWhereInput[]
+    id?: IntFilter<"item_tran_history"> | number
+    item_id?: IntNullableFilter<"item_tran_history"> | number | null
+    tran_id?: IntNullableFilter<"item_tran_history"> | number | null
+    status?: Enumitem_tran_history_statusFilter<"item_tran_history"> | $Enums.item_tran_history_status
+    requested_by?: IntNullableFilter<"item_tran_history"> | number | null
+    approved_by?: IntNullableFilter<"item_tran_history"> | number | null
+    requested_at?: DateTimeNullableFilter<"item_tran_history"> | Date | string | null
+    approved_at?: DateTimeNullableFilter<"item_tran_history"> | Date | string | null
+    date_issued?: DateTimeNullableFilter<"item_tran_history"> | Date | string | null
+    date_due?: DateTimeNullableFilter<"item_tran_history"> | Date | string | null
+    date_returned?: DateTimeNullableFilter<"item_tran_history"> | Date | string | null
+    remarks?: StringNullableFilter<"item_tran_history"> | string | null
+    library_items?: XOR<Library_itemsNullableScalarRelationFilter, library_itemsWhereInput> | null
+    item_tran?: XOR<Item_tranNullableScalarRelationFilter, item_tranWhereInput> | null
+    users_item_tran_history_requested_byTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
+    users_item_tran_history_approved_byTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
     fines?: FinesListRelationFilter
   }
 
-  export type book_tran_historyOrderByWithRelationInput = {
+  export type item_tran_historyOrderByWithRelationInput = {
     id?: SortOrder
-    book_id?: SortOrderInput | SortOrder
+    item_id?: SortOrderInput | SortOrder
     tran_id?: SortOrderInput | SortOrder
     status?: SortOrder
     requested_by?: SortOrderInput | SortOrder
@@ -12013,40 +14379,40 @@ export namespace Prisma {
     date_due?: SortOrderInput | SortOrder
     date_returned?: SortOrderInput | SortOrder
     remarks?: SortOrderInput | SortOrder
-    books?: booksOrderByWithRelationInput
-    book_tran?: book_tranOrderByWithRelationInput
-    users_book_tran_history_requested_byTousers?: usersOrderByWithRelationInput
-    users_book_tran_history_approved_byTousers?: usersOrderByWithRelationInput
+    library_items?: library_itemsOrderByWithRelationInput
+    item_tran?: item_tranOrderByWithRelationInput
+    users_item_tran_history_requested_byTousers?: usersOrderByWithRelationInput
+    users_item_tran_history_approved_byTousers?: usersOrderByWithRelationInput
     fines?: finesOrderByRelationAggregateInput
-    _relevance?: book_tran_historyOrderByRelevanceInput
+    _relevance?: item_tran_historyOrderByRelevanceInput
   }
 
-  export type book_tran_historyWhereUniqueInput = Prisma.AtLeast<{
+  export type item_tran_historyWhereUniqueInput = Prisma.AtLeast<{
     id?: number
-    AND?: book_tran_historyWhereInput | book_tran_historyWhereInput[]
-    OR?: book_tran_historyWhereInput[]
-    NOT?: book_tran_historyWhereInput | book_tran_historyWhereInput[]
-    book_id?: IntNullableFilter<"book_tran_history"> | number | null
-    tran_id?: IntNullableFilter<"book_tran_history"> | number | null
-    status?: Enumbook_tran_history_statusFilter<"book_tran_history"> | $Enums.book_tran_history_status
-    requested_by?: IntNullableFilter<"book_tran_history"> | number | null
-    approved_by?: IntNullableFilter<"book_tran_history"> | number | null
-    requested_at?: DateTimeNullableFilter<"book_tran_history"> | Date | string | null
-    approved_at?: DateTimeNullableFilter<"book_tran_history"> | Date | string | null
-    date_issued?: DateTimeNullableFilter<"book_tran_history"> | Date | string | null
-    date_due?: DateTimeNullableFilter<"book_tran_history"> | Date | string | null
-    date_returned?: DateTimeNullableFilter<"book_tran_history"> | Date | string | null
-    remarks?: StringNullableFilter<"book_tran_history"> | string | null
-    books?: XOR<BooksNullableScalarRelationFilter, booksWhereInput> | null
-    book_tran?: XOR<Book_tranNullableScalarRelationFilter, book_tranWhereInput> | null
-    users_book_tran_history_requested_byTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
-    users_book_tran_history_approved_byTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
+    AND?: item_tran_historyWhereInput | item_tran_historyWhereInput[]
+    OR?: item_tran_historyWhereInput[]
+    NOT?: item_tran_historyWhereInput | item_tran_historyWhereInput[]
+    item_id?: IntNullableFilter<"item_tran_history"> | number | null
+    tran_id?: IntNullableFilter<"item_tran_history"> | number | null
+    status?: Enumitem_tran_history_statusFilter<"item_tran_history"> | $Enums.item_tran_history_status
+    requested_by?: IntNullableFilter<"item_tran_history"> | number | null
+    approved_by?: IntNullableFilter<"item_tran_history"> | number | null
+    requested_at?: DateTimeNullableFilter<"item_tran_history"> | Date | string | null
+    approved_at?: DateTimeNullableFilter<"item_tran_history"> | Date | string | null
+    date_issued?: DateTimeNullableFilter<"item_tran_history"> | Date | string | null
+    date_due?: DateTimeNullableFilter<"item_tran_history"> | Date | string | null
+    date_returned?: DateTimeNullableFilter<"item_tran_history"> | Date | string | null
+    remarks?: StringNullableFilter<"item_tran_history"> | string | null
+    library_items?: XOR<Library_itemsNullableScalarRelationFilter, library_itemsWhereInput> | null
+    item_tran?: XOR<Item_tranNullableScalarRelationFilter, item_tranWhereInput> | null
+    users_item_tran_history_requested_byTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
+    users_item_tran_history_approved_byTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
     fines?: FinesListRelationFilter
   }, "id">
 
-  export type book_tran_historyOrderByWithAggregationInput = {
+  export type item_tran_historyOrderByWithAggregationInput = {
     id?: SortOrder
-    book_id?: SortOrderInput | SortOrder
+    item_id?: SortOrderInput | SortOrder
     tran_id?: SortOrderInput | SortOrder
     status?: SortOrder
     requested_by?: SortOrderInput | SortOrder
@@ -12057,55 +14423,64 @@ export namespace Prisma {
     date_due?: SortOrderInput | SortOrder
     date_returned?: SortOrderInput | SortOrder
     remarks?: SortOrderInput | SortOrder
-    _count?: book_tran_historyCountOrderByAggregateInput
-    _avg?: book_tran_historyAvgOrderByAggregateInput
-    _max?: book_tran_historyMaxOrderByAggregateInput
-    _min?: book_tran_historyMinOrderByAggregateInput
-    _sum?: book_tran_historySumOrderByAggregateInput
+    _count?: item_tran_historyCountOrderByAggregateInput
+    _avg?: item_tran_historyAvgOrderByAggregateInput
+    _max?: item_tran_historyMaxOrderByAggregateInput
+    _min?: item_tran_historyMinOrderByAggregateInput
+    _sum?: item_tran_historySumOrderByAggregateInput
   }
 
-  export type book_tran_historyScalarWhereWithAggregatesInput = {
-    AND?: book_tran_historyScalarWhereWithAggregatesInput | book_tran_historyScalarWhereWithAggregatesInput[]
-    OR?: book_tran_historyScalarWhereWithAggregatesInput[]
-    NOT?: book_tran_historyScalarWhereWithAggregatesInput | book_tran_historyScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"book_tran_history"> | number
-    book_id?: IntNullableWithAggregatesFilter<"book_tran_history"> | number | null
-    tran_id?: IntNullableWithAggregatesFilter<"book_tran_history"> | number | null
-    status?: Enumbook_tran_history_statusWithAggregatesFilter<"book_tran_history"> | $Enums.book_tran_history_status
-    requested_by?: IntNullableWithAggregatesFilter<"book_tran_history"> | number | null
-    approved_by?: IntNullableWithAggregatesFilter<"book_tran_history"> | number | null
-    requested_at?: DateTimeNullableWithAggregatesFilter<"book_tran_history"> | Date | string | null
-    approved_at?: DateTimeNullableWithAggregatesFilter<"book_tran_history"> | Date | string | null
-    date_issued?: DateTimeNullableWithAggregatesFilter<"book_tran_history"> | Date | string | null
-    date_due?: DateTimeNullableWithAggregatesFilter<"book_tran_history"> | Date | string | null
-    date_returned?: DateTimeNullableWithAggregatesFilter<"book_tran_history"> | Date | string | null
-    remarks?: StringNullableWithAggregatesFilter<"book_tran_history"> | string | null
+  export type item_tran_historyScalarWhereWithAggregatesInput = {
+    AND?: item_tran_historyScalarWhereWithAggregatesInput | item_tran_historyScalarWhereWithAggregatesInput[]
+    OR?: item_tran_historyScalarWhereWithAggregatesInput[]
+    NOT?: item_tran_historyScalarWhereWithAggregatesInput | item_tran_historyScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"item_tran_history"> | number
+    item_id?: IntNullableWithAggregatesFilter<"item_tran_history"> | number | null
+    tran_id?: IntNullableWithAggregatesFilter<"item_tran_history"> | number | null
+    status?: Enumitem_tran_history_statusWithAggregatesFilter<"item_tran_history"> | $Enums.item_tran_history_status
+    requested_by?: IntNullableWithAggregatesFilter<"item_tran_history"> | number | null
+    approved_by?: IntNullableWithAggregatesFilter<"item_tran_history"> | number | null
+    requested_at?: DateTimeNullableWithAggregatesFilter<"item_tran_history"> | Date | string | null
+    approved_at?: DateTimeNullableWithAggregatesFilter<"item_tran_history"> | Date | string | null
+    date_issued?: DateTimeNullableWithAggregatesFilter<"item_tran_history"> | Date | string | null
+    date_due?: DateTimeNullableWithAggregatesFilter<"item_tran_history"> | Date | string | null
+    date_returned?: DateTimeNullableWithAggregatesFilter<"item_tran_history"> | Date | string | null
+    remarks?: StringNullableWithAggregatesFilter<"item_tran_history"> | string | null
   }
 
-  export type booksWhereInput = {
-    AND?: booksWhereInput | booksWhereInput[]
-    OR?: booksWhereInput[]
-    NOT?: booksWhereInput | booksWhereInput[]
-    book_id?: IntFilter<"books"> | number
-    title?: StringNullableFilter<"books"> | string | null
-    author?: StringFilter<"books"> | string
-    isbn?: StringNullableFilter<"books"> | string | null
-    year?: IntNullableFilter<"books"> | number | null
-    genre?: StringNullableFilter<"books"> | string | null
-    image_url?: StringNullableFilter<"books"> | string | null
-    description?: StringNullableFilter<"books"> | string | null
-    librarian_id?: IntNullableFilter<"books"> | number | null
-    created_at?: DateTimeNullableFilter<"books"> | Date | string | null
-    updated_at?: DateTimeNullableFilter<"books"> | Date | string | null
-    record_status?: Enumrecord_statusNullableFilter<"books"> | $Enums.record_status | null
-    book_tran?: Book_tranListRelationFilter
-    book_tran_history?: Book_tran_historyListRelationFilter
+  export type library_itemsWhereInput = {
+    AND?: library_itemsWhereInput | library_itemsWhereInput[]
+    OR?: library_itemsWhereInput[]
+    NOT?: library_itemsWhereInput | library_itemsWhereInput[]
+    item_id?: IntFilter<"library_items"> | number
+    title?: StringNullableFilter<"library_items"> | string | null
+    author?: StringFilter<"library_items"> | string
+    isbn?: StringNullableFilter<"library_items"> | string | null
+    year?: IntNullableFilter<"library_items"> | number | null
+    genre?: StringNullableFilter<"library_items"> | string | null
+    image_url?: StringNullableFilter<"library_items"> | string | null
+    description?: StringNullableFilter<"library_items"> | string | null
+    librarian_id?: IntNullableFilter<"library_items"> | number | null
+    item_type?: Enumlibrary_item_typeFilter<"library_items"> | $Enums.library_item_type
+    location?: StringNullableFilter<"library_items"> | string | null
+    publisher?: StringNullableFilter<"library_items"> | string | null
+    language?: StringNullableFilter<"library_items"> | string | null
+    pages?: IntNullableFilter<"library_items"> | number | null
+    duration?: IntNullableFilter<"library_items"> | number | null
+    format?: StringNullableFilter<"library_items"> | string | null
+    subject?: StringNullableFilter<"library_items"> | string | null
+    keywords?: StringNullableFilter<"library_items"> | string | null
+    created_at?: DateTimeNullableFilter<"library_items"> | Date | string | null
+    updated_at?: DateTimeNullableFilter<"library_items"> | Date | string | null
+    record_status?: Enumrecord_statusNullableFilter<"library_items"> | $Enums.record_status | null
+    item_tran?: Item_tranListRelationFilter
+    item_tran_history?: Item_tran_historyListRelationFilter
     notifications?: NotificationsListRelationFilter
     user_wishlist?: User_wishlistListRelationFilter
   }
 
-  export type booksOrderByWithRelationInput = {
-    book_id?: SortOrder
+  export type library_itemsOrderByWithRelationInput = {
+    item_id?: SortOrder
     title?: SortOrderInput | SortOrder
     author?: SortOrder
     isbn?: SortOrderInput | SortOrder
@@ -12114,40 +14489,58 @@ export namespace Prisma {
     image_url?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     librarian_id?: SortOrderInput | SortOrder
+    item_type?: SortOrder
+    location?: SortOrderInput | SortOrder
+    publisher?: SortOrderInput | SortOrder
+    language?: SortOrderInput | SortOrder
+    pages?: SortOrderInput | SortOrder
+    duration?: SortOrderInput | SortOrder
+    format?: SortOrderInput | SortOrder
+    subject?: SortOrderInput | SortOrder
+    keywords?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     updated_at?: SortOrderInput | SortOrder
     record_status?: SortOrderInput | SortOrder
-    book_tran?: book_tranOrderByRelationAggregateInput
-    book_tran_history?: book_tran_historyOrderByRelationAggregateInput
+    item_tran?: item_tranOrderByRelationAggregateInput
+    item_tran_history?: item_tran_historyOrderByRelationAggregateInput
     notifications?: notificationsOrderByRelationAggregateInput
     user_wishlist?: user_wishlistOrderByRelationAggregateInput
-    _relevance?: booksOrderByRelevanceInput
+    _relevance?: library_itemsOrderByRelevanceInput
   }
 
-  export type booksWhereUniqueInput = Prisma.AtLeast<{
-    book_id?: number
-    AND?: booksWhereInput | booksWhereInput[]
-    OR?: booksWhereInput[]
-    NOT?: booksWhereInput | booksWhereInput[]
-    title?: StringNullableFilter<"books"> | string | null
-    author?: StringFilter<"books"> | string
-    isbn?: StringNullableFilter<"books"> | string | null
-    year?: IntNullableFilter<"books"> | number | null
-    genre?: StringNullableFilter<"books"> | string | null
-    image_url?: StringNullableFilter<"books"> | string | null
-    description?: StringNullableFilter<"books"> | string | null
-    librarian_id?: IntNullableFilter<"books"> | number | null
-    created_at?: DateTimeNullableFilter<"books"> | Date | string | null
-    updated_at?: DateTimeNullableFilter<"books"> | Date | string | null
-    record_status?: Enumrecord_statusNullableFilter<"books"> | $Enums.record_status | null
-    book_tran?: Book_tranListRelationFilter
-    book_tran_history?: Book_tran_historyListRelationFilter
+  export type library_itemsWhereUniqueInput = Prisma.AtLeast<{
+    item_id?: number
+    AND?: library_itemsWhereInput | library_itemsWhereInput[]
+    OR?: library_itemsWhereInput[]
+    NOT?: library_itemsWhereInput | library_itemsWhereInput[]
+    title?: StringNullableFilter<"library_items"> | string | null
+    author?: StringFilter<"library_items"> | string
+    isbn?: StringNullableFilter<"library_items"> | string | null
+    year?: IntNullableFilter<"library_items"> | number | null
+    genre?: StringNullableFilter<"library_items"> | string | null
+    image_url?: StringNullableFilter<"library_items"> | string | null
+    description?: StringNullableFilter<"library_items"> | string | null
+    librarian_id?: IntNullableFilter<"library_items"> | number | null
+    item_type?: Enumlibrary_item_typeFilter<"library_items"> | $Enums.library_item_type
+    location?: StringNullableFilter<"library_items"> | string | null
+    publisher?: StringNullableFilter<"library_items"> | string | null
+    language?: StringNullableFilter<"library_items"> | string | null
+    pages?: IntNullableFilter<"library_items"> | number | null
+    duration?: IntNullableFilter<"library_items"> | number | null
+    format?: StringNullableFilter<"library_items"> | string | null
+    subject?: StringNullableFilter<"library_items"> | string | null
+    keywords?: StringNullableFilter<"library_items"> | string | null
+    created_at?: DateTimeNullableFilter<"library_items"> | Date | string | null
+    updated_at?: DateTimeNullableFilter<"library_items"> | Date | string | null
+    record_status?: Enumrecord_statusNullableFilter<"library_items"> | $Enums.record_status | null
+    item_tran?: Item_tranListRelationFilter
+    item_tran_history?: Item_tran_historyListRelationFilter
     notifications?: NotificationsListRelationFilter
     user_wishlist?: User_wishlistListRelationFilter
-  }, "book_id">
+  }, "item_id">
 
-  export type booksOrderByWithAggregationInput = {
-    book_id?: SortOrder
+  export type library_itemsOrderByWithAggregationInput = {
+    item_id?: SortOrder
     title?: SortOrderInput | SortOrder
     author?: SortOrder
     isbn?: SortOrderInput | SortOrder
@@ -12156,32 +14549,50 @@ export namespace Prisma {
     image_url?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     librarian_id?: SortOrderInput | SortOrder
+    item_type?: SortOrder
+    location?: SortOrderInput | SortOrder
+    publisher?: SortOrderInput | SortOrder
+    language?: SortOrderInput | SortOrder
+    pages?: SortOrderInput | SortOrder
+    duration?: SortOrderInput | SortOrder
+    format?: SortOrderInput | SortOrder
+    subject?: SortOrderInput | SortOrder
+    keywords?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     updated_at?: SortOrderInput | SortOrder
     record_status?: SortOrderInput | SortOrder
-    _count?: booksCountOrderByAggregateInput
-    _avg?: booksAvgOrderByAggregateInput
-    _max?: booksMaxOrderByAggregateInput
-    _min?: booksMinOrderByAggregateInput
-    _sum?: booksSumOrderByAggregateInput
+    _count?: library_itemsCountOrderByAggregateInput
+    _avg?: library_itemsAvgOrderByAggregateInput
+    _max?: library_itemsMaxOrderByAggregateInput
+    _min?: library_itemsMinOrderByAggregateInput
+    _sum?: library_itemsSumOrderByAggregateInput
   }
 
-  export type booksScalarWhereWithAggregatesInput = {
-    AND?: booksScalarWhereWithAggregatesInput | booksScalarWhereWithAggregatesInput[]
-    OR?: booksScalarWhereWithAggregatesInput[]
-    NOT?: booksScalarWhereWithAggregatesInput | booksScalarWhereWithAggregatesInput[]
-    book_id?: IntWithAggregatesFilter<"books"> | number
-    title?: StringNullableWithAggregatesFilter<"books"> | string | null
-    author?: StringWithAggregatesFilter<"books"> | string
-    isbn?: StringNullableWithAggregatesFilter<"books"> | string | null
-    year?: IntNullableWithAggregatesFilter<"books"> | number | null
-    genre?: StringNullableWithAggregatesFilter<"books"> | string | null
-    image_url?: StringNullableWithAggregatesFilter<"books"> | string | null
-    description?: StringNullableWithAggregatesFilter<"books"> | string | null
-    librarian_id?: IntNullableWithAggregatesFilter<"books"> | number | null
-    created_at?: DateTimeNullableWithAggregatesFilter<"books"> | Date | string | null
-    updated_at?: DateTimeNullableWithAggregatesFilter<"books"> | Date | string | null
-    record_status?: Enumrecord_statusNullableWithAggregatesFilter<"books"> | $Enums.record_status | null
+  export type library_itemsScalarWhereWithAggregatesInput = {
+    AND?: library_itemsScalarWhereWithAggregatesInput | library_itemsScalarWhereWithAggregatesInput[]
+    OR?: library_itemsScalarWhereWithAggregatesInput[]
+    NOT?: library_itemsScalarWhereWithAggregatesInput | library_itemsScalarWhereWithAggregatesInput[]
+    item_id?: IntWithAggregatesFilter<"library_items"> | number
+    title?: StringNullableWithAggregatesFilter<"library_items"> | string | null
+    author?: StringWithAggregatesFilter<"library_items"> | string
+    isbn?: StringNullableWithAggregatesFilter<"library_items"> | string | null
+    year?: IntNullableWithAggregatesFilter<"library_items"> | number | null
+    genre?: StringNullableWithAggregatesFilter<"library_items"> | string | null
+    image_url?: StringNullableWithAggregatesFilter<"library_items"> | string | null
+    description?: StringNullableWithAggregatesFilter<"library_items"> | string | null
+    librarian_id?: IntNullableWithAggregatesFilter<"library_items"> | number | null
+    item_type?: Enumlibrary_item_typeWithAggregatesFilter<"library_items"> | $Enums.library_item_type
+    location?: StringNullableWithAggregatesFilter<"library_items"> | string | null
+    publisher?: StringNullableWithAggregatesFilter<"library_items"> | string | null
+    language?: StringNullableWithAggregatesFilter<"library_items"> | string | null
+    pages?: IntNullableWithAggregatesFilter<"library_items"> | number | null
+    duration?: IntNullableWithAggregatesFilter<"library_items"> | number | null
+    format?: StringNullableWithAggregatesFilter<"library_items"> | string | null
+    subject?: StringNullableWithAggregatesFilter<"library_items"> | string | null
+    keywords?: StringNullableWithAggregatesFilter<"library_items"> | string | null
+    created_at?: DateTimeNullableWithAggregatesFilter<"library_items"> | Date | string | null
+    updated_at?: DateTimeNullableWithAggregatesFilter<"library_items"> | Date | string | null
+    record_status?: Enumrecord_statusNullableWithAggregatesFilter<"library_items"> | $Enums.record_status | null
   }
 
   export type finesWhereInput = {
@@ -12190,27 +14601,27 @@ export namespace Prisma {
     NOT?: finesWhereInput | finesWhereInput[]
     fine_id?: IntFilter<"fines"> | number
     user_id?: IntNullableFilter<"fines"> | number | null
-    book_tran_history_id?: IntNullableFilter<"fines"> | number | null
+    item_tran_history_id?: IntNullableFilter<"fines"> | number | null
     amount?: DecimalNullableFilter<"fines"> | Decimal | DecimalJsLike | number | string | null
     reason?: StringNullableFilter<"fines"> | string | null
     status?: Enumfines_statusNullableFilter<"fines"> | $Enums.fines_status | null
     created_at?: DateTimeNullableFilter<"fines"> | Date | string | null
     paid_at?: DateTimeNullableFilter<"fines"> | Date | string | null
     users?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
-    book_tran_history?: XOR<Book_tran_historyNullableScalarRelationFilter, book_tran_historyWhereInput> | null
+    item_tran_history?: XOR<Item_tran_historyNullableScalarRelationFilter, item_tran_historyWhereInput> | null
   }
 
   export type finesOrderByWithRelationInput = {
     fine_id?: SortOrder
     user_id?: SortOrderInput | SortOrder
-    book_tran_history_id?: SortOrderInput | SortOrder
+    item_tran_history_id?: SortOrderInput | SortOrder
     amount?: SortOrderInput | SortOrder
     reason?: SortOrderInput | SortOrder
     status?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     paid_at?: SortOrderInput | SortOrder
     users?: usersOrderByWithRelationInput
-    book_tran_history?: book_tran_historyOrderByWithRelationInput
+    item_tran_history?: item_tran_historyOrderByWithRelationInput
     _relevance?: finesOrderByRelevanceInput
   }
 
@@ -12220,20 +14631,20 @@ export namespace Prisma {
     OR?: finesWhereInput[]
     NOT?: finesWhereInput | finesWhereInput[]
     user_id?: IntNullableFilter<"fines"> | number | null
-    book_tran_history_id?: IntNullableFilter<"fines"> | number | null
+    item_tran_history_id?: IntNullableFilter<"fines"> | number | null
     amount?: DecimalNullableFilter<"fines"> | Decimal | DecimalJsLike | number | string | null
     reason?: StringNullableFilter<"fines"> | string | null
     status?: Enumfines_statusNullableFilter<"fines"> | $Enums.fines_status | null
     created_at?: DateTimeNullableFilter<"fines"> | Date | string | null
     paid_at?: DateTimeNullableFilter<"fines"> | Date | string | null
     users?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
-    book_tran_history?: XOR<Book_tran_historyNullableScalarRelationFilter, book_tran_historyWhereInput> | null
+    item_tran_history?: XOR<Item_tran_historyNullableScalarRelationFilter, item_tran_historyWhereInput> | null
   }, "fine_id">
 
   export type finesOrderByWithAggregationInput = {
     fine_id?: SortOrder
     user_id?: SortOrderInput | SortOrder
-    book_tran_history_id?: SortOrderInput | SortOrder
+    item_tran_history_id?: SortOrderInput | SortOrder
     amount?: SortOrderInput | SortOrder
     reason?: SortOrderInput | SortOrder
     status?: SortOrderInput | SortOrder
@@ -12252,7 +14663,7 @@ export namespace Prisma {
     NOT?: finesScalarWhereWithAggregatesInput | finesScalarWhereWithAggregatesInput[]
     fine_id?: IntWithAggregatesFilter<"fines"> | number
     user_id?: IntNullableWithAggregatesFilter<"fines"> | number | null
-    book_tran_history_id?: IntNullableWithAggregatesFilter<"fines"> | number | null
+    item_tran_history_id?: IntNullableWithAggregatesFilter<"fines"> | number | null
     amount?: DecimalNullableWithAggregatesFilter<"fines"> | Decimal | DecimalJsLike | number | string | null
     reason?: StringNullableWithAggregatesFilter<"fines"> | string | null
     status?: Enumfines_statusNullableWithAggregatesFilter<"fines"> | $Enums.fines_status | null
@@ -12319,35 +14730,37 @@ export namespace Prisma {
     NOT?: notificationsWhereInput | notificationsWhereInput[]
     notification_id?: IntFilter<"notifications"> | number
     type?: Enumnotifications_typeNullableFilter<"notifications"> | $Enums.notifications_type | null
-    book_id?: IntNullableFilter<"notifications"> | number | null
+    item_id?: IntNullableFilter<"notifications"> | number | null
     from_user_id?: IntNullableFilter<"notifications"> | number | null
     to_user_id?: IntNullableFilter<"notifications"> | number | null
     tran_id?: IntNullableFilter<"notifications"> | number | null
+    reservation_id?: IntNullableFilter<"notifications"> | number | null
     status?: Enumnotifications_statusNullableFilter<"notifications"> | $Enums.notifications_status | null
     message?: StringNullableFilter<"notifications"> | string | null
     created_at?: DateTimeNullableFilter<"notifications"> | Date | string | null
     resolved_at?: DateTimeNullableFilter<"notifications"> | Date | string | null
-    books?: XOR<BooksNullableScalarRelationFilter, booksWhereInput> | null
+    library_items?: XOR<Library_itemsNullableScalarRelationFilter, library_itemsWhereInput> | null
     users_notifications_from_user_idTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
     users_notifications_to_user_idTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
-    book_tran?: XOR<Book_tranNullableScalarRelationFilter, book_tranWhereInput> | null
+    item_tran?: XOR<Item_tranNullableScalarRelationFilter, item_tranWhereInput> | null
   }
 
   export type notificationsOrderByWithRelationInput = {
     notification_id?: SortOrder
     type?: SortOrderInput | SortOrder
-    book_id?: SortOrderInput | SortOrder
+    item_id?: SortOrderInput | SortOrder
     from_user_id?: SortOrderInput | SortOrder
     to_user_id?: SortOrderInput | SortOrder
     tran_id?: SortOrderInput | SortOrder
+    reservation_id?: SortOrderInput | SortOrder
     status?: SortOrderInput | SortOrder
     message?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     resolved_at?: SortOrderInput | SortOrder
-    books?: booksOrderByWithRelationInput
+    library_items?: library_itemsOrderByWithRelationInput
     users_notifications_from_user_idTousers?: usersOrderByWithRelationInput
     users_notifications_to_user_idTousers?: usersOrderByWithRelationInput
-    book_tran?: book_tranOrderByWithRelationInput
+    item_tran?: item_tranOrderByWithRelationInput
     _relevance?: notificationsOrderByRelevanceInput
   }
 
@@ -12357,27 +14770,29 @@ export namespace Prisma {
     OR?: notificationsWhereInput[]
     NOT?: notificationsWhereInput | notificationsWhereInput[]
     type?: Enumnotifications_typeNullableFilter<"notifications"> | $Enums.notifications_type | null
-    book_id?: IntNullableFilter<"notifications"> | number | null
+    item_id?: IntNullableFilter<"notifications"> | number | null
     from_user_id?: IntNullableFilter<"notifications"> | number | null
     to_user_id?: IntNullableFilter<"notifications"> | number | null
     tran_id?: IntNullableFilter<"notifications"> | number | null
+    reservation_id?: IntNullableFilter<"notifications"> | number | null
     status?: Enumnotifications_statusNullableFilter<"notifications"> | $Enums.notifications_status | null
     message?: StringNullableFilter<"notifications"> | string | null
     created_at?: DateTimeNullableFilter<"notifications"> | Date | string | null
     resolved_at?: DateTimeNullableFilter<"notifications"> | Date | string | null
-    books?: XOR<BooksNullableScalarRelationFilter, booksWhereInput> | null
+    library_items?: XOR<Library_itemsNullableScalarRelationFilter, library_itemsWhereInput> | null
     users_notifications_from_user_idTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
     users_notifications_to_user_idTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
-    book_tran?: XOR<Book_tranNullableScalarRelationFilter, book_tranWhereInput> | null
+    item_tran?: XOR<Item_tranNullableScalarRelationFilter, item_tranWhereInput> | null
   }, "notification_id">
 
   export type notificationsOrderByWithAggregationInput = {
     notification_id?: SortOrder
     type?: SortOrderInput | SortOrder
-    book_id?: SortOrderInput | SortOrder
+    item_id?: SortOrderInput | SortOrder
     from_user_id?: SortOrderInput | SortOrder
     to_user_id?: SortOrderInput | SortOrder
     tran_id?: SortOrderInput | SortOrder
+    reservation_id?: SortOrderInput | SortOrder
     status?: SortOrderInput | SortOrder
     message?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
@@ -12395,10 +14810,11 @@ export namespace Prisma {
     NOT?: notificationsScalarWhereWithAggregatesInput | notificationsScalarWhereWithAggregatesInput[]
     notification_id?: IntWithAggregatesFilter<"notifications"> | number
     type?: Enumnotifications_typeNullableWithAggregatesFilter<"notifications"> | $Enums.notifications_type | null
-    book_id?: IntNullableWithAggregatesFilter<"notifications"> | number | null
+    item_id?: IntNullableWithAggregatesFilter<"notifications"> | number | null
     from_user_id?: IntNullableWithAggregatesFilter<"notifications"> | number | null
     to_user_id?: IntNullableWithAggregatesFilter<"notifications"> | number | null
     tran_id?: IntNullableWithAggregatesFilter<"notifications"> | number | null
+    reservation_id?: IntNullableWithAggregatesFilter<"notifications"> | number | null
     status?: Enumnotifications_statusNullableWithAggregatesFilter<"notifications"> | $Enums.notifications_status | null
     message?: StringNullableWithAggregatesFilter<"notifications"> | string | null
     created_at?: DateTimeNullableWithAggregatesFilter<"notifications"> | Date | string | null
@@ -12411,19 +14827,19 @@ export namespace Prisma {
     NOT?: user_wishlistWhereInput | user_wishlistWhereInput[]
     id?: IntFilter<"user_wishlist"> | number
     user_id?: IntNullableFilter<"user_wishlist"> | number | null
-    book_id?: IntNullableFilter<"user_wishlist"> | number | null
+    item_id?: IntNullableFilter<"user_wishlist"> | number | null
     created_at?: DateTimeNullableFilter<"user_wishlist"> | Date | string | null
     users?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
-    books?: XOR<BooksNullableScalarRelationFilter, booksWhereInput> | null
+    library_items?: XOR<Library_itemsNullableScalarRelationFilter, library_itemsWhereInput> | null
   }
 
   export type user_wishlistOrderByWithRelationInput = {
     id?: SortOrder
     user_id?: SortOrderInput | SortOrder
-    book_id?: SortOrderInput | SortOrder
+    item_id?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     users?: usersOrderByWithRelationInput
-    books?: booksOrderByWithRelationInput
+    library_items?: library_itemsOrderByWithRelationInput
   }
 
   export type user_wishlistWhereUniqueInput = Prisma.AtLeast<{
@@ -12432,16 +14848,16 @@ export namespace Prisma {
     OR?: user_wishlistWhereInput[]
     NOT?: user_wishlistWhereInput | user_wishlistWhereInput[]
     user_id?: IntNullableFilter<"user_wishlist"> | number | null
-    book_id?: IntNullableFilter<"user_wishlist"> | number | null
+    item_id?: IntNullableFilter<"user_wishlist"> | number | null
     created_at?: DateTimeNullableFilter<"user_wishlist"> | Date | string | null
     users?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
-    books?: XOR<BooksNullableScalarRelationFilter, booksWhereInput> | null
+    library_items?: XOR<Library_itemsNullableScalarRelationFilter, library_itemsWhereInput> | null
   }, "id">
 
   export type user_wishlistOrderByWithAggregationInput = {
     id?: SortOrder
     user_id?: SortOrderInput | SortOrder
-    book_id?: SortOrderInput | SortOrder
+    item_id?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     _count?: user_wishlistCountOrderByAggregateInput
     _avg?: user_wishlistAvgOrderByAggregateInput
@@ -12456,7 +14872,7 @@ export namespace Prisma {
     NOT?: user_wishlistScalarWhereWithAggregatesInput | user_wishlistScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"user_wishlist"> | number
     user_id?: IntNullableWithAggregatesFilter<"user_wishlist"> | number | null
-    book_id?: IntNullableWithAggregatesFilter<"user_wishlist"> | number | null
+    item_id?: IntNullableWithAggregatesFilter<"user_wishlist"> | number | null
     created_at?: DateTimeNullableWithAggregatesFilter<"user_wishlist"> | Date | string | null
   }
 
@@ -12477,14 +14893,15 @@ export namespace Prisma {
     birth_date?: DateTimeNullableFilter<"users"> | Date | string | null
     address?: StringNullableFilter<"users"> | string | null
     profile_image_url?: StringNullableFilter<"users"> | string | null
-    book_tran?: Book_tranListRelationFilter
-    book_tran_history_book_tran_history_requested_byTousers?: Book_tran_historyListRelationFilter
-    book_tran_history_book_tran_history_approved_byTousers?: Book_tran_historyListRelationFilter
+    item_tran?: Item_tranListRelationFilter
+    item_tran_history_item_tran_history_requested_byTousers?: Item_tran_historyListRelationFilter
+    item_tran_history_item_tran_history_approved_byTousers?: Item_tran_historyListRelationFilter
     fines?: FinesListRelationFilter
     logs?: LogsListRelationFilter
     notifications_notifications_from_user_idTousers?: NotificationsListRelationFilter
     notifications_notifications_to_user_idTousers?: NotificationsListRelationFilter
     user_wishlist?: User_wishlistListRelationFilter
+    library_cards?: Library_cardsListRelationFilter
   }
 
   export type usersOrderByWithRelationInput = {
@@ -12501,14 +14918,15 @@ export namespace Prisma {
     birth_date?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
     profile_image_url?: SortOrderInput | SortOrder
-    book_tran?: book_tranOrderByRelationAggregateInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyOrderByRelationAggregateInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyOrderByRelationAggregateInput
+    item_tran?: item_tranOrderByRelationAggregateInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyOrderByRelationAggregateInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyOrderByRelationAggregateInput
     fines?: finesOrderByRelationAggregateInput
     logs?: logsOrderByRelationAggregateInput
     notifications_notifications_from_user_idTousers?: notificationsOrderByRelationAggregateInput
     notifications_notifications_to_user_idTousers?: notificationsOrderByRelationAggregateInput
     user_wishlist?: user_wishlistOrderByRelationAggregateInput
+    library_cards?: library_cardsOrderByRelationAggregateInput
     _relevance?: usersOrderByRelevanceInput
   }
 
@@ -12529,14 +14947,15 @@ export namespace Prisma {
     birth_date?: DateTimeNullableFilter<"users"> | Date | string | null
     address?: StringNullableFilter<"users"> | string | null
     profile_image_url?: StringNullableFilter<"users"> | string | null
-    book_tran?: Book_tranListRelationFilter
-    book_tran_history_book_tran_history_requested_byTousers?: Book_tran_historyListRelationFilter
-    book_tran_history_book_tran_history_approved_byTousers?: Book_tran_historyListRelationFilter
+    item_tran?: Item_tranListRelationFilter
+    item_tran_history_item_tran_history_requested_byTousers?: Item_tran_historyListRelationFilter
+    item_tran_history_item_tran_history_approved_byTousers?: Item_tran_historyListRelationFilter
     fines?: FinesListRelationFilter
     logs?: LogsListRelationFilter
     notifications_notifications_from_user_idTousers?: NotificationsListRelationFilter
     notifications_notifications_to_user_idTousers?: NotificationsListRelationFilter
     user_wishlist?: User_wishlistListRelationFilter
+    library_cards?: Library_cardsListRelationFilter
   }, "user_id" | "email">
 
   export type usersOrderByWithAggregationInput = {
@@ -12639,85 +15058,203 @@ export namespace Prisma {
     created_at?: DateTimeNullableWithAggregatesFilter<"contact_us"> | Date | string | null
   }
 
-  export type book_tranCreateInput = {
-    status?: $Enums.book_tran_status | null
-    record_status?: $Enums.record_status | null
-    books?: booksCreateNestedOneWithoutBook_tranInput
-    users?: usersCreateNestedOneWithoutBook_tranInput
-    book_tran_history?: book_tran_historyCreateNestedManyWithoutBook_tranInput
-    notifications?: notificationsCreateNestedManyWithoutBook_tranInput
+  export type system_configWhereInput = {
+    AND?: system_configWhereInput | system_configWhereInput[]
+    OR?: system_configWhereInput[]
+    NOT?: system_configWhereInput | system_configWhereInput[]
+    config_id?: IntFilter<"system_config"> | number
+    config_key?: StringFilter<"system_config"> | string
+    config_value?: StringFilter<"system_config"> | string
+    description?: StringNullableFilter<"system_config"> | string | null
+    updated_at?: DateTimeFilter<"system_config"> | Date | string
   }
 
-  export type book_tranUncheckedCreateInput = {
+  export type system_configOrderByWithRelationInput = {
+    config_id?: SortOrder
+    config_key?: SortOrder
+    config_value?: SortOrder
+    description?: SortOrderInput | SortOrder
+    updated_at?: SortOrder
+    _relevance?: system_configOrderByRelevanceInput
+  }
+
+  export type system_configWhereUniqueInput = Prisma.AtLeast<{
+    config_id?: number
+    config_key?: string
+    AND?: system_configWhereInput | system_configWhereInput[]
+    OR?: system_configWhereInput[]
+    NOT?: system_configWhereInput | system_configWhereInput[]
+    config_value?: StringFilter<"system_config"> | string
+    description?: StringNullableFilter<"system_config"> | string | null
+    updated_at?: DateTimeFilter<"system_config"> | Date | string
+  }, "config_id" | "config_key">
+
+  export type system_configOrderByWithAggregationInput = {
+    config_id?: SortOrder
+    config_key?: SortOrder
+    config_value?: SortOrder
+    description?: SortOrderInput | SortOrder
+    updated_at?: SortOrder
+    _count?: system_configCountOrderByAggregateInput
+    _avg?: system_configAvgOrderByAggregateInput
+    _max?: system_configMaxOrderByAggregateInput
+    _min?: system_configMinOrderByAggregateInput
+    _sum?: system_configSumOrderByAggregateInput
+  }
+
+  export type system_configScalarWhereWithAggregatesInput = {
+    AND?: system_configScalarWhereWithAggregatesInput | system_configScalarWhereWithAggregatesInput[]
+    OR?: system_configScalarWhereWithAggregatesInput[]
+    NOT?: system_configScalarWhereWithAggregatesInput | system_configScalarWhereWithAggregatesInput[]
+    config_id?: IntWithAggregatesFilter<"system_config"> | number
+    config_key?: StringWithAggregatesFilter<"system_config"> | string
+    config_value?: StringWithAggregatesFilter<"system_config"> | string
+    description?: StringNullableWithAggregatesFilter<"system_config"> | string | null
+    updated_at?: DateTimeWithAggregatesFilter<"system_config"> | Date | string
+  }
+
+  export type library_cardsWhereInput = {
+    AND?: library_cardsWhereInput | library_cardsWhereInput[]
+    OR?: library_cardsWhereInput[]
+    NOT?: library_cardsWhereInput | library_cardsWhereInput[]
+    card_id?: IntFilter<"library_cards"> | number
+    user_id?: IntNullableFilter<"library_cards"> | number | null
+    card_number?: StringFilter<"library_cards"> | string
+    issued_at?: DateTimeFilter<"library_cards"> | Date | string
+    expires_at?: DateTimeNullableFilter<"library_cards"> | Date | string | null
+    status?: Enumcard_statusFilter<"library_cards"> | $Enums.card_status
+    users?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
+  }
+
+  export type library_cardsOrderByWithRelationInput = {
+    card_id?: SortOrder
+    user_id?: SortOrderInput | SortOrder
+    card_number?: SortOrder
+    issued_at?: SortOrder
+    expires_at?: SortOrderInput | SortOrder
+    status?: SortOrder
+    users?: usersOrderByWithRelationInput
+    _relevance?: library_cardsOrderByRelevanceInput
+  }
+
+  export type library_cardsWhereUniqueInput = Prisma.AtLeast<{
+    card_id?: number
+    card_number?: string
+    AND?: library_cardsWhereInput | library_cardsWhereInput[]
+    OR?: library_cardsWhereInput[]
+    NOT?: library_cardsWhereInput | library_cardsWhereInput[]
+    user_id?: IntNullableFilter<"library_cards"> | number | null
+    issued_at?: DateTimeFilter<"library_cards"> | Date | string
+    expires_at?: DateTimeNullableFilter<"library_cards"> | Date | string | null
+    status?: Enumcard_statusFilter<"library_cards"> | $Enums.card_status
+    users?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
+  }, "card_id" | "card_number">
+
+  export type library_cardsOrderByWithAggregationInput = {
+    card_id?: SortOrder
+    user_id?: SortOrderInput | SortOrder
+    card_number?: SortOrder
+    issued_at?: SortOrder
+    expires_at?: SortOrderInput | SortOrder
+    status?: SortOrder
+    _count?: library_cardsCountOrderByAggregateInput
+    _avg?: library_cardsAvgOrderByAggregateInput
+    _max?: library_cardsMaxOrderByAggregateInput
+    _min?: library_cardsMinOrderByAggregateInput
+    _sum?: library_cardsSumOrderByAggregateInput
+  }
+
+  export type library_cardsScalarWhereWithAggregatesInput = {
+    AND?: library_cardsScalarWhereWithAggregatesInput | library_cardsScalarWhereWithAggregatesInput[]
+    OR?: library_cardsScalarWhereWithAggregatesInput[]
+    NOT?: library_cardsScalarWhereWithAggregatesInput | library_cardsScalarWhereWithAggregatesInput[]
+    card_id?: IntWithAggregatesFilter<"library_cards"> | number
+    user_id?: IntNullableWithAggregatesFilter<"library_cards"> | number | null
+    card_number?: StringWithAggregatesFilter<"library_cards"> | string
+    issued_at?: DateTimeWithAggregatesFilter<"library_cards"> | Date | string
+    expires_at?: DateTimeNullableWithAggregatesFilter<"library_cards"> | Date | string | null
+    status?: Enumcard_statusWithAggregatesFilter<"library_cards"> | $Enums.card_status
+  }
+
+  export type item_tranCreateInput = {
+    status?: $Enums.item_tran_status | null
+    record_status?: $Enums.record_status | null
+    library_items?: library_itemsCreateNestedOneWithoutItem_tranInput
+    users?: usersCreateNestedOneWithoutItem_tranInput
+    item_tran_history?: item_tran_historyCreateNestedManyWithoutItem_tranInput
+    notifications?: notificationsCreateNestedManyWithoutItem_tranInput
+  }
+
+  export type item_tranUncheckedCreateInput = {
     tran_id?: number
-    book_id?: number | null
-    status?: $Enums.book_tran_status | null
+    item_id?: number | null
+    status?: $Enums.item_tran_status | null
     user_id?: number | null
     record_status?: $Enums.record_status | null
-    book_tran_history?: book_tran_historyUncheckedCreateNestedManyWithoutBook_tranInput
-    notifications?: notificationsUncheckedCreateNestedManyWithoutBook_tranInput
+    item_tran_history?: item_tran_historyUncheckedCreateNestedManyWithoutItem_tranInput
+    notifications?: notificationsUncheckedCreateNestedManyWithoutItem_tranInput
   }
 
-  export type book_tranUpdateInput = {
-    status?: NullableEnumbook_tran_statusFieldUpdateOperationsInput | $Enums.book_tran_status | null
+  export type item_tranUpdateInput = {
+    status?: NullableEnumitem_tran_statusFieldUpdateOperationsInput | $Enums.item_tran_status | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
-    books?: booksUpdateOneWithoutBook_tranNestedInput
-    users?: usersUpdateOneWithoutBook_tranNestedInput
-    book_tran_history?: book_tran_historyUpdateManyWithoutBook_tranNestedInput
-    notifications?: notificationsUpdateManyWithoutBook_tranNestedInput
+    library_items?: library_itemsUpdateOneWithoutItem_tranNestedInput
+    users?: usersUpdateOneWithoutItem_tranNestedInput
+    item_tran_history?: item_tran_historyUpdateManyWithoutItem_tranNestedInput
+    notifications?: notificationsUpdateManyWithoutItem_tranNestedInput
   }
 
-  export type book_tranUncheckedUpdateInput = {
+  export type item_tranUncheckedUpdateInput = {
     tran_id?: IntFieldUpdateOperationsInput | number
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: NullableEnumbook_tran_statusFieldUpdateOperationsInput | $Enums.book_tran_status | null
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: NullableEnumitem_tran_statusFieldUpdateOperationsInput | $Enums.item_tran_status | null
     user_id?: NullableIntFieldUpdateOperationsInput | number | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
-    book_tran_history?: book_tran_historyUncheckedUpdateManyWithoutBook_tranNestedInput
-    notifications?: notificationsUncheckedUpdateManyWithoutBook_tranNestedInput
+    item_tran_history?: item_tran_historyUncheckedUpdateManyWithoutItem_tranNestedInput
+    notifications?: notificationsUncheckedUpdateManyWithoutItem_tranNestedInput
   }
 
-  export type book_tranCreateManyInput = {
+  export type item_tranCreateManyInput = {
     tran_id?: number
-    book_id?: number | null
-    status?: $Enums.book_tran_status | null
+    item_id?: number | null
+    status?: $Enums.item_tran_status | null
     user_id?: number | null
     record_status?: $Enums.record_status | null
   }
 
-  export type book_tranUpdateManyMutationInput = {
-    status?: NullableEnumbook_tran_statusFieldUpdateOperationsInput | $Enums.book_tran_status | null
+  export type item_tranUpdateManyMutationInput = {
+    status?: NullableEnumitem_tran_statusFieldUpdateOperationsInput | $Enums.item_tran_status | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
   }
 
-  export type book_tranUncheckedUpdateManyInput = {
+  export type item_tranUncheckedUpdateManyInput = {
     tran_id?: IntFieldUpdateOperationsInput | number
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: NullableEnumbook_tran_statusFieldUpdateOperationsInput | $Enums.book_tran_status | null
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: NullableEnumitem_tran_statusFieldUpdateOperationsInput | $Enums.item_tran_status | null
     user_id?: NullableIntFieldUpdateOperationsInput | number | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
   }
 
-  export type book_tran_historyCreateInput = {
-    status?: $Enums.book_tran_history_status
+  export type item_tran_historyCreateInput = {
+    status?: $Enums.item_tran_history_status
     requested_at?: Date | string | null
     approved_at?: Date | string | null
     date_issued?: Date | string | null
     date_due?: Date | string | null
     date_returned?: Date | string | null
     remarks?: string | null
-    books?: booksCreateNestedOneWithoutBook_tran_historyInput
-    book_tran?: book_tranCreateNestedOneWithoutBook_tran_historyInput
-    users_book_tran_history_requested_byTousers?: usersCreateNestedOneWithoutBook_tran_history_book_tran_history_requested_byTousersInput
-    users_book_tran_history_approved_byTousers?: usersCreateNestedOneWithoutBook_tran_history_book_tran_history_approved_byTousersInput
-    fines?: finesCreateNestedManyWithoutBook_tran_historyInput
+    library_items?: library_itemsCreateNestedOneWithoutItem_tran_historyInput
+    item_tran?: item_tranCreateNestedOneWithoutItem_tran_historyInput
+    users_item_tran_history_requested_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_requested_byTousersInput
+    users_item_tran_history_approved_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_approved_byTousersInput
+    fines?: finesCreateNestedManyWithoutItem_tran_historyInput
   }
 
-  export type book_tran_historyUncheckedCreateInput = {
+  export type item_tran_historyUncheckedCreateInput = {
     id?: number
-    book_id?: number | null
+    item_id?: number | null
     tran_id?: number | null
-    status?: $Enums.book_tran_history_status
+    status?: $Enums.item_tran_history_status
     requested_by?: number | null
     approved_by?: number | null
     requested_at?: Date | string | null
@@ -12726,29 +15263,29 @@ export namespace Prisma {
     date_due?: Date | string | null
     date_returned?: Date | string | null
     remarks?: string | null
-    fines?: finesUncheckedCreateNestedManyWithoutBook_tran_historyInput
+    fines?: finesUncheckedCreateNestedManyWithoutItem_tran_historyInput
   }
 
-  export type book_tran_historyUpdateInput = {
-    status?: Enumbook_tran_history_statusFieldUpdateOperationsInput | $Enums.book_tran_history_status
+  export type item_tran_historyUpdateInput = {
+    status?: Enumitem_tran_history_statusFieldUpdateOperationsInput | $Enums.item_tran_history_status
     requested_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_issued?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_due?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_returned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    books?: booksUpdateOneWithoutBook_tran_historyNestedInput
-    book_tran?: book_tranUpdateOneWithoutBook_tran_historyNestedInput
-    users_book_tran_history_requested_byTousers?: usersUpdateOneWithoutBook_tran_history_book_tran_history_requested_byTousersNestedInput
-    users_book_tran_history_approved_byTousers?: usersUpdateOneWithoutBook_tran_history_book_tran_history_approved_byTousersNestedInput
-    fines?: finesUpdateManyWithoutBook_tran_historyNestedInput
+    library_items?: library_itemsUpdateOneWithoutItem_tran_historyNestedInput
+    item_tran?: item_tranUpdateOneWithoutItem_tran_historyNestedInput
+    users_item_tran_history_requested_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_requested_byTousersNestedInput
+    users_item_tran_history_approved_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_approved_byTousersNestedInput
+    fines?: finesUpdateManyWithoutItem_tran_historyNestedInput
   }
 
-  export type book_tran_historyUncheckedUpdateInput = {
+  export type item_tran_historyUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
     tran_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: Enumbook_tran_history_statusFieldUpdateOperationsInput | $Enums.book_tran_history_status
+    status?: Enumitem_tran_history_statusFieldUpdateOperationsInput | $Enums.item_tran_history_status
     requested_by?: NullableIntFieldUpdateOperationsInput | number | null
     approved_by?: NullableIntFieldUpdateOperationsInput | number | null
     requested_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12757,14 +15294,14 @@ export namespace Prisma {
     date_due?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_returned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    fines?: finesUncheckedUpdateManyWithoutBook_tran_historyNestedInput
+    fines?: finesUncheckedUpdateManyWithoutItem_tran_historyNestedInput
   }
 
-  export type book_tran_historyCreateManyInput = {
+  export type item_tran_historyCreateManyInput = {
     id?: number
-    book_id?: number | null
+    item_id?: number | null
     tran_id?: number | null
-    status?: $Enums.book_tran_history_status
+    status?: $Enums.item_tran_history_status
     requested_by?: number | null
     approved_by?: number | null
     requested_at?: Date | string | null
@@ -12775,8 +15312,8 @@ export namespace Prisma {
     remarks?: string | null
   }
 
-  export type book_tran_historyUpdateManyMutationInput = {
-    status?: Enumbook_tran_history_statusFieldUpdateOperationsInput | $Enums.book_tran_history_status
+  export type item_tran_historyUpdateManyMutationInput = {
+    status?: Enumitem_tran_history_statusFieldUpdateOperationsInput | $Enums.item_tran_history_status
     requested_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_issued?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12785,11 +15322,11 @@ export namespace Prisma {
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type book_tran_historyUncheckedUpdateManyInput = {
+  export type item_tran_historyUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
     tran_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: Enumbook_tran_history_statusFieldUpdateOperationsInput | $Enums.book_tran_history_status
+    status?: Enumitem_tran_history_statusFieldUpdateOperationsInput | $Enums.item_tran_history_status
     requested_by?: NullableIntFieldUpdateOperationsInput | number | null
     approved_by?: NullableIntFieldUpdateOperationsInput | number | null
     requested_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12800,7 +15337,7 @@ export namespace Prisma {
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type booksCreateInput = {
+  export type library_itemsCreateInput = {
     title?: string | null
     author: string
     isbn?: string | null
@@ -12809,17 +15346,26 @@ export namespace Prisma {
     image_url?: string | null
     description?: string | null
     librarian_id?: number | null
+    item_type?: $Enums.library_item_type
+    location?: string | null
+    publisher?: string | null
+    language?: string | null
+    pages?: number | null
+    duration?: number | null
+    format?: string | null
+    subject?: string | null
+    keywords?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     record_status?: $Enums.record_status | null
-    book_tran?: book_tranCreateNestedManyWithoutBooksInput
-    book_tran_history?: book_tran_historyCreateNestedManyWithoutBooksInput
-    notifications?: notificationsCreateNestedManyWithoutBooksInput
-    user_wishlist?: user_wishlistCreateNestedManyWithoutBooksInput
+    item_tran?: item_tranCreateNestedManyWithoutLibrary_itemsInput
+    item_tran_history?: item_tran_historyCreateNestedManyWithoutLibrary_itemsInput
+    notifications?: notificationsCreateNestedManyWithoutLibrary_itemsInput
+    user_wishlist?: user_wishlistCreateNestedManyWithoutLibrary_itemsInput
   }
 
-  export type booksUncheckedCreateInput = {
-    book_id?: number
+  export type library_itemsUncheckedCreateInput = {
+    item_id?: number
     title?: string | null
     author: string
     isbn?: string | null
@@ -12828,16 +15374,25 @@ export namespace Prisma {
     image_url?: string | null
     description?: string | null
     librarian_id?: number | null
+    item_type?: $Enums.library_item_type
+    location?: string | null
+    publisher?: string | null
+    language?: string | null
+    pages?: number | null
+    duration?: number | null
+    format?: string | null
+    subject?: string | null
+    keywords?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     record_status?: $Enums.record_status | null
-    book_tran?: book_tranUncheckedCreateNestedManyWithoutBooksInput
-    book_tran_history?: book_tran_historyUncheckedCreateNestedManyWithoutBooksInput
-    notifications?: notificationsUncheckedCreateNestedManyWithoutBooksInput
-    user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutBooksInput
+    item_tran?: item_tranUncheckedCreateNestedManyWithoutLibrary_itemsInput
+    item_tran_history?: item_tran_historyUncheckedCreateNestedManyWithoutLibrary_itemsInput
+    notifications?: notificationsUncheckedCreateNestedManyWithoutLibrary_itemsInput
+    user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutLibrary_itemsInput
   }
 
-  export type booksUpdateInput = {
+  export type library_itemsUpdateInput = {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     author?: StringFieldUpdateOperationsInput | string
     isbn?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12846,17 +15401,26 @@ export namespace Prisma {
     image_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     librarian_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_type?: Enumlibrary_item_typeFieldUpdateOperationsInput | $Enums.library_item_type
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    publisher?: NullableStringFieldUpdateOperationsInput | string | null
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: NullableIntFieldUpdateOperationsInput | number | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    format?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
-    book_tran?: book_tranUpdateManyWithoutBooksNestedInput
-    book_tran_history?: book_tran_historyUpdateManyWithoutBooksNestedInput
-    notifications?: notificationsUpdateManyWithoutBooksNestedInput
-    user_wishlist?: user_wishlistUpdateManyWithoutBooksNestedInput
+    item_tran?: item_tranUpdateManyWithoutLibrary_itemsNestedInput
+    item_tran_history?: item_tran_historyUpdateManyWithoutLibrary_itemsNestedInput
+    notifications?: notificationsUpdateManyWithoutLibrary_itemsNestedInput
+    user_wishlist?: user_wishlistUpdateManyWithoutLibrary_itemsNestedInput
   }
 
-  export type booksUncheckedUpdateInput = {
-    book_id?: IntFieldUpdateOperationsInput | number
+  export type library_itemsUncheckedUpdateInput = {
+    item_id?: IntFieldUpdateOperationsInput | number
     title?: NullableStringFieldUpdateOperationsInput | string | null
     author?: StringFieldUpdateOperationsInput | string
     isbn?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12865,17 +15429,26 @@ export namespace Prisma {
     image_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     librarian_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_type?: Enumlibrary_item_typeFieldUpdateOperationsInput | $Enums.library_item_type
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    publisher?: NullableStringFieldUpdateOperationsInput | string | null
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: NullableIntFieldUpdateOperationsInput | number | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    format?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
-    book_tran?: book_tranUncheckedUpdateManyWithoutBooksNestedInput
-    book_tran_history?: book_tran_historyUncheckedUpdateManyWithoutBooksNestedInput
-    notifications?: notificationsUncheckedUpdateManyWithoutBooksNestedInput
-    user_wishlist?: user_wishlistUncheckedUpdateManyWithoutBooksNestedInput
+    item_tran?: item_tranUncheckedUpdateManyWithoutLibrary_itemsNestedInput
+    item_tran_history?: item_tran_historyUncheckedUpdateManyWithoutLibrary_itemsNestedInput
+    notifications?: notificationsUncheckedUpdateManyWithoutLibrary_itemsNestedInput
+    user_wishlist?: user_wishlistUncheckedUpdateManyWithoutLibrary_itemsNestedInput
   }
 
-  export type booksCreateManyInput = {
-    book_id?: number
+  export type library_itemsCreateManyInput = {
+    item_id?: number
     title?: string | null
     author: string
     isbn?: string | null
@@ -12884,12 +15457,21 @@ export namespace Prisma {
     image_url?: string | null
     description?: string | null
     librarian_id?: number | null
+    item_type?: $Enums.library_item_type
+    location?: string | null
+    publisher?: string | null
+    language?: string | null
+    pages?: number | null
+    duration?: number | null
+    format?: string | null
+    subject?: string | null
+    keywords?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     record_status?: $Enums.record_status | null
   }
 
-  export type booksUpdateManyMutationInput = {
+  export type library_itemsUpdateManyMutationInput = {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     author?: StringFieldUpdateOperationsInput | string
     isbn?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12898,13 +15480,22 @@ export namespace Prisma {
     image_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     librarian_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_type?: Enumlibrary_item_typeFieldUpdateOperationsInput | $Enums.library_item_type
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    publisher?: NullableStringFieldUpdateOperationsInput | string | null
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: NullableIntFieldUpdateOperationsInput | number | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    format?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
   }
 
-  export type booksUncheckedUpdateManyInput = {
-    book_id?: IntFieldUpdateOperationsInput | number
+  export type library_itemsUncheckedUpdateManyInput = {
+    item_id?: IntFieldUpdateOperationsInput | number
     title?: NullableStringFieldUpdateOperationsInput | string | null
     author?: StringFieldUpdateOperationsInput | string
     isbn?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12913,6 +15504,15 @@ export namespace Prisma {
     image_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     librarian_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_type?: Enumlibrary_item_typeFieldUpdateOperationsInput | $Enums.library_item_type
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    publisher?: NullableStringFieldUpdateOperationsInput | string | null
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: NullableIntFieldUpdateOperationsInput | number | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    format?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
@@ -12925,13 +15525,13 @@ export namespace Prisma {
     created_at?: Date | string | null
     paid_at?: Date | string | null
     users?: usersCreateNestedOneWithoutFinesInput
-    book_tran_history?: book_tran_historyCreateNestedOneWithoutFinesInput
+    item_tran_history?: item_tran_historyCreateNestedOneWithoutFinesInput
   }
 
   export type finesUncheckedCreateInput = {
     fine_id?: number
     user_id?: number | null
-    book_tran_history_id?: number | null
+    item_tran_history_id?: number | null
     amount?: Decimal | DecimalJsLike | number | string | null
     reason?: string | null
     status?: $Enums.fines_status | null
@@ -12946,13 +15546,13 @@ export namespace Prisma {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paid_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: usersUpdateOneWithoutFinesNestedInput
-    book_tran_history?: book_tran_historyUpdateOneWithoutFinesNestedInput
+    item_tran_history?: item_tran_historyUpdateOneWithoutFinesNestedInput
   }
 
   export type finesUncheckedUpdateInput = {
     fine_id?: IntFieldUpdateOperationsInput | number
     user_id?: NullableIntFieldUpdateOperationsInput | number | null
-    book_tran_history_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_tran_history_id?: NullableIntFieldUpdateOperationsInput | number | null
     amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableEnumfines_statusFieldUpdateOperationsInput | $Enums.fines_status | null
@@ -12963,7 +15563,7 @@ export namespace Prisma {
   export type finesCreateManyInput = {
     fine_id?: number
     user_id?: number | null
-    book_tran_history_id?: number | null
+    item_tran_history_id?: number | null
     amount?: Decimal | DecimalJsLike | number | string | null
     reason?: string | null
     status?: $Enums.fines_status | null
@@ -12982,7 +15582,7 @@ export namespace Prisma {
   export type finesUncheckedUpdateManyInput = {
     fine_id?: IntFieldUpdateOperationsInput | number
     user_id?: NullableIntFieldUpdateOperationsInput | number | null
-    book_tran_history_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_tran_history_id?: NullableIntFieldUpdateOperationsInput | number | null
     amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableEnumfines_statusFieldUpdateOperationsInput | $Enums.fines_status | null
@@ -13037,23 +15637,25 @@ export namespace Prisma {
 
   export type notificationsCreateInput = {
     type?: $Enums.notifications_type | null
+    reservation_id?: number | null
     status?: $Enums.notifications_status | null
     message?: string | null
     created_at?: Date | string | null
     resolved_at?: Date | string | null
-    books?: booksCreateNestedOneWithoutNotificationsInput
+    library_items?: library_itemsCreateNestedOneWithoutNotificationsInput
     users_notifications_from_user_idTousers?: usersCreateNestedOneWithoutNotifications_notifications_from_user_idTousersInput
     users_notifications_to_user_idTousers?: usersCreateNestedOneWithoutNotifications_notifications_to_user_idTousersInput
-    book_tran?: book_tranCreateNestedOneWithoutNotificationsInput
+    item_tran?: item_tranCreateNestedOneWithoutNotificationsInput
   }
 
   export type notificationsUncheckedCreateInput = {
     notification_id?: number
     type?: $Enums.notifications_type | null
-    book_id?: number | null
+    item_id?: number | null
     from_user_id?: number | null
     to_user_id?: number | null
     tran_id?: number | null
+    reservation_id?: number | null
     status?: $Enums.notifications_status | null
     message?: string | null
     created_at?: Date | string | null
@@ -13062,23 +15664,25 @@ export namespace Prisma {
 
   export type notificationsUpdateInput = {
     type?: NullableEnumnotifications_typeFieldUpdateOperationsInput | $Enums.notifications_type | null
+    reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
     message?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     resolved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    books?: booksUpdateOneWithoutNotificationsNestedInput
+    library_items?: library_itemsUpdateOneWithoutNotificationsNestedInput
     users_notifications_from_user_idTousers?: usersUpdateOneWithoutNotifications_notifications_from_user_idTousersNestedInput
     users_notifications_to_user_idTousers?: usersUpdateOneWithoutNotifications_notifications_to_user_idTousersNestedInput
-    book_tran?: book_tranUpdateOneWithoutNotificationsNestedInput
+    item_tran?: item_tranUpdateOneWithoutNotificationsNestedInput
   }
 
   export type notificationsUncheckedUpdateInput = {
     notification_id?: IntFieldUpdateOperationsInput | number
     type?: NullableEnumnotifications_typeFieldUpdateOperationsInput | $Enums.notifications_type | null
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
     from_user_id?: NullableIntFieldUpdateOperationsInput | number | null
     to_user_id?: NullableIntFieldUpdateOperationsInput | number | null
     tran_id?: NullableIntFieldUpdateOperationsInput | number | null
+    reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
     message?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13088,10 +15692,11 @@ export namespace Prisma {
   export type notificationsCreateManyInput = {
     notification_id?: number
     type?: $Enums.notifications_type | null
-    book_id?: number | null
+    item_id?: number | null
     from_user_id?: number | null
     to_user_id?: number | null
     tran_id?: number | null
+    reservation_id?: number | null
     status?: $Enums.notifications_status | null
     message?: string | null
     created_at?: Date | string | null
@@ -13100,6 +15705,7 @@ export namespace Prisma {
 
   export type notificationsUpdateManyMutationInput = {
     type?: NullableEnumnotifications_typeFieldUpdateOperationsInput | $Enums.notifications_type | null
+    reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
     message?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13109,10 +15715,11 @@ export namespace Prisma {
   export type notificationsUncheckedUpdateManyInput = {
     notification_id?: IntFieldUpdateOperationsInput | number
     type?: NullableEnumnotifications_typeFieldUpdateOperationsInput | $Enums.notifications_type | null
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
     from_user_id?: NullableIntFieldUpdateOperationsInput | number | null
     to_user_id?: NullableIntFieldUpdateOperationsInput | number | null
     tran_id?: NullableIntFieldUpdateOperationsInput | number | null
+    reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
     message?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13122,33 +15729,33 @@ export namespace Prisma {
   export type user_wishlistCreateInput = {
     created_at?: Date | string | null
     users?: usersCreateNestedOneWithoutUser_wishlistInput
-    books?: booksCreateNestedOneWithoutUser_wishlistInput
+    library_items?: library_itemsCreateNestedOneWithoutUser_wishlistInput
   }
 
   export type user_wishlistUncheckedCreateInput = {
     id?: number
     user_id?: number | null
-    book_id?: number | null
+    item_id?: number | null
     created_at?: Date | string | null
   }
 
   export type user_wishlistUpdateInput = {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: usersUpdateOneWithoutUser_wishlistNestedInput
-    books?: booksUpdateOneWithoutUser_wishlistNestedInput
+    library_items?: library_itemsUpdateOneWithoutUser_wishlistNestedInput
   }
 
   export type user_wishlistUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     user_id?: NullableIntFieldUpdateOperationsInput | number | null
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type user_wishlistCreateManyInput = {
     id?: number
     user_id?: number | null
-    book_id?: number | null
+    item_id?: number | null
     created_at?: Date | string | null
   }
 
@@ -13159,7 +15766,7 @@ export namespace Prisma {
   export type user_wishlistUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     user_id?: NullableIntFieldUpdateOperationsInput | number | null
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
@@ -13176,14 +15783,15 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    book_tran?: book_tranCreateNestedManyWithoutUsersInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyCreateNestedManyWithoutUsers_book_tran_history_requested_byTousersInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyCreateNestedManyWithoutUsers_book_tran_history_approved_byTousersInput
+    item_tran?: item_tranCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
     fines?: finesCreateNestedManyWithoutUsersInput
     logs?: logsCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistCreateNestedManyWithoutUsersInput
+    library_cards?: library_cardsCreateNestedManyWithoutUsersInput
   }
 
   export type usersUncheckedCreateInput = {
@@ -13200,14 +15808,15 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    book_tran?: book_tranUncheckedCreateNestedManyWithoutUsersInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyUncheckedCreateNestedManyWithoutUsers_book_tran_history_requested_byTousersInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyUncheckedCreateNestedManyWithoutUsers_book_tran_history_approved_byTousersInput
+    item_tran?: item_tranUncheckedCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
     fines?: finesUncheckedCreateNestedManyWithoutUsersInput
     logs?: logsUncheckedCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutUsersInput
+    library_cards?: library_cardsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type usersUpdateInput = {
@@ -13223,14 +15832,15 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    book_tran?: book_tranUpdateManyWithoutUsersNestedInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyUpdateManyWithoutUsers_book_tran_history_requested_byTousersNestedInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyUpdateManyWithoutUsers_book_tran_history_approved_byTousersNestedInput
+    item_tran?: item_tranUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
     fines?: finesUpdateManyWithoutUsersNestedInput
     logs?: logsUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUpdateManyWithoutUsersNestedInput
+    library_cards?: library_cardsUpdateManyWithoutUsersNestedInput
   }
 
   export type usersUncheckedUpdateInput = {
@@ -13247,14 +15857,15 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    book_tran?: book_tranUncheckedUpdateManyWithoutUsersNestedInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyUncheckedUpdateManyWithoutUsers_book_tran_history_requested_byTousersNestedInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyUncheckedUpdateManyWithoutUsers_book_tran_history_approved_byTousersNestedInput
+    item_tran?: item_tranUncheckedUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
     fines?: finesUncheckedUpdateManyWithoutUsersNestedInput
     logs?: logsUncheckedUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
+    library_cards?: library_cardsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type usersCreateManyInput = {
@@ -13364,6 +15975,118 @@ export namespace Prisma {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type system_configCreateInput = {
+    config_key: string
+    config_value: string
+    description?: string | null
+    updated_at?: Date | string
+  }
+
+  export type system_configUncheckedCreateInput = {
+    config_id?: number
+    config_key: string
+    config_value: string
+    description?: string | null
+    updated_at?: Date | string
+  }
+
+  export type system_configUpdateInput = {
+    config_key?: StringFieldUpdateOperationsInput | string
+    config_value?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type system_configUncheckedUpdateInput = {
+    config_id?: IntFieldUpdateOperationsInput | number
+    config_key?: StringFieldUpdateOperationsInput | string
+    config_value?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type system_configCreateManyInput = {
+    config_id?: number
+    config_key: string
+    config_value: string
+    description?: string | null
+    updated_at?: Date | string
+  }
+
+  export type system_configUpdateManyMutationInput = {
+    config_key?: StringFieldUpdateOperationsInput | string
+    config_value?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type system_configUncheckedUpdateManyInput = {
+    config_id?: IntFieldUpdateOperationsInput | number
+    config_key?: StringFieldUpdateOperationsInput | string
+    config_value?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type library_cardsCreateInput = {
+    card_number: string
+    issued_at?: Date | string
+    expires_at?: Date | string | null
+    status?: $Enums.card_status
+    users?: usersCreateNestedOneWithoutLibrary_cardsInput
+  }
+
+  export type library_cardsUncheckedCreateInput = {
+    card_id?: number
+    user_id?: number | null
+    card_number: string
+    issued_at?: Date | string
+    expires_at?: Date | string | null
+    status?: $Enums.card_status
+  }
+
+  export type library_cardsUpdateInput = {
+    card_number?: StringFieldUpdateOperationsInput | string
+    issued_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: Enumcard_statusFieldUpdateOperationsInput | $Enums.card_status
+    users?: usersUpdateOneWithoutLibrary_cardsNestedInput
+  }
+
+  export type library_cardsUncheckedUpdateInput = {
+    card_id?: IntFieldUpdateOperationsInput | number
+    user_id?: NullableIntFieldUpdateOperationsInput | number | null
+    card_number?: StringFieldUpdateOperationsInput | string
+    issued_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: Enumcard_statusFieldUpdateOperationsInput | $Enums.card_status
+  }
+
+  export type library_cardsCreateManyInput = {
+    card_id?: number
+    user_id?: number | null
+    card_number: string
+    issued_at?: Date | string
+    expires_at?: Date | string | null
+    status?: $Enums.card_status
+  }
+
+  export type library_cardsUpdateManyMutationInput = {
+    card_number?: StringFieldUpdateOperationsInput | string
+    issued_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: Enumcard_statusFieldUpdateOperationsInput | $Enums.card_status
+  }
+
+  export type library_cardsUncheckedUpdateManyInput = {
+    card_id?: IntFieldUpdateOperationsInput | number
+    user_id?: NullableIntFieldUpdateOperationsInput | number | null
+    card_number?: StringFieldUpdateOperationsInput | string
+    issued_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: Enumcard_statusFieldUpdateOperationsInput | $Enums.card_status
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[]
@@ -13386,11 +16109,11 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type Enumbook_tran_statusNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.book_tran_status | Enumbook_tran_statusFieldRefInput<$PrismaModel> | null
-    in?: $Enums.book_tran_status[] | null
-    notIn?: $Enums.book_tran_status[] | null
-    not?: NestedEnumbook_tran_statusNullableFilter<$PrismaModel> | $Enums.book_tran_status | null
+  export type Enumitem_tran_statusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.item_tran_status | Enumitem_tran_statusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.item_tran_status[] | null
+    notIn?: $Enums.item_tran_status[] | null
+    not?: NestedEnumitem_tran_statusNullableFilter<$PrismaModel> | $Enums.item_tran_status | null
   }
 
   export type Enumrecord_statusNullableFilter<$PrismaModel = never> = {
@@ -13400,9 +16123,9 @@ export namespace Prisma {
     not?: NestedEnumrecord_statusNullableFilter<$PrismaModel> | $Enums.record_status | null
   }
 
-  export type BooksNullableScalarRelationFilter = {
-    is?: booksWhereInput | null
-    isNot?: booksWhereInput | null
+  export type Library_itemsNullableScalarRelationFilter = {
+    is?: library_itemsWhereInput | null
+    isNot?: library_itemsWhereInput | null
   }
 
   export type UsersNullableScalarRelationFilter = {
@@ -13410,10 +16133,10 @@ export namespace Prisma {
     isNot?: usersWhereInput | null
   }
 
-  export type Book_tran_historyListRelationFilter = {
-    every?: book_tran_historyWhereInput
-    some?: book_tran_historyWhereInput
-    none?: book_tran_historyWhereInput
+  export type Item_tran_historyListRelationFilter = {
+    every?: item_tran_historyWhereInput
+    some?: item_tran_historyWhereInput
+    none?: item_tran_historyWhereInput
   }
 
   export type NotificationsListRelationFilter = {
@@ -13427,7 +16150,7 @@ export namespace Prisma {
     nulls?: NullsOrder
   }
 
-  export type book_tran_historyOrderByRelationAggregateInput = {
+  export type item_tran_historyOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -13435,39 +16158,39 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type book_tranCountOrderByAggregateInput = {
+  export type item_tranCountOrderByAggregateInput = {
     tran_id?: SortOrder
-    book_id?: SortOrder
+    item_id?: SortOrder
     status?: SortOrder
     user_id?: SortOrder
     record_status?: SortOrder
   }
 
-  export type book_tranAvgOrderByAggregateInput = {
+  export type item_tranAvgOrderByAggregateInput = {
     tran_id?: SortOrder
-    book_id?: SortOrder
+    item_id?: SortOrder
     user_id?: SortOrder
   }
 
-  export type book_tranMaxOrderByAggregateInput = {
+  export type item_tranMaxOrderByAggregateInput = {
     tran_id?: SortOrder
-    book_id?: SortOrder
+    item_id?: SortOrder
     status?: SortOrder
     user_id?: SortOrder
     record_status?: SortOrder
   }
 
-  export type book_tranMinOrderByAggregateInput = {
+  export type item_tranMinOrderByAggregateInput = {
     tran_id?: SortOrder
-    book_id?: SortOrder
+    item_id?: SortOrder
     status?: SortOrder
     user_id?: SortOrder
     record_status?: SortOrder
   }
 
-  export type book_tranSumOrderByAggregateInput = {
+  export type item_tranSumOrderByAggregateInput = {
     tran_id?: SortOrder
-    book_id?: SortOrder
+    item_id?: SortOrder
     user_id?: SortOrder
   }
 
@@ -13503,14 +16226,14 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
-  export type Enumbook_tran_statusNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.book_tran_status | Enumbook_tran_statusFieldRefInput<$PrismaModel> | null
-    in?: $Enums.book_tran_status[] | null
-    notIn?: $Enums.book_tran_status[] | null
-    not?: NestedEnumbook_tran_statusNullableWithAggregatesFilter<$PrismaModel> | $Enums.book_tran_status | null
+  export type Enumitem_tran_statusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.item_tran_status | Enumitem_tran_statusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.item_tran_status[] | null
+    notIn?: $Enums.item_tran_status[] | null
+    not?: NestedEnumitem_tran_statusNullableWithAggregatesFilter<$PrismaModel> | $Enums.item_tran_status | null
     _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumbook_tran_statusNullableFilter<$PrismaModel>
-    _max?: NestedEnumbook_tran_statusNullableFilter<$PrismaModel>
+    _min?: NestedEnumitem_tran_statusNullableFilter<$PrismaModel>
+    _max?: NestedEnumitem_tran_statusNullableFilter<$PrismaModel>
   }
 
   export type Enumrecord_statusNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -13523,11 +16246,11 @@ export namespace Prisma {
     _max?: NestedEnumrecord_statusNullableFilter<$PrismaModel>
   }
 
-  export type Enumbook_tran_history_statusFilter<$PrismaModel = never> = {
-    equals?: $Enums.book_tran_history_status | Enumbook_tran_history_statusFieldRefInput<$PrismaModel>
-    in?: $Enums.book_tran_history_status[]
-    notIn?: $Enums.book_tran_history_status[]
-    not?: NestedEnumbook_tran_history_statusFilter<$PrismaModel> | $Enums.book_tran_history_status
+  export type Enumitem_tran_history_statusFilter<$PrismaModel = never> = {
+    equals?: $Enums.item_tran_history_status | Enumitem_tran_history_statusFieldRefInput<$PrismaModel>
+    in?: $Enums.item_tran_history_status[]
+    notIn?: $Enums.item_tran_history_status[]
+    not?: NestedEnumitem_tran_history_statusFilter<$PrismaModel> | $Enums.item_tran_history_status
   }
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
@@ -13556,9 +16279,9 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type Book_tranNullableScalarRelationFilter = {
-    is?: book_tranWhereInput | null
-    isNot?: book_tranWhereInput | null
+  export type Item_tranNullableScalarRelationFilter = {
+    is?: item_tranWhereInput | null
+    isNot?: item_tranWhereInput | null
   }
 
   export type FinesListRelationFilter = {
@@ -13571,15 +16294,15 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type book_tran_historyOrderByRelevanceInput = {
-    fields: book_tran_historyOrderByRelevanceFieldEnum | book_tran_historyOrderByRelevanceFieldEnum[]
+  export type item_tran_historyOrderByRelevanceInput = {
+    fields: item_tran_historyOrderByRelevanceFieldEnum | item_tran_historyOrderByRelevanceFieldEnum[]
     sort: SortOrder
     search: string
   }
 
-  export type book_tran_historyCountOrderByAggregateInput = {
+  export type item_tran_historyCountOrderByAggregateInput = {
     id?: SortOrder
-    book_id?: SortOrder
+    item_id?: SortOrder
     tran_id?: SortOrder
     status?: SortOrder
     requested_by?: SortOrder
@@ -13592,32 +16315,17 @@ export namespace Prisma {
     remarks?: SortOrder
   }
 
-  export type book_tran_historyAvgOrderByAggregateInput = {
+  export type item_tran_historyAvgOrderByAggregateInput = {
     id?: SortOrder
-    book_id?: SortOrder
+    item_id?: SortOrder
     tran_id?: SortOrder
     requested_by?: SortOrder
     approved_by?: SortOrder
   }
 
-  export type book_tran_historyMaxOrderByAggregateInput = {
+  export type item_tran_historyMaxOrderByAggregateInput = {
     id?: SortOrder
-    book_id?: SortOrder
-    tran_id?: SortOrder
-    status?: SortOrder
-    requested_by?: SortOrder
-    approved_by?: SortOrder
-    requested_at?: SortOrder
-    approved_at?: SortOrder
-    date_issued?: SortOrder
-    date_due?: SortOrder
-    date_returned?: SortOrder
-    remarks?: SortOrder
-  }
-
-  export type book_tran_historyMinOrderByAggregateInput = {
-    id?: SortOrder
-    book_id?: SortOrder
+    item_id?: SortOrder
     tran_id?: SortOrder
     status?: SortOrder
     requested_by?: SortOrder
@@ -13630,22 +16338,37 @@ export namespace Prisma {
     remarks?: SortOrder
   }
 
-  export type book_tran_historySumOrderByAggregateInput = {
+  export type item_tran_historyMinOrderByAggregateInput = {
     id?: SortOrder
-    book_id?: SortOrder
+    item_id?: SortOrder
+    tran_id?: SortOrder
+    status?: SortOrder
+    requested_by?: SortOrder
+    approved_by?: SortOrder
+    requested_at?: SortOrder
+    approved_at?: SortOrder
+    date_issued?: SortOrder
+    date_due?: SortOrder
+    date_returned?: SortOrder
+    remarks?: SortOrder
+  }
+
+  export type item_tran_historySumOrderByAggregateInput = {
+    id?: SortOrder
+    item_id?: SortOrder
     tran_id?: SortOrder
     requested_by?: SortOrder
     approved_by?: SortOrder
   }
 
-  export type Enumbook_tran_history_statusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.book_tran_history_status | Enumbook_tran_history_statusFieldRefInput<$PrismaModel>
-    in?: $Enums.book_tran_history_status[]
-    notIn?: $Enums.book_tran_history_status[]
-    not?: NestedEnumbook_tran_history_statusWithAggregatesFilter<$PrismaModel> | $Enums.book_tran_history_status
+  export type Enumitem_tran_history_statusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.item_tran_history_status | Enumitem_tran_history_statusFieldRefInput<$PrismaModel>
+    in?: $Enums.item_tran_history_status[]
+    notIn?: $Enums.item_tran_history_status[]
+    not?: NestedEnumitem_tran_history_statusWithAggregatesFilter<$PrismaModel> | $Enums.item_tran_history_status
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumbook_tran_history_statusFilter<$PrismaModel>
-    _max?: NestedEnumbook_tran_history_statusFilter<$PrismaModel>
+    _min?: NestedEnumitem_tran_history_statusFilter<$PrismaModel>
+    _max?: NestedEnumitem_tran_history_statusFilter<$PrismaModel>
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -13695,10 +16418,17 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
-  export type Book_tranListRelationFilter = {
-    every?: book_tranWhereInput
-    some?: book_tranWhereInput
-    none?: book_tranWhereInput
+  export type Enumlibrary_item_typeFilter<$PrismaModel = never> = {
+    equals?: $Enums.library_item_type | Enumlibrary_item_typeFieldRefInput<$PrismaModel>
+    in?: $Enums.library_item_type[]
+    notIn?: $Enums.library_item_type[]
+    not?: NestedEnumlibrary_item_typeFilter<$PrismaModel> | $Enums.library_item_type
+  }
+
+  export type Item_tranListRelationFilter = {
+    every?: item_tranWhereInput
+    some?: item_tranWhereInput
+    none?: item_tranWhereInput
   }
 
   export type User_wishlistListRelationFilter = {
@@ -13707,7 +16437,7 @@ export namespace Prisma {
     none?: user_wishlistWhereInput
   }
 
-  export type book_tranOrderByRelationAggregateInput = {
+  export type item_tranOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -13715,14 +16445,14 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type booksOrderByRelevanceInput = {
-    fields: booksOrderByRelevanceFieldEnum | booksOrderByRelevanceFieldEnum[]
+  export type library_itemsOrderByRelevanceInput = {
+    fields: library_itemsOrderByRelevanceFieldEnum | library_itemsOrderByRelevanceFieldEnum[]
     sort: SortOrder
     search: string
   }
 
-  export type booksCountOrderByAggregateInput = {
-    book_id?: SortOrder
+  export type library_itemsCountOrderByAggregateInput = {
+    item_id?: SortOrder
     title?: SortOrder
     author?: SortOrder
     isbn?: SortOrder
@@ -13731,19 +16461,30 @@ export namespace Prisma {
     image_url?: SortOrder
     description?: SortOrder
     librarian_id?: SortOrder
+    item_type?: SortOrder
+    location?: SortOrder
+    publisher?: SortOrder
+    language?: SortOrder
+    pages?: SortOrder
+    duration?: SortOrder
+    format?: SortOrder
+    subject?: SortOrder
+    keywords?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     record_status?: SortOrder
   }
 
-  export type booksAvgOrderByAggregateInput = {
-    book_id?: SortOrder
+  export type library_itemsAvgOrderByAggregateInput = {
+    item_id?: SortOrder
     year?: SortOrder
     librarian_id?: SortOrder
+    pages?: SortOrder
+    duration?: SortOrder
   }
 
-  export type booksMaxOrderByAggregateInput = {
-    book_id?: SortOrder
+  export type library_itemsMaxOrderByAggregateInput = {
+    item_id?: SortOrder
     title?: SortOrder
     author?: SortOrder
     isbn?: SortOrder
@@ -13752,13 +16493,22 @@ export namespace Prisma {
     image_url?: SortOrder
     description?: SortOrder
     librarian_id?: SortOrder
+    item_type?: SortOrder
+    location?: SortOrder
+    publisher?: SortOrder
+    language?: SortOrder
+    pages?: SortOrder
+    duration?: SortOrder
+    format?: SortOrder
+    subject?: SortOrder
+    keywords?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     record_status?: SortOrder
   }
 
-  export type booksMinOrderByAggregateInput = {
-    book_id?: SortOrder
+  export type library_itemsMinOrderByAggregateInput = {
+    item_id?: SortOrder
     title?: SortOrder
     author?: SortOrder
     isbn?: SortOrder
@@ -13767,15 +16517,26 @@ export namespace Prisma {
     image_url?: SortOrder
     description?: SortOrder
     librarian_id?: SortOrder
+    item_type?: SortOrder
+    location?: SortOrder
+    publisher?: SortOrder
+    language?: SortOrder
+    pages?: SortOrder
+    duration?: SortOrder
+    format?: SortOrder
+    subject?: SortOrder
+    keywords?: SortOrder
     created_at?: SortOrder
     updated_at?: SortOrder
     record_status?: SortOrder
   }
 
-  export type booksSumOrderByAggregateInput = {
-    book_id?: SortOrder
+  export type library_itemsSumOrderByAggregateInput = {
+    item_id?: SortOrder
     year?: SortOrder
     librarian_id?: SortOrder
+    pages?: SortOrder
+    duration?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -13796,6 +16557,16 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type Enumlibrary_item_typeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.library_item_type | Enumlibrary_item_typeFieldRefInput<$PrismaModel>
+    in?: $Enums.library_item_type[]
+    notIn?: $Enums.library_item_type[]
+    not?: NestedEnumlibrary_item_typeWithAggregatesFilter<$PrismaModel> | $Enums.library_item_type
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumlibrary_item_typeFilter<$PrismaModel>
+    _max?: NestedEnumlibrary_item_typeFilter<$PrismaModel>
+  }
+
   export type DecimalNullableFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | null
@@ -13814,9 +16585,9 @@ export namespace Prisma {
     not?: NestedEnumfines_statusNullableFilter<$PrismaModel> | $Enums.fines_status | null
   }
 
-  export type Book_tran_historyNullableScalarRelationFilter = {
-    is?: book_tran_historyWhereInput | null
-    isNot?: book_tran_historyWhereInput | null
+  export type Item_tran_historyNullableScalarRelationFilter = {
+    is?: item_tran_historyWhereInput | null
+    isNot?: item_tran_historyWhereInput | null
   }
 
   export type finesOrderByRelevanceInput = {
@@ -13828,7 +16599,7 @@ export namespace Prisma {
   export type finesCountOrderByAggregateInput = {
     fine_id?: SortOrder
     user_id?: SortOrder
-    book_tran_history_id?: SortOrder
+    item_tran_history_id?: SortOrder
     amount?: SortOrder
     reason?: SortOrder
     status?: SortOrder
@@ -13839,14 +16610,14 @@ export namespace Prisma {
   export type finesAvgOrderByAggregateInput = {
     fine_id?: SortOrder
     user_id?: SortOrder
-    book_tran_history_id?: SortOrder
+    item_tran_history_id?: SortOrder
     amount?: SortOrder
   }
 
   export type finesMaxOrderByAggregateInput = {
     fine_id?: SortOrder
     user_id?: SortOrder
-    book_tran_history_id?: SortOrder
+    item_tran_history_id?: SortOrder
     amount?: SortOrder
     reason?: SortOrder
     status?: SortOrder
@@ -13857,7 +16628,7 @@ export namespace Prisma {
   export type finesMinOrderByAggregateInput = {
     fine_id?: SortOrder
     user_id?: SortOrder
-    book_tran_history_id?: SortOrder
+    item_tran_history_id?: SortOrder
     amount?: SortOrder
     reason?: SortOrder
     status?: SortOrder
@@ -13868,7 +16639,7 @@ export namespace Prisma {
   export type finesSumOrderByAggregateInput = {
     fine_id?: SortOrder
     user_id?: SortOrder
-    book_tran_history_id?: SortOrder
+    item_tran_history_id?: SortOrder
     amount?: SortOrder
   }
 
@@ -13963,10 +16734,11 @@ export namespace Prisma {
   export type notificationsCountOrderByAggregateInput = {
     notification_id?: SortOrder
     type?: SortOrder
-    book_id?: SortOrder
+    item_id?: SortOrder
     from_user_id?: SortOrder
     to_user_id?: SortOrder
     tran_id?: SortOrder
+    reservation_id?: SortOrder
     status?: SortOrder
     message?: SortOrder
     created_at?: SortOrder
@@ -13975,19 +16747,21 @@ export namespace Prisma {
 
   export type notificationsAvgOrderByAggregateInput = {
     notification_id?: SortOrder
-    book_id?: SortOrder
+    item_id?: SortOrder
     from_user_id?: SortOrder
     to_user_id?: SortOrder
     tran_id?: SortOrder
+    reservation_id?: SortOrder
   }
 
   export type notificationsMaxOrderByAggregateInput = {
     notification_id?: SortOrder
     type?: SortOrder
-    book_id?: SortOrder
+    item_id?: SortOrder
     from_user_id?: SortOrder
     to_user_id?: SortOrder
     tran_id?: SortOrder
+    reservation_id?: SortOrder
     status?: SortOrder
     message?: SortOrder
     created_at?: SortOrder
@@ -13997,10 +16771,11 @@ export namespace Prisma {
   export type notificationsMinOrderByAggregateInput = {
     notification_id?: SortOrder
     type?: SortOrder
-    book_id?: SortOrder
+    item_id?: SortOrder
     from_user_id?: SortOrder
     to_user_id?: SortOrder
     tran_id?: SortOrder
+    reservation_id?: SortOrder
     status?: SortOrder
     message?: SortOrder
     created_at?: SortOrder
@@ -14009,10 +16784,11 @@ export namespace Prisma {
 
   export type notificationsSumOrderByAggregateInput = {
     notification_id?: SortOrder
-    book_id?: SortOrder
+    item_id?: SortOrder
     from_user_id?: SortOrder
     to_user_id?: SortOrder
     tran_id?: SortOrder
+    reservation_id?: SortOrder
   }
 
   export type Enumnotifications_typeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -14038,34 +16814,34 @@ export namespace Prisma {
   export type user_wishlistCountOrderByAggregateInput = {
     id?: SortOrder
     user_id?: SortOrder
-    book_id?: SortOrder
+    item_id?: SortOrder
     created_at?: SortOrder
   }
 
   export type user_wishlistAvgOrderByAggregateInput = {
     id?: SortOrder
     user_id?: SortOrder
-    book_id?: SortOrder
+    item_id?: SortOrder
   }
 
   export type user_wishlistMaxOrderByAggregateInput = {
     id?: SortOrder
     user_id?: SortOrder
-    book_id?: SortOrder
+    item_id?: SortOrder
     created_at?: SortOrder
   }
 
   export type user_wishlistMinOrderByAggregateInput = {
     id?: SortOrder
     user_id?: SortOrder
-    book_id?: SortOrder
+    item_id?: SortOrder
     created_at?: SortOrder
   }
 
   export type user_wishlistSumOrderByAggregateInput = {
     id?: SortOrder
     user_id?: SortOrder
-    book_id?: SortOrder
+    item_id?: SortOrder
   }
 
   export type Enumusers_roleNullableFilter<$PrismaModel = never> = {
@@ -14095,7 +16871,17 @@ export namespace Prisma {
     none?: logsWhereInput
   }
 
+  export type Library_cardsListRelationFilter = {
+    every?: library_cardsWhereInput
+    some?: library_cardsWhereInput
+    none?: library_cardsWhereInput
+  }
+
   export type logsOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type library_cardsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -14232,99 +17018,222 @@ export namespace Prisma {
     id?: SortOrder
   }
 
-  export type booksCreateNestedOneWithoutBook_tranInput = {
-    create?: XOR<booksCreateWithoutBook_tranInput, booksUncheckedCreateWithoutBook_tranInput>
-    connectOrCreate?: booksCreateOrConnectWithoutBook_tranInput
-    connect?: booksWhereUniqueInput
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type usersCreateNestedOneWithoutBook_tranInput = {
-    create?: XOR<usersCreateWithoutBook_tranInput, usersUncheckedCreateWithoutBook_tranInput>
-    connectOrCreate?: usersCreateOrConnectWithoutBook_tranInput
+  export type system_configOrderByRelevanceInput = {
+    fields: system_configOrderByRelevanceFieldEnum | system_configOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type system_configCountOrderByAggregateInput = {
+    config_id?: SortOrder
+    config_key?: SortOrder
+    config_value?: SortOrder
+    description?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type system_configAvgOrderByAggregateInput = {
+    config_id?: SortOrder
+  }
+
+  export type system_configMaxOrderByAggregateInput = {
+    config_id?: SortOrder
+    config_key?: SortOrder
+    config_value?: SortOrder
+    description?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type system_configMinOrderByAggregateInput = {
+    config_id?: SortOrder
+    config_key?: SortOrder
+    config_value?: SortOrder
+    description?: SortOrder
+    updated_at?: SortOrder
+  }
+
+  export type system_configSumOrderByAggregateInput = {
+    config_id?: SortOrder
+  }
+
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type Enumcard_statusFilter<$PrismaModel = never> = {
+    equals?: $Enums.card_status | Enumcard_statusFieldRefInput<$PrismaModel>
+    in?: $Enums.card_status[]
+    notIn?: $Enums.card_status[]
+    not?: NestedEnumcard_statusFilter<$PrismaModel> | $Enums.card_status
+  }
+
+  export type library_cardsOrderByRelevanceInput = {
+    fields: library_cardsOrderByRelevanceFieldEnum | library_cardsOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type library_cardsCountOrderByAggregateInput = {
+    card_id?: SortOrder
+    user_id?: SortOrder
+    card_number?: SortOrder
+    issued_at?: SortOrder
+    expires_at?: SortOrder
+    status?: SortOrder
+  }
+
+  export type library_cardsAvgOrderByAggregateInput = {
+    card_id?: SortOrder
+    user_id?: SortOrder
+  }
+
+  export type library_cardsMaxOrderByAggregateInput = {
+    card_id?: SortOrder
+    user_id?: SortOrder
+    card_number?: SortOrder
+    issued_at?: SortOrder
+    expires_at?: SortOrder
+    status?: SortOrder
+  }
+
+  export type library_cardsMinOrderByAggregateInput = {
+    card_id?: SortOrder
+    user_id?: SortOrder
+    card_number?: SortOrder
+    issued_at?: SortOrder
+    expires_at?: SortOrder
+    status?: SortOrder
+  }
+
+  export type library_cardsSumOrderByAggregateInput = {
+    card_id?: SortOrder
+    user_id?: SortOrder
+  }
+
+  export type Enumcard_statusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.card_status | Enumcard_statusFieldRefInput<$PrismaModel>
+    in?: $Enums.card_status[]
+    notIn?: $Enums.card_status[]
+    not?: NestedEnumcard_statusWithAggregatesFilter<$PrismaModel> | $Enums.card_status
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumcard_statusFilter<$PrismaModel>
+    _max?: NestedEnumcard_statusFilter<$PrismaModel>
+  }
+
+  export type library_itemsCreateNestedOneWithoutItem_tranInput = {
+    create?: XOR<library_itemsCreateWithoutItem_tranInput, library_itemsUncheckedCreateWithoutItem_tranInput>
+    connectOrCreate?: library_itemsCreateOrConnectWithoutItem_tranInput
+    connect?: library_itemsWhereUniqueInput
+  }
+
+  export type usersCreateNestedOneWithoutItem_tranInput = {
+    create?: XOR<usersCreateWithoutItem_tranInput, usersUncheckedCreateWithoutItem_tranInput>
+    connectOrCreate?: usersCreateOrConnectWithoutItem_tranInput
     connect?: usersWhereUniqueInput
   }
 
-  export type book_tran_historyCreateNestedManyWithoutBook_tranInput = {
-    create?: XOR<book_tran_historyCreateWithoutBook_tranInput, book_tran_historyUncheckedCreateWithoutBook_tranInput> | book_tran_historyCreateWithoutBook_tranInput[] | book_tran_historyUncheckedCreateWithoutBook_tranInput[]
-    connectOrCreate?: book_tran_historyCreateOrConnectWithoutBook_tranInput | book_tran_historyCreateOrConnectWithoutBook_tranInput[]
-    createMany?: book_tran_historyCreateManyBook_tranInputEnvelope
-    connect?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
+  export type item_tran_historyCreateNestedManyWithoutItem_tranInput = {
+    create?: XOR<item_tran_historyCreateWithoutItem_tranInput, item_tran_historyUncheckedCreateWithoutItem_tranInput> | item_tran_historyCreateWithoutItem_tranInput[] | item_tran_historyUncheckedCreateWithoutItem_tranInput[]
+    connectOrCreate?: item_tran_historyCreateOrConnectWithoutItem_tranInput | item_tran_historyCreateOrConnectWithoutItem_tranInput[]
+    createMany?: item_tran_historyCreateManyItem_tranInputEnvelope
+    connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
   }
 
-  export type notificationsCreateNestedManyWithoutBook_tranInput = {
-    create?: XOR<notificationsCreateWithoutBook_tranInput, notificationsUncheckedCreateWithoutBook_tranInput> | notificationsCreateWithoutBook_tranInput[] | notificationsUncheckedCreateWithoutBook_tranInput[]
-    connectOrCreate?: notificationsCreateOrConnectWithoutBook_tranInput | notificationsCreateOrConnectWithoutBook_tranInput[]
-    createMany?: notificationsCreateManyBook_tranInputEnvelope
+  export type notificationsCreateNestedManyWithoutItem_tranInput = {
+    create?: XOR<notificationsCreateWithoutItem_tranInput, notificationsUncheckedCreateWithoutItem_tranInput> | notificationsCreateWithoutItem_tranInput[] | notificationsUncheckedCreateWithoutItem_tranInput[]
+    connectOrCreate?: notificationsCreateOrConnectWithoutItem_tranInput | notificationsCreateOrConnectWithoutItem_tranInput[]
+    createMany?: notificationsCreateManyItem_tranInputEnvelope
     connect?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
   }
 
-  export type book_tran_historyUncheckedCreateNestedManyWithoutBook_tranInput = {
-    create?: XOR<book_tran_historyCreateWithoutBook_tranInput, book_tran_historyUncheckedCreateWithoutBook_tranInput> | book_tran_historyCreateWithoutBook_tranInput[] | book_tran_historyUncheckedCreateWithoutBook_tranInput[]
-    connectOrCreate?: book_tran_historyCreateOrConnectWithoutBook_tranInput | book_tran_historyCreateOrConnectWithoutBook_tranInput[]
-    createMany?: book_tran_historyCreateManyBook_tranInputEnvelope
-    connect?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
+  export type item_tran_historyUncheckedCreateNestedManyWithoutItem_tranInput = {
+    create?: XOR<item_tran_historyCreateWithoutItem_tranInput, item_tran_historyUncheckedCreateWithoutItem_tranInput> | item_tran_historyCreateWithoutItem_tranInput[] | item_tran_historyUncheckedCreateWithoutItem_tranInput[]
+    connectOrCreate?: item_tran_historyCreateOrConnectWithoutItem_tranInput | item_tran_historyCreateOrConnectWithoutItem_tranInput[]
+    createMany?: item_tran_historyCreateManyItem_tranInputEnvelope
+    connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
   }
 
-  export type notificationsUncheckedCreateNestedManyWithoutBook_tranInput = {
-    create?: XOR<notificationsCreateWithoutBook_tranInput, notificationsUncheckedCreateWithoutBook_tranInput> | notificationsCreateWithoutBook_tranInput[] | notificationsUncheckedCreateWithoutBook_tranInput[]
-    connectOrCreate?: notificationsCreateOrConnectWithoutBook_tranInput | notificationsCreateOrConnectWithoutBook_tranInput[]
-    createMany?: notificationsCreateManyBook_tranInputEnvelope
+  export type notificationsUncheckedCreateNestedManyWithoutItem_tranInput = {
+    create?: XOR<notificationsCreateWithoutItem_tranInput, notificationsUncheckedCreateWithoutItem_tranInput> | notificationsCreateWithoutItem_tranInput[] | notificationsUncheckedCreateWithoutItem_tranInput[]
+    connectOrCreate?: notificationsCreateOrConnectWithoutItem_tranInput | notificationsCreateOrConnectWithoutItem_tranInput[]
+    createMany?: notificationsCreateManyItem_tranInputEnvelope
     connect?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
   }
 
-  export type NullableEnumbook_tran_statusFieldUpdateOperationsInput = {
-    set?: $Enums.book_tran_status | null
+  export type NullableEnumitem_tran_statusFieldUpdateOperationsInput = {
+    set?: $Enums.item_tran_status | null
   }
 
   export type NullableEnumrecord_statusFieldUpdateOperationsInput = {
     set?: $Enums.record_status | null
   }
 
-  export type booksUpdateOneWithoutBook_tranNestedInput = {
-    create?: XOR<booksCreateWithoutBook_tranInput, booksUncheckedCreateWithoutBook_tranInput>
-    connectOrCreate?: booksCreateOrConnectWithoutBook_tranInput
-    upsert?: booksUpsertWithoutBook_tranInput
-    disconnect?: booksWhereInput | boolean
-    delete?: booksWhereInput | boolean
-    connect?: booksWhereUniqueInput
-    update?: XOR<XOR<booksUpdateToOneWithWhereWithoutBook_tranInput, booksUpdateWithoutBook_tranInput>, booksUncheckedUpdateWithoutBook_tranInput>
+  export type library_itemsUpdateOneWithoutItem_tranNestedInput = {
+    create?: XOR<library_itemsCreateWithoutItem_tranInput, library_itemsUncheckedCreateWithoutItem_tranInput>
+    connectOrCreate?: library_itemsCreateOrConnectWithoutItem_tranInput
+    upsert?: library_itemsUpsertWithoutItem_tranInput
+    disconnect?: library_itemsWhereInput | boolean
+    delete?: library_itemsWhereInput | boolean
+    connect?: library_itemsWhereUniqueInput
+    update?: XOR<XOR<library_itemsUpdateToOneWithWhereWithoutItem_tranInput, library_itemsUpdateWithoutItem_tranInput>, library_itemsUncheckedUpdateWithoutItem_tranInput>
   }
 
-  export type usersUpdateOneWithoutBook_tranNestedInput = {
-    create?: XOR<usersCreateWithoutBook_tranInput, usersUncheckedCreateWithoutBook_tranInput>
-    connectOrCreate?: usersCreateOrConnectWithoutBook_tranInput
-    upsert?: usersUpsertWithoutBook_tranInput
+  export type usersUpdateOneWithoutItem_tranNestedInput = {
+    create?: XOR<usersCreateWithoutItem_tranInput, usersUncheckedCreateWithoutItem_tranInput>
+    connectOrCreate?: usersCreateOrConnectWithoutItem_tranInput
+    upsert?: usersUpsertWithoutItem_tranInput
     disconnect?: usersWhereInput | boolean
     delete?: usersWhereInput | boolean
     connect?: usersWhereUniqueInput
-    update?: XOR<XOR<usersUpdateToOneWithWhereWithoutBook_tranInput, usersUpdateWithoutBook_tranInput>, usersUncheckedUpdateWithoutBook_tranInput>
+    update?: XOR<XOR<usersUpdateToOneWithWhereWithoutItem_tranInput, usersUpdateWithoutItem_tranInput>, usersUncheckedUpdateWithoutItem_tranInput>
   }
 
-  export type book_tran_historyUpdateManyWithoutBook_tranNestedInput = {
-    create?: XOR<book_tran_historyCreateWithoutBook_tranInput, book_tran_historyUncheckedCreateWithoutBook_tranInput> | book_tran_historyCreateWithoutBook_tranInput[] | book_tran_historyUncheckedCreateWithoutBook_tranInput[]
-    connectOrCreate?: book_tran_historyCreateOrConnectWithoutBook_tranInput | book_tran_historyCreateOrConnectWithoutBook_tranInput[]
-    upsert?: book_tran_historyUpsertWithWhereUniqueWithoutBook_tranInput | book_tran_historyUpsertWithWhereUniqueWithoutBook_tranInput[]
-    createMany?: book_tran_historyCreateManyBook_tranInputEnvelope
-    set?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    disconnect?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    delete?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    connect?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    update?: book_tran_historyUpdateWithWhereUniqueWithoutBook_tranInput | book_tran_historyUpdateWithWhereUniqueWithoutBook_tranInput[]
-    updateMany?: book_tran_historyUpdateManyWithWhereWithoutBook_tranInput | book_tran_historyUpdateManyWithWhereWithoutBook_tranInput[]
-    deleteMany?: book_tran_historyScalarWhereInput | book_tran_historyScalarWhereInput[]
+  export type item_tran_historyUpdateManyWithoutItem_tranNestedInput = {
+    create?: XOR<item_tran_historyCreateWithoutItem_tranInput, item_tran_historyUncheckedCreateWithoutItem_tranInput> | item_tran_historyCreateWithoutItem_tranInput[] | item_tran_historyUncheckedCreateWithoutItem_tranInput[]
+    connectOrCreate?: item_tran_historyCreateOrConnectWithoutItem_tranInput | item_tran_historyCreateOrConnectWithoutItem_tranInput[]
+    upsert?: item_tran_historyUpsertWithWhereUniqueWithoutItem_tranInput | item_tran_historyUpsertWithWhereUniqueWithoutItem_tranInput[]
+    createMany?: item_tran_historyCreateManyItem_tranInputEnvelope
+    set?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    disconnect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    delete?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    update?: item_tran_historyUpdateWithWhereUniqueWithoutItem_tranInput | item_tran_historyUpdateWithWhereUniqueWithoutItem_tranInput[]
+    updateMany?: item_tran_historyUpdateManyWithWhereWithoutItem_tranInput | item_tran_historyUpdateManyWithWhereWithoutItem_tranInput[]
+    deleteMany?: item_tran_historyScalarWhereInput | item_tran_historyScalarWhereInput[]
   }
 
-  export type notificationsUpdateManyWithoutBook_tranNestedInput = {
-    create?: XOR<notificationsCreateWithoutBook_tranInput, notificationsUncheckedCreateWithoutBook_tranInput> | notificationsCreateWithoutBook_tranInput[] | notificationsUncheckedCreateWithoutBook_tranInput[]
-    connectOrCreate?: notificationsCreateOrConnectWithoutBook_tranInput | notificationsCreateOrConnectWithoutBook_tranInput[]
-    upsert?: notificationsUpsertWithWhereUniqueWithoutBook_tranInput | notificationsUpsertWithWhereUniqueWithoutBook_tranInput[]
-    createMany?: notificationsCreateManyBook_tranInputEnvelope
+  export type notificationsUpdateManyWithoutItem_tranNestedInput = {
+    create?: XOR<notificationsCreateWithoutItem_tranInput, notificationsUncheckedCreateWithoutItem_tranInput> | notificationsCreateWithoutItem_tranInput[] | notificationsUncheckedCreateWithoutItem_tranInput[]
+    connectOrCreate?: notificationsCreateOrConnectWithoutItem_tranInput | notificationsCreateOrConnectWithoutItem_tranInput[]
+    upsert?: notificationsUpsertWithWhereUniqueWithoutItem_tranInput | notificationsUpsertWithWhereUniqueWithoutItem_tranInput[]
+    createMany?: notificationsCreateManyItem_tranInputEnvelope
     set?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
     disconnect?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
     delete?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
     connect?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
-    update?: notificationsUpdateWithWhereUniqueWithoutBook_tranInput | notificationsUpdateWithWhereUniqueWithoutBook_tranInput[]
-    updateMany?: notificationsUpdateManyWithWhereWithoutBook_tranInput | notificationsUpdateManyWithWhereWithoutBook_tranInput[]
+    update?: notificationsUpdateWithWhereUniqueWithoutItem_tranInput | notificationsUpdateWithWhereUniqueWithoutItem_tranInput[]
+    updateMany?: notificationsUpdateManyWithWhereWithoutItem_tranInput | notificationsUpdateManyWithWhereWithoutItem_tranInput[]
     deleteMany?: notificationsScalarWhereInput | notificationsScalarWhereInput[]
   }
 
@@ -14344,74 +17253,74 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type book_tran_historyUncheckedUpdateManyWithoutBook_tranNestedInput = {
-    create?: XOR<book_tran_historyCreateWithoutBook_tranInput, book_tran_historyUncheckedCreateWithoutBook_tranInput> | book_tran_historyCreateWithoutBook_tranInput[] | book_tran_historyUncheckedCreateWithoutBook_tranInput[]
-    connectOrCreate?: book_tran_historyCreateOrConnectWithoutBook_tranInput | book_tran_historyCreateOrConnectWithoutBook_tranInput[]
-    upsert?: book_tran_historyUpsertWithWhereUniqueWithoutBook_tranInput | book_tran_historyUpsertWithWhereUniqueWithoutBook_tranInput[]
-    createMany?: book_tran_historyCreateManyBook_tranInputEnvelope
-    set?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    disconnect?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    delete?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    connect?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    update?: book_tran_historyUpdateWithWhereUniqueWithoutBook_tranInput | book_tran_historyUpdateWithWhereUniqueWithoutBook_tranInput[]
-    updateMany?: book_tran_historyUpdateManyWithWhereWithoutBook_tranInput | book_tran_historyUpdateManyWithWhereWithoutBook_tranInput[]
-    deleteMany?: book_tran_historyScalarWhereInput | book_tran_historyScalarWhereInput[]
+  export type item_tran_historyUncheckedUpdateManyWithoutItem_tranNestedInput = {
+    create?: XOR<item_tran_historyCreateWithoutItem_tranInput, item_tran_historyUncheckedCreateWithoutItem_tranInput> | item_tran_historyCreateWithoutItem_tranInput[] | item_tran_historyUncheckedCreateWithoutItem_tranInput[]
+    connectOrCreate?: item_tran_historyCreateOrConnectWithoutItem_tranInput | item_tran_historyCreateOrConnectWithoutItem_tranInput[]
+    upsert?: item_tran_historyUpsertWithWhereUniqueWithoutItem_tranInput | item_tran_historyUpsertWithWhereUniqueWithoutItem_tranInput[]
+    createMany?: item_tran_historyCreateManyItem_tranInputEnvelope
+    set?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    disconnect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    delete?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    update?: item_tran_historyUpdateWithWhereUniqueWithoutItem_tranInput | item_tran_historyUpdateWithWhereUniqueWithoutItem_tranInput[]
+    updateMany?: item_tran_historyUpdateManyWithWhereWithoutItem_tranInput | item_tran_historyUpdateManyWithWhereWithoutItem_tranInput[]
+    deleteMany?: item_tran_historyScalarWhereInput | item_tran_historyScalarWhereInput[]
   }
 
-  export type notificationsUncheckedUpdateManyWithoutBook_tranNestedInput = {
-    create?: XOR<notificationsCreateWithoutBook_tranInput, notificationsUncheckedCreateWithoutBook_tranInput> | notificationsCreateWithoutBook_tranInput[] | notificationsUncheckedCreateWithoutBook_tranInput[]
-    connectOrCreate?: notificationsCreateOrConnectWithoutBook_tranInput | notificationsCreateOrConnectWithoutBook_tranInput[]
-    upsert?: notificationsUpsertWithWhereUniqueWithoutBook_tranInput | notificationsUpsertWithWhereUniqueWithoutBook_tranInput[]
-    createMany?: notificationsCreateManyBook_tranInputEnvelope
+  export type notificationsUncheckedUpdateManyWithoutItem_tranNestedInput = {
+    create?: XOR<notificationsCreateWithoutItem_tranInput, notificationsUncheckedCreateWithoutItem_tranInput> | notificationsCreateWithoutItem_tranInput[] | notificationsUncheckedCreateWithoutItem_tranInput[]
+    connectOrCreate?: notificationsCreateOrConnectWithoutItem_tranInput | notificationsCreateOrConnectWithoutItem_tranInput[]
+    upsert?: notificationsUpsertWithWhereUniqueWithoutItem_tranInput | notificationsUpsertWithWhereUniqueWithoutItem_tranInput[]
+    createMany?: notificationsCreateManyItem_tranInputEnvelope
     set?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
     disconnect?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
     delete?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
     connect?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
-    update?: notificationsUpdateWithWhereUniqueWithoutBook_tranInput | notificationsUpdateWithWhereUniqueWithoutBook_tranInput[]
-    updateMany?: notificationsUpdateManyWithWhereWithoutBook_tranInput | notificationsUpdateManyWithWhereWithoutBook_tranInput[]
+    update?: notificationsUpdateWithWhereUniqueWithoutItem_tranInput | notificationsUpdateWithWhereUniqueWithoutItem_tranInput[]
+    updateMany?: notificationsUpdateManyWithWhereWithoutItem_tranInput | notificationsUpdateManyWithWhereWithoutItem_tranInput[]
     deleteMany?: notificationsScalarWhereInput | notificationsScalarWhereInput[]
   }
 
-  export type booksCreateNestedOneWithoutBook_tran_historyInput = {
-    create?: XOR<booksCreateWithoutBook_tran_historyInput, booksUncheckedCreateWithoutBook_tran_historyInput>
-    connectOrCreate?: booksCreateOrConnectWithoutBook_tran_historyInput
-    connect?: booksWhereUniqueInput
+  export type library_itemsCreateNestedOneWithoutItem_tran_historyInput = {
+    create?: XOR<library_itemsCreateWithoutItem_tran_historyInput, library_itemsUncheckedCreateWithoutItem_tran_historyInput>
+    connectOrCreate?: library_itemsCreateOrConnectWithoutItem_tran_historyInput
+    connect?: library_itemsWhereUniqueInput
   }
 
-  export type book_tranCreateNestedOneWithoutBook_tran_historyInput = {
-    create?: XOR<book_tranCreateWithoutBook_tran_historyInput, book_tranUncheckedCreateWithoutBook_tran_historyInput>
-    connectOrCreate?: book_tranCreateOrConnectWithoutBook_tran_historyInput
-    connect?: book_tranWhereUniqueInput
+  export type item_tranCreateNestedOneWithoutItem_tran_historyInput = {
+    create?: XOR<item_tranCreateWithoutItem_tran_historyInput, item_tranUncheckedCreateWithoutItem_tran_historyInput>
+    connectOrCreate?: item_tranCreateOrConnectWithoutItem_tran_historyInput
+    connect?: item_tranWhereUniqueInput
   }
 
-  export type usersCreateNestedOneWithoutBook_tran_history_book_tran_history_requested_byTousersInput = {
-    create?: XOR<usersCreateWithoutBook_tran_history_book_tran_history_requested_byTousersInput, usersUncheckedCreateWithoutBook_tran_history_book_tran_history_requested_byTousersInput>
-    connectOrCreate?: usersCreateOrConnectWithoutBook_tran_history_book_tran_history_requested_byTousersInput
+  export type usersCreateNestedOneWithoutItem_tran_history_item_tran_history_requested_byTousersInput = {
+    create?: XOR<usersCreateWithoutItem_tran_history_item_tran_history_requested_byTousersInput, usersUncheckedCreateWithoutItem_tran_history_item_tran_history_requested_byTousersInput>
+    connectOrCreate?: usersCreateOrConnectWithoutItem_tran_history_item_tran_history_requested_byTousersInput
     connect?: usersWhereUniqueInput
   }
 
-  export type usersCreateNestedOneWithoutBook_tran_history_book_tran_history_approved_byTousersInput = {
-    create?: XOR<usersCreateWithoutBook_tran_history_book_tran_history_approved_byTousersInput, usersUncheckedCreateWithoutBook_tran_history_book_tran_history_approved_byTousersInput>
-    connectOrCreate?: usersCreateOrConnectWithoutBook_tran_history_book_tran_history_approved_byTousersInput
+  export type usersCreateNestedOneWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
+    create?: XOR<usersCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput, usersUncheckedCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput>
+    connectOrCreate?: usersCreateOrConnectWithoutItem_tran_history_item_tran_history_approved_byTousersInput
     connect?: usersWhereUniqueInput
   }
 
-  export type finesCreateNestedManyWithoutBook_tran_historyInput = {
-    create?: XOR<finesCreateWithoutBook_tran_historyInput, finesUncheckedCreateWithoutBook_tran_historyInput> | finesCreateWithoutBook_tran_historyInput[] | finesUncheckedCreateWithoutBook_tran_historyInput[]
-    connectOrCreate?: finesCreateOrConnectWithoutBook_tran_historyInput | finesCreateOrConnectWithoutBook_tran_historyInput[]
-    createMany?: finesCreateManyBook_tran_historyInputEnvelope
+  export type finesCreateNestedManyWithoutItem_tran_historyInput = {
+    create?: XOR<finesCreateWithoutItem_tran_historyInput, finesUncheckedCreateWithoutItem_tran_historyInput> | finesCreateWithoutItem_tran_historyInput[] | finesUncheckedCreateWithoutItem_tran_historyInput[]
+    connectOrCreate?: finesCreateOrConnectWithoutItem_tran_historyInput | finesCreateOrConnectWithoutItem_tran_historyInput[]
+    createMany?: finesCreateManyItem_tran_historyInputEnvelope
     connect?: finesWhereUniqueInput | finesWhereUniqueInput[]
   }
 
-  export type finesUncheckedCreateNestedManyWithoutBook_tran_historyInput = {
-    create?: XOR<finesCreateWithoutBook_tran_historyInput, finesUncheckedCreateWithoutBook_tran_historyInput> | finesCreateWithoutBook_tran_historyInput[] | finesUncheckedCreateWithoutBook_tran_historyInput[]
-    connectOrCreate?: finesCreateOrConnectWithoutBook_tran_historyInput | finesCreateOrConnectWithoutBook_tran_historyInput[]
-    createMany?: finesCreateManyBook_tran_historyInputEnvelope
+  export type finesUncheckedCreateNestedManyWithoutItem_tran_historyInput = {
+    create?: XOR<finesCreateWithoutItem_tran_historyInput, finesUncheckedCreateWithoutItem_tran_historyInput> | finesCreateWithoutItem_tran_historyInput[] | finesUncheckedCreateWithoutItem_tran_historyInput[]
+    connectOrCreate?: finesCreateOrConnectWithoutItem_tran_historyInput | finesCreateOrConnectWithoutItem_tran_historyInput[]
+    createMany?: finesCreateManyItem_tran_historyInputEnvelope
     connect?: finesWhereUniqueInput | finesWhereUniqueInput[]
   }
 
-  export type Enumbook_tran_history_statusFieldUpdateOperationsInput = {
-    set?: $Enums.book_tran_history_status
+  export type Enumitem_tran_history_statusFieldUpdateOperationsInput = {
+    set?: $Enums.item_tran_history_status
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -14422,127 +17331,127 @@ export namespace Prisma {
     set?: string | null
   }
 
-  export type booksUpdateOneWithoutBook_tran_historyNestedInput = {
-    create?: XOR<booksCreateWithoutBook_tran_historyInput, booksUncheckedCreateWithoutBook_tran_historyInput>
-    connectOrCreate?: booksCreateOrConnectWithoutBook_tran_historyInput
-    upsert?: booksUpsertWithoutBook_tran_historyInput
-    disconnect?: booksWhereInput | boolean
-    delete?: booksWhereInput | boolean
-    connect?: booksWhereUniqueInput
-    update?: XOR<XOR<booksUpdateToOneWithWhereWithoutBook_tran_historyInput, booksUpdateWithoutBook_tran_historyInput>, booksUncheckedUpdateWithoutBook_tran_historyInput>
+  export type library_itemsUpdateOneWithoutItem_tran_historyNestedInput = {
+    create?: XOR<library_itemsCreateWithoutItem_tran_historyInput, library_itemsUncheckedCreateWithoutItem_tran_historyInput>
+    connectOrCreate?: library_itemsCreateOrConnectWithoutItem_tran_historyInput
+    upsert?: library_itemsUpsertWithoutItem_tran_historyInput
+    disconnect?: library_itemsWhereInput | boolean
+    delete?: library_itemsWhereInput | boolean
+    connect?: library_itemsWhereUniqueInput
+    update?: XOR<XOR<library_itemsUpdateToOneWithWhereWithoutItem_tran_historyInput, library_itemsUpdateWithoutItem_tran_historyInput>, library_itemsUncheckedUpdateWithoutItem_tran_historyInput>
   }
 
-  export type book_tranUpdateOneWithoutBook_tran_historyNestedInput = {
-    create?: XOR<book_tranCreateWithoutBook_tran_historyInput, book_tranUncheckedCreateWithoutBook_tran_historyInput>
-    connectOrCreate?: book_tranCreateOrConnectWithoutBook_tran_historyInput
-    upsert?: book_tranUpsertWithoutBook_tran_historyInput
-    disconnect?: book_tranWhereInput | boolean
-    delete?: book_tranWhereInput | boolean
-    connect?: book_tranWhereUniqueInput
-    update?: XOR<XOR<book_tranUpdateToOneWithWhereWithoutBook_tran_historyInput, book_tranUpdateWithoutBook_tran_historyInput>, book_tranUncheckedUpdateWithoutBook_tran_historyInput>
+  export type item_tranUpdateOneWithoutItem_tran_historyNestedInput = {
+    create?: XOR<item_tranCreateWithoutItem_tran_historyInput, item_tranUncheckedCreateWithoutItem_tran_historyInput>
+    connectOrCreate?: item_tranCreateOrConnectWithoutItem_tran_historyInput
+    upsert?: item_tranUpsertWithoutItem_tran_historyInput
+    disconnect?: item_tranWhereInput | boolean
+    delete?: item_tranWhereInput | boolean
+    connect?: item_tranWhereUniqueInput
+    update?: XOR<XOR<item_tranUpdateToOneWithWhereWithoutItem_tran_historyInput, item_tranUpdateWithoutItem_tran_historyInput>, item_tranUncheckedUpdateWithoutItem_tran_historyInput>
   }
 
-  export type usersUpdateOneWithoutBook_tran_history_book_tran_history_requested_byTousersNestedInput = {
-    create?: XOR<usersCreateWithoutBook_tran_history_book_tran_history_requested_byTousersInput, usersUncheckedCreateWithoutBook_tran_history_book_tran_history_requested_byTousersInput>
-    connectOrCreate?: usersCreateOrConnectWithoutBook_tran_history_book_tran_history_requested_byTousersInput
-    upsert?: usersUpsertWithoutBook_tran_history_book_tran_history_requested_byTousersInput
+  export type usersUpdateOneWithoutItem_tran_history_item_tran_history_requested_byTousersNestedInput = {
+    create?: XOR<usersCreateWithoutItem_tran_history_item_tran_history_requested_byTousersInput, usersUncheckedCreateWithoutItem_tran_history_item_tran_history_requested_byTousersInput>
+    connectOrCreate?: usersCreateOrConnectWithoutItem_tran_history_item_tran_history_requested_byTousersInput
+    upsert?: usersUpsertWithoutItem_tran_history_item_tran_history_requested_byTousersInput
     disconnect?: usersWhereInput | boolean
     delete?: usersWhereInput | boolean
     connect?: usersWhereUniqueInput
-    update?: XOR<XOR<usersUpdateToOneWithWhereWithoutBook_tran_history_book_tran_history_requested_byTousersInput, usersUpdateWithoutBook_tran_history_book_tran_history_requested_byTousersInput>, usersUncheckedUpdateWithoutBook_tran_history_book_tran_history_requested_byTousersInput>
+    update?: XOR<XOR<usersUpdateToOneWithWhereWithoutItem_tran_history_item_tran_history_requested_byTousersInput, usersUpdateWithoutItem_tran_history_item_tran_history_requested_byTousersInput>, usersUncheckedUpdateWithoutItem_tran_history_item_tran_history_requested_byTousersInput>
   }
 
-  export type usersUpdateOneWithoutBook_tran_history_book_tran_history_approved_byTousersNestedInput = {
-    create?: XOR<usersCreateWithoutBook_tran_history_book_tran_history_approved_byTousersInput, usersUncheckedCreateWithoutBook_tran_history_book_tran_history_approved_byTousersInput>
-    connectOrCreate?: usersCreateOrConnectWithoutBook_tran_history_book_tran_history_approved_byTousersInput
-    upsert?: usersUpsertWithoutBook_tran_history_book_tran_history_approved_byTousersInput
+  export type usersUpdateOneWithoutItem_tran_history_item_tran_history_approved_byTousersNestedInput = {
+    create?: XOR<usersCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput, usersUncheckedCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput>
+    connectOrCreate?: usersCreateOrConnectWithoutItem_tran_history_item_tran_history_approved_byTousersInput
+    upsert?: usersUpsertWithoutItem_tran_history_item_tran_history_approved_byTousersInput
     disconnect?: usersWhereInput | boolean
     delete?: usersWhereInput | boolean
     connect?: usersWhereUniqueInput
-    update?: XOR<XOR<usersUpdateToOneWithWhereWithoutBook_tran_history_book_tran_history_approved_byTousersInput, usersUpdateWithoutBook_tran_history_book_tran_history_approved_byTousersInput>, usersUncheckedUpdateWithoutBook_tran_history_book_tran_history_approved_byTousersInput>
+    update?: XOR<XOR<usersUpdateToOneWithWhereWithoutItem_tran_history_item_tran_history_approved_byTousersInput, usersUpdateWithoutItem_tran_history_item_tran_history_approved_byTousersInput>, usersUncheckedUpdateWithoutItem_tran_history_item_tran_history_approved_byTousersInput>
   }
 
-  export type finesUpdateManyWithoutBook_tran_historyNestedInput = {
-    create?: XOR<finesCreateWithoutBook_tran_historyInput, finesUncheckedCreateWithoutBook_tran_historyInput> | finesCreateWithoutBook_tran_historyInput[] | finesUncheckedCreateWithoutBook_tran_historyInput[]
-    connectOrCreate?: finesCreateOrConnectWithoutBook_tran_historyInput | finesCreateOrConnectWithoutBook_tran_historyInput[]
-    upsert?: finesUpsertWithWhereUniqueWithoutBook_tran_historyInput | finesUpsertWithWhereUniqueWithoutBook_tran_historyInput[]
-    createMany?: finesCreateManyBook_tran_historyInputEnvelope
+  export type finesUpdateManyWithoutItem_tran_historyNestedInput = {
+    create?: XOR<finesCreateWithoutItem_tran_historyInput, finesUncheckedCreateWithoutItem_tran_historyInput> | finesCreateWithoutItem_tran_historyInput[] | finesUncheckedCreateWithoutItem_tran_historyInput[]
+    connectOrCreate?: finesCreateOrConnectWithoutItem_tran_historyInput | finesCreateOrConnectWithoutItem_tran_historyInput[]
+    upsert?: finesUpsertWithWhereUniqueWithoutItem_tran_historyInput | finesUpsertWithWhereUniqueWithoutItem_tran_historyInput[]
+    createMany?: finesCreateManyItem_tran_historyInputEnvelope
     set?: finesWhereUniqueInput | finesWhereUniqueInput[]
     disconnect?: finesWhereUniqueInput | finesWhereUniqueInput[]
     delete?: finesWhereUniqueInput | finesWhereUniqueInput[]
     connect?: finesWhereUniqueInput | finesWhereUniqueInput[]
-    update?: finesUpdateWithWhereUniqueWithoutBook_tran_historyInput | finesUpdateWithWhereUniqueWithoutBook_tran_historyInput[]
-    updateMany?: finesUpdateManyWithWhereWithoutBook_tran_historyInput | finesUpdateManyWithWhereWithoutBook_tran_historyInput[]
+    update?: finesUpdateWithWhereUniqueWithoutItem_tran_historyInput | finesUpdateWithWhereUniqueWithoutItem_tran_historyInput[]
+    updateMany?: finesUpdateManyWithWhereWithoutItem_tran_historyInput | finesUpdateManyWithWhereWithoutItem_tran_historyInput[]
     deleteMany?: finesScalarWhereInput | finesScalarWhereInput[]
   }
 
-  export type finesUncheckedUpdateManyWithoutBook_tran_historyNestedInput = {
-    create?: XOR<finesCreateWithoutBook_tran_historyInput, finesUncheckedCreateWithoutBook_tran_historyInput> | finesCreateWithoutBook_tran_historyInput[] | finesUncheckedCreateWithoutBook_tran_historyInput[]
-    connectOrCreate?: finesCreateOrConnectWithoutBook_tran_historyInput | finesCreateOrConnectWithoutBook_tran_historyInput[]
-    upsert?: finesUpsertWithWhereUniqueWithoutBook_tran_historyInput | finesUpsertWithWhereUniqueWithoutBook_tran_historyInput[]
-    createMany?: finesCreateManyBook_tran_historyInputEnvelope
+  export type finesUncheckedUpdateManyWithoutItem_tran_historyNestedInput = {
+    create?: XOR<finesCreateWithoutItem_tran_historyInput, finesUncheckedCreateWithoutItem_tran_historyInput> | finesCreateWithoutItem_tran_historyInput[] | finesUncheckedCreateWithoutItem_tran_historyInput[]
+    connectOrCreate?: finesCreateOrConnectWithoutItem_tran_historyInput | finesCreateOrConnectWithoutItem_tran_historyInput[]
+    upsert?: finesUpsertWithWhereUniqueWithoutItem_tran_historyInput | finesUpsertWithWhereUniqueWithoutItem_tran_historyInput[]
+    createMany?: finesCreateManyItem_tran_historyInputEnvelope
     set?: finesWhereUniqueInput | finesWhereUniqueInput[]
     disconnect?: finesWhereUniqueInput | finesWhereUniqueInput[]
     delete?: finesWhereUniqueInput | finesWhereUniqueInput[]
     connect?: finesWhereUniqueInput | finesWhereUniqueInput[]
-    update?: finesUpdateWithWhereUniqueWithoutBook_tran_historyInput | finesUpdateWithWhereUniqueWithoutBook_tran_historyInput[]
-    updateMany?: finesUpdateManyWithWhereWithoutBook_tran_historyInput | finesUpdateManyWithWhereWithoutBook_tran_historyInput[]
+    update?: finesUpdateWithWhereUniqueWithoutItem_tran_historyInput | finesUpdateWithWhereUniqueWithoutItem_tran_historyInput[]
+    updateMany?: finesUpdateManyWithWhereWithoutItem_tran_historyInput | finesUpdateManyWithWhereWithoutItem_tran_historyInput[]
     deleteMany?: finesScalarWhereInput | finesScalarWhereInput[]
   }
 
-  export type book_tranCreateNestedManyWithoutBooksInput = {
-    create?: XOR<book_tranCreateWithoutBooksInput, book_tranUncheckedCreateWithoutBooksInput> | book_tranCreateWithoutBooksInput[] | book_tranUncheckedCreateWithoutBooksInput[]
-    connectOrCreate?: book_tranCreateOrConnectWithoutBooksInput | book_tranCreateOrConnectWithoutBooksInput[]
-    createMany?: book_tranCreateManyBooksInputEnvelope
-    connect?: book_tranWhereUniqueInput | book_tranWhereUniqueInput[]
+  export type item_tranCreateNestedManyWithoutLibrary_itemsInput = {
+    create?: XOR<item_tranCreateWithoutLibrary_itemsInput, item_tranUncheckedCreateWithoutLibrary_itemsInput> | item_tranCreateWithoutLibrary_itemsInput[] | item_tranUncheckedCreateWithoutLibrary_itemsInput[]
+    connectOrCreate?: item_tranCreateOrConnectWithoutLibrary_itemsInput | item_tranCreateOrConnectWithoutLibrary_itemsInput[]
+    createMany?: item_tranCreateManyLibrary_itemsInputEnvelope
+    connect?: item_tranWhereUniqueInput | item_tranWhereUniqueInput[]
   }
 
-  export type book_tran_historyCreateNestedManyWithoutBooksInput = {
-    create?: XOR<book_tran_historyCreateWithoutBooksInput, book_tran_historyUncheckedCreateWithoutBooksInput> | book_tran_historyCreateWithoutBooksInput[] | book_tran_historyUncheckedCreateWithoutBooksInput[]
-    connectOrCreate?: book_tran_historyCreateOrConnectWithoutBooksInput | book_tran_historyCreateOrConnectWithoutBooksInput[]
-    createMany?: book_tran_historyCreateManyBooksInputEnvelope
-    connect?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
+  export type item_tran_historyCreateNestedManyWithoutLibrary_itemsInput = {
+    create?: XOR<item_tran_historyCreateWithoutLibrary_itemsInput, item_tran_historyUncheckedCreateWithoutLibrary_itemsInput> | item_tran_historyCreateWithoutLibrary_itemsInput[] | item_tran_historyUncheckedCreateWithoutLibrary_itemsInput[]
+    connectOrCreate?: item_tran_historyCreateOrConnectWithoutLibrary_itemsInput | item_tran_historyCreateOrConnectWithoutLibrary_itemsInput[]
+    createMany?: item_tran_historyCreateManyLibrary_itemsInputEnvelope
+    connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
   }
 
-  export type notificationsCreateNestedManyWithoutBooksInput = {
-    create?: XOR<notificationsCreateWithoutBooksInput, notificationsUncheckedCreateWithoutBooksInput> | notificationsCreateWithoutBooksInput[] | notificationsUncheckedCreateWithoutBooksInput[]
-    connectOrCreate?: notificationsCreateOrConnectWithoutBooksInput | notificationsCreateOrConnectWithoutBooksInput[]
-    createMany?: notificationsCreateManyBooksInputEnvelope
+  export type notificationsCreateNestedManyWithoutLibrary_itemsInput = {
+    create?: XOR<notificationsCreateWithoutLibrary_itemsInput, notificationsUncheckedCreateWithoutLibrary_itemsInput> | notificationsCreateWithoutLibrary_itemsInput[] | notificationsUncheckedCreateWithoutLibrary_itemsInput[]
+    connectOrCreate?: notificationsCreateOrConnectWithoutLibrary_itemsInput | notificationsCreateOrConnectWithoutLibrary_itemsInput[]
+    createMany?: notificationsCreateManyLibrary_itemsInputEnvelope
     connect?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
   }
 
-  export type user_wishlistCreateNestedManyWithoutBooksInput = {
-    create?: XOR<user_wishlistCreateWithoutBooksInput, user_wishlistUncheckedCreateWithoutBooksInput> | user_wishlistCreateWithoutBooksInput[] | user_wishlistUncheckedCreateWithoutBooksInput[]
-    connectOrCreate?: user_wishlistCreateOrConnectWithoutBooksInput | user_wishlistCreateOrConnectWithoutBooksInput[]
-    createMany?: user_wishlistCreateManyBooksInputEnvelope
+  export type user_wishlistCreateNestedManyWithoutLibrary_itemsInput = {
+    create?: XOR<user_wishlistCreateWithoutLibrary_itemsInput, user_wishlistUncheckedCreateWithoutLibrary_itemsInput> | user_wishlistCreateWithoutLibrary_itemsInput[] | user_wishlistUncheckedCreateWithoutLibrary_itemsInput[]
+    connectOrCreate?: user_wishlistCreateOrConnectWithoutLibrary_itemsInput | user_wishlistCreateOrConnectWithoutLibrary_itemsInput[]
+    createMany?: user_wishlistCreateManyLibrary_itemsInputEnvelope
     connect?: user_wishlistWhereUniqueInput | user_wishlistWhereUniqueInput[]
   }
 
-  export type book_tranUncheckedCreateNestedManyWithoutBooksInput = {
-    create?: XOR<book_tranCreateWithoutBooksInput, book_tranUncheckedCreateWithoutBooksInput> | book_tranCreateWithoutBooksInput[] | book_tranUncheckedCreateWithoutBooksInput[]
-    connectOrCreate?: book_tranCreateOrConnectWithoutBooksInput | book_tranCreateOrConnectWithoutBooksInput[]
-    createMany?: book_tranCreateManyBooksInputEnvelope
-    connect?: book_tranWhereUniqueInput | book_tranWhereUniqueInput[]
+  export type item_tranUncheckedCreateNestedManyWithoutLibrary_itemsInput = {
+    create?: XOR<item_tranCreateWithoutLibrary_itemsInput, item_tranUncheckedCreateWithoutLibrary_itemsInput> | item_tranCreateWithoutLibrary_itemsInput[] | item_tranUncheckedCreateWithoutLibrary_itemsInput[]
+    connectOrCreate?: item_tranCreateOrConnectWithoutLibrary_itemsInput | item_tranCreateOrConnectWithoutLibrary_itemsInput[]
+    createMany?: item_tranCreateManyLibrary_itemsInputEnvelope
+    connect?: item_tranWhereUniqueInput | item_tranWhereUniqueInput[]
   }
 
-  export type book_tran_historyUncheckedCreateNestedManyWithoutBooksInput = {
-    create?: XOR<book_tran_historyCreateWithoutBooksInput, book_tran_historyUncheckedCreateWithoutBooksInput> | book_tran_historyCreateWithoutBooksInput[] | book_tran_historyUncheckedCreateWithoutBooksInput[]
-    connectOrCreate?: book_tran_historyCreateOrConnectWithoutBooksInput | book_tran_historyCreateOrConnectWithoutBooksInput[]
-    createMany?: book_tran_historyCreateManyBooksInputEnvelope
-    connect?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
+  export type item_tran_historyUncheckedCreateNestedManyWithoutLibrary_itemsInput = {
+    create?: XOR<item_tran_historyCreateWithoutLibrary_itemsInput, item_tran_historyUncheckedCreateWithoutLibrary_itemsInput> | item_tran_historyCreateWithoutLibrary_itemsInput[] | item_tran_historyUncheckedCreateWithoutLibrary_itemsInput[]
+    connectOrCreate?: item_tran_historyCreateOrConnectWithoutLibrary_itemsInput | item_tran_historyCreateOrConnectWithoutLibrary_itemsInput[]
+    createMany?: item_tran_historyCreateManyLibrary_itemsInputEnvelope
+    connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
   }
 
-  export type notificationsUncheckedCreateNestedManyWithoutBooksInput = {
-    create?: XOR<notificationsCreateWithoutBooksInput, notificationsUncheckedCreateWithoutBooksInput> | notificationsCreateWithoutBooksInput[] | notificationsUncheckedCreateWithoutBooksInput[]
-    connectOrCreate?: notificationsCreateOrConnectWithoutBooksInput | notificationsCreateOrConnectWithoutBooksInput[]
-    createMany?: notificationsCreateManyBooksInputEnvelope
+  export type notificationsUncheckedCreateNestedManyWithoutLibrary_itemsInput = {
+    create?: XOR<notificationsCreateWithoutLibrary_itemsInput, notificationsUncheckedCreateWithoutLibrary_itemsInput> | notificationsCreateWithoutLibrary_itemsInput[] | notificationsUncheckedCreateWithoutLibrary_itemsInput[]
+    connectOrCreate?: notificationsCreateOrConnectWithoutLibrary_itemsInput | notificationsCreateOrConnectWithoutLibrary_itemsInput[]
+    createMany?: notificationsCreateManyLibrary_itemsInputEnvelope
     connect?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
   }
 
-  export type user_wishlistUncheckedCreateNestedManyWithoutBooksInput = {
-    create?: XOR<user_wishlistCreateWithoutBooksInput, user_wishlistUncheckedCreateWithoutBooksInput> | user_wishlistCreateWithoutBooksInput[] | user_wishlistUncheckedCreateWithoutBooksInput[]
-    connectOrCreate?: user_wishlistCreateOrConnectWithoutBooksInput | user_wishlistCreateOrConnectWithoutBooksInput[]
-    createMany?: user_wishlistCreateManyBooksInputEnvelope
+  export type user_wishlistUncheckedCreateNestedManyWithoutLibrary_itemsInput = {
+    create?: XOR<user_wishlistCreateWithoutLibrary_itemsInput, user_wishlistUncheckedCreateWithoutLibrary_itemsInput> | user_wishlistCreateWithoutLibrary_itemsInput[] | user_wishlistUncheckedCreateWithoutLibrary_itemsInput[]
+    connectOrCreate?: user_wishlistCreateOrConnectWithoutLibrary_itemsInput | user_wishlistCreateOrConnectWithoutLibrary_itemsInput[]
+    createMany?: user_wishlistCreateManyLibrary_itemsInputEnvelope
     connect?: user_wishlistWhereUniqueInput | user_wishlistWhereUniqueInput[]
   }
 
@@ -14550,115 +17459,119 @@ export namespace Prisma {
     set?: string
   }
 
-  export type book_tranUpdateManyWithoutBooksNestedInput = {
-    create?: XOR<book_tranCreateWithoutBooksInput, book_tranUncheckedCreateWithoutBooksInput> | book_tranCreateWithoutBooksInput[] | book_tranUncheckedCreateWithoutBooksInput[]
-    connectOrCreate?: book_tranCreateOrConnectWithoutBooksInput | book_tranCreateOrConnectWithoutBooksInput[]
-    upsert?: book_tranUpsertWithWhereUniqueWithoutBooksInput | book_tranUpsertWithWhereUniqueWithoutBooksInput[]
-    createMany?: book_tranCreateManyBooksInputEnvelope
-    set?: book_tranWhereUniqueInput | book_tranWhereUniqueInput[]
-    disconnect?: book_tranWhereUniqueInput | book_tranWhereUniqueInput[]
-    delete?: book_tranWhereUniqueInput | book_tranWhereUniqueInput[]
-    connect?: book_tranWhereUniqueInput | book_tranWhereUniqueInput[]
-    update?: book_tranUpdateWithWhereUniqueWithoutBooksInput | book_tranUpdateWithWhereUniqueWithoutBooksInput[]
-    updateMany?: book_tranUpdateManyWithWhereWithoutBooksInput | book_tranUpdateManyWithWhereWithoutBooksInput[]
-    deleteMany?: book_tranScalarWhereInput | book_tranScalarWhereInput[]
+  export type Enumlibrary_item_typeFieldUpdateOperationsInput = {
+    set?: $Enums.library_item_type
   }
 
-  export type book_tran_historyUpdateManyWithoutBooksNestedInput = {
-    create?: XOR<book_tran_historyCreateWithoutBooksInput, book_tran_historyUncheckedCreateWithoutBooksInput> | book_tran_historyCreateWithoutBooksInput[] | book_tran_historyUncheckedCreateWithoutBooksInput[]
-    connectOrCreate?: book_tran_historyCreateOrConnectWithoutBooksInput | book_tran_historyCreateOrConnectWithoutBooksInput[]
-    upsert?: book_tran_historyUpsertWithWhereUniqueWithoutBooksInput | book_tran_historyUpsertWithWhereUniqueWithoutBooksInput[]
-    createMany?: book_tran_historyCreateManyBooksInputEnvelope
-    set?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    disconnect?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    delete?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    connect?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    update?: book_tran_historyUpdateWithWhereUniqueWithoutBooksInput | book_tran_historyUpdateWithWhereUniqueWithoutBooksInput[]
-    updateMany?: book_tran_historyUpdateManyWithWhereWithoutBooksInput | book_tran_historyUpdateManyWithWhereWithoutBooksInput[]
-    deleteMany?: book_tran_historyScalarWhereInput | book_tran_historyScalarWhereInput[]
+  export type item_tranUpdateManyWithoutLibrary_itemsNestedInput = {
+    create?: XOR<item_tranCreateWithoutLibrary_itemsInput, item_tranUncheckedCreateWithoutLibrary_itemsInput> | item_tranCreateWithoutLibrary_itemsInput[] | item_tranUncheckedCreateWithoutLibrary_itemsInput[]
+    connectOrCreate?: item_tranCreateOrConnectWithoutLibrary_itemsInput | item_tranCreateOrConnectWithoutLibrary_itemsInput[]
+    upsert?: item_tranUpsertWithWhereUniqueWithoutLibrary_itemsInput | item_tranUpsertWithWhereUniqueWithoutLibrary_itemsInput[]
+    createMany?: item_tranCreateManyLibrary_itemsInputEnvelope
+    set?: item_tranWhereUniqueInput | item_tranWhereUniqueInput[]
+    disconnect?: item_tranWhereUniqueInput | item_tranWhereUniqueInput[]
+    delete?: item_tranWhereUniqueInput | item_tranWhereUniqueInput[]
+    connect?: item_tranWhereUniqueInput | item_tranWhereUniqueInput[]
+    update?: item_tranUpdateWithWhereUniqueWithoutLibrary_itemsInput | item_tranUpdateWithWhereUniqueWithoutLibrary_itemsInput[]
+    updateMany?: item_tranUpdateManyWithWhereWithoutLibrary_itemsInput | item_tranUpdateManyWithWhereWithoutLibrary_itemsInput[]
+    deleteMany?: item_tranScalarWhereInput | item_tranScalarWhereInput[]
   }
 
-  export type notificationsUpdateManyWithoutBooksNestedInput = {
-    create?: XOR<notificationsCreateWithoutBooksInput, notificationsUncheckedCreateWithoutBooksInput> | notificationsCreateWithoutBooksInput[] | notificationsUncheckedCreateWithoutBooksInput[]
-    connectOrCreate?: notificationsCreateOrConnectWithoutBooksInput | notificationsCreateOrConnectWithoutBooksInput[]
-    upsert?: notificationsUpsertWithWhereUniqueWithoutBooksInput | notificationsUpsertWithWhereUniqueWithoutBooksInput[]
-    createMany?: notificationsCreateManyBooksInputEnvelope
+  export type item_tran_historyUpdateManyWithoutLibrary_itemsNestedInput = {
+    create?: XOR<item_tran_historyCreateWithoutLibrary_itemsInput, item_tran_historyUncheckedCreateWithoutLibrary_itemsInput> | item_tran_historyCreateWithoutLibrary_itemsInput[] | item_tran_historyUncheckedCreateWithoutLibrary_itemsInput[]
+    connectOrCreate?: item_tran_historyCreateOrConnectWithoutLibrary_itemsInput | item_tran_historyCreateOrConnectWithoutLibrary_itemsInput[]
+    upsert?: item_tran_historyUpsertWithWhereUniqueWithoutLibrary_itemsInput | item_tran_historyUpsertWithWhereUniqueWithoutLibrary_itemsInput[]
+    createMany?: item_tran_historyCreateManyLibrary_itemsInputEnvelope
+    set?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    disconnect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    delete?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    update?: item_tran_historyUpdateWithWhereUniqueWithoutLibrary_itemsInput | item_tran_historyUpdateWithWhereUniqueWithoutLibrary_itemsInput[]
+    updateMany?: item_tran_historyUpdateManyWithWhereWithoutLibrary_itemsInput | item_tran_historyUpdateManyWithWhereWithoutLibrary_itemsInput[]
+    deleteMany?: item_tran_historyScalarWhereInput | item_tran_historyScalarWhereInput[]
+  }
+
+  export type notificationsUpdateManyWithoutLibrary_itemsNestedInput = {
+    create?: XOR<notificationsCreateWithoutLibrary_itemsInput, notificationsUncheckedCreateWithoutLibrary_itemsInput> | notificationsCreateWithoutLibrary_itemsInput[] | notificationsUncheckedCreateWithoutLibrary_itemsInput[]
+    connectOrCreate?: notificationsCreateOrConnectWithoutLibrary_itemsInput | notificationsCreateOrConnectWithoutLibrary_itemsInput[]
+    upsert?: notificationsUpsertWithWhereUniqueWithoutLibrary_itemsInput | notificationsUpsertWithWhereUniqueWithoutLibrary_itemsInput[]
+    createMany?: notificationsCreateManyLibrary_itemsInputEnvelope
     set?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
     disconnect?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
     delete?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
     connect?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
-    update?: notificationsUpdateWithWhereUniqueWithoutBooksInput | notificationsUpdateWithWhereUniqueWithoutBooksInput[]
-    updateMany?: notificationsUpdateManyWithWhereWithoutBooksInput | notificationsUpdateManyWithWhereWithoutBooksInput[]
+    update?: notificationsUpdateWithWhereUniqueWithoutLibrary_itemsInput | notificationsUpdateWithWhereUniqueWithoutLibrary_itemsInput[]
+    updateMany?: notificationsUpdateManyWithWhereWithoutLibrary_itemsInput | notificationsUpdateManyWithWhereWithoutLibrary_itemsInput[]
     deleteMany?: notificationsScalarWhereInput | notificationsScalarWhereInput[]
   }
 
-  export type user_wishlistUpdateManyWithoutBooksNestedInput = {
-    create?: XOR<user_wishlistCreateWithoutBooksInput, user_wishlistUncheckedCreateWithoutBooksInput> | user_wishlistCreateWithoutBooksInput[] | user_wishlistUncheckedCreateWithoutBooksInput[]
-    connectOrCreate?: user_wishlistCreateOrConnectWithoutBooksInput | user_wishlistCreateOrConnectWithoutBooksInput[]
-    upsert?: user_wishlistUpsertWithWhereUniqueWithoutBooksInput | user_wishlistUpsertWithWhereUniqueWithoutBooksInput[]
-    createMany?: user_wishlistCreateManyBooksInputEnvelope
+  export type user_wishlistUpdateManyWithoutLibrary_itemsNestedInput = {
+    create?: XOR<user_wishlistCreateWithoutLibrary_itemsInput, user_wishlistUncheckedCreateWithoutLibrary_itemsInput> | user_wishlistCreateWithoutLibrary_itemsInput[] | user_wishlistUncheckedCreateWithoutLibrary_itemsInput[]
+    connectOrCreate?: user_wishlistCreateOrConnectWithoutLibrary_itemsInput | user_wishlistCreateOrConnectWithoutLibrary_itemsInput[]
+    upsert?: user_wishlistUpsertWithWhereUniqueWithoutLibrary_itemsInput | user_wishlistUpsertWithWhereUniqueWithoutLibrary_itemsInput[]
+    createMany?: user_wishlistCreateManyLibrary_itemsInputEnvelope
     set?: user_wishlistWhereUniqueInput | user_wishlistWhereUniqueInput[]
     disconnect?: user_wishlistWhereUniqueInput | user_wishlistWhereUniqueInput[]
     delete?: user_wishlistWhereUniqueInput | user_wishlistWhereUniqueInput[]
     connect?: user_wishlistWhereUniqueInput | user_wishlistWhereUniqueInput[]
-    update?: user_wishlistUpdateWithWhereUniqueWithoutBooksInput | user_wishlistUpdateWithWhereUniqueWithoutBooksInput[]
-    updateMany?: user_wishlistUpdateManyWithWhereWithoutBooksInput | user_wishlistUpdateManyWithWhereWithoutBooksInput[]
+    update?: user_wishlistUpdateWithWhereUniqueWithoutLibrary_itemsInput | user_wishlistUpdateWithWhereUniqueWithoutLibrary_itemsInput[]
+    updateMany?: user_wishlistUpdateManyWithWhereWithoutLibrary_itemsInput | user_wishlistUpdateManyWithWhereWithoutLibrary_itemsInput[]
     deleteMany?: user_wishlistScalarWhereInput | user_wishlistScalarWhereInput[]
   }
 
-  export type book_tranUncheckedUpdateManyWithoutBooksNestedInput = {
-    create?: XOR<book_tranCreateWithoutBooksInput, book_tranUncheckedCreateWithoutBooksInput> | book_tranCreateWithoutBooksInput[] | book_tranUncheckedCreateWithoutBooksInput[]
-    connectOrCreate?: book_tranCreateOrConnectWithoutBooksInput | book_tranCreateOrConnectWithoutBooksInput[]
-    upsert?: book_tranUpsertWithWhereUniqueWithoutBooksInput | book_tranUpsertWithWhereUniqueWithoutBooksInput[]
-    createMany?: book_tranCreateManyBooksInputEnvelope
-    set?: book_tranWhereUniqueInput | book_tranWhereUniqueInput[]
-    disconnect?: book_tranWhereUniqueInput | book_tranWhereUniqueInput[]
-    delete?: book_tranWhereUniqueInput | book_tranWhereUniqueInput[]
-    connect?: book_tranWhereUniqueInput | book_tranWhereUniqueInput[]
-    update?: book_tranUpdateWithWhereUniqueWithoutBooksInput | book_tranUpdateWithWhereUniqueWithoutBooksInput[]
-    updateMany?: book_tranUpdateManyWithWhereWithoutBooksInput | book_tranUpdateManyWithWhereWithoutBooksInput[]
-    deleteMany?: book_tranScalarWhereInput | book_tranScalarWhereInput[]
+  export type item_tranUncheckedUpdateManyWithoutLibrary_itemsNestedInput = {
+    create?: XOR<item_tranCreateWithoutLibrary_itemsInput, item_tranUncheckedCreateWithoutLibrary_itemsInput> | item_tranCreateWithoutLibrary_itemsInput[] | item_tranUncheckedCreateWithoutLibrary_itemsInput[]
+    connectOrCreate?: item_tranCreateOrConnectWithoutLibrary_itemsInput | item_tranCreateOrConnectWithoutLibrary_itemsInput[]
+    upsert?: item_tranUpsertWithWhereUniqueWithoutLibrary_itemsInput | item_tranUpsertWithWhereUniqueWithoutLibrary_itemsInput[]
+    createMany?: item_tranCreateManyLibrary_itemsInputEnvelope
+    set?: item_tranWhereUniqueInput | item_tranWhereUniqueInput[]
+    disconnect?: item_tranWhereUniqueInput | item_tranWhereUniqueInput[]
+    delete?: item_tranWhereUniqueInput | item_tranWhereUniqueInput[]
+    connect?: item_tranWhereUniqueInput | item_tranWhereUniqueInput[]
+    update?: item_tranUpdateWithWhereUniqueWithoutLibrary_itemsInput | item_tranUpdateWithWhereUniqueWithoutLibrary_itemsInput[]
+    updateMany?: item_tranUpdateManyWithWhereWithoutLibrary_itemsInput | item_tranUpdateManyWithWhereWithoutLibrary_itemsInput[]
+    deleteMany?: item_tranScalarWhereInput | item_tranScalarWhereInput[]
   }
 
-  export type book_tran_historyUncheckedUpdateManyWithoutBooksNestedInput = {
-    create?: XOR<book_tran_historyCreateWithoutBooksInput, book_tran_historyUncheckedCreateWithoutBooksInput> | book_tran_historyCreateWithoutBooksInput[] | book_tran_historyUncheckedCreateWithoutBooksInput[]
-    connectOrCreate?: book_tran_historyCreateOrConnectWithoutBooksInput | book_tran_historyCreateOrConnectWithoutBooksInput[]
-    upsert?: book_tran_historyUpsertWithWhereUniqueWithoutBooksInput | book_tran_historyUpsertWithWhereUniqueWithoutBooksInput[]
-    createMany?: book_tran_historyCreateManyBooksInputEnvelope
-    set?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    disconnect?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    delete?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    connect?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    update?: book_tran_historyUpdateWithWhereUniqueWithoutBooksInput | book_tran_historyUpdateWithWhereUniqueWithoutBooksInput[]
-    updateMany?: book_tran_historyUpdateManyWithWhereWithoutBooksInput | book_tran_historyUpdateManyWithWhereWithoutBooksInput[]
-    deleteMany?: book_tran_historyScalarWhereInput | book_tran_historyScalarWhereInput[]
+  export type item_tran_historyUncheckedUpdateManyWithoutLibrary_itemsNestedInput = {
+    create?: XOR<item_tran_historyCreateWithoutLibrary_itemsInput, item_tran_historyUncheckedCreateWithoutLibrary_itemsInput> | item_tran_historyCreateWithoutLibrary_itemsInput[] | item_tran_historyUncheckedCreateWithoutLibrary_itemsInput[]
+    connectOrCreate?: item_tran_historyCreateOrConnectWithoutLibrary_itemsInput | item_tran_historyCreateOrConnectWithoutLibrary_itemsInput[]
+    upsert?: item_tran_historyUpsertWithWhereUniqueWithoutLibrary_itemsInput | item_tran_historyUpsertWithWhereUniqueWithoutLibrary_itemsInput[]
+    createMany?: item_tran_historyCreateManyLibrary_itemsInputEnvelope
+    set?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    disconnect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    delete?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    update?: item_tran_historyUpdateWithWhereUniqueWithoutLibrary_itemsInput | item_tran_historyUpdateWithWhereUniqueWithoutLibrary_itemsInput[]
+    updateMany?: item_tran_historyUpdateManyWithWhereWithoutLibrary_itemsInput | item_tran_historyUpdateManyWithWhereWithoutLibrary_itemsInput[]
+    deleteMany?: item_tran_historyScalarWhereInput | item_tran_historyScalarWhereInput[]
   }
 
-  export type notificationsUncheckedUpdateManyWithoutBooksNestedInput = {
-    create?: XOR<notificationsCreateWithoutBooksInput, notificationsUncheckedCreateWithoutBooksInput> | notificationsCreateWithoutBooksInput[] | notificationsUncheckedCreateWithoutBooksInput[]
-    connectOrCreate?: notificationsCreateOrConnectWithoutBooksInput | notificationsCreateOrConnectWithoutBooksInput[]
-    upsert?: notificationsUpsertWithWhereUniqueWithoutBooksInput | notificationsUpsertWithWhereUniqueWithoutBooksInput[]
-    createMany?: notificationsCreateManyBooksInputEnvelope
+  export type notificationsUncheckedUpdateManyWithoutLibrary_itemsNestedInput = {
+    create?: XOR<notificationsCreateWithoutLibrary_itemsInput, notificationsUncheckedCreateWithoutLibrary_itemsInput> | notificationsCreateWithoutLibrary_itemsInput[] | notificationsUncheckedCreateWithoutLibrary_itemsInput[]
+    connectOrCreate?: notificationsCreateOrConnectWithoutLibrary_itemsInput | notificationsCreateOrConnectWithoutLibrary_itemsInput[]
+    upsert?: notificationsUpsertWithWhereUniqueWithoutLibrary_itemsInput | notificationsUpsertWithWhereUniqueWithoutLibrary_itemsInput[]
+    createMany?: notificationsCreateManyLibrary_itemsInputEnvelope
     set?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
     disconnect?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
     delete?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
     connect?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
-    update?: notificationsUpdateWithWhereUniqueWithoutBooksInput | notificationsUpdateWithWhereUniqueWithoutBooksInput[]
-    updateMany?: notificationsUpdateManyWithWhereWithoutBooksInput | notificationsUpdateManyWithWhereWithoutBooksInput[]
+    update?: notificationsUpdateWithWhereUniqueWithoutLibrary_itemsInput | notificationsUpdateWithWhereUniqueWithoutLibrary_itemsInput[]
+    updateMany?: notificationsUpdateManyWithWhereWithoutLibrary_itemsInput | notificationsUpdateManyWithWhereWithoutLibrary_itemsInput[]
     deleteMany?: notificationsScalarWhereInput | notificationsScalarWhereInput[]
   }
 
-  export type user_wishlistUncheckedUpdateManyWithoutBooksNestedInput = {
-    create?: XOR<user_wishlistCreateWithoutBooksInput, user_wishlistUncheckedCreateWithoutBooksInput> | user_wishlistCreateWithoutBooksInput[] | user_wishlistUncheckedCreateWithoutBooksInput[]
-    connectOrCreate?: user_wishlistCreateOrConnectWithoutBooksInput | user_wishlistCreateOrConnectWithoutBooksInput[]
-    upsert?: user_wishlistUpsertWithWhereUniqueWithoutBooksInput | user_wishlistUpsertWithWhereUniqueWithoutBooksInput[]
-    createMany?: user_wishlistCreateManyBooksInputEnvelope
+  export type user_wishlistUncheckedUpdateManyWithoutLibrary_itemsNestedInput = {
+    create?: XOR<user_wishlistCreateWithoutLibrary_itemsInput, user_wishlistUncheckedCreateWithoutLibrary_itemsInput> | user_wishlistCreateWithoutLibrary_itemsInput[] | user_wishlistUncheckedCreateWithoutLibrary_itemsInput[]
+    connectOrCreate?: user_wishlistCreateOrConnectWithoutLibrary_itemsInput | user_wishlistCreateOrConnectWithoutLibrary_itemsInput[]
+    upsert?: user_wishlistUpsertWithWhereUniqueWithoutLibrary_itemsInput | user_wishlistUpsertWithWhereUniqueWithoutLibrary_itemsInput[]
+    createMany?: user_wishlistCreateManyLibrary_itemsInputEnvelope
     set?: user_wishlistWhereUniqueInput | user_wishlistWhereUniqueInput[]
     disconnect?: user_wishlistWhereUniqueInput | user_wishlistWhereUniqueInput[]
     delete?: user_wishlistWhereUniqueInput | user_wishlistWhereUniqueInput[]
     connect?: user_wishlistWhereUniqueInput | user_wishlistWhereUniqueInput[]
-    update?: user_wishlistUpdateWithWhereUniqueWithoutBooksInput | user_wishlistUpdateWithWhereUniqueWithoutBooksInput[]
-    updateMany?: user_wishlistUpdateManyWithWhereWithoutBooksInput | user_wishlistUpdateManyWithWhereWithoutBooksInput[]
+    update?: user_wishlistUpdateWithWhereUniqueWithoutLibrary_itemsInput | user_wishlistUpdateWithWhereUniqueWithoutLibrary_itemsInput[]
+    updateMany?: user_wishlistUpdateManyWithWhereWithoutLibrary_itemsInput | user_wishlistUpdateManyWithWhereWithoutLibrary_itemsInput[]
     deleteMany?: user_wishlistScalarWhereInput | user_wishlistScalarWhereInput[]
   }
 
@@ -14668,10 +17581,10 @@ export namespace Prisma {
     connect?: usersWhereUniqueInput
   }
 
-  export type book_tran_historyCreateNestedOneWithoutFinesInput = {
-    create?: XOR<book_tran_historyCreateWithoutFinesInput, book_tran_historyUncheckedCreateWithoutFinesInput>
-    connectOrCreate?: book_tran_historyCreateOrConnectWithoutFinesInput
-    connect?: book_tran_historyWhereUniqueInput
+  export type item_tran_historyCreateNestedOneWithoutFinesInput = {
+    create?: XOR<item_tran_historyCreateWithoutFinesInput, item_tran_historyUncheckedCreateWithoutFinesInput>
+    connectOrCreate?: item_tran_historyCreateOrConnectWithoutFinesInput
+    connect?: item_tran_historyWhereUniqueInput
   }
 
   export type NullableDecimalFieldUpdateOperationsInput = {
@@ -14696,14 +17609,14 @@ export namespace Prisma {
     update?: XOR<XOR<usersUpdateToOneWithWhereWithoutFinesInput, usersUpdateWithoutFinesInput>, usersUncheckedUpdateWithoutFinesInput>
   }
 
-  export type book_tran_historyUpdateOneWithoutFinesNestedInput = {
-    create?: XOR<book_tran_historyCreateWithoutFinesInput, book_tran_historyUncheckedCreateWithoutFinesInput>
-    connectOrCreate?: book_tran_historyCreateOrConnectWithoutFinesInput
-    upsert?: book_tran_historyUpsertWithoutFinesInput
-    disconnect?: book_tran_historyWhereInput | boolean
-    delete?: book_tran_historyWhereInput | boolean
-    connect?: book_tran_historyWhereUniqueInput
-    update?: XOR<XOR<book_tran_historyUpdateToOneWithWhereWithoutFinesInput, book_tran_historyUpdateWithoutFinesInput>, book_tran_historyUncheckedUpdateWithoutFinesInput>
+  export type item_tran_historyUpdateOneWithoutFinesNestedInput = {
+    create?: XOR<item_tran_historyCreateWithoutFinesInput, item_tran_historyUncheckedCreateWithoutFinesInput>
+    connectOrCreate?: item_tran_historyCreateOrConnectWithoutFinesInput
+    upsert?: item_tran_historyUpsertWithoutFinesInput
+    disconnect?: item_tran_historyWhereInput | boolean
+    delete?: item_tran_historyWhereInput | boolean
+    connect?: item_tran_historyWhereUniqueInput
+    update?: XOR<XOR<item_tran_historyUpdateToOneWithWhereWithoutFinesInput, item_tran_historyUpdateWithoutFinesInput>, item_tran_historyUncheckedUpdateWithoutFinesInput>
   }
 
   export type usersCreateNestedOneWithoutLogsInput = {
@@ -14720,10 +17633,10 @@ export namespace Prisma {
     update?: XOR<XOR<usersUpdateToOneWithWhereWithoutLogsInput, usersUpdateWithoutLogsInput>, usersUncheckedUpdateWithoutLogsInput>
   }
 
-  export type booksCreateNestedOneWithoutNotificationsInput = {
-    create?: XOR<booksCreateWithoutNotificationsInput, booksUncheckedCreateWithoutNotificationsInput>
-    connectOrCreate?: booksCreateOrConnectWithoutNotificationsInput
-    connect?: booksWhereUniqueInput
+  export type library_itemsCreateNestedOneWithoutNotificationsInput = {
+    create?: XOR<library_itemsCreateWithoutNotificationsInput, library_itemsUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: library_itemsCreateOrConnectWithoutNotificationsInput
+    connect?: library_itemsWhereUniqueInput
   }
 
   export type usersCreateNestedOneWithoutNotifications_notifications_from_user_idTousersInput = {
@@ -14738,10 +17651,10 @@ export namespace Prisma {
     connect?: usersWhereUniqueInput
   }
 
-  export type book_tranCreateNestedOneWithoutNotificationsInput = {
-    create?: XOR<book_tranCreateWithoutNotificationsInput, book_tranUncheckedCreateWithoutNotificationsInput>
-    connectOrCreate?: book_tranCreateOrConnectWithoutNotificationsInput
-    connect?: book_tranWhereUniqueInput
+  export type item_tranCreateNestedOneWithoutNotificationsInput = {
+    create?: XOR<item_tranCreateWithoutNotificationsInput, item_tranUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: item_tranCreateOrConnectWithoutNotificationsInput
+    connect?: item_tranWhereUniqueInput
   }
 
   export type NullableEnumnotifications_typeFieldUpdateOperationsInput = {
@@ -14752,14 +17665,14 @@ export namespace Prisma {
     set?: $Enums.notifications_status | null
   }
 
-  export type booksUpdateOneWithoutNotificationsNestedInput = {
-    create?: XOR<booksCreateWithoutNotificationsInput, booksUncheckedCreateWithoutNotificationsInput>
-    connectOrCreate?: booksCreateOrConnectWithoutNotificationsInput
-    upsert?: booksUpsertWithoutNotificationsInput
-    disconnect?: booksWhereInput | boolean
-    delete?: booksWhereInput | boolean
-    connect?: booksWhereUniqueInput
-    update?: XOR<XOR<booksUpdateToOneWithWhereWithoutNotificationsInput, booksUpdateWithoutNotificationsInput>, booksUncheckedUpdateWithoutNotificationsInput>
+  export type library_itemsUpdateOneWithoutNotificationsNestedInput = {
+    create?: XOR<library_itemsCreateWithoutNotificationsInput, library_itemsUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: library_itemsCreateOrConnectWithoutNotificationsInput
+    upsert?: library_itemsUpsertWithoutNotificationsInput
+    disconnect?: library_itemsWhereInput | boolean
+    delete?: library_itemsWhereInput | boolean
+    connect?: library_itemsWhereUniqueInput
+    update?: XOR<XOR<library_itemsUpdateToOneWithWhereWithoutNotificationsInput, library_itemsUpdateWithoutNotificationsInput>, library_itemsUncheckedUpdateWithoutNotificationsInput>
   }
 
   export type usersUpdateOneWithoutNotifications_notifications_from_user_idTousersNestedInput = {
@@ -14782,14 +17695,14 @@ export namespace Prisma {
     update?: XOR<XOR<usersUpdateToOneWithWhereWithoutNotifications_notifications_to_user_idTousersInput, usersUpdateWithoutNotifications_notifications_to_user_idTousersInput>, usersUncheckedUpdateWithoutNotifications_notifications_to_user_idTousersInput>
   }
 
-  export type book_tranUpdateOneWithoutNotificationsNestedInput = {
-    create?: XOR<book_tranCreateWithoutNotificationsInput, book_tranUncheckedCreateWithoutNotificationsInput>
-    connectOrCreate?: book_tranCreateOrConnectWithoutNotificationsInput
-    upsert?: book_tranUpsertWithoutNotificationsInput
-    disconnect?: book_tranWhereInput | boolean
-    delete?: book_tranWhereInput | boolean
-    connect?: book_tranWhereUniqueInput
-    update?: XOR<XOR<book_tranUpdateToOneWithWhereWithoutNotificationsInput, book_tranUpdateWithoutNotificationsInput>, book_tranUncheckedUpdateWithoutNotificationsInput>
+  export type item_tranUpdateOneWithoutNotificationsNestedInput = {
+    create?: XOR<item_tranCreateWithoutNotificationsInput, item_tranUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: item_tranCreateOrConnectWithoutNotificationsInput
+    upsert?: item_tranUpsertWithoutNotificationsInput
+    disconnect?: item_tranWhereInput | boolean
+    delete?: item_tranWhereInput | boolean
+    connect?: item_tranWhereUniqueInput
+    update?: XOR<XOR<item_tranUpdateToOneWithWhereWithoutNotificationsInput, item_tranUpdateWithoutNotificationsInput>, item_tranUncheckedUpdateWithoutNotificationsInput>
   }
 
   export type usersCreateNestedOneWithoutUser_wishlistInput = {
@@ -14798,10 +17711,10 @@ export namespace Prisma {
     connect?: usersWhereUniqueInput
   }
 
-  export type booksCreateNestedOneWithoutUser_wishlistInput = {
-    create?: XOR<booksCreateWithoutUser_wishlistInput, booksUncheckedCreateWithoutUser_wishlistInput>
-    connectOrCreate?: booksCreateOrConnectWithoutUser_wishlistInput
-    connect?: booksWhereUniqueInput
+  export type library_itemsCreateNestedOneWithoutUser_wishlistInput = {
+    create?: XOR<library_itemsCreateWithoutUser_wishlistInput, library_itemsUncheckedCreateWithoutUser_wishlistInput>
+    connectOrCreate?: library_itemsCreateOrConnectWithoutUser_wishlistInput
+    connect?: library_itemsWhereUniqueInput
   }
 
   export type usersUpdateOneWithoutUser_wishlistNestedInput = {
@@ -14814,35 +17727,35 @@ export namespace Prisma {
     update?: XOR<XOR<usersUpdateToOneWithWhereWithoutUser_wishlistInput, usersUpdateWithoutUser_wishlistInput>, usersUncheckedUpdateWithoutUser_wishlistInput>
   }
 
-  export type booksUpdateOneWithoutUser_wishlistNestedInput = {
-    create?: XOR<booksCreateWithoutUser_wishlistInput, booksUncheckedCreateWithoutUser_wishlistInput>
-    connectOrCreate?: booksCreateOrConnectWithoutUser_wishlistInput
-    upsert?: booksUpsertWithoutUser_wishlistInput
-    disconnect?: booksWhereInput | boolean
-    delete?: booksWhereInput | boolean
-    connect?: booksWhereUniqueInput
-    update?: XOR<XOR<booksUpdateToOneWithWhereWithoutUser_wishlistInput, booksUpdateWithoutUser_wishlistInput>, booksUncheckedUpdateWithoutUser_wishlistInput>
+  export type library_itemsUpdateOneWithoutUser_wishlistNestedInput = {
+    create?: XOR<library_itemsCreateWithoutUser_wishlistInput, library_itemsUncheckedCreateWithoutUser_wishlistInput>
+    connectOrCreate?: library_itemsCreateOrConnectWithoutUser_wishlistInput
+    upsert?: library_itemsUpsertWithoutUser_wishlistInput
+    disconnect?: library_itemsWhereInput | boolean
+    delete?: library_itemsWhereInput | boolean
+    connect?: library_itemsWhereUniqueInput
+    update?: XOR<XOR<library_itemsUpdateToOneWithWhereWithoutUser_wishlistInput, library_itemsUpdateWithoutUser_wishlistInput>, library_itemsUncheckedUpdateWithoutUser_wishlistInput>
   }
 
-  export type book_tranCreateNestedManyWithoutUsersInput = {
-    create?: XOR<book_tranCreateWithoutUsersInput, book_tranUncheckedCreateWithoutUsersInput> | book_tranCreateWithoutUsersInput[] | book_tranUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: book_tranCreateOrConnectWithoutUsersInput | book_tranCreateOrConnectWithoutUsersInput[]
-    createMany?: book_tranCreateManyUsersInputEnvelope
-    connect?: book_tranWhereUniqueInput | book_tranWhereUniqueInput[]
+  export type item_tranCreateNestedManyWithoutUsersInput = {
+    create?: XOR<item_tranCreateWithoutUsersInput, item_tranUncheckedCreateWithoutUsersInput> | item_tranCreateWithoutUsersInput[] | item_tranUncheckedCreateWithoutUsersInput[]
+    connectOrCreate?: item_tranCreateOrConnectWithoutUsersInput | item_tranCreateOrConnectWithoutUsersInput[]
+    createMany?: item_tranCreateManyUsersInputEnvelope
+    connect?: item_tranWhereUniqueInput | item_tranWhereUniqueInput[]
   }
 
-  export type book_tran_historyCreateNestedManyWithoutUsers_book_tran_history_requested_byTousersInput = {
-    create?: XOR<book_tran_historyCreateWithoutUsers_book_tran_history_requested_byTousersInput, book_tran_historyUncheckedCreateWithoutUsers_book_tran_history_requested_byTousersInput> | book_tran_historyCreateWithoutUsers_book_tran_history_requested_byTousersInput[] | book_tran_historyUncheckedCreateWithoutUsers_book_tran_history_requested_byTousersInput[]
-    connectOrCreate?: book_tran_historyCreateOrConnectWithoutUsers_book_tran_history_requested_byTousersInput | book_tran_historyCreateOrConnectWithoutUsers_book_tran_history_requested_byTousersInput[]
-    createMany?: book_tran_historyCreateManyUsers_book_tran_history_requested_byTousersInputEnvelope
-    connect?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
+  export type item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput = {
+    create?: XOR<item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput, item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput> | item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput[] | item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput[]
+    connectOrCreate?: item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput[]
+    createMany?: item_tran_historyCreateManyUsers_item_tran_history_requested_byTousersInputEnvelope
+    connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
   }
 
-  export type book_tran_historyCreateNestedManyWithoutUsers_book_tran_history_approved_byTousersInput = {
-    create?: XOR<book_tran_historyCreateWithoutUsers_book_tran_history_approved_byTousersInput, book_tran_historyUncheckedCreateWithoutUsers_book_tran_history_approved_byTousersInput> | book_tran_historyCreateWithoutUsers_book_tran_history_approved_byTousersInput[] | book_tran_historyUncheckedCreateWithoutUsers_book_tran_history_approved_byTousersInput[]
-    connectOrCreate?: book_tran_historyCreateOrConnectWithoutUsers_book_tran_history_approved_byTousersInput | book_tran_historyCreateOrConnectWithoutUsers_book_tran_history_approved_byTousersInput[]
-    createMany?: book_tran_historyCreateManyUsers_book_tran_history_approved_byTousersInputEnvelope
-    connect?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
+  export type item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput = {
+    create?: XOR<item_tran_historyCreateWithoutUsers_item_tran_history_approved_byTousersInput, item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_approved_byTousersInput> | item_tran_historyCreateWithoutUsers_item_tran_history_approved_byTousersInput[] | item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_approved_byTousersInput[]
+    connectOrCreate?: item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_approved_byTousersInput | item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_approved_byTousersInput[]
+    createMany?: item_tran_historyCreateManyUsers_item_tran_history_approved_byTousersInputEnvelope
+    connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
   }
 
   export type finesCreateNestedManyWithoutUsersInput = {
@@ -14880,25 +17793,32 @@ export namespace Prisma {
     connect?: user_wishlistWhereUniqueInput | user_wishlistWhereUniqueInput[]
   }
 
-  export type book_tranUncheckedCreateNestedManyWithoutUsersInput = {
-    create?: XOR<book_tranCreateWithoutUsersInput, book_tranUncheckedCreateWithoutUsersInput> | book_tranCreateWithoutUsersInput[] | book_tranUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: book_tranCreateOrConnectWithoutUsersInput | book_tranCreateOrConnectWithoutUsersInput[]
-    createMany?: book_tranCreateManyUsersInputEnvelope
-    connect?: book_tranWhereUniqueInput | book_tranWhereUniqueInput[]
+  export type library_cardsCreateNestedManyWithoutUsersInput = {
+    create?: XOR<library_cardsCreateWithoutUsersInput, library_cardsUncheckedCreateWithoutUsersInput> | library_cardsCreateWithoutUsersInput[] | library_cardsUncheckedCreateWithoutUsersInput[]
+    connectOrCreate?: library_cardsCreateOrConnectWithoutUsersInput | library_cardsCreateOrConnectWithoutUsersInput[]
+    createMany?: library_cardsCreateManyUsersInputEnvelope
+    connect?: library_cardsWhereUniqueInput | library_cardsWhereUniqueInput[]
   }
 
-  export type book_tran_historyUncheckedCreateNestedManyWithoutUsers_book_tran_history_requested_byTousersInput = {
-    create?: XOR<book_tran_historyCreateWithoutUsers_book_tran_history_requested_byTousersInput, book_tran_historyUncheckedCreateWithoutUsers_book_tran_history_requested_byTousersInput> | book_tran_historyCreateWithoutUsers_book_tran_history_requested_byTousersInput[] | book_tran_historyUncheckedCreateWithoutUsers_book_tran_history_requested_byTousersInput[]
-    connectOrCreate?: book_tran_historyCreateOrConnectWithoutUsers_book_tran_history_requested_byTousersInput | book_tran_historyCreateOrConnectWithoutUsers_book_tran_history_requested_byTousersInput[]
-    createMany?: book_tran_historyCreateManyUsers_book_tran_history_requested_byTousersInputEnvelope
-    connect?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
+  export type item_tranUncheckedCreateNestedManyWithoutUsersInput = {
+    create?: XOR<item_tranCreateWithoutUsersInput, item_tranUncheckedCreateWithoutUsersInput> | item_tranCreateWithoutUsersInput[] | item_tranUncheckedCreateWithoutUsersInput[]
+    connectOrCreate?: item_tranCreateOrConnectWithoutUsersInput | item_tranCreateOrConnectWithoutUsersInput[]
+    createMany?: item_tranCreateManyUsersInputEnvelope
+    connect?: item_tranWhereUniqueInput | item_tranWhereUniqueInput[]
   }
 
-  export type book_tran_historyUncheckedCreateNestedManyWithoutUsers_book_tran_history_approved_byTousersInput = {
-    create?: XOR<book_tran_historyCreateWithoutUsers_book_tran_history_approved_byTousersInput, book_tran_historyUncheckedCreateWithoutUsers_book_tran_history_approved_byTousersInput> | book_tran_historyCreateWithoutUsers_book_tran_history_approved_byTousersInput[] | book_tran_historyUncheckedCreateWithoutUsers_book_tran_history_approved_byTousersInput[]
-    connectOrCreate?: book_tran_historyCreateOrConnectWithoutUsers_book_tran_history_approved_byTousersInput | book_tran_historyCreateOrConnectWithoutUsers_book_tran_history_approved_byTousersInput[]
-    createMany?: book_tran_historyCreateManyUsers_book_tran_history_approved_byTousersInputEnvelope
-    connect?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
+  export type item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput = {
+    create?: XOR<item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput, item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput> | item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput[] | item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput[]
+    connectOrCreate?: item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput[]
+    createMany?: item_tran_historyCreateManyUsers_item_tran_history_requested_byTousersInputEnvelope
+    connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+  }
+
+  export type item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput = {
+    create?: XOR<item_tran_historyCreateWithoutUsers_item_tran_history_approved_byTousersInput, item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_approved_byTousersInput> | item_tran_historyCreateWithoutUsers_item_tran_history_approved_byTousersInput[] | item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_approved_byTousersInput[]
+    connectOrCreate?: item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_approved_byTousersInput | item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_approved_byTousersInput[]
+    createMany?: item_tran_historyCreateManyUsers_item_tran_history_approved_byTousersInputEnvelope
+    connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
   }
 
   export type finesUncheckedCreateNestedManyWithoutUsersInput = {
@@ -14936,6 +17856,13 @@ export namespace Prisma {
     connect?: user_wishlistWhereUniqueInput | user_wishlistWhereUniqueInput[]
   }
 
+  export type library_cardsUncheckedCreateNestedManyWithoutUsersInput = {
+    create?: XOR<library_cardsCreateWithoutUsersInput, library_cardsUncheckedCreateWithoutUsersInput> | library_cardsCreateWithoutUsersInput[] | library_cardsUncheckedCreateWithoutUsersInput[]
+    connectOrCreate?: library_cardsCreateOrConnectWithoutUsersInput | library_cardsCreateOrConnectWithoutUsersInput[]
+    createMany?: library_cardsCreateManyUsersInputEnvelope
+    connect?: library_cardsWhereUniqueInput | library_cardsWhereUniqueInput[]
+  }
+
   export type NullableEnumusers_roleFieldUpdateOperationsInput = {
     set?: $Enums.users_role | null
   }
@@ -14948,46 +17875,46 @@ export namespace Prisma {
     set?: $Enums.gender | null
   }
 
-  export type book_tranUpdateManyWithoutUsersNestedInput = {
-    create?: XOR<book_tranCreateWithoutUsersInput, book_tranUncheckedCreateWithoutUsersInput> | book_tranCreateWithoutUsersInput[] | book_tranUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: book_tranCreateOrConnectWithoutUsersInput | book_tranCreateOrConnectWithoutUsersInput[]
-    upsert?: book_tranUpsertWithWhereUniqueWithoutUsersInput | book_tranUpsertWithWhereUniqueWithoutUsersInput[]
-    createMany?: book_tranCreateManyUsersInputEnvelope
-    set?: book_tranWhereUniqueInput | book_tranWhereUniqueInput[]
-    disconnect?: book_tranWhereUniqueInput | book_tranWhereUniqueInput[]
-    delete?: book_tranWhereUniqueInput | book_tranWhereUniqueInput[]
-    connect?: book_tranWhereUniqueInput | book_tranWhereUniqueInput[]
-    update?: book_tranUpdateWithWhereUniqueWithoutUsersInput | book_tranUpdateWithWhereUniqueWithoutUsersInput[]
-    updateMany?: book_tranUpdateManyWithWhereWithoutUsersInput | book_tranUpdateManyWithWhereWithoutUsersInput[]
-    deleteMany?: book_tranScalarWhereInput | book_tranScalarWhereInput[]
+  export type item_tranUpdateManyWithoutUsersNestedInput = {
+    create?: XOR<item_tranCreateWithoutUsersInput, item_tranUncheckedCreateWithoutUsersInput> | item_tranCreateWithoutUsersInput[] | item_tranUncheckedCreateWithoutUsersInput[]
+    connectOrCreate?: item_tranCreateOrConnectWithoutUsersInput | item_tranCreateOrConnectWithoutUsersInput[]
+    upsert?: item_tranUpsertWithWhereUniqueWithoutUsersInput | item_tranUpsertWithWhereUniqueWithoutUsersInput[]
+    createMany?: item_tranCreateManyUsersInputEnvelope
+    set?: item_tranWhereUniqueInput | item_tranWhereUniqueInput[]
+    disconnect?: item_tranWhereUniqueInput | item_tranWhereUniqueInput[]
+    delete?: item_tranWhereUniqueInput | item_tranWhereUniqueInput[]
+    connect?: item_tranWhereUniqueInput | item_tranWhereUniqueInput[]
+    update?: item_tranUpdateWithWhereUniqueWithoutUsersInput | item_tranUpdateWithWhereUniqueWithoutUsersInput[]
+    updateMany?: item_tranUpdateManyWithWhereWithoutUsersInput | item_tranUpdateManyWithWhereWithoutUsersInput[]
+    deleteMany?: item_tranScalarWhereInput | item_tranScalarWhereInput[]
   }
 
-  export type book_tran_historyUpdateManyWithoutUsers_book_tran_history_requested_byTousersNestedInput = {
-    create?: XOR<book_tran_historyCreateWithoutUsers_book_tran_history_requested_byTousersInput, book_tran_historyUncheckedCreateWithoutUsers_book_tran_history_requested_byTousersInput> | book_tran_historyCreateWithoutUsers_book_tran_history_requested_byTousersInput[] | book_tran_historyUncheckedCreateWithoutUsers_book_tran_history_requested_byTousersInput[]
-    connectOrCreate?: book_tran_historyCreateOrConnectWithoutUsers_book_tran_history_requested_byTousersInput | book_tran_historyCreateOrConnectWithoutUsers_book_tran_history_requested_byTousersInput[]
-    upsert?: book_tran_historyUpsertWithWhereUniqueWithoutUsers_book_tran_history_requested_byTousersInput | book_tran_historyUpsertWithWhereUniqueWithoutUsers_book_tran_history_requested_byTousersInput[]
-    createMany?: book_tran_historyCreateManyUsers_book_tran_history_requested_byTousersInputEnvelope
-    set?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    disconnect?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    delete?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    connect?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    update?: book_tran_historyUpdateWithWhereUniqueWithoutUsers_book_tran_history_requested_byTousersInput | book_tran_historyUpdateWithWhereUniqueWithoutUsers_book_tran_history_requested_byTousersInput[]
-    updateMany?: book_tran_historyUpdateManyWithWhereWithoutUsers_book_tran_history_requested_byTousersInput | book_tran_historyUpdateManyWithWhereWithoutUsers_book_tran_history_requested_byTousersInput[]
-    deleteMany?: book_tran_historyScalarWhereInput | book_tran_historyScalarWhereInput[]
+  export type item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput = {
+    create?: XOR<item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput, item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput> | item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput[] | item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput[]
+    connectOrCreate?: item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput[]
+    upsert?: item_tran_historyUpsertWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyUpsertWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput[]
+    createMany?: item_tran_historyCreateManyUsers_item_tran_history_requested_byTousersInputEnvelope
+    set?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    disconnect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    delete?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    update?: item_tran_historyUpdateWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyUpdateWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput[]
+    updateMany?: item_tran_historyUpdateManyWithWhereWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyUpdateManyWithWhereWithoutUsers_item_tran_history_requested_byTousersInput[]
+    deleteMany?: item_tran_historyScalarWhereInput | item_tran_historyScalarWhereInput[]
   }
 
-  export type book_tran_historyUpdateManyWithoutUsers_book_tran_history_approved_byTousersNestedInput = {
-    create?: XOR<book_tran_historyCreateWithoutUsers_book_tran_history_approved_byTousersInput, book_tran_historyUncheckedCreateWithoutUsers_book_tran_history_approved_byTousersInput> | book_tran_historyCreateWithoutUsers_book_tran_history_approved_byTousersInput[] | book_tran_historyUncheckedCreateWithoutUsers_book_tran_history_approved_byTousersInput[]
-    connectOrCreate?: book_tran_historyCreateOrConnectWithoutUsers_book_tran_history_approved_byTousersInput | book_tran_historyCreateOrConnectWithoutUsers_book_tran_history_approved_byTousersInput[]
-    upsert?: book_tran_historyUpsertWithWhereUniqueWithoutUsers_book_tran_history_approved_byTousersInput | book_tran_historyUpsertWithWhereUniqueWithoutUsers_book_tran_history_approved_byTousersInput[]
-    createMany?: book_tran_historyCreateManyUsers_book_tran_history_approved_byTousersInputEnvelope
-    set?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    disconnect?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    delete?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    connect?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    update?: book_tran_historyUpdateWithWhereUniqueWithoutUsers_book_tran_history_approved_byTousersInput | book_tran_historyUpdateWithWhereUniqueWithoutUsers_book_tran_history_approved_byTousersInput[]
-    updateMany?: book_tran_historyUpdateManyWithWhereWithoutUsers_book_tran_history_approved_byTousersInput | book_tran_historyUpdateManyWithWhereWithoutUsers_book_tran_history_approved_byTousersInput[]
-    deleteMany?: book_tran_historyScalarWhereInput | book_tran_historyScalarWhereInput[]
+  export type item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput = {
+    create?: XOR<item_tran_historyCreateWithoutUsers_item_tran_history_approved_byTousersInput, item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_approved_byTousersInput> | item_tran_historyCreateWithoutUsers_item_tran_history_approved_byTousersInput[] | item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_approved_byTousersInput[]
+    connectOrCreate?: item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_approved_byTousersInput | item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_approved_byTousersInput[]
+    upsert?: item_tran_historyUpsertWithWhereUniqueWithoutUsers_item_tran_history_approved_byTousersInput | item_tran_historyUpsertWithWhereUniqueWithoutUsers_item_tran_history_approved_byTousersInput[]
+    createMany?: item_tran_historyCreateManyUsers_item_tran_history_approved_byTousersInputEnvelope
+    set?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    disconnect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    delete?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    update?: item_tran_historyUpdateWithWhereUniqueWithoutUsers_item_tran_history_approved_byTousersInput | item_tran_historyUpdateWithWhereUniqueWithoutUsers_item_tran_history_approved_byTousersInput[]
+    updateMany?: item_tran_historyUpdateManyWithWhereWithoutUsers_item_tran_history_approved_byTousersInput | item_tran_historyUpdateManyWithWhereWithoutUsers_item_tran_history_approved_byTousersInput[]
+    deleteMany?: item_tran_historyScalarWhereInput | item_tran_historyScalarWhereInput[]
   }
 
   export type finesUpdateManyWithoutUsersNestedInput = {
@@ -15060,46 +17987,60 @@ export namespace Prisma {
     deleteMany?: user_wishlistScalarWhereInput | user_wishlistScalarWhereInput[]
   }
 
-  export type book_tranUncheckedUpdateManyWithoutUsersNestedInput = {
-    create?: XOR<book_tranCreateWithoutUsersInput, book_tranUncheckedCreateWithoutUsersInput> | book_tranCreateWithoutUsersInput[] | book_tranUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: book_tranCreateOrConnectWithoutUsersInput | book_tranCreateOrConnectWithoutUsersInput[]
-    upsert?: book_tranUpsertWithWhereUniqueWithoutUsersInput | book_tranUpsertWithWhereUniqueWithoutUsersInput[]
-    createMany?: book_tranCreateManyUsersInputEnvelope
-    set?: book_tranWhereUniqueInput | book_tranWhereUniqueInput[]
-    disconnect?: book_tranWhereUniqueInput | book_tranWhereUniqueInput[]
-    delete?: book_tranWhereUniqueInput | book_tranWhereUniqueInput[]
-    connect?: book_tranWhereUniqueInput | book_tranWhereUniqueInput[]
-    update?: book_tranUpdateWithWhereUniqueWithoutUsersInput | book_tranUpdateWithWhereUniqueWithoutUsersInput[]
-    updateMany?: book_tranUpdateManyWithWhereWithoutUsersInput | book_tranUpdateManyWithWhereWithoutUsersInput[]
-    deleteMany?: book_tranScalarWhereInput | book_tranScalarWhereInput[]
+  export type library_cardsUpdateManyWithoutUsersNestedInput = {
+    create?: XOR<library_cardsCreateWithoutUsersInput, library_cardsUncheckedCreateWithoutUsersInput> | library_cardsCreateWithoutUsersInput[] | library_cardsUncheckedCreateWithoutUsersInput[]
+    connectOrCreate?: library_cardsCreateOrConnectWithoutUsersInput | library_cardsCreateOrConnectWithoutUsersInput[]
+    upsert?: library_cardsUpsertWithWhereUniqueWithoutUsersInput | library_cardsUpsertWithWhereUniqueWithoutUsersInput[]
+    createMany?: library_cardsCreateManyUsersInputEnvelope
+    set?: library_cardsWhereUniqueInput | library_cardsWhereUniqueInput[]
+    disconnect?: library_cardsWhereUniqueInput | library_cardsWhereUniqueInput[]
+    delete?: library_cardsWhereUniqueInput | library_cardsWhereUniqueInput[]
+    connect?: library_cardsWhereUniqueInput | library_cardsWhereUniqueInput[]
+    update?: library_cardsUpdateWithWhereUniqueWithoutUsersInput | library_cardsUpdateWithWhereUniqueWithoutUsersInput[]
+    updateMany?: library_cardsUpdateManyWithWhereWithoutUsersInput | library_cardsUpdateManyWithWhereWithoutUsersInput[]
+    deleteMany?: library_cardsScalarWhereInput | library_cardsScalarWhereInput[]
   }
 
-  export type book_tran_historyUncheckedUpdateManyWithoutUsers_book_tran_history_requested_byTousersNestedInput = {
-    create?: XOR<book_tran_historyCreateWithoutUsers_book_tran_history_requested_byTousersInput, book_tran_historyUncheckedCreateWithoutUsers_book_tran_history_requested_byTousersInput> | book_tran_historyCreateWithoutUsers_book_tran_history_requested_byTousersInput[] | book_tran_historyUncheckedCreateWithoutUsers_book_tran_history_requested_byTousersInput[]
-    connectOrCreate?: book_tran_historyCreateOrConnectWithoutUsers_book_tran_history_requested_byTousersInput | book_tran_historyCreateOrConnectWithoutUsers_book_tran_history_requested_byTousersInput[]
-    upsert?: book_tran_historyUpsertWithWhereUniqueWithoutUsers_book_tran_history_requested_byTousersInput | book_tran_historyUpsertWithWhereUniqueWithoutUsers_book_tran_history_requested_byTousersInput[]
-    createMany?: book_tran_historyCreateManyUsers_book_tran_history_requested_byTousersInputEnvelope
-    set?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    disconnect?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    delete?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    connect?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    update?: book_tran_historyUpdateWithWhereUniqueWithoutUsers_book_tran_history_requested_byTousersInput | book_tran_historyUpdateWithWhereUniqueWithoutUsers_book_tran_history_requested_byTousersInput[]
-    updateMany?: book_tran_historyUpdateManyWithWhereWithoutUsers_book_tran_history_requested_byTousersInput | book_tran_historyUpdateManyWithWhereWithoutUsers_book_tran_history_requested_byTousersInput[]
-    deleteMany?: book_tran_historyScalarWhereInput | book_tran_historyScalarWhereInput[]
+  export type item_tranUncheckedUpdateManyWithoutUsersNestedInput = {
+    create?: XOR<item_tranCreateWithoutUsersInput, item_tranUncheckedCreateWithoutUsersInput> | item_tranCreateWithoutUsersInput[] | item_tranUncheckedCreateWithoutUsersInput[]
+    connectOrCreate?: item_tranCreateOrConnectWithoutUsersInput | item_tranCreateOrConnectWithoutUsersInput[]
+    upsert?: item_tranUpsertWithWhereUniqueWithoutUsersInput | item_tranUpsertWithWhereUniqueWithoutUsersInput[]
+    createMany?: item_tranCreateManyUsersInputEnvelope
+    set?: item_tranWhereUniqueInput | item_tranWhereUniqueInput[]
+    disconnect?: item_tranWhereUniqueInput | item_tranWhereUniqueInput[]
+    delete?: item_tranWhereUniqueInput | item_tranWhereUniqueInput[]
+    connect?: item_tranWhereUniqueInput | item_tranWhereUniqueInput[]
+    update?: item_tranUpdateWithWhereUniqueWithoutUsersInput | item_tranUpdateWithWhereUniqueWithoutUsersInput[]
+    updateMany?: item_tranUpdateManyWithWhereWithoutUsersInput | item_tranUpdateManyWithWhereWithoutUsersInput[]
+    deleteMany?: item_tranScalarWhereInput | item_tranScalarWhereInput[]
   }
 
-  export type book_tran_historyUncheckedUpdateManyWithoutUsers_book_tran_history_approved_byTousersNestedInput = {
-    create?: XOR<book_tran_historyCreateWithoutUsers_book_tran_history_approved_byTousersInput, book_tran_historyUncheckedCreateWithoutUsers_book_tran_history_approved_byTousersInput> | book_tran_historyCreateWithoutUsers_book_tran_history_approved_byTousersInput[] | book_tran_historyUncheckedCreateWithoutUsers_book_tran_history_approved_byTousersInput[]
-    connectOrCreate?: book_tran_historyCreateOrConnectWithoutUsers_book_tran_history_approved_byTousersInput | book_tran_historyCreateOrConnectWithoutUsers_book_tran_history_approved_byTousersInput[]
-    upsert?: book_tran_historyUpsertWithWhereUniqueWithoutUsers_book_tran_history_approved_byTousersInput | book_tran_historyUpsertWithWhereUniqueWithoutUsers_book_tran_history_approved_byTousersInput[]
-    createMany?: book_tran_historyCreateManyUsers_book_tran_history_approved_byTousersInputEnvelope
-    set?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    disconnect?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    delete?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    connect?: book_tran_historyWhereUniqueInput | book_tran_historyWhereUniqueInput[]
-    update?: book_tran_historyUpdateWithWhereUniqueWithoutUsers_book_tran_history_approved_byTousersInput | book_tran_historyUpdateWithWhereUniqueWithoutUsers_book_tran_history_approved_byTousersInput[]
-    updateMany?: book_tran_historyUpdateManyWithWhereWithoutUsers_book_tran_history_approved_byTousersInput | book_tran_historyUpdateManyWithWhereWithoutUsers_book_tran_history_approved_byTousersInput[]
-    deleteMany?: book_tran_historyScalarWhereInput | book_tran_historyScalarWhereInput[]
+  export type item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput = {
+    create?: XOR<item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput, item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput> | item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput[] | item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput[]
+    connectOrCreate?: item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput[]
+    upsert?: item_tran_historyUpsertWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyUpsertWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput[]
+    createMany?: item_tran_historyCreateManyUsers_item_tran_history_requested_byTousersInputEnvelope
+    set?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    disconnect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    delete?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    update?: item_tran_historyUpdateWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyUpdateWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput[]
+    updateMany?: item_tran_historyUpdateManyWithWhereWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyUpdateManyWithWhereWithoutUsers_item_tran_history_requested_byTousersInput[]
+    deleteMany?: item_tran_historyScalarWhereInput | item_tran_historyScalarWhereInput[]
+  }
+
+  export type item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput = {
+    create?: XOR<item_tran_historyCreateWithoutUsers_item_tran_history_approved_byTousersInput, item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_approved_byTousersInput> | item_tran_historyCreateWithoutUsers_item_tran_history_approved_byTousersInput[] | item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_approved_byTousersInput[]
+    connectOrCreate?: item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_approved_byTousersInput | item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_approved_byTousersInput[]
+    upsert?: item_tran_historyUpsertWithWhereUniqueWithoutUsers_item_tran_history_approved_byTousersInput | item_tran_historyUpsertWithWhereUniqueWithoutUsers_item_tran_history_approved_byTousersInput[]
+    createMany?: item_tran_historyCreateManyUsers_item_tran_history_approved_byTousersInputEnvelope
+    set?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    disconnect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    delete?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    update?: item_tran_historyUpdateWithWhereUniqueWithoutUsers_item_tran_history_approved_byTousersInput | item_tran_historyUpdateWithWhereUniqueWithoutUsers_item_tran_history_approved_byTousersInput[]
+    updateMany?: item_tran_historyUpdateManyWithWhereWithoutUsers_item_tran_history_approved_byTousersInput | item_tran_historyUpdateManyWithWhereWithoutUsers_item_tran_history_approved_byTousersInput[]
+    deleteMany?: item_tran_historyScalarWhereInput | item_tran_historyScalarWhereInput[]
   }
 
   export type finesUncheckedUpdateManyWithoutUsersNestedInput = {
@@ -15172,6 +18113,44 @@ export namespace Prisma {
     deleteMany?: user_wishlistScalarWhereInput | user_wishlistScalarWhereInput[]
   }
 
+  export type library_cardsUncheckedUpdateManyWithoutUsersNestedInput = {
+    create?: XOR<library_cardsCreateWithoutUsersInput, library_cardsUncheckedCreateWithoutUsersInput> | library_cardsCreateWithoutUsersInput[] | library_cardsUncheckedCreateWithoutUsersInput[]
+    connectOrCreate?: library_cardsCreateOrConnectWithoutUsersInput | library_cardsCreateOrConnectWithoutUsersInput[]
+    upsert?: library_cardsUpsertWithWhereUniqueWithoutUsersInput | library_cardsUpsertWithWhereUniqueWithoutUsersInput[]
+    createMany?: library_cardsCreateManyUsersInputEnvelope
+    set?: library_cardsWhereUniqueInput | library_cardsWhereUniqueInput[]
+    disconnect?: library_cardsWhereUniqueInput | library_cardsWhereUniqueInput[]
+    delete?: library_cardsWhereUniqueInput | library_cardsWhereUniqueInput[]
+    connect?: library_cardsWhereUniqueInput | library_cardsWhereUniqueInput[]
+    update?: library_cardsUpdateWithWhereUniqueWithoutUsersInput | library_cardsUpdateWithWhereUniqueWithoutUsersInput[]
+    updateMany?: library_cardsUpdateManyWithWhereWithoutUsersInput | library_cardsUpdateManyWithWhereWithoutUsersInput[]
+    deleteMany?: library_cardsScalarWhereInput | library_cardsScalarWhereInput[]
+  }
+
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
+  }
+
+  export type usersCreateNestedOneWithoutLibrary_cardsInput = {
+    create?: XOR<usersCreateWithoutLibrary_cardsInput, usersUncheckedCreateWithoutLibrary_cardsInput>
+    connectOrCreate?: usersCreateOrConnectWithoutLibrary_cardsInput
+    connect?: usersWhereUniqueInput
+  }
+
+  export type Enumcard_statusFieldUpdateOperationsInput = {
+    set?: $Enums.card_status
+  }
+
+  export type usersUpdateOneWithoutLibrary_cardsNestedInput = {
+    create?: XOR<usersCreateWithoutLibrary_cardsInput, usersUncheckedCreateWithoutLibrary_cardsInput>
+    connectOrCreate?: usersCreateOrConnectWithoutLibrary_cardsInput
+    upsert?: usersUpsertWithoutLibrary_cardsInput
+    disconnect?: usersWhereInput | boolean
+    delete?: usersWhereInput | boolean
+    connect?: usersWhereUniqueInput
+    update?: XOR<XOR<usersUpdateToOneWithWhereWithoutLibrary_cardsInput, usersUpdateWithoutLibrary_cardsInput>, usersUncheckedUpdateWithoutLibrary_cardsInput>
+  }
+
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[]
@@ -15194,11 +18173,11 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedEnumbook_tran_statusNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.book_tran_status | Enumbook_tran_statusFieldRefInput<$PrismaModel> | null
-    in?: $Enums.book_tran_status[] | null
-    notIn?: $Enums.book_tran_status[] | null
-    not?: NestedEnumbook_tran_statusNullableFilter<$PrismaModel> | $Enums.book_tran_status | null
+  export type NestedEnumitem_tran_statusNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.item_tran_status | Enumitem_tran_statusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.item_tran_status[] | null
+    notIn?: $Enums.item_tran_status[] | null
+    not?: NestedEnumitem_tran_statusNullableFilter<$PrismaModel> | $Enums.item_tran_status | null
   }
 
   export type NestedEnumrecord_statusNullableFilter<$PrismaModel = never> = {
@@ -15262,14 +18241,14 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedEnumbook_tran_statusNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.book_tran_status | Enumbook_tran_statusFieldRefInput<$PrismaModel> | null
-    in?: $Enums.book_tran_status[] | null
-    notIn?: $Enums.book_tran_status[] | null
-    not?: NestedEnumbook_tran_statusNullableWithAggregatesFilter<$PrismaModel> | $Enums.book_tran_status | null
+  export type NestedEnumitem_tran_statusNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.item_tran_status | Enumitem_tran_statusFieldRefInput<$PrismaModel> | null
+    in?: $Enums.item_tran_status[] | null
+    notIn?: $Enums.item_tran_status[] | null
+    not?: NestedEnumitem_tran_statusNullableWithAggregatesFilter<$PrismaModel> | $Enums.item_tran_status | null
     _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedEnumbook_tran_statusNullableFilter<$PrismaModel>
-    _max?: NestedEnumbook_tran_statusNullableFilter<$PrismaModel>
+    _min?: NestedEnumitem_tran_statusNullableFilter<$PrismaModel>
+    _max?: NestedEnumitem_tran_statusNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumrecord_statusNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -15282,11 +18261,11 @@ export namespace Prisma {
     _max?: NestedEnumrecord_statusNullableFilter<$PrismaModel>
   }
 
-  export type NestedEnumbook_tran_history_statusFilter<$PrismaModel = never> = {
-    equals?: $Enums.book_tran_history_status | Enumbook_tran_history_statusFieldRefInput<$PrismaModel>
-    in?: $Enums.book_tran_history_status[]
-    notIn?: $Enums.book_tran_history_status[]
-    not?: NestedEnumbook_tran_history_statusFilter<$PrismaModel> | $Enums.book_tran_history_status
+  export type NestedEnumitem_tran_history_statusFilter<$PrismaModel = never> = {
+    equals?: $Enums.item_tran_history_status | Enumitem_tran_history_statusFieldRefInput<$PrismaModel>
+    in?: $Enums.item_tran_history_status[]
+    notIn?: $Enums.item_tran_history_status[]
+    not?: NestedEnumitem_tran_history_statusFilter<$PrismaModel> | $Enums.item_tran_history_status
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
@@ -15315,14 +18294,14 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type NestedEnumbook_tran_history_statusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.book_tran_history_status | Enumbook_tran_history_statusFieldRefInput<$PrismaModel>
-    in?: $Enums.book_tran_history_status[]
-    notIn?: $Enums.book_tran_history_status[]
-    not?: NestedEnumbook_tran_history_statusWithAggregatesFilter<$PrismaModel> | $Enums.book_tran_history_status
+  export type NestedEnumitem_tran_history_statusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.item_tran_history_status | Enumitem_tran_history_statusFieldRefInput<$PrismaModel>
+    in?: $Enums.item_tran_history_status[]
+    notIn?: $Enums.item_tran_history_status[]
+    not?: NestedEnumitem_tran_history_statusWithAggregatesFilter<$PrismaModel> | $Enums.item_tran_history_status
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumbook_tran_history_statusFilter<$PrismaModel>
-    _max?: NestedEnumbook_tran_history_statusFilter<$PrismaModel>
+    _min?: NestedEnumitem_tran_history_statusFilter<$PrismaModel>
+    _max?: NestedEnumitem_tran_history_statusFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -15372,6 +18351,13 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type NestedEnumlibrary_item_typeFilter<$PrismaModel = never> = {
+    equals?: $Enums.library_item_type | Enumlibrary_item_typeFieldRefInput<$PrismaModel>
+    in?: $Enums.library_item_type[]
+    notIn?: $Enums.library_item_type[]
+    not?: NestedEnumlibrary_item_typeFilter<$PrismaModel> | $Enums.library_item_type
+  }
+
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -15388,6 +18374,16 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type NestedEnumlibrary_item_typeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.library_item_type | Enumlibrary_item_typeFieldRefInput<$PrismaModel>
+    in?: $Enums.library_item_type[]
+    notIn?: $Enums.library_item_type[]
+    not?: NestedEnumlibrary_item_typeWithAggregatesFilter<$PrismaModel> | $Enums.library_item_type
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumlibrary_item_typeFilter<$PrismaModel>
+    _max?: NestedEnumlibrary_item_typeFilter<$PrismaModel>
   }
 
   export type NestedDecimalNullableFilter<$PrismaModel = never> = {
@@ -15519,7 +18515,49 @@ export namespace Prisma {
     _max?: NestedEnumgenderNullableFilter<$PrismaModel>
   }
 
-  export type booksCreateWithoutBook_tranInput = {
+  export type NestedDateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[]
+    notIn?: Date[] | string[]
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumcard_statusFilter<$PrismaModel = never> = {
+    equals?: $Enums.card_status | Enumcard_statusFieldRefInput<$PrismaModel>
+    in?: $Enums.card_status[]
+    notIn?: $Enums.card_status[]
+    not?: NestedEnumcard_statusFilter<$PrismaModel> | $Enums.card_status
+  }
+
+  export type NestedEnumcard_statusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.card_status | Enumcard_statusFieldRefInput<$PrismaModel>
+    in?: $Enums.card_status[]
+    notIn?: $Enums.card_status[]
+    not?: NestedEnumcard_statusWithAggregatesFilter<$PrismaModel> | $Enums.card_status
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumcard_statusFilter<$PrismaModel>
+    _max?: NestedEnumcard_statusFilter<$PrismaModel>
+  }
+
+  export type library_itemsCreateWithoutItem_tranInput = {
     title?: string | null
     author: string
     isbn?: string | null
@@ -15528,16 +18566,25 @@ export namespace Prisma {
     image_url?: string | null
     description?: string | null
     librarian_id?: number | null
+    item_type?: $Enums.library_item_type
+    location?: string | null
+    publisher?: string | null
+    language?: string | null
+    pages?: number | null
+    duration?: number | null
+    format?: string | null
+    subject?: string | null
+    keywords?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     record_status?: $Enums.record_status | null
-    book_tran_history?: book_tran_historyCreateNestedManyWithoutBooksInput
-    notifications?: notificationsCreateNestedManyWithoutBooksInput
-    user_wishlist?: user_wishlistCreateNestedManyWithoutBooksInput
+    item_tran_history?: item_tran_historyCreateNestedManyWithoutLibrary_itemsInput
+    notifications?: notificationsCreateNestedManyWithoutLibrary_itemsInput
+    user_wishlist?: user_wishlistCreateNestedManyWithoutLibrary_itemsInput
   }
 
-  export type booksUncheckedCreateWithoutBook_tranInput = {
-    book_id?: number
+  export type library_itemsUncheckedCreateWithoutItem_tranInput = {
+    item_id?: number
     title?: string | null
     author: string
     isbn?: string | null
@@ -15546,20 +18593,29 @@ export namespace Prisma {
     image_url?: string | null
     description?: string | null
     librarian_id?: number | null
+    item_type?: $Enums.library_item_type
+    location?: string | null
+    publisher?: string | null
+    language?: string | null
+    pages?: number | null
+    duration?: number | null
+    format?: string | null
+    subject?: string | null
+    keywords?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     record_status?: $Enums.record_status | null
-    book_tran_history?: book_tran_historyUncheckedCreateNestedManyWithoutBooksInput
-    notifications?: notificationsUncheckedCreateNestedManyWithoutBooksInput
-    user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutBooksInput
+    item_tran_history?: item_tran_historyUncheckedCreateNestedManyWithoutLibrary_itemsInput
+    notifications?: notificationsUncheckedCreateNestedManyWithoutLibrary_itemsInput
+    user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutLibrary_itemsInput
   }
 
-  export type booksCreateOrConnectWithoutBook_tranInput = {
-    where: booksWhereUniqueInput
-    create: XOR<booksCreateWithoutBook_tranInput, booksUncheckedCreateWithoutBook_tranInput>
+  export type library_itemsCreateOrConnectWithoutItem_tranInput = {
+    where: library_itemsWhereUniqueInput
+    create: XOR<library_itemsCreateWithoutItem_tranInput, library_itemsUncheckedCreateWithoutItem_tranInput>
   }
 
-  export type usersCreateWithoutBook_tranInput = {
+  export type usersCreateWithoutItem_tranInput = {
     name?: string | null
     email?: string | null
     password_hash?: string | null
@@ -15572,16 +18628,17 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyCreateNestedManyWithoutUsers_book_tran_history_requested_byTousersInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyCreateNestedManyWithoutUsers_book_tran_history_approved_byTousersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
     fines?: finesCreateNestedManyWithoutUsersInput
     logs?: logsCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistCreateNestedManyWithoutUsersInput
+    library_cards?: library_cardsCreateNestedManyWithoutUsersInput
   }
 
-  export type usersUncheckedCreateWithoutBook_tranInput = {
+  export type usersUncheckedCreateWithoutItem_tranInput = {
     user_id?: number
     name?: string | null
     email?: string | null
@@ -15595,38 +18652,39 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyUncheckedCreateNestedManyWithoutUsers_book_tran_history_requested_byTousersInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyUncheckedCreateNestedManyWithoutUsers_book_tran_history_approved_byTousersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
     fines?: finesUncheckedCreateNestedManyWithoutUsersInput
     logs?: logsUncheckedCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutUsersInput
+    library_cards?: library_cardsUncheckedCreateNestedManyWithoutUsersInput
   }
 
-  export type usersCreateOrConnectWithoutBook_tranInput = {
+  export type usersCreateOrConnectWithoutItem_tranInput = {
     where: usersWhereUniqueInput
-    create: XOR<usersCreateWithoutBook_tranInput, usersUncheckedCreateWithoutBook_tranInput>
+    create: XOR<usersCreateWithoutItem_tranInput, usersUncheckedCreateWithoutItem_tranInput>
   }
 
-  export type book_tran_historyCreateWithoutBook_tranInput = {
-    status?: $Enums.book_tran_history_status
+  export type item_tran_historyCreateWithoutItem_tranInput = {
+    status?: $Enums.item_tran_history_status
     requested_at?: Date | string | null
     approved_at?: Date | string | null
     date_issued?: Date | string | null
     date_due?: Date | string | null
     date_returned?: Date | string | null
     remarks?: string | null
-    books?: booksCreateNestedOneWithoutBook_tran_historyInput
-    users_book_tran_history_requested_byTousers?: usersCreateNestedOneWithoutBook_tran_history_book_tran_history_requested_byTousersInput
-    users_book_tran_history_approved_byTousers?: usersCreateNestedOneWithoutBook_tran_history_book_tran_history_approved_byTousersInput
-    fines?: finesCreateNestedManyWithoutBook_tran_historyInput
+    library_items?: library_itemsCreateNestedOneWithoutItem_tran_historyInput
+    users_item_tran_history_requested_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_requested_byTousersInput
+    users_item_tran_history_approved_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_approved_byTousersInput
+    fines?: finesCreateNestedManyWithoutItem_tran_historyInput
   }
 
-  export type book_tran_historyUncheckedCreateWithoutBook_tranInput = {
+  export type item_tran_historyUncheckedCreateWithoutItem_tranInput = {
     id?: number
-    book_id?: number | null
-    status?: $Enums.book_tran_history_status
+    item_id?: number | null
+    status?: $Enums.item_tran_history_status
     requested_by?: number | null
     approved_by?: number | null
     requested_at?: Date | string | null
@@ -15635,64 +18693,66 @@ export namespace Prisma {
     date_due?: Date | string | null
     date_returned?: Date | string | null
     remarks?: string | null
-    fines?: finesUncheckedCreateNestedManyWithoutBook_tran_historyInput
+    fines?: finesUncheckedCreateNestedManyWithoutItem_tran_historyInput
   }
 
-  export type book_tran_historyCreateOrConnectWithoutBook_tranInput = {
-    where: book_tran_historyWhereUniqueInput
-    create: XOR<book_tran_historyCreateWithoutBook_tranInput, book_tran_historyUncheckedCreateWithoutBook_tranInput>
+  export type item_tran_historyCreateOrConnectWithoutItem_tranInput = {
+    where: item_tran_historyWhereUniqueInput
+    create: XOR<item_tran_historyCreateWithoutItem_tranInput, item_tran_historyUncheckedCreateWithoutItem_tranInput>
   }
 
-  export type book_tran_historyCreateManyBook_tranInputEnvelope = {
-    data: book_tran_historyCreateManyBook_tranInput | book_tran_historyCreateManyBook_tranInput[]
+  export type item_tran_historyCreateManyItem_tranInputEnvelope = {
+    data: item_tran_historyCreateManyItem_tranInput | item_tran_historyCreateManyItem_tranInput[]
     skipDuplicates?: boolean
   }
 
-  export type notificationsCreateWithoutBook_tranInput = {
+  export type notificationsCreateWithoutItem_tranInput = {
     type?: $Enums.notifications_type | null
+    reservation_id?: number | null
     status?: $Enums.notifications_status | null
     message?: string | null
     created_at?: Date | string | null
     resolved_at?: Date | string | null
-    books?: booksCreateNestedOneWithoutNotificationsInput
+    library_items?: library_itemsCreateNestedOneWithoutNotificationsInput
     users_notifications_from_user_idTousers?: usersCreateNestedOneWithoutNotifications_notifications_from_user_idTousersInput
     users_notifications_to_user_idTousers?: usersCreateNestedOneWithoutNotifications_notifications_to_user_idTousersInput
   }
 
-  export type notificationsUncheckedCreateWithoutBook_tranInput = {
+  export type notificationsUncheckedCreateWithoutItem_tranInput = {
     notification_id?: number
     type?: $Enums.notifications_type | null
-    book_id?: number | null
+    item_id?: number | null
     from_user_id?: number | null
     to_user_id?: number | null
+    reservation_id?: number | null
     status?: $Enums.notifications_status | null
     message?: string | null
     created_at?: Date | string | null
     resolved_at?: Date | string | null
   }
 
-  export type notificationsCreateOrConnectWithoutBook_tranInput = {
+  export type notificationsCreateOrConnectWithoutItem_tranInput = {
     where: notificationsWhereUniqueInput
-    create: XOR<notificationsCreateWithoutBook_tranInput, notificationsUncheckedCreateWithoutBook_tranInput>
+    create: XOR<notificationsCreateWithoutItem_tranInput, notificationsUncheckedCreateWithoutItem_tranInput>
   }
 
-  export type notificationsCreateManyBook_tranInputEnvelope = {
-    data: notificationsCreateManyBook_tranInput | notificationsCreateManyBook_tranInput[]
+  export type notificationsCreateManyItem_tranInputEnvelope = {
+    data: notificationsCreateManyItem_tranInput | notificationsCreateManyItem_tranInput[]
     skipDuplicates?: boolean
   }
 
-  export type booksUpsertWithoutBook_tranInput = {
-    update: XOR<booksUpdateWithoutBook_tranInput, booksUncheckedUpdateWithoutBook_tranInput>
-    create: XOR<booksCreateWithoutBook_tranInput, booksUncheckedCreateWithoutBook_tranInput>
-    where?: booksWhereInput
+  export type library_itemsUpsertWithoutItem_tranInput = {
+    update: XOR<library_itemsUpdateWithoutItem_tranInput, library_itemsUncheckedUpdateWithoutItem_tranInput>
+    create: XOR<library_itemsCreateWithoutItem_tranInput, library_itemsUncheckedCreateWithoutItem_tranInput>
+    where?: library_itemsWhereInput
   }
 
-  export type booksUpdateToOneWithWhereWithoutBook_tranInput = {
-    where?: booksWhereInput
-    data: XOR<booksUpdateWithoutBook_tranInput, booksUncheckedUpdateWithoutBook_tranInput>
+  export type library_itemsUpdateToOneWithWhereWithoutItem_tranInput = {
+    where?: library_itemsWhereInput
+    data: XOR<library_itemsUpdateWithoutItem_tranInput, library_itemsUncheckedUpdateWithoutItem_tranInput>
   }
 
-  export type booksUpdateWithoutBook_tranInput = {
+  export type library_itemsUpdateWithoutItem_tranInput = {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     author?: StringFieldUpdateOperationsInput | string
     isbn?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15701,16 +18761,25 @@ export namespace Prisma {
     image_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     librarian_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_type?: Enumlibrary_item_typeFieldUpdateOperationsInput | $Enums.library_item_type
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    publisher?: NullableStringFieldUpdateOperationsInput | string | null
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: NullableIntFieldUpdateOperationsInput | number | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    format?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
-    book_tran_history?: book_tran_historyUpdateManyWithoutBooksNestedInput
-    notifications?: notificationsUpdateManyWithoutBooksNestedInput
-    user_wishlist?: user_wishlistUpdateManyWithoutBooksNestedInput
+    item_tran_history?: item_tran_historyUpdateManyWithoutLibrary_itemsNestedInput
+    notifications?: notificationsUpdateManyWithoutLibrary_itemsNestedInput
+    user_wishlist?: user_wishlistUpdateManyWithoutLibrary_itemsNestedInput
   }
 
-  export type booksUncheckedUpdateWithoutBook_tranInput = {
-    book_id?: IntFieldUpdateOperationsInput | number
+  export type library_itemsUncheckedUpdateWithoutItem_tranInput = {
+    item_id?: IntFieldUpdateOperationsInput | number
     title?: NullableStringFieldUpdateOperationsInput | string | null
     author?: StringFieldUpdateOperationsInput | string
     isbn?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15719,26 +18788,35 @@ export namespace Prisma {
     image_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     librarian_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_type?: Enumlibrary_item_typeFieldUpdateOperationsInput | $Enums.library_item_type
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    publisher?: NullableStringFieldUpdateOperationsInput | string | null
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: NullableIntFieldUpdateOperationsInput | number | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    format?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
-    book_tran_history?: book_tran_historyUncheckedUpdateManyWithoutBooksNestedInput
-    notifications?: notificationsUncheckedUpdateManyWithoutBooksNestedInput
-    user_wishlist?: user_wishlistUncheckedUpdateManyWithoutBooksNestedInput
+    item_tran_history?: item_tran_historyUncheckedUpdateManyWithoutLibrary_itemsNestedInput
+    notifications?: notificationsUncheckedUpdateManyWithoutLibrary_itemsNestedInput
+    user_wishlist?: user_wishlistUncheckedUpdateManyWithoutLibrary_itemsNestedInput
   }
 
-  export type usersUpsertWithoutBook_tranInput = {
-    update: XOR<usersUpdateWithoutBook_tranInput, usersUncheckedUpdateWithoutBook_tranInput>
-    create: XOR<usersCreateWithoutBook_tranInput, usersUncheckedCreateWithoutBook_tranInput>
+  export type usersUpsertWithoutItem_tranInput = {
+    update: XOR<usersUpdateWithoutItem_tranInput, usersUncheckedUpdateWithoutItem_tranInput>
+    create: XOR<usersCreateWithoutItem_tranInput, usersUncheckedCreateWithoutItem_tranInput>
     where?: usersWhereInput
   }
 
-  export type usersUpdateToOneWithWhereWithoutBook_tranInput = {
+  export type usersUpdateToOneWithWhereWithoutItem_tranInput = {
     where?: usersWhereInput
-    data: XOR<usersUpdateWithoutBook_tranInput, usersUncheckedUpdateWithoutBook_tranInput>
+    data: XOR<usersUpdateWithoutItem_tranInput, usersUncheckedUpdateWithoutItem_tranInput>
   }
 
-  export type usersUpdateWithoutBook_tranInput = {
+  export type usersUpdateWithoutItem_tranInput = {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     password_hash?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15751,16 +18829,17 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyUpdateManyWithoutUsers_book_tran_history_requested_byTousersNestedInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyUpdateManyWithoutUsers_book_tran_history_approved_byTousersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
     fines?: finesUpdateManyWithoutUsersNestedInput
     logs?: logsUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUpdateManyWithoutUsersNestedInput
+    library_cards?: library_cardsUpdateManyWithoutUsersNestedInput
   }
 
-  export type usersUncheckedUpdateWithoutBook_tranInput = {
+  export type usersUncheckedUpdateWithoutItem_tranInput = {
     user_id?: IntFieldUpdateOperationsInput | number
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15774,63 +18853,64 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyUncheckedUpdateManyWithoutUsers_book_tran_history_requested_byTousersNestedInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyUncheckedUpdateManyWithoutUsers_book_tran_history_approved_byTousersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
     fines?: finesUncheckedUpdateManyWithoutUsersNestedInput
     logs?: logsUncheckedUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
+    library_cards?: library_cardsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
-  export type book_tran_historyUpsertWithWhereUniqueWithoutBook_tranInput = {
-    where: book_tran_historyWhereUniqueInput
-    update: XOR<book_tran_historyUpdateWithoutBook_tranInput, book_tran_historyUncheckedUpdateWithoutBook_tranInput>
-    create: XOR<book_tran_historyCreateWithoutBook_tranInput, book_tran_historyUncheckedCreateWithoutBook_tranInput>
+  export type item_tran_historyUpsertWithWhereUniqueWithoutItem_tranInput = {
+    where: item_tran_historyWhereUniqueInput
+    update: XOR<item_tran_historyUpdateWithoutItem_tranInput, item_tran_historyUncheckedUpdateWithoutItem_tranInput>
+    create: XOR<item_tran_historyCreateWithoutItem_tranInput, item_tran_historyUncheckedCreateWithoutItem_tranInput>
   }
 
-  export type book_tran_historyUpdateWithWhereUniqueWithoutBook_tranInput = {
-    where: book_tran_historyWhereUniqueInput
-    data: XOR<book_tran_historyUpdateWithoutBook_tranInput, book_tran_historyUncheckedUpdateWithoutBook_tranInput>
+  export type item_tran_historyUpdateWithWhereUniqueWithoutItem_tranInput = {
+    where: item_tran_historyWhereUniqueInput
+    data: XOR<item_tran_historyUpdateWithoutItem_tranInput, item_tran_historyUncheckedUpdateWithoutItem_tranInput>
   }
 
-  export type book_tran_historyUpdateManyWithWhereWithoutBook_tranInput = {
-    where: book_tran_historyScalarWhereInput
-    data: XOR<book_tran_historyUpdateManyMutationInput, book_tran_historyUncheckedUpdateManyWithoutBook_tranInput>
+  export type item_tran_historyUpdateManyWithWhereWithoutItem_tranInput = {
+    where: item_tran_historyScalarWhereInput
+    data: XOR<item_tran_historyUpdateManyMutationInput, item_tran_historyUncheckedUpdateManyWithoutItem_tranInput>
   }
 
-  export type book_tran_historyScalarWhereInput = {
-    AND?: book_tran_historyScalarWhereInput | book_tran_historyScalarWhereInput[]
-    OR?: book_tran_historyScalarWhereInput[]
-    NOT?: book_tran_historyScalarWhereInput | book_tran_historyScalarWhereInput[]
-    id?: IntFilter<"book_tran_history"> | number
-    book_id?: IntNullableFilter<"book_tran_history"> | number | null
-    tran_id?: IntNullableFilter<"book_tran_history"> | number | null
-    status?: Enumbook_tran_history_statusFilter<"book_tran_history"> | $Enums.book_tran_history_status
-    requested_by?: IntNullableFilter<"book_tran_history"> | number | null
-    approved_by?: IntNullableFilter<"book_tran_history"> | number | null
-    requested_at?: DateTimeNullableFilter<"book_tran_history"> | Date | string | null
-    approved_at?: DateTimeNullableFilter<"book_tran_history"> | Date | string | null
-    date_issued?: DateTimeNullableFilter<"book_tran_history"> | Date | string | null
-    date_due?: DateTimeNullableFilter<"book_tran_history"> | Date | string | null
-    date_returned?: DateTimeNullableFilter<"book_tran_history"> | Date | string | null
-    remarks?: StringNullableFilter<"book_tran_history"> | string | null
+  export type item_tran_historyScalarWhereInput = {
+    AND?: item_tran_historyScalarWhereInput | item_tran_historyScalarWhereInput[]
+    OR?: item_tran_historyScalarWhereInput[]
+    NOT?: item_tran_historyScalarWhereInput | item_tran_historyScalarWhereInput[]
+    id?: IntFilter<"item_tran_history"> | number
+    item_id?: IntNullableFilter<"item_tran_history"> | number | null
+    tran_id?: IntNullableFilter<"item_tran_history"> | number | null
+    status?: Enumitem_tran_history_statusFilter<"item_tran_history"> | $Enums.item_tran_history_status
+    requested_by?: IntNullableFilter<"item_tran_history"> | number | null
+    approved_by?: IntNullableFilter<"item_tran_history"> | number | null
+    requested_at?: DateTimeNullableFilter<"item_tran_history"> | Date | string | null
+    approved_at?: DateTimeNullableFilter<"item_tran_history"> | Date | string | null
+    date_issued?: DateTimeNullableFilter<"item_tran_history"> | Date | string | null
+    date_due?: DateTimeNullableFilter<"item_tran_history"> | Date | string | null
+    date_returned?: DateTimeNullableFilter<"item_tran_history"> | Date | string | null
+    remarks?: StringNullableFilter<"item_tran_history"> | string | null
   }
 
-  export type notificationsUpsertWithWhereUniqueWithoutBook_tranInput = {
+  export type notificationsUpsertWithWhereUniqueWithoutItem_tranInput = {
     where: notificationsWhereUniqueInput
-    update: XOR<notificationsUpdateWithoutBook_tranInput, notificationsUncheckedUpdateWithoutBook_tranInput>
-    create: XOR<notificationsCreateWithoutBook_tranInput, notificationsUncheckedCreateWithoutBook_tranInput>
+    update: XOR<notificationsUpdateWithoutItem_tranInput, notificationsUncheckedUpdateWithoutItem_tranInput>
+    create: XOR<notificationsCreateWithoutItem_tranInput, notificationsUncheckedCreateWithoutItem_tranInput>
   }
 
-  export type notificationsUpdateWithWhereUniqueWithoutBook_tranInput = {
+  export type notificationsUpdateWithWhereUniqueWithoutItem_tranInput = {
     where: notificationsWhereUniqueInput
-    data: XOR<notificationsUpdateWithoutBook_tranInput, notificationsUncheckedUpdateWithoutBook_tranInput>
+    data: XOR<notificationsUpdateWithoutItem_tranInput, notificationsUncheckedUpdateWithoutItem_tranInput>
   }
 
-  export type notificationsUpdateManyWithWhereWithoutBook_tranInput = {
+  export type notificationsUpdateManyWithWhereWithoutItem_tranInput = {
     where: notificationsScalarWhereInput
-    data: XOR<notificationsUpdateManyMutationInput, notificationsUncheckedUpdateManyWithoutBook_tranInput>
+    data: XOR<notificationsUpdateManyMutationInput, notificationsUncheckedUpdateManyWithoutItem_tranInput>
   }
 
   export type notificationsScalarWhereInput = {
@@ -15839,17 +18919,18 @@ export namespace Prisma {
     NOT?: notificationsScalarWhereInput | notificationsScalarWhereInput[]
     notification_id?: IntFilter<"notifications"> | number
     type?: Enumnotifications_typeNullableFilter<"notifications"> | $Enums.notifications_type | null
-    book_id?: IntNullableFilter<"notifications"> | number | null
+    item_id?: IntNullableFilter<"notifications"> | number | null
     from_user_id?: IntNullableFilter<"notifications"> | number | null
     to_user_id?: IntNullableFilter<"notifications"> | number | null
     tran_id?: IntNullableFilter<"notifications"> | number | null
+    reservation_id?: IntNullableFilter<"notifications"> | number | null
     status?: Enumnotifications_statusNullableFilter<"notifications"> | $Enums.notifications_status | null
     message?: StringNullableFilter<"notifications"> | string | null
     created_at?: DateTimeNullableFilter<"notifications"> | Date | string | null
     resolved_at?: DateTimeNullableFilter<"notifications"> | Date | string | null
   }
 
-  export type booksCreateWithoutBook_tran_historyInput = {
+  export type library_itemsCreateWithoutItem_tran_historyInput = {
     title?: string | null
     author: string
     isbn?: string | null
@@ -15858,16 +18939,25 @@ export namespace Prisma {
     image_url?: string | null
     description?: string | null
     librarian_id?: number | null
+    item_type?: $Enums.library_item_type
+    location?: string | null
+    publisher?: string | null
+    language?: string | null
+    pages?: number | null
+    duration?: number | null
+    format?: string | null
+    subject?: string | null
+    keywords?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     record_status?: $Enums.record_status | null
-    book_tran?: book_tranCreateNestedManyWithoutBooksInput
-    notifications?: notificationsCreateNestedManyWithoutBooksInput
-    user_wishlist?: user_wishlistCreateNestedManyWithoutBooksInput
+    item_tran?: item_tranCreateNestedManyWithoutLibrary_itemsInput
+    notifications?: notificationsCreateNestedManyWithoutLibrary_itemsInput
+    user_wishlist?: user_wishlistCreateNestedManyWithoutLibrary_itemsInput
   }
 
-  export type booksUncheckedCreateWithoutBook_tran_historyInput = {
-    book_id?: number
+  export type library_itemsUncheckedCreateWithoutItem_tran_historyInput = {
+    item_id?: number
     title?: string | null
     author: string
     isbn?: string | null
@@ -15876,42 +18966,51 @@ export namespace Prisma {
     image_url?: string | null
     description?: string | null
     librarian_id?: number | null
+    item_type?: $Enums.library_item_type
+    location?: string | null
+    publisher?: string | null
+    language?: string | null
+    pages?: number | null
+    duration?: number | null
+    format?: string | null
+    subject?: string | null
+    keywords?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     record_status?: $Enums.record_status | null
-    book_tran?: book_tranUncheckedCreateNestedManyWithoutBooksInput
-    notifications?: notificationsUncheckedCreateNestedManyWithoutBooksInput
-    user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutBooksInput
+    item_tran?: item_tranUncheckedCreateNestedManyWithoutLibrary_itemsInput
+    notifications?: notificationsUncheckedCreateNestedManyWithoutLibrary_itemsInput
+    user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutLibrary_itemsInput
   }
 
-  export type booksCreateOrConnectWithoutBook_tran_historyInput = {
-    where: booksWhereUniqueInput
-    create: XOR<booksCreateWithoutBook_tran_historyInput, booksUncheckedCreateWithoutBook_tran_historyInput>
+  export type library_itemsCreateOrConnectWithoutItem_tran_historyInput = {
+    where: library_itemsWhereUniqueInput
+    create: XOR<library_itemsCreateWithoutItem_tran_historyInput, library_itemsUncheckedCreateWithoutItem_tran_historyInput>
   }
 
-  export type book_tranCreateWithoutBook_tran_historyInput = {
-    status?: $Enums.book_tran_status | null
+  export type item_tranCreateWithoutItem_tran_historyInput = {
+    status?: $Enums.item_tran_status | null
     record_status?: $Enums.record_status | null
-    books?: booksCreateNestedOneWithoutBook_tranInput
-    users?: usersCreateNestedOneWithoutBook_tranInput
-    notifications?: notificationsCreateNestedManyWithoutBook_tranInput
+    library_items?: library_itemsCreateNestedOneWithoutItem_tranInput
+    users?: usersCreateNestedOneWithoutItem_tranInput
+    notifications?: notificationsCreateNestedManyWithoutItem_tranInput
   }
 
-  export type book_tranUncheckedCreateWithoutBook_tran_historyInput = {
+  export type item_tranUncheckedCreateWithoutItem_tran_historyInput = {
     tran_id?: number
-    book_id?: number | null
-    status?: $Enums.book_tran_status | null
+    item_id?: number | null
+    status?: $Enums.item_tran_status | null
     user_id?: number | null
     record_status?: $Enums.record_status | null
-    notifications?: notificationsUncheckedCreateNestedManyWithoutBook_tranInput
+    notifications?: notificationsUncheckedCreateNestedManyWithoutItem_tranInput
   }
 
-  export type book_tranCreateOrConnectWithoutBook_tran_historyInput = {
-    where: book_tranWhereUniqueInput
-    create: XOR<book_tranCreateWithoutBook_tran_historyInput, book_tranUncheckedCreateWithoutBook_tran_historyInput>
+  export type item_tranCreateOrConnectWithoutItem_tran_historyInput = {
+    where: item_tranWhereUniqueInput
+    create: XOR<item_tranCreateWithoutItem_tran_historyInput, item_tranUncheckedCreateWithoutItem_tran_historyInput>
   }
 
-  export type usersCreateWithoutBook_tran_history_book_tran_history_requested_byTousersInput = {
+  export type usersCreateWithoutItem_tran_history_item_tran_history_requested_byTousersInput = {
     name?: string | null
     email?: string | null
     password_hash?: string | null
@@ -15924,16 +19023,17 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    book_tran?: book_tranCreateNestedManyWithoutUsersInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyCreateNestedManyWithoutUsers_book_tran_history_approved_byTousersInput
+    item_tran?: item_tranCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
     fines?: finesCreateNestedManyWithoutUsersInput
     logs?: logsCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistCreateNestedManyWithoutUsersInput
+    library_cards?: library_cardsCreateNestedManyWithoutUsersInput
   }
 
-  export type usersUncheckedCreateWithoutBook_tran_history_book_tran_history_requested_byTousersInput = {
+  export type usersUncheckedCreateWithoutItem_tran_history_item_tran_history_requested_byTousersInput = {
     user_id?: number
     name?: string | null
     email?: string | null
@@ -15947,21 +19047,22 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    book_tran?: book_tranUncheckedCreateNestedManyWithoutUsersInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyUncheckedCreateNestedManyWithoutUsers_book_tran_history_approved_byTousersInput
+    item_tran?: item_tranUncheckedCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
     fines?: finesUncheckedCreateNestedManyWithoutUsersInput
     logs?: logsUncheckedCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutUsersInput
+    library_cards?: library_cardsUncheckedCreateNestedManyWithoutUsersInput
   }
 
-  export type usersCreateOrConnectWithoutBook_tran_history_book_tran_history_requested_byTousersInput = {
+  export type usersCreateOrConnectWithoutItem_tran_history_item_tran_history_requested_byTousersInput = {
     where: usersWhereUniqueInput
-    create: XOR<usersCreateWithoutBook_tran_history_book_tran_history_requested_byTousersInput, usersUncheckedCreateWithoutBook_tran_history_book_tran_history_requested_byTousersInput>
+    create: XOR<usersCreateWithoutItem_tran_history_item_tran_history_requested_byTousersInput, usersUncheckedCreateWithoutItem_tran_history_item_tran_history_requested_byTousersInput>
   }
 
-  export type usersCreateWithoutBook_tran_history_book_tran_history_approved_byTousersInput = {
+  export type usersCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
     name?: string | null
     email?: string | null
     password_hash?: string | null
@@ -15974,16 +19075,17 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    book_tran?: book_tranCreateNestedManyWithoutUsersInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyCreateNestedManyWithoutUsers_book_tran_history_requested_byTousersInput
+    item_tran?: item_tranCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
     fines?: finesCreateNestedManyWithoutUsersInput
     logs?: logsCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistCreateNestedManyWithoutUsersInput
+    library_cards?: library_cardsCreateNestedManyWithoutUsersInput
   }
 
-  export type usersUncheckedCreateWithoutBook_tran_history_book_tran_history_approved_byTousersInput = {
+  export type usersUncheckedCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
     user_id?: number
     name?: string | null
     email?: string | null
@@ -15997,21 +19099,22 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    book_tran?: book_tranUncheckedCreateNestedManyWithoutUsersInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyUncheckedCreateNestedManyWithoutUsers_book_tran_history_requested_byTousersInput
+    item_tran?: item_tranUncheckedCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
     fines?: finesUncheckedCreateNestedManyWithoutUsersInput
     logs?: logsUncheckedCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutUsersInput
+    library_cards?: library_cardsUncheckedCreateNestedManyWithoutUsersInput
   }
 
-  export type usersCreateOrConnectWithoutBook_tran_history_book_tran_history_approved_byTousersInput = {
+  export type usersCreateOrConnectWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
     where: usersWhereUniqueInput
-    create: XOR<usersCreateWithoutBook_tran_history_book_tran_history_approved_byTousersInput, usersUncheckedCreateWithoutBook_tran_history_book_tran_history_approved_byTousersInput>
+    create: XOR<usersCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput, usersUncheckedCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput>
   }
 
-  export type finesCreateWithoutBook_tran_historyInput = {
+  export type finesCreateWithoutItem_tran_historyInput = {
     amount?: Decimal | DecimalJsLike | number | string | null
     reason?: string | null
     status?: $Enums.fines_status | null
@@ -16020,7 +19123,7 @@ export namespace Prisma {
     users?: usersCreateNestedOneWithoutFinesInput
   }
 
-  export type finesUncheckedCreateWithoutBook_tran_historyInput = {
+  export type finesUncheckedCreateWithoutItem_tran_historyInput = {
     fine_id?: number
     user_id?: number | null
     amount?: Decimal | DecimalJsLike | number | string | null
@@ -16030,28 +19133,28 @@ export namespace Prisma {
     paid_at?: Date | string | null
   }
 
-  export type finesCreateOrConnectWithoutBook_tran_historyInput = {
+  export type finesCreateOrConnectWithoutItem_tran_historyInput = {
     where: finesWhereUniqueInput
-    create: XOR<finesCreateWithoutBook_tran_historyInput, finesUncheckedCreateWithoutBook_tran_historyInput>
+    create: XOR<finesCreateWithoutItem_tran_historyInput, finesUncheckedCreateWithoutItem_tran_historyInput>
   }
 
-  export type finesCreateManyBook_tran_historyInputEnvelope = {
-    data: finesCreateManyBook_tran_historyInput | finesCreateManyBook_tran_historyInput[]
+  export type finesCreateManyItem_tran_historyInputEnvelope = {
+    data: finesCreateManyItem_tran_historyInput | finesCreateManyItem_tran_historyInput[]
     skipDuplicates?: boolean
   }
 
-  export type booksUpsertWithoutBook_tran_historyInput = {
-    update: XOR<booksUpdateWithoutBook_tran_historyInput, booksUncheckedUpdateWithoutBook_tran_historyInput>
-    create: XOR<booksCreateWithoutBook_tran_historyInput, booksUncheckedCreateWithoutBook_tran_historyInput>
-    where?: booksWhereInput
+  export type library_itemsUpsertWithoutItem_tran_historyInput = {
+    update: XOR<library_itemsUpdateWithoutItem_tran_historyInput, library_itemsUncheckedUpdateWithoutItem_tran_historyInput>
+    create: XOR<library_itemsCreateWithoutItem_tran_historyInput, library_itemsUncheckedCreateWithoutItem_tran_historyInput>
+    where?: library_itemsWhereInput
   }
 
-  export type booksUpdateToOneWithWhereWithoutBook_tran_historyInput = {
-    where?: booksWhereInput
-    data: XOR<booksUpdateWithoutBook_tran_historyInput, booksUncheckedUpdateWithoutBook_tran_historyInput>
+  export type library_itemsUpdateToOneWithWhereWithoutItem_tran_historyInput = {
+    where?: library_itemsWhereInput
+    data: XOR<library_itemsUpdateWithoutItem_tran_historyInput, library_itemsUncheckedUpdateWithoutItem_tran_historyInput>
   }
 
-  export type booksUpdateWithoutBook_tran_historyInput = {
+  export type library_itemsUpdateWithoutItem_tran_historyInput = {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     author?: StringFieldUpdateOperationsInput | string
     isbn?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16060,16 +19163,25 @@ export namespace Prisma {
     image_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     librarian_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_type?: Enumlibrary_item_typeFieldUpdateOperationsInput | $Enums.library_item_type
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    publisher?: NullableStringFieldUpdateOperationsInput | string | null
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: NullableIntFieldUpdateOperationsInput | number | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    format?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
-    book_tran?: book_tranUpdateManyWithoutBooksNestedInput
-    notifications?: notificationsUpdateManyWithoutBooksNestedInput
-    user_wishlist?: user_wishlistUpdateManyWithoutBooksNestedInput
+    item_tran?: item_tranUpdateManyWithoutLibrary_itemsNestedInput
+    notifications?: notificationsUpdateManyWithoutLibrary_itemsNestedInput
+    user_wishlist?: user_wishlistUpdateManyWithoutLibrary_itemsNestedInput
   }
 
-  export type booksUncheckedUpdateWithoutBook_tran_historyInput = {
-    book_id?: IntFieldUpdateOperationsInput | number
+  export type library_itemsUncheckedUpdateWithoutItem_tran_historyInput = {
+    item_id?: IntFieldUpdateOperationsInput | number
     title?: NullableStringFieldUpdateOperationsInput | string | null
     author?: StringFieldUpdateOperationsInput | string
     isbn?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16078,54 +19190,63 @@ export namespace Prisma {
     image_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     librarian_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_type?: Enumlibrary_item_typeFieldUpdateOperationsInput | $Enums.library_item_type
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    publisher?: NullableStringFieldUpdateOperationsInput | string | null
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: NullableIntFieldUpdateOperationsInput | number | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    format?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
-    book_tran?: book_tranUncheckedUpdateManyWithoutBooksNestedInput
-    notifications?: notificationsUncheckedUpdateManyWithoutBooksNestedInput
-    user_wishlist?: user_wishlistUncheckedUpdateManyWithoutBooksNestedInput
+    item_tran?: item_tranUncheckedUpdateManyWithoutLibrary_itemsNestedInput
+    notifications?: notificationsUncheckedUpdateManyWithoutLibrary_itemsNestedInput
+    user_wishlist?: user_wishlistUncheckedUpdateManyWithoutLibrary_itemsNestedInput
   }
 
-  export type book_tranUpsertWithoutBook_tran_historyInput = {
-    update: XOR<book_tranUpdateWithoutBook_tran_historyInput, book_tranUncheckedUpdateWithoutBook_tran_historyInput>
-    create: XOR<book_tranCreateWithoutBook_tran_historyInput, book_tranUncheckedCreateWithoutBook_tran_historyInput>
-    where?: book_tranWhereInput
+  export type item_tranUpsertWithoutItem_tran_historyInput = {
+    update: XOR<item_tranUpdateWithoutItem_tran_historyInput, item_tranUncheckedUpdateWithoutItem_tran_historyInput>
+    create: XOR<item_tranCreateWithoutItem_tran_historyInput, item_tranUncheckedCreateWithoutItem_tran_historyInput>
+    where?: item_tranWhereInput
   }
 
-  export type book_tranUpdateToOneWithWhereWithoutBook_tran_historyInput = {
-    where?: book_tranWhereInput
-    data: XOR<book_tranUpdateWithoutBook_tran_historyInput, book_tranUncheckedUpdateWithoutBook_tran_historyInput>
+  export type item_tranUpdateToOneWithWhereWithoutItem_tran_historyInput = {
+    where?: item_tranWhereInput
+    data: XOR<item_tranUpdateWithoutItem_tran_historyInput, item_tranUncheckedUpdateWithoutItem_tran_historyInput>
   }
 
-  export type book_tranUpdateWithoutBook_tran_historyInput = {
-    status?: NullableEnumbook_tran_statusFieldUpdateOperationsInput | $Enums.book_tran_status | null
+  export type item_tranUpdateWithoutItem_tran_historyInput = {
+    status?: NullableEnumitem_tran_statusFieldUpdateOperationsInput | $Enums.item_tran_status | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
-    books?: booksUpdateOneWithoutBook_tranNestedInput
-    users?: usersUpdateOneWithoutBook_tranNestedInput
-    notifications?: notificationsUpdateManyWithoutBook_tranNestedInput
+    library_items?: library_itemsUpdateOneWithoutItem_tranNestedInput
+    users?: usersUpdateOneWithoutItem_tranNestedInput
+    notifications?: notificationsUpdateManyWithoutItem_tranNestedInput
   }
 
-  export type book_tranUncheckedUpdateWithoutBook_tran_historyInput = {
+  export type item_tranUncheckedUpdateWithoutItem_tran_historyInput = {
     tran_id?: IntFieldUpdateOperationsInput | number
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: NullableEnumbook_tran_statusFieldUpdateOperationsInput | $Enums.book_tran_status | null
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: NullableEnumitem_tran_statusFieldUpdateOperationsInput | $Enums.item_tran_status | null
     user_id?: NullableIntFieldUpdateOperationsInput | number | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
-    notifications?: notificationsUncheckedUpdateManyWithoutBook_tranNestedInput
+    notifications?: notificationsUncheckedUpdateManyWithoutItem_tranNestedInput
   }
 
-  export type usersUpsertWithoutBook_tran_history_book_tran_history_requested_byTousersInput = {
-    update: XOR<usersUpdateWithoutBook_tran_history_book_tran_history_requested_byTousersInput, usersUncheckedUpdateWithoutBook_tran_history_book_tran_history_requested_byTousersInput>
-    create: XOR<usersCreateWithoutBook_tran_history_book_tran_history_requested_byTousersInput, usersUncheckedCreateWithoutBook_tran_history_book_tran_history_requested_byTousersInput>
+  export type usersUpsertWithoutItem_tran_history_item_tran_history_requested_byTousersInput = {
+    update: XOR<usersUpdateWithoutItem_tran_history_item_tran_history_requested_byTousersInput, usersUncheckedUpdateWithoutItem_tran_history_item_tran_history_requested_byTousersInput>
+    create: XOR<usersCreateWithoutItem_tran_history_item_tran_history_requested_byTousersInput, usersUncheckedCreateWithoutItem_tran_history_item_tran_history_requested_byTousersInput>
     where?: usersWhereInput
   }
 
-  export type usersUpdateToOneWithWhereWithoutBook_tran_history_book_tran_history_requested_byTousersInput = {
+  export type usersUpdateToOneWithWhereWithoutItem_tran_history_item_tran_history_requested_byTousersInput = {
     where?: usersWhereInput
-    data: XOR<usersUpdateWithoutBook_tran_history_book_tran_history_requested_byTousersInput, usersUncheckedUpdateWithoutBook_tran_history_book_tran_history_requested_byTousersInput>
+    data: XOR<usersUpdateWithoutItem_tran_history_item_tran_history_requested_byTousersInput, usersUncheckedUpdateWithoutItem_tran_history_item_tran_history_requested_byTousersInput>
   }
 
-  export type usersUpdateWithoutBook_tran_history_book_tran_history_requested_byTousersInput = {
+  export type usersUpdateWithoutItem_tran_history_item_tran_history_requested_byTousersInput = {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     password_hash?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16138,16 +19259,17 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    book_tran?: book_tranUpdateManyWithoutUsersNestedInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyUpdateManyWithoutUsers_book_tran_history_approved_byTousersNestedInput
+    item_tran?: item_tranUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
     fines?: finesUpdateManyWithoutUsersNestedInput
     logs?: logsUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUpdateManyWithoutUsersNestedInput
+    library_cards?: library_cardsUpdateManyWithoutUsersNestedInput
   }
 
-  export type usersUncheckedUpdateWithoutBook_tran_history_book_tran_history_requested_byTousersInput = {
+  export type usersUncheckedUpdateWithoutItem_tran_history_item_tran_history_requested_byTousersInput = {
     user_id?: IntFieldUpdateOperationsInput | number
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16161,27 +19283,28 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    book_tran?: book_tranUncheckedUpdateManyWithoutUsersNestedInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyUncheckedUpdateManyWithoutUsers_book_tran_history_approved_byTousersNestedInput
+    item_tran?: item_tranUncheckedUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
     fines?: finesUncheckedUpdateManyWithoutUsersNestedInput
     logs?: logsUncheckedUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
+    library_cards?: library_cardsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
-  export type usersUpsertWithoutBook_tran_history_book_tran_history_approved_byTousersInput = {
-    update: XOR<usersUpdateWithoutBook_tran_history_book_tran_history_approved_byTousersInput, usersUncheckedUpdateWithoutBook_tran_history_book_tran_history_approved_byTousersInput>
-    create: XOR<usersCreateWithoutBook_tran_history_book_tran_history_approved_byTousersInput, usersUncheckedCreateWithoutBook_tran_history_book_tran_history_approved_byTousersInput>
+  export type usersUpsertWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
+    update: XOR<usersUpdateWithoutItem_tran_history_item_tran_history_approved_byTousersInput, usersUncheckedUpdateWithoutItem_tran_history_item_tran_history_approved_byTousersInput>
+    create: XOR<usersCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput, usersUncheckedCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput>
     where?: usersWhereInput
   }
 
-  export type usersUpdateToOneWithWhereWithoutBook_tran_history_book_tran_history_approved_byTousersInput = {
+  export type usersUpdateToOneWithWhereWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
     where?: usersWhereInput
-    data: XOR<usersUpdateWithoutBook_tran_history_book_tran_history_approved_byTousersInput, usersUncheckedUpdateWithoutBook_tran_history_book_tran_history_approved_byTousersInput>
+    data: XOR<usersUpdateWithoutItem_tran_history_item_tran_history_approved_byTousersInput, usersUncheckedUpdateWithoutItem_tran_history_item_tran_history_approved_byTousersInput>
   }
 
-  export type usersUpdateWithoutBook_tran_history_book_tran_history_approved_byTousersInput = {
+  export type usersUpdateWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
     password_hash?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16194,16 +19317,17 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    book_tran?: book_tranUpdateManyWithoutUsersNestedInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyUpdateManyWithoutUsers_book_tran_history_requested_byTousersNestedInput
+    item_tran?: item_tranUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
     fines?: finesUpdateManyWithoutUsersNestedInput
     logs?: logsUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUpdateManyWithoutUsersNestedInput
+    library_cards?: library_cardsUpdateManyWithoutUsersNestedInput
   }
 
-  export type usersUncheckedUpdateWithoutBook_tran_history_book_tran_history_approved_byTousersInput = {
+  export type usersUncheckedUpdateWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
     user_id?: IntFieldUpdateOperationsInput | number
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16217,29 +19341,30 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    book_tran?: book_tranUncheckedUpdateManyWithoutUsersNestedInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyUncheckedUpdateManyWithoutUsers_book_tran_history_requested_byTousersNestedInput
+    item_tran?: item_tranUncheckedUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
     fines?: finesUncheckedUpdateManyWithoutUsersNestedInput
     logs?: logsUncheckedUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
+    library_cards?: library_cardsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
-  export type finesUpsertWithWhereUniqueWithoutBook_tran_historyInput = {
+  export type finesUpsertWithWhereUniqueWithoutItem_tran_historyInput = {
     where: finesWhereUniqueInput
-    update: XOR<finesUpdateWithoutBook_tran_historyInput, finesUncheckedUpdateWithoutBook_tran_historyInput>
-    create: XOR<finesCreateWithoutBook_tran_historyInput, finesUncheckedCreateWithoutBook_tran_historyInput>
+    update: XOR<finesUpdateWithoutItem_tran_historyInput, finesUncheckedUpdateWithoutItem_tran_historyInput>
+    create: XOR<finesCreateWithoutItem_tran_historyInput, finesUncheckedCreateWithoutItem_tran_historyInput>
   }
 
-  export type finesUpdateWithWhereUniqueWithoutBook_tran_historyInput = {
+  export type finesUpdateWithWhereUniqueWithoutItem_tran_historyInput = {
     where: finesWhereUniqueInput
-    data: XOR<finesUpdateWithoutBook_tran_historyInput, finesUncheckedUpdateWithoutBook_tran_historyInput>
+    data: XOR<finesUpdateWithoutItem_tran_historyInput, finesUncheckedUpdateWithoutItem_tran_historyInput>
   }
 
-  export type finesUpdateManyWithWhereWithoutBook_tran_historyInput = {
+  export type finesUpdateManyWithWhereWithoutItem_tran_historyInput = {
     where: finesScalarWhereInput
-    data: XOR<finesUpdateManyMutationInput, finesUncheckedUpdateManyWithoutBook_tran_historyInput>
+    data: XOR<finesUpdateManyMutationInput, finesUncheckedUpdateManyWithoutItem_tran_historyInput>
   }
 
   export type finesScalarWhereInput = {
@@ -16248,7 +19373,7 @@ export namespace Prisma {
     NOT?: finesScalarWhereInput | finesScalarWhereInput[]
     fine_id?: IntFilter<"fines"> | number
     user_id?: IntNullableFilter<"fines"> | number | null
-    book_tran_history_id?: IntNullableFilter<"fines"> | number | null
+    item_tran_history_id?: IntNullableFilter<"fines"> | number | null
     amount?: DecimalNullableFilter<"fines"> | Decimal | DecimalJsLike | number | string | null
     reason?: StringNullableFilter<"fines"> | string | null
     status?: Enumfines_statusNullableFilter<"fines"> | $Enums.fines_status | null
@@ -16256,51 +19381,51 @@ export namespace Prisma {
     paid_at?: DateTimeNullableFilter<"fines"> | Date | string | null
   }
 
-  export type book_tranCreateWithoutBooksInput = {
-    status?: $Enums.book_tran_status | null
+  export type item_tranCreateWithoutLibrary_itemsInput = {
+    status?: $Enums.item_tran_status | null
     record_status?: $Enums.record_status | null
-    users?: usersCreateNestedOneWithoutBook_tranInput
-    book_tran_history?: book_tran_historyCreateNestedManyWithoutBook_tranInput
-    notifications?: notificationsCreateNestedManyWithoutBook_tranInput
+    users?: usersCreateNestedOneWithoutItem_tranInput
+    item_tran_history?: item_tran_historyCreateNestedManyWithoutItem_tranInput
+    notifications?: notificationsCreateNestedManyWithoutItem_tranInput
   }
 
-  export type book_tranUncheckedCreateWithoutBooksInput = {
+  export type item_tranUncheckedCreateWithoutLibrary_itemsInput = {
     tran_id?: number
-    status?: $Enums.book_tran_status | null
+    status?: $Enums.item_tran_status | null
     user_id?: number | null
     record_status?: $Enums.record_status | null
-    book_tran_history?: book_tran_historyUncheckedCreateNestedManyWithoutBook_tranInput
-    notifications?: notificationsUncheckedCreateNestedManyWithoutBook_tranInput
+    item_tran_history?: item_tran_historyUncheckedCreateNestedManyWithoutItem_tranInput
+    notifications?: notificationsUncheckedCreateNestedManyWithoutItem_tranInput
   }
 
-  export type book_tranCreateOrConnectWithoutBooksInput = {
-    where: book_tranWhereUniqueInput
-    create: XOR<book_tranCreateWithoutBooksInput, book_tranUncheckedCreateWithoutBooksInput>
+  export type item_tranCreateOrConnectWithoutLibrary_itemsInput = {
+    where: item_tranWhereUniqueInput
+    create: XOR<item_tranCreateWithoutLibrary_itemsInput, item_tranUncheckedCreateWithoutLibrary_itemsInput>
   }
 
-  export type book_tranCreateManyBooksInputEnvelope = {
-    data: book_tranCreateManyBooksInput | book_tranCreateManyBooksInput[]
+  export type item_tranCreateManyLibrary_itemsInputEnvelope = {
+    data: item_tranCreateManyLibrary_itemsInput | item_tranCreateManyLibrary_itemsInput[]
     skipDuplicates?: boolean
   }
 
-  export type book_tran_historyCreateWithoutBooksInput = {
-    status?: $Enums.book_tran_history_status
+  export type item_tran_historyCreateWithoutLibrary_itemsInput = {
+    status?: $Enums.item_tran_history_status
     requested_at?: Date | string | null
     approved_at?: Date | string | null
     date_issued?: Date | string | null
     date_due?: Date | string | null
     date_returned?: Date | string | null
     remarks?: string | null
-    book_tran?: book_tranCreateNestedOneWithoutBook_tran_historyInput
-    users_book_tran_history_requested_byTousers?: usersCreateNestedOneWithoutBook_tran_history_book_tran_history_requested_byTousersInput
-    users_book_tran_history_approved_byTousers?: usersCreateNestedOneWithoutBook_tran_history_book_tran_history_approved_byTousersInput
-    fines?: finesCreateNestedManyWithoutBook_tran_historyInput
+    item_tran?: item_tranCreateNestedOneWithoutItem_tran_historyInput
+    users_item_tran_history_requested_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_requested_byTousersInput
+    users_item_tran_history_approved_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_approved_byTousersInput
+    fines?: finesCreateNestedManyWithoutItem_tran_historyInput
   }
 
-  export type book_tran_historyUncheckedCreateWithoutBooksInput = {
+  export type item_tran_historyUncheckedCreateWithoutLibrary_itemsInput = {
     id?: number
     tran_id?: number | null
-    status?: $Enums.book_tran_history_status
+    status?: $Enums.item_tran_history_status
     requested_by?: number | null
     approved_by?: number | null
     requested_at?: Date | string | null
@@ -16309,146 +19434,148 @@ export namespace Prisma {
     date_due?: Date | string | null
     date_returned?: Date | string | null
     remarks?: string | null
-    fines?: finesUncheckedCreateNestedManyWithoutBook_tran_historyInput
+    fines?: finesUncheckedCreateNestedManyWithoutItem_tran_historyInput
   }
 
-  export type book_tran_historyCreateOrConnectWithoutBooksInput = {
-    where: book_tran_historyWhereUniqueInput
-    create: XOR<book_tran_historyCreateWithoutBooksInput, book_tran_historyUncheckedCreateWithoutBooksInput>
+  export type item_tran_historyCreateOrConnectWithoutLibrary_itemsInput = {
+    where: item_tran_historyWhereUniqueInput
+    create: XOR<item_tran_historyCreateWithoutLibrary_itemsInput, item_tran_historyUncheckedCreateWithoutLibrary_itemsInput>
   }
 
-  export type book_tran_historyCreateManyBooksInputEnvelope = {
-    data: book_tran_historyCreateManyBooksInput | book_tran_historyCreateManyBooksInput[]
+  export type item_tran_historyCreateManyLibrary_itemsInputEnvelope = {
+    data: item_tran_historyCreateManyLibrary_itemsInput | item_tran_historyCreateManyLibrary_itemsInput[]
     skipDuplicates?: boolean
   }
 
-  export type notificationsCreateWithoutBooksInput = {
+  export type notificationsCreateWithoutLibrary_itemsInput = {
     type?: $Enums.notifications_type | null
+    reservation_id?: number | null
     status?: $Enums.notifications_status | null
     message?: string | null
     created_at?: Date | string | null
     resolved_at?: Date | string | null
     users_notifications_from_user_idTousers?: usersCreateNestedOneWithoutNotifications_notifications_from_user_idTousersInput
     users_notifications_to_user_idTousers?: usersCreateNestedOneWithoutNotifications_notifications_to_user_idTousersInput
-    book_tran?: book_tranCreateNestedOneWithoutNotificationsInput
+    item_tran?: item_tranCreateNestedOneWithoutNotificationsInput
   }
 
-  export type notificationsUncheckedCreateWithoutBooksInput = {
+  export type notificationsUncheckedCreateWithoutLibrary_itemsInput = {
     notification_id?: number
     type?: $Enums.notifications_type | null
     from_user_id?: number | null
     to_user_id?: number | null
     tran_id?: number | null
+    reservation_id?: number | null
     status?: $Enums.notifications_status | null
     message?: string | null
     created_at?: Date | string | null
     resolved_at?: Date | string | null
   }
 
-  export type notificationsCreateOrConnectWithoutBooksInput = {
+  export type notificationsCreateOrConnectWithoutLibrary_itemsInput = {
     where: notificationsWhereUniqueInput
-    create: XOR<notificationsCreateWithoutBooksInput, notificationsUncheckedCreateWithoutBooksInput>
+    create: XOR<notificationsCreateWithoutLibrary_itemsInput, notificationsUncheckedCreateWithoutLibrary_itemsInput>
   }
 
-  export type notificationsCreateManyBooksInputEnvelope = {
-    data: notificationsCreateManyBooksInput | notificationsCreateManyBooksInput[]
+  export type notificationsCreateManyLibrary_itemsInputEnvelope = {
+    data: notificationsCreateManyLibrary_itemsInput | notificationsCreateManyLibrary_itemsInput[]
     skipDuplicates?: boolean
   }
 
-  export type user_wishlistCreateWithoutBooksInput = {
+  export type user_wishlistCreateWithoutLibrary_itemsInput = {
     created_at?: Date | string | null
     users?: usersCreateNestedOneWithoutUser_wishlistInput
   }
 
-  export type user_wishlistUncheckedCreateWithoutBooksInput = {
+  export type user_wishlistUncheckedCreateWithoutLibrary_itemsInput = {
     id?: number
     user_id?: number | null
     created_at?: Date | string | null
   }
 
-  export type user_wishlistCreateOrConnectWithoutBooksInput = {
+  export type user_wishlistCreateOrConnectWithoutLibrary_itemsInput = {
     where: user_wishlistWhereUniqueInput
-    create: XOR<user_wishlistCreateWithoutBooksInput, user_wishlistUncheckedCreateWithoutBooksInput>
+    create: XOR<user_wishlistCreateWithoutLibrary_itemsInput, user_wishlistUncheckedCreateWithoutLibrary_itemsInput>
   }
 
-  export type user_wishlistCreateManyBooksInputEnvelope = {
-    data: user_wishlistCreateManyBooksInput | user_wishlistCreateManyBooksInput[]
+  export type user_wishlistCreateManyLibrary_itemsInputEnvelope = {
+    data: user_wishlistCreateManyLibrary_itemsInput | user_wishlistCreateManyLibrary_itemsInput[]
     skipDuplicates?: boolean
   }
 
-  export type book_tranUpsertWithWhereUniqueWithoutBooksInput = {
-    where: book_tranWhereUniqueInput
-    update: XOR<book_tranUpdateWithoutBooksInput, book_tranUncheckedUpdateWithoutBooksInput>
-    create: XOR<book_tranCreateWithoutBooksInput, book_tranUncheckedCreateWithoutBooksInput>
+  export type item_tranUpsertWithWhereUniqueWithoutLibrary_itemsInput = {
+    where: item_tranWhereUniqueInput
+    update: XOR<item_tranUpdateWithoutLibrary_itemsInput, item_tranUncheckedUpdateWithoutLibrary_itemsInput>
+    create: XOR<item_tranCreateWithoutLibrary_itemsInput, item_tranUncheckedCreateWithoutLibrary_itemsInput>
   }
 
-  export type book_tranUpdateWithWhereUniqueWithoutBooksInput = {
-    where: book_tranWhereUniqueInput
-    data: XOR<book_tranUpdateWithoutBooksInput, book_tranUncheckedUpdateWithoutBooksInput>
+  export type item_tranUpdateWithWhereUniqueWithoutLibrary_itemsInput = {
+    where: item_tranWhereUniqueInput
+    data: XOR<item_tranUpdateWithoutLibrary_itemsInput, item_tranUncheckedUpdateWithoutLibrary_itemsInput>
   }
 
-  export type book_tranUpdateManyWithWhereWithoutBooksInput = {
-    where: book_tranScalarWhereInput
-    data: XOR<book_tranUpdateManyMutationInput, book_tranUncheckedUpdateManyWithoutBooksInput>
+  export type item_tranUpdateManyWithWhereWithoutLibrary_itemsInput = {
+    where: item_tranScalarWhereInput
+    data: XOR<item_tranUpdateManyMutationInput, item_tranUncheckedUpdateManyWithoutLibrary_itemsInput>
   }
 
-  export type book_tranScalarWhereInput = {
-    AND?: book_tranScalarWhereInput | book_tranScalarWhereInput[]
-    OR?: book_tranScalarWhereInput[]
-    NOT?: book_tranScalarWhereInput | book_tranScalarWhereInput[]
-    tran_id?: IntFilter<"book_tran"> | number
-    book_id?: IntNullableFilter<"book_tran"> | number | null
-    status?: Enumbook_tran_statusNullableFilter<"book_tran"> | $Enums.book_tran_status | null
-    user_id?: IntNullableFilter<"book_tran"> | number | null
-    record_status?: Enumrecord_statusNullableFilter<"book_tran"> | $Enums.record_status | null
+  export type item_tranScalarWhereInput = {
+    AND?: item_tranScalarWhereInput | item_tranScalarWhereInput[]
+    OR?: item_tranScalarWhereInput[]
+    NOT?: item_tranScalarWhereInput | item_tranScalarWhereInput[]
+    tran_id?: IntFilter<"item_tran"> | number
+    item_id?: IntNullableFilter<"item_tran"> | number | null
+    status?: Enumitem_tran_statusNullableFilter<"item_tran"> | $Enums.item_tran_status | null
+    user_id?: IntNullableFilter<"item_tran"> | number | null
+    record_status?: Enumrecord_statusNullableFilter<"item_tran"> | $Enums.record_status | null
   }
 
-  export type book_tran_historyUpsertWithWhereUniqueWithoutBooksInput = {
-    where: book_tran_historyWhereUniqueInput
-    update: XOR<book_tran_historyUpdateWithoutBooksInput, book_tran_historyUncheckedUpdateWithoutBooksInput>
-    create: XOR<book_tran_historyCreateWithoutBooksInput, book_tran_historyUncheckedCreateWithoutBooksInput>
+  export type item_tran_historyUpsertWithWhereUniqueWithoutLibrary_itemsInput = {
+    where: item_tran_historyWhereUniqueInput
+    update: XOR<item_tran_historyUpdateWithoutLibrary_itemsInput, item_tran_historyUncheckedUpdateWithoutLibrary_itemsInput>
+    create: XOR<item_tran_historyCreateWithoutLibrary_itemsInput, item_tran_historyUncheckedCreateWithoutLibrary_itemsInput>
   }
 
-  export type book_tran_historyUpdateWithWhereUniqueWithoutBooksInput = {
-    where: book_tran_historyWhereUniqueInput
-    data: XOR<book_tran_historyUpdateWithoutBooksInput, book_tran_historyUncheckedUpdateWithoutBooksInput>
+  export type item_tran_historyUpdateWithWhereUniqueWithoutLibrary_itemsInput = {
+    where: item_tran_historyWhereUniqueInput
+    data: XOR<item_tran_historyUpdateWithoutLibrary_itemsInput, item_tran_historyUncheckedUpdateWithoutLibrary_itemsInput>
   }
 
-  export type book_tran_historyUpdateManyWithWhereWithoutBooksInput = {
-    where: book_tran_historyScalarWhereInput
-    data: XOR<book_tran_historyUpdateManyMutationInput, book_tran_historyUncheckedUpdateManyWithoutBooksInput>
+  export type item_tran_historyUpdateManyWithWhereWithoutLibrary_itemsInput = {
+    where: item_tran_historyScalarWhereInput
+    data: XOR<item_tran_historyUpdateManyMutationInput, item_tran_historyUncheckedUpdateManyWithoutLibrary_itemsInput>
   }
 
-  export type notificationsUpsertWithWhereUniqueWithoutBooksInput = {
+  export type notificationsUpsertWithWhereUniqueWithoutLibrary_itemsInput = {
     where: notificationsWhereUniqueInput
-    update: XOR<notificationsUpdateWithoutBooksInput, notificationsUncheckedUpdateWithoutBooksInput>
-    create: XOR<notificationsCreateWithoutBooksInput, notificationsUncheckedCreateWithoutBooksInput>
+    update: XOR<notificationsUpdateWithoutLibrary_itemsInput, notificationsUncheckedUpdateWithoutLibrary_itemsInput>
+    create: XOR<notificationsCreateWithoutLibrary_itemsInput, notificationsUncheckedCreateWithoutLibrary_itemsInput>
   }
 
-  export type notificationsUpdateWithWhereUniqueWithoutBooksInput = {
+  export type notificationsUpdateWithWhereUniqueWithoutLibrary_itemsInput = {
     where: notificationsWhereUniqueInput
-    data: XOR<notificationsUpdateWithoutBooksInput, notificationsUncheckedUpdateWithoutBooksInput>
+    data: XOR<notificationsUpdateWithoutLibrary_itemsInput, notificationsUncheckedUpdateWithoutLibrary_itemsInput>
   }
 
-  export type notificationsUpdateManyWithWhereWithoutBooksInput = {
+  export type notificationsUpdateManyWithWhereWithoutLibrary_itemsInput = {
     where: notificationsScalarWhereInput
-    data: XOR<notificationsUpdateManyMutationInput, notificationsUncheckedUpdateManyWithoutBooksInput>
+    data: XOR<notificationsUpdateManyMutationInput, notificationsUncheckedUpdateManyWithoutLibrary_itemsInput>
   }
 
-  export type user_wishlistUpsertWithWhereUniqueWithoutBooksInput = {
+  export type user_wishlistUpsertWithWhereUniqueWithoutLibrary_itemsInput = {
     where: user_wishlistWhereUniqueInput
-    update: XOR<user_wishlistUpdateWithoutBooksInput, user_wishlistUncheckedUpdateWithoutBooksInput>
-    create: XOR<user_wishlistCreateWithoutBooksInput, user_wishlistUncheckedCreateWithoutBooksInput>
+    update: XOR<user_wishlistUpdateWithoutLibrary_itemsInput, user_wishlistUncheckedUpdateWithoutLibrary_itemsInput>
+    create: XOR<user_wishlistCreateWithoutLibrary_itemsInput, user_wishlistUncheckedCreateWithoutLibrary_itemsInput>
   }
 
-  export type user_wishlistUpdateWithWhereUniqueWithoutBooksInput = {
+  export type user_wishlistUpdateWithWhereUniqueWithoutLibrary_itemsInput = {
     where: user_wishlistWhereUniqueInput
-    data: XOR<user_wishlistUpdateWithoutBooksInput, user_wishlistUncheckedUpdateWithoutBooksInput>
+    data: XOR<user_wishlistUpdateWithoutLibrary_itemsInput, user_wishlistUncheckedUpdateWithoutLibrary_itemsInput>
   }
 
-  export type user_wishlistUpdateManyWithWhereWithoutBooksInput = {
+  export type user_wishlistUpdateManyWithWhereWithoutLibrary_itemsInput = {
     where: user_wishlistScalarWhereInput
-    data: XOR<user_wishlistUpdateManyMutationInput, user_wishlistUncheckedUpdateManyWithoutBooksInput>
+    data: XOR<user_wishlistUpdateManyMutationInput, user_wishlistUncheckedUpdateManyWithoutLibrary_itemsInput>
   }
 
   export type user_wishlistScalarWhereInput = {
@@ -16457,7 +19584,7 @@ export namespace Prisma {
     NOT?: user_wishlistScalarWhereInput | user_wishlistScalarWhereInput[]
     id?: IntFilter<"user_wishlist"> | number
     user_id?: IntNullableFilter<"user_wishlist"> | number | null
-    book_id?: IntNullableFilter<"user_wishlist"> | number | null
+    item_id?: IntNullableFilter<"user_wishlist"> | number | null
     created_at?: DateTimeNullableFilter<"user_wishlist"> | Date | string | null
   }
 
@@ -16474,13 +19601,14 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    book_tran?: book_tranCreateNestedManyWithoutUsersInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyCreateNestedManyWithoutUsers_book_tran_history_requested_byTousersInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyCreateNestedManyWithoutUsers_book_tran_history_approved_byTousersInput
+    item_tran?: item_tranCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
     logs?: logsCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistCreateNestedManyWithoutUsersInput
+    library_cards?: library_cardsCreateNestedManyWithoutUsersInput
   }
 
   export type usersUncheckedCreateWithoutFinesInput = {
@@ -16497,13 +19625,14 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    book_tran?: book_tranUncheckedCreateNestedManyWithoutUsersInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyUncheckedCreateNestedManyWithoutUsers_book_tran_history_requested_byTousersInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyUncheckedCreateNestedManyWithoutUsers_book_tran_history_approved_byTousersInput
+    item_tran?: item_tranUncheckedCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
     logs?: logsUncheckedCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutUsersInput
+    library_cards?: library_cardsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type usersCreateOrConnectWithoutFinesInput = {
@@ -16511,25 +19640,25 @@ export namespace Prisma {
     create: XOR<usersCreateWithoutFinesInput, usersUncheckedCreateWithoutFinesInput>
   }
 
-  export type book_tran_historyCreateWithoutFinesInput = {
-    status?: $Enums.book_tran_history_status
+  export type item_tran_historyCreateWithoutFinesInput = {
+    status?: $Enums.item_tran_history_status
     requested_at?: Date | string | null
     approved_at?: Date | string | null
     date_issued?: Date | string | null
     date_due?: Date | string | null
     date_returned?: Date | string | null
     remarks?: string | null
-    books?: booksCreateNestedOneWithoutBook_tran_historyInput
-    book_tran?: book_tranCreateNestedOneWithoutBook_tran_historyInput
-    users_book_tran_history_requested_byTousers?: usersCreateNestedOneWithoutBook_tran_history_book_tran_history_requested_byTousersInput
-    users_book_tran_history_approved_byTousers?: usersCreateNestedOneWithoutBook_tran_history_book_tran_history_approved_byTousersInput
+    library_items?: library_itemsCreateNestedOneWithoutItem_tran_historyInput
+    item_tran?: item_tranCreateNestedOneWithoutItem_tran_historyInput
+    users_item_tran_history_requested_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_requested_byTousersInput
+    users_item_tran_history_approved_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_approved_byTousersInput
   }
 
-  export type book_tran_historyUncheckedCreateWithoutFinesInput = {
+  export type item_tran_historyUncheckedCreateWithoutFinesInput = {
     id?: number
-    book_id?: number | null
+    item_id?: number | null
     tran_id?: number | null
-    status?: $Enums.book_tran_history_status
+    status?: $Enums.item_tran_history_status
     requested_by?: number | null
     approved_by?: number | null
     requested_at?: Date | string | null
@@ -16540,9 +19669,9 @@ export namespace Prisma {
     remarks?: string | null
   }
 
-  export type book_tran_historyCreateOrConnectWithoutFinesInput = {
-    where: book_tran_historyWhereUniqueInput
-    create: XOR<book_tran_historyCreateWithoutFinesInput, book_tran_historyUncheckedCreateWithoutFinesInput>
+  export type item_tran_historyCreateOrConnectWithoutFinesInput = {
+    where: item_tran_historyWhereUniqueInput
+    create: XOR<item_tran_historyCreateWithoutFinesInput, item_tran_historyUncheckedCreateWithoutFinesInput>
   }
 
   export type usersUpsertWithoutFinesInput = {
@@ -16569,13 +19698,14 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    book_tran?: book_tranUpdateManyWithoutUsersNestedInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyUpdateManyWithoutUsers_book_tran_history_requested_byTousersNestedInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyUpdateManyWithoutUsers_book_tran_history_approved_byTousersNestedInput
+    item_tran?: item_tranUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
     logs?: logsUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUpdateManyWithoutUsersNestedInput
+    library_cards?: library_cardsUpdateManyWithoutUsersNestedInput
   }
 
   export type usersUncheckedUpdateWithoutFinesInput = {
@@ -16592,45 +19722,46 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    book_tran?: book_tranUncheckedUpdateManyWithoutUsersNestedInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyUncheckedUpdateManyWithoutUsers_book_tran_history_requested_byTousersNestedInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyUncheckedUpdateManyWithoutUsers_book_tran_history_approved_byTousersNestedInput
+    item_tran?: item_tranUncheckedUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
     logs?: logsUncheckedUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
+    library_cards?: library_cardsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
-  export type book_tran_historyUpsertWithoutFinesInput = {
-    update: XOR<book_tran_historyUpdateWithoutFinesInput, book_tran_historyUncheckedUpdateWithoutFinesInput>
-    create: XOR<book_tran_historyCreateWithoutFinesInput, book_tran_historyUncheckedCreateWithoutFinesInput>
-    where?: book_tran_historyWhereInput
+  export type item_tran_historyUpsertWithoutFinesInput = {
+    update: XOR<item_tran_historyUpdateWithoutFinesInput, item_tran_historyUncheckedUpdateWithoutFinesInput>
+    create: XOR<item_tran_historyCreateWithoutFinesInput, item_tran_historyUncheckedCreateWithoutFinesInput>
+    where?: item_tran_historyWhereInput
   }
 
-  export type book_tran_historyUpdateToOneWithWhereWithoutFinesInput = {
-    where?: book_tran_historyWhereInput
-    data: XOR<book_tran_historyUpdateWithoutFinesInput, book_tran_historyUncheckedUpdateWithoutFinesInput>
+  export type item_tran_historyUpdateToOneWithWhereWithoutFinesInput = {
+    where?: item_tran_historyWhereInput
+    data: XOR<item_tran_historyUpdateWithoutFinesInput, item_tran_historyUncheckedUpdateWithoutFinesInput>
   }
 
-  export type book_tran_historyUpdateWithoutFinesInput = {
-    status?: Enumbook_tran_history_statusFieldUpdateOperationsInput | $Enums.book_tran_history_status
+  export type item_tran_historyUpdateWithoutFinesInput = {
+    status?: Enumitem_tran_history_statusFieldUpdateOperationsInput | $Enums.item_tran_history_status
     requested_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_issued?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_due?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_returned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    books?: booksUpdateOneWithoutBook_tran_historyNestedInput
-    book_tran?: book_tranUpdateOneWithoutBook_tran_historyNestedInput
-    users_book_tran_history_requested_byTousers?: usersUpdateOneWithoutBook_tran_history_book_tran_history_requested_byTousersNestedInput
-    users_book_tran_history_approved_byTousers?: usersUpdateOneWithoutBook_tran_history_book_tran_history_approved_byTousersNestedInput
+    library_items?: library_itemsUpdateOneWithoutItem_tran_historyNestedInput
+    item_tran?: item_tranUpdateOneWithoutItem_tran_historyNestedInput
+    users_item_tran_history_requested_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_requested_byTousersNestedInput
+    users_item_tran_history_approved_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_approved_byTousersNestedInput
   }
 
-  export type book_tran_historyUncheckedUpdateWithoutFinesInput = {
+  export type item_tran_historyUncheckedUpdateWithoutFinesInput = {
     id?: IntFieldUpdateOperationsInput | number
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
     tran_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: Enumbook_tran_history_statusFieldUpdateOperationsInput | $Enums.book_tran_history_status
+    status?: Enumitem_tran_history_statusFieldUpdateOperationsInput | $Enums.item_tran_history_status
     requested_by?: NullableIntFieldUpdateOperationsInput | number | null
     approved_by?: NullableIntFieldUpdateOperationsInput | number | null
     requested_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -16654,13 +19785,14 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    book_tran?: book_tranCreateNestedManyWithoutUsersInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyCreateNestedManyWithoutUsers_book_tran_history_requested_byTousersInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyCreateNestedManyWithoutUsers_book_tran_history_approved_byTousersInput
+    item_tran?: item_tranCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
     fines?: finesCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistCreateNestedManyWithoutUsersInput
+    library_cards?: library_cardsCreateNestedManyWithoutUsersInput
   }
 
   export type usersUncheckedCreateWithoutLogsInput = {
@@ -16677,13 +19809,14 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    book_tran?: book_tranUncheckedCreateNestedManyWithoutUsersInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyUncheckedCreateNestedManyWithoutUsers_book_tran_history_requested_byTousersInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyUncheckedCreateNestedManyWithoutUsers_book_tran_history_approved_byTousersInput
+    item_tran?: item_tranUncheckedCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
     fines?: finesUncheckedCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutUsersInput
+    library_cards?: library_cardsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type usersCreateOrConnectWithoutLogsInput = {
@@ -16715,13 +19848,14 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    book_tran?: book_tranUpdateManyWithoutUsersNestedInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyUpdateManyWithoutUsers_book_tran_history_requested_byTousersNestedInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyUpdateManyWithoutUsers_book_tran_history_approved_byTousersNestedInput
+    item_tran?: item_tranUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
     fines?: finesUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUpdateManyWithoutUsersNestedInput
+    library_cards?: library_cardsUpdateManyWithoutUsersNestedInput
   }
 
   export type usersUncheckedUpdateWithoutLogsInput = {
@@ -16738,16 +19872,17 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    book_tran?: book_tranUncheckedUpdateManyWithoutUsersNestedInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyUncheckedUpdateManyWithoutUsers_book_tran_history_requested_byTousersNestedInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyUncheckedUpdateManyWithoutUsers_book_tran_history_approved_byTousersNestedInput
+    item_tran?: item_tranUncheckedUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
     fines?: finesUncheckedUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
+    library_cards?: library_cardsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
-  export type booksCreateWithoutNotificationsInput = {
+  export type library_itemsCreateWithoutNotificationsInput = {
     title?: string | null
     author: string
     isbn?: string | null
@@ -16756,16 +19891,25 @@ export namespace Prisma {
     image_url?: string | null
     description?: string | null
     librarian_id?: number | null
+    item_type?: $Enums.library_item_type
+    location?: string | null
+    publisher?: string | null
+    language?: string | null
+    pages?: number | null
+    duration?: number | null
+    format?: string | null
+    subject?: string | null
+    keywords?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     record_status?: $Enums.record_status | null
-    book_tran?: book_tranCreateNestedManyWithoutBooksInput
-    book_tran_history?: book_tran_historyCreateNestedManyWithoutBooksInput
-    user_wishlist?: user_wishlistCreateNestedManyWithoutBooksInput
+    item_tran?: item_tranCreateNestedManyWithoutLibrary_itemsInput
+    item_tran_history?: item_tran_historyCreateNestedManyWithoutLibrary_itemsInput
+    user_wishlist?: user_wishlistCreateNestedManyWithoutLibrary_itemsInput
   }
 
-  export type booksUncheckedCreateWithoutNotificationsInput = {
-    book_id?: number
+  export type library_itemsUncheckedCreateWithoutNotificationsInput = {
+    item_id?: number
     title?: string | null
     author: string
     isbn?: string | null
@@ -16774,17 +19918,26 @@ export namespace Prisma {
     image_url?: string | null
     description?: string | null
     librarian_id?: number | null
+    item_type?: $Enums.library_item_type
+    location?: string | null
+    publisher?: string | null
+    language?: string | null
+    pages?: number | null
+    duration?: number | null
+    format?: string | null
+    subject?: string | null
+    keywords?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     record_status?: $Enums.record_status | null
-    book_tran?: book_tranUncheckedCreateNestedManyWithoutBooksInput
-    book_tran_history?: book_tran_historyUncheckedCreateNestedManyWithoutBooksInput
-    user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutBooksInput
+    item_tran?: item_tranUncheckedCreateNestedManyWithoutLibrary_itemsInput
+    item_tran_history?: item_tran_historyUncheckedCreateNestedManyWithoutLibrary_itemsInput
+    user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutLibrary_itemsInput
   }
 
-  export type booksCreateOrConnectWithoutNotificationsInput = {
-    where: booksWhereUniqueInput
-    create: XOR<booksCreateWithoutNotificationsInput, booksUncheckedCreateWithoutNotificationsInput>
+  export type library_itemsCreateOrConnectWithoutNotificationsInput = {
+    where: library_itemsWhereUniqueInput
+    create: XOR<library_itemsCreateWithoutNotificationsInput, library_itemsUncheckedCreateWithoutNotificationsInput>
   }
 
   export type usersCreateWithoutNotifications_notifications_from_user_idTousersInput = {
@@ -16800,13 +19953,14 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    book_tran?: book_tranCreateNestedManyWithoutUsersInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyCreateNestedManyWithoutUsers_book_tran_history_requested_byTousersInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyCreateNestedManyWithoutUsers_book_tran_history_approved_byTousersInput
+    item_tran?: item_tranCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
     fines?: finesCreateNestedManyWithoutUsersInput
     logs?: logsCreateNestedManyWithoutUsersInput
     notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistCreateNestedManyWithoutUsersInput
+    library_cards?: library_cardsCreateNestedManyWithoutUsersInput
   }
 
   export type usersUncheckedCreateWithoutNotifications_notifications_from_user_idTousersInput = {
@@ -16823,13 +19977,14 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    book_tran?: book_tranUncheckedCreateNestedManyWithoutUsersInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyUncheckedCreateNestedManyWithoutUsers_book_tran_history_requested_byTousersInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyUncheckedCreateNestedManyWithoutUsers_book_tran_history_approved_byTousersInput
+    item_tran?: item_tranUncheckedCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
     fines?: finesUncheckedCreateNestedManyWithoutUsersInput
     logs?: logsUncheckedCreateNestedManyWithoutUsersInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutUsersInput
+    library_cards?: library_cardsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type usersCreateOrConnectWithoutNotifications_notifications_from_user_idTousersInput = {
@@ -16850,13 +20005,14 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    book_tran?: book_tranCreateNestedManyWithoutUsersInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyCreateNestedManyWithoutUsers_book_tran_history_requested_byTousersInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyCreateNestedManyWithoutUsers_book_tran_history_approved_byTousersInput
+    item_tran?: item_tranCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
     fines?: finesCreateNestedManyWithoutUsersInput
     logs?: logsCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     user_wishlist?: user_wishlistCreateNestedManyWithoutUsersInput
+    library_cards?: library_cardsCreateNestedManyWithoutUsersInput
   }
 
   export type usersUncheckedCreateWithoutNotifications_notifications_to_user_idTousersInput = {
@@ -16873,13 +20029,14 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    book_tran?: book_tranUncheckedCreateNestedManyWithoutUsersInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyUncheckedCreateNestedManyWithoutUsers_book_tran_history_requested_byTousersInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyUncheckedCreateNestedManyWithoutUsers_book_tran_history_approved_byTousersInput
+    item_tran?: item_tranUncheckedCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
     fines?: finesUncheckedCreateNestedManyWithoutUsersInput
     logs?: logsUncheckedCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutUsersInput
+    library_cards?: library_cardsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type usersCreateOrConnectWithoutNotifications_notifications_to_user_idTousersInput = {
@@ -16887,40 +20044,40 @@ export namespace Prisma {
     create: XOR<usersCreateWithoutNotifications_notifications_to_user_idTousersInput, usersUncheckedCreateWithoutNotifications_notifications_to_user_idTousersInput>
   }
 
-  export type book_tranCreateWithoutNotificationsInput = {
-    status?: $Enums.book_tran_status | null
+  export type item_tranCreateWithoutNotificationsInput = {
+    status?: $Enums.item_tran_status | null
     record_status?: $Enums.record_status | null
-    books?: booksCreateNestedOneWithoutBook_tranInput
-    users?: usersCreateNestedOneWithoutBook_tranInput
-    book_tran_history?: book_tran_historyCreateNestedManyWithoutBook_tranInput
+    library_items?: library_itemsCreateNestedOneWithoutItem_tranInput
+    users?: usersCreateNestedOneWithoutItem_tranInput
+    item_tran_history?: item_tran_historyCreateNestedManyWithoutItem_tranInput
   }
 
-  export type book_tranUncheckedCreateWithoutNotificationsInput = {
+  export type item_tranUncheckedCreateWithoutNotificationsInput = {
     tran_id?: number
-    book_id?: number | null
-    status?: $Enums.book_tran_status | null
+    item_id?: number | null
+    status?: $Enums.item_tran_status | null
     user_id?: number | null
     record_status?: $Enums.record_status | null
-    book_tran_history?: book_tran_historyUncheckedCreateNestedManyWithoutBook_tranInput
+    item_tran_history?: item_tran_historyUncheckedCreateNestedManyWithoutItem_tranInput
   }
 
-  export type book_tranCreateOrConnectWithoutNotificationsInput = {
-    where: book_tranWhereUniqueInput
-    create: XOR<book_tranCreateWithoutNotificationsInput, book_tranUncheckedCreateWithoutNotificationsInput>
+  export type item_tranCreateOrConnectWithoutNotificationsInput = {
+    where: item_tranWhereUniqueInput
+    create: XOR<item_tranCreateWithoutNotificationsInput, item_tranUncheckedCreateWithoutNotificationsInput>
   }
 
-  export type booksUpsertWithoutNotificationsInput = {
-    update: XOR<booksUpdateWithoutNotificationsInput, booksUncheckedUpdateWithoutNotificationsInput>
-    create: XOR<booksCreateWithoutNotificationsInput, booksUncheckedCreateWithoutNotificationsInput>
-    where?: booksWhereInput
+  export type library_itemsUpsertWithoutNotificationsInput = {
+    update: XOR<library_itemsUpdateWithoutNotificationsInput, library_itemsUncheckedUpdateWithoutNotificationsInput>
+    create: XOR<library_itemsCreateWithoutNotificationsInput, library_itemsUncheckedCreateWithoutNotificationsInput>
+    where?: library_itemsWhereInput
   }
 
-  export type booksUpdateToOneWithWhereWithoutNotificationsInput = {
-    where?: booksWhereInput
-    data: XOR<booksUpdateWithoutNotificationsInput, booksUncheckedUpdateWithoutNotificationsInput>
+  export type library_itemsUpdateToOneWithWhereWithoutNotificationsInput = {
+    where?: library_itemsWhereInput
+    data: XOR<library_itemsUpdateWithoutNotificationsInput, library_itemsUncheckedUpdateWithoutNotificationsInput>
   }
 
-  export type booksUpdateWithoutNotificationsInput = {
+  export type library_itemsUpdateWithoutNotificationsInput = {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     author?: StringFieldUpdateOperationsInput | string
     isbn?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16929,16 +20086,25 @@ export namespace Prisma {
     image_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     librarian_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_type?: Enumlibrary_item_typeFieldUpdateOperationsInput | $Enums.library_item_type
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    publisher?: NullableStringFieldUpdateOperationsInput | string | null
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: NullableIntFieldUpdateOperationsInput | number | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    format?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
-    book_tran?: book_tranUpdateManyWithoutBooksNestedInput
-    book_tran_history?: book_tran_historyUpdateManyWithoutBooksNestedInput
-    user_wishlist?: user_wishlistUpdateManyWithoutBooksNestedInput
+    item_tran?: item_tranUpdateManyWithoutLibrary_itemsNestedInput
+    item_tran_history?: item_tran_historyUpdateManyWithoutLibrary_itemsNestedInput
+    user_wishlist?: user_wishlistUpdateManyWithoutLibrary_itemsNestedInput
   }
 
-  export type booksUncheckedUpdateWithoutNotificationsInput = {
-    book_id?: IntFieldUpdateOperationsInput | number
+  export type library_itemsUncheckedUpdateWithoutNotificationsInput = {
+    item_id?: IntFieldUpdateOperationsInput | number
     title?: NullableStringFieldUpdateOperationsInput | string | null
     author?: StringFieldUpdateOperationsInput | string
     isbn?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16947,12 +20113,21 @@ export namespace Prisma {
     image_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     librarian_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_type?: Enumlibrary_item_typeFieldUpdateOperationsInput | $Enums.library_item_type
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    publisher?: NullableStringFieldUpdateOperationsInput | string | null
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: NullableIntFieldUpdateOperationsInput | number | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    format?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
-    book_tran?: book_tranUncheckedUpdateManyWithoutBooksNestedInput
-    book_tran_history?: book_tran_historyUncheckedUpdateManyWithoutBooksNestedInput
-    user_wishlist?: user_wishlistUncheckedUpdateManyWithoutBooksNestedInput
+    item_tran?: item_tranUncheckedUpdateManyWithoutLibrary_itemsNestedInput
+    item_tran_history?: item_tran_historyUncheckedUpdateManyWithoutLibrary_itemsNestedInput
+    user_wishlist?: user_wishlistUncheckedUpdateManyWithoutLibrary_itemsNestedInput
   }
 
   export type usersUpsertWithoutNotifications_notifications_from_user_idTousersInput = {
@@ -16979,13 +20154,14 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    book_tran?: book_tranUpdateManyWithoutUsersNestedInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyUpdateManyWithoutUsers_book_tran_history_requested_byTousersNestedInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyUpdateManyWithoutUsers_book_tran_history_approved_byTousersNestedInput
+    item_tran?: item_tranUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
     fines?: finesUpdateManyWithoutUsersNestedInput
     logs?: logsUpdateManyWithoutUsersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUpdateManyWithoutUsersNestedInput
+    library_cards?: library_cardsUpdateManyWithoutUsersNestedInput
   }
 
   export type usersUncheckedUpdateWithoutNotifications_notifications_from_user_idTousersInput = {
@@ -17002,13 +20178,14 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    book_tran?: book_tranUncheckedUpdateManyWithoutUsersNestedInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyUncheckedUpdateManyWithoutUsers_book_tran_history_requested_byTousersNestedInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyUncheckedUpdateManyWithoutUsers_book_tran_history_approved_byTousersNestedInput
+    item_tran?: item_tranUncheckedUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
     fines?: finesUncheckedUpdateManyWithoutUsersNestedInput
     logs?: logsUncheckedUpdateManyWithoutUsersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
+    library_cards?: library_cardsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type usersUpsertWithoutNotifications_notifications_to_user_idTousersInput = {
@@ -17035,13 +20212,14 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    book_tran?: book_tranUpdateManyWithoutUsersNestedInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyUpdateManyWithoutUsers_book_tran_history_requested_byTousersNestedInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyUpdateManyWithoutUsers_book_tran_history_approved_byTousersNestedInput
+    item_tran?: item_tranUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
     fines?: finesUpdateManyWithoutUsersNestedInput
     logs?: logsUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     user_wishlist?: user_wishlistUpdateManyWithoutUsersNestedInput
+    library_cards?: library_cardsUpdateManyWithoutUsersNestedInput
   }
 
   export type usersUncheckedUpdateWithoutNotifications_notifications_to_user_idTousersInput = {
@@ -17058,41 +20236,42 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    book_tran?: book_tranUncheckedUpdateManyWithoutUsersNestedInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyUncheckedUpdateManyWithoutUsers_book_tran_history_requested_byTousersNestedInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyUncheckedUpdateManyWithoutUsers_book_tran_history_approved_byTousersNestedInput
+    item_tran?: item_tranUncheckedUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
     fines?: finesUncheckedUpdateManyWithoutUsersNestedInput
     logs?: logsUncheckedUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
+    library_cards?: library_cardsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
-  export type book_tranUpsertWithoutNotificationsInput = {
-    update: XOR<book_tranUpdateWithoutNotificationsInput, book_tranUncheckedUpdateWithoutNotificationsInput>
-    create: XOR<book_tranCreateWithoutNotificationsInput, book_tranUncheckedCreateWithoutNotificationsInput>
-    where?: book_tranWhereInput
+  export type item_tranUpsertWithoutNotificationsInput = {
+    update: XOR<item_tranUpdateWithoutNotificationsInput, item_tranUncheckedUpdateWithoutNotificationsInput>
+    create: XOR<item_tranCreateWithoutNotificationsInput, item_tranUncheckedCreateWithoutNotificationsInput>
+    where?: item_tranWhereInput
   }
 
-  export type book_tranUpdateToOneWithWhereWithoutNotificationsInput = {
-    where?: book_tranWhereInput
-    data: XOR<book_tranUpdateWithoutNotificationsInput, book_tranUncheckedUpdateWithoutNotificationsInput>
+  export type item_tranUpdateToOneWithWhereWithoutNotificationsInput = {
+    where?: item_tranWhereInput
+    data: XOR<item_tranUpdateWithoutNotificationsInput, item_tranUncheckedUpdateWithoutNotificationsInput>
   }
 
-  export type book_tranUpdateWithoutNotificationsInput = {
-    status?: NullableEnumbook_tran_statusFieldUpdateOperationsInput | $Enums.book_tran_status | null
+  export type item_tranUpdateWithoutNotificationsInput = {
+    status?: NullableEnumitem_tran_statusFieldUpdateOperationsInput | $Enums.item_tran_status | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
-    books?: booksUpdateOneWithoutBook_tranNestedInput
-    users?: usersUpdateOneWithoutBook_tranNestedInput
-    book_tran_history?: book_tran_historyUpdateManyWithoutBook_tranNestedInput
+    library_items?: library_itemsUpdateOneWithoutItem_tranNestedInput
+    users?: usersUpdateOneWithoutItem_tranNestedInput
+    item_tran_history?: item_tran_historyUpdateManyWithoutItem_tranNestedInput
   }
 
-  export type book_tranUncheckedUpdateWithoutNotificationsInput = {
+  export type item_tranUncheckedUpdateWithoutNotificationsInput = {
     tran_id?: IntFieldUpdateOperationsInput | number
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: NullableEnumbook_tran_statusFieldUpdateOperationsInput | $Enums.book_tran_status | null
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: NullableEnumitem_tran_statusFieldUpdateOperationsInput | $Enums.item_tran_status | null
     user_id?: NullableIntFieldUpdateOperationsInput | number | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
-    book_tran_history?: book_tran_historyUncheckedUpdateManyWithoutBook_tranNestedInput
+    item_tran_history?: item_tran_historyUncheckedUpdateManyWithoutItem_tranNestedInput
   }
 
   export type usersCreateWithoutUser_wishlistInput = {
@@ -17108,13 +20287,14 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    book_tran?: book_tranCreateNestedManyWithoutUsersInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyCreateNestedManyWithoutUsers_book_tran_history_requested_byTousersInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyCreateNestedManyWithoutUsers_book_tran_history_approved_byTousersInput
+    item_tran?: item_tranCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
     fines?: finesCreateNestedManyWithoutUsersInput
     logs?: logsCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
+    library_cards?: library_cardsCreateNestedManyWithoutUsersInput
   }
 
   export type usersUncheckedCreateWithoutUser_wishlistInput = {
@@ -17131,13 +20311,14 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    book_tran?: book_tranUncheckedCreateNestedManyWithoutUsersInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyUncheckedCreateNestedManyWithoutUsers_book_tran_history_requested_byTousersInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyUncheckedCreateNestedManyWithoutUsers_book_tran_history_approved_byTousersInput
+    item_tran?: item_tranUncheckedCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
     fines?: finesUncheckedCreateNestedManyWithoutUsersInput
     logs?: logsUncheckedCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
+    library_cards?: library_cardsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type usersCreateOrConnectWithoutUser_wishlistInput = {
@@ -17145,7 +20326,7 @@ export namespace Prisma {
     create: XOR<usersCreateWithoutUser_wishlistInput, usersUncheckedCreateWithoutUser_wishlistInput>
   }
 
-  export type booksCreateWithoutUser_wishlistInput = {
+  export type library_itemsCreateWithoutUser_wishlistInput = {
     title?: string | null
     author: string
     isbn?: string | null
@@ -17154,16 +20335,25 @@ export namespace Prisma {
     image_url?: string | null
     description?: string | null
     librarian_id?: number | null
+    item_type?: $Enums.library_item_type
+    location?: string | null
+    publisher?: string | null
+    language?: string | null
+    pages?: number | null
+    duration?: number | null
+    format?: string | null
+    subject?: string | null
+    keywords?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     record_status?: $Enums.record_status | null
-    book_tran?: book_tranCreateNestedManyWithoutBooksInput
-    book_tran_history?: book_tran_historyCreateNestedManyWithoutBooksInput
-    notifications?: notificationsCreateNestedManyWithoutBooksInput
+    item_tran?: item_tranCreateNestedManyWithoutLibrary_itemsInput
+    item_tran_history?: item_tran_historyCreateNestedManyWithoutLibrary_itemsInput
+    notifications?: notificationsCreateNestedManyWithoutLibrary_itemsInput
   }
 
-  export type booksUncheckedCreateWithoutUser_wishlistInput = {
-    book_id?: number
+  export type library_itemsUncheckedCreateWithoutUser_wishlistInput = {
+    item_id?: number
     title?: string | null
     author: string
     isbn?: string | null
@@ -17172,17 +20362,26 @@ export namespace Prisma {
     image_url?: string | null
     description?: string | null
     librarian_id?: number | null
+    item_type?: $Enums.library_item_type
+    location?: string | null
+    publisher?: string | null
+    language?: string | null
+    pages?: number | null
+    duration?: number | null
+    format?: string | null
+    subject?: string | null
+    keywords?: string | null
     created_at?: Date | string | null
     updated_at?: Date | string | null
     record_status?: $Enums.record_status | null
-    book_tran?: book_tranUncheckedCreateNestedManyWithoutBooksInput
-    book_tran_history?: book_tran_historyUncheckedCreateNestedManyWithoutBooksInput
-    notifications?: notificationsUncheckedCreateNestedManyWithoutBooksInput
+    item_tran?: item_tranUncheckedCreateNestedManyWithoutLibrary_itemsInput
+    item_tran_history?: item_tran_historyUncheckedCreateNestedManyWithoutLibrary_itemsInput
+    notifications?: notificationsUncheckedCreateNestedManyWithoutLibrary_itemsInput
   }
 
-  export type booksCreateOrConnectWithoutUser_wishlistInput = {
-    where: booksWhereUniqueInput
-    create: XOR<booksCreateWithoutUser_wishlistInput, booksUncheckedCreateWithoutUser_wishlistInput>
+  export type library_itemsCreateOrConnectWithoutUser_wishlistInput = {
+    where: library_itemsWhereUniqueInput
+    create: XOR<library_itemsCreateWithoutUser_wishlistInput, library_itemsUncheckedCreateWithoutUser_wishlistInput>
   }
 
   export type usersUpsertWithoutUser_wishlistInput = {
@@ -17209,13 +20408,14 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    book_tran?: book_tranUpdateManyWithoutUsersNestedInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyUpdateManyWithoutUsers_book_tran_history_requested_byTousersNestedInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyUpdateManyWithoutUsers_book_tran_history_approved_byTousersNestedInput
+    item_tran?: item_tranUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
     fines?: finesUpdateManyWithoutUsersNestedInput
     logs?: logsUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
+    library_cards?: library_cardsUpdateManyWithoutUsersNestedInput
   }
 
   export type usersUncheckedUpdateWithoutUser_wishlistInput = {
@@ -17232,27 +20432,28 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    book_tran?: book_tranUncheckedUpdateManyWithoutUsersNestedInput
-    book_tran_history_book_tran_history_requested_byTousers?: book_tran_historyUncheckedUpdateManyWithoutUsers_book_tran_history_requested_byTousersNestedInput
-    book_tran_history_book_tran_history_approved_byTousers?: book_tran_historyUncheckedUpdateManyWithoutUsers_book_tran_history_approved_byTousersNestedInput
+    item_tran?: item_tranUncheckedUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
     fines?: finesUncheckedUpdateManyWithoutUsersNestedInput
     logs?: logsUncheckedUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
+    library_cards?: library_cardsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
-  export type booksUpsertWithoutUser_wishlistInput = {
-    update: XOR<booksUpdateWithoutUser_wishlistInput, booksUncheckedUpdateWithoutUser_wishlistInput>
-    create: XOR<booksCreateWithoutUser_wishlistInput, booksUncheckedCreateWithoutUser_wishlistInput>
-    where?: booksWhereInput
+  export type library_itemsUpsertWithoutUser_wishlistInput = {
+    update: XOR<library_itemsUpdateWithoutUser_wishlistInput, library_itemsUncheckedUpdateWithoutUser_wishlistInput>
+    create: XOR<library_itemsCreateWithoutUser_wishlistInput, library_itemsUncheckedCreateWithoutUser_wishlistInput>
+    where?: library_itemsWhereInput
   }
 
-  export type booksUpdateToOneWithWhereWithoutUser_wishlistInput = {
-    where?: booksWhereInput
-    data: XOR<booksUpdateWithoutUser_wishlistInput, booksUncheckedUpdateWithoutUser_wishlistInput>
+  export type library_itemsUpdateToOneWithWhereWithoutUser_wishlistInput = {
+    where?: library_itemsWhereInput
+    data: XOR<library_itemsUpdateWithoutUser_wishlistInput, library_itemsUncheckedUpdateWithoutUser_wishlistInput>
   }
 
-  export type booksUpdateWithoutUser_wishlistInput = {
+  export type library_itemsUpdateWithoutUser_wishlistInput = {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     author?: StringFieldUpdateOperationsInput | string
     isbn?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17261,16 +20462,25 @@ export namespace Prisma {
     image_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     librarian_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_type?: Enumlibrary_item_typeFieldUpdateOperationsInput | $Enums.library_item_type
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    publisher?: NullableStringFieldUpdateOperationsInput | string | null
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: NullableIntFieldUpdateOperationsInput | number | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    format?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
-    book_tran?: book_tranUpdateManyWithoutBooksNestedInput
-    book_tran_history?: book_tran_historyUpdateManyWithoutBooksNestedInput
-    notifications?: notificationsUpdateManyWithoutBooksNestedInput
+    item_tran?: item_tranUpdateManyWithoutLibrary_itemsNestedInput
+    item_tran_history?: item_tran_historyUpdateManyWithoutLibrary_itemsNestedInput
+    notifications?: notificationsUpdateManyWithoutLibrary_itemsNestedInput
   }
 
-  export type booksUncheckedUpdateWithoutUser_wishlistInput = {
-    book_id?: IntFieldUpdateOperationsInput | number
+  export type library_itemsUncheckedUpdateWithoutUser_wishlistInput = {
+    item_id?: IntFieldUpdateOperationsInput | number
     title?: NullableStringFieldUpdateOperationsInput | string | null
     author?: StringFieldUpdateOperationsInput | string
     isbn?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17279,60 +20489,69 @@ export namespace Prisma {
     image_url?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     librarian_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_type?: Enumlibrary_item_typeFieldUpdateOperationsInput | $Enums.library_item_type
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    publisher?: NullableStringFieldUpdateOperationsInput | string | null
+    language?: NullableStringFieldUpdateOperationsInput | string | null
+    pages?: NullableIntFieldUpdateOperationsInput | number | null
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
+    format?: NullableStringFieldUpdateOperationsInput | string | null
+    subject?: NullableStringFieldUpdateOperationsInput | string | null
+    keywords?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
-    book_tran?: book_tranUncheckedUpdateManyWithoutBooksNestedInput
-    book_tran_history?: book_tran_historyUncheckedUpdateManyWithoutBooksNestedInput
-    notifications?: notificationsUncheckedUpdateManyWithoutBooksNestedInput
+    item_tran?: item_tranUncheckedUpdateManyWithoutLibrary_itemsNestedInput
+    item_tran_history?: item_tran_historyUncheckedUpdateManyWithoutLibrary_itemsNestedInput
+    notifications?: notificationsUncheckedUpdateManyWithoutLibrary_itemsNestedInput
   }
 
-  export type book_tranCreateWithoutUsersInput = {
-    status?: $Enums.book_tran_status | null
+  export type item_tranCreateWithoutUsersInput = {
+    status?: $Enums.item_tran_status | null
     record_status?: $Enums.record_status | null
-    books?: booksCreateNestedOneWithoutBook_tranInput
-    book_tran_history?: book_tran_historyCreateNestedManyWithoutBook_tranInput
-    notifications?: notificationsCreateNestedManyWithoutBook_tranInput
+    library_items?: library_itemsCreateNestedOneWithoutItem_tranInput
+    item_tran_history?: item_tran_historyCreateNestedManyWithoutItem_tranInput
+    notifications?: notificationsCreateNestedManyWithoutItem_tranInput
   }
 
-  export type book_tranUncheckedCreateWithoutUsersInput = {
+  export type item_tranUncheckedCreateWithoutUsersInput = {
     tran_id?: number
-    book_id?: number | null
-    status?: $Enums.book_tran_status | null
+    item_id?: number | null
+    status?: $Enums.item_tran_status | null
     record_status?: $Enums.record_status | null
-    book_tran_history?: book_tran_historyUncheckedCreateNestedManyWithoutBook_tranInput
-    notifications?: notificationsUncheckedCreateNestedManyWithoutBook_tranInput
+    item_tran_history?: item_tran_historyUncheckedCreateNestedManyWithoutItem_tranInput
+    notifications?: notificationsUncheckedCreateNestedManyWithoutItem_tranInput
   }
 
-  export type book_tranCreateOrConnectWithoutUsersInput = {
-    where: book_tranWhereUniqueInput
-    create: XOR<book_tranCreateWithoutUsersInput, book_tranUncheckedCreateWithoutUsersInput>
+  export type item_tranCreateOrConnectWithoutUsersInput = {
+    where: item_tranWhereUniqueInput
+    create: XOR<item_tranCreateWithoutUsersInput, item_tranUncheckedCreateWithoutUsersInput>
   }
 
-  export type book_tranCreateManyUsersInputEnvelope = {
-    data: book_tranCreateManyUsersInput | book_tranCreateManyUsersInput[]
+  export type item_tranCreateManyUsersInputEnvelope = {
+    data: item_tranCreateManyUsersInput | item_tranCreateManyUsersInput[]
     skipDuplicates?: boolean
   }
 
-  export type book_tran_historyCreateWithoutUsers_book_tran_history_requested_byTousersInput = {
-    status?: $Enums.book_tran_history_status
+  export type item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput = {
+    status?: $Enums.item_tran_history_status
     requested_at?: Date | string | null
     approved_at?: Date | string | null
     date_issued?: Date | string | null
     date_due?: Date | string | null
     date_returned?: Date | string | null
     remarks?: string | null
-    books?: booksCreateNestedOneWithoutBook_tran_historyInput
-    book_tran?: book_tranCreateNestedOneWithoutBook_tran_historyInput
-    users_book_tran_history_approved_byTousers?: usersCreateNestedOneWithoutBook_tran_history_book_tran_history_approved_byTousersInput
-    fines?: finesCreateNestedManyWithoutBook_tran_historyInput
+    library_items?: library_itemsCreateNestedOneWithoutItem_tran_historyInput
+    item_tran?: item_tranCreateNestedOneWithoutItem_tran_historyInput
+    users_item_tran_history_approved_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_approved_byTousersInput
+    fines?: finesCreateNestedManyWithoutItem_tran_historyInput
   }
 
-  export type book_tran_historyUncheckedCreateWithoutUsers_book_tran_history_requested_byTousersInput = {
+  export type item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput = {
     id?: number
-    book_id?: number | null
+    item_id?: number | null
     tran_id?: number | null
-    status?: $Enums.book_tran_history_status
+    status?: $Enums.item_tran_history_status
     approved_by?: number | null
     requested_at?: Date | string | null
     approved_at?: Date | string | null
@@ -17340,38 +20559,38 @@ export namespace Prisma {
     date_due?: Date | string | null
     date_returned?: Date | string | null
     remarks?: string | null
-    fines?: finesUncheckedCreateNestedManyWithoutBook_tran_historyInput
+    fines?: finesUncheckedCreateNestedManyWithoutItem_tran_historyInput
   }
 
-  export type book_tran_historyCreateOrConnectWithoutUsers_book_tran_history_requested_byTousersInput = {
-    where: book_tran_historyWhereUniqueInput
-    create: XOR<book_tran_historyCreateWithoutUsers_book_tran_history_requested_byTousersInput, book_tran_historyUncheckedCreateWithoutUsers_book_tran_history_requested_byTousersInput>
+  export type item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput = {
+    where: item_tran_historyWhereUniqueInput
+    create: XOR<item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput, item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput>
   }
 
-  export type book_tran_historyCreateManyUsers_book_tran_history_requested_byTousersInputEnvelope = {
-    data: book_tran_historyCreateManyUsers_book_tran_history_requested_byTousersInput | book_tran_historyCreateManyUsers_book_tran_history_requested_byTousersInput[]
+  export type item_tran_historyCreateManyUsers_item_tran_history_requested_byTousersInputEnvelope = {
+    data: item_tran_historyCreateManyUsers_item_tran_history_requested_byTousersInput | item_tran_historyCreateManyUsers_item_tran_history_requested_byTousersInput[]
     skipDuplicates?: boolean
   }
 
-  export type book_tran_historyCreateWithoutUsers_book_tran_history_approved_byTousersInput = {
-    status?: $Enums.book_tran_history_status
+  export type item_tran_historyCreateWithoutUsers_item_tran_history_approved_byTousersInput = {
+    status?: $Enums.item_tran_history_status
     requested_at?: Date | string | null
     approved_at?: Date | string | null
     date_issued?: Date | string | null
     date_due?: Date | string | null
     date_returned?: Date | string | null
     remarks?: string | null
-    books?: booksCreateNestedOneWithoutBook_tran_historyInput
-    book_tran?: book_tranCreateNestedOneWithoutBook_tran_historyInput
-    users_book_tran_history_requested_byTousers?: usersCreateNestedOneWithoutBook_tran_history_book_tran_history_requested_byTousersInput
-    fines?: finesCreateNestedManyWithoutBook_tran_historyInput
+    library_items?: library_itemsCreateNestedOneWithoutItem_tran_historyInput
+    item_tran?: item_tranCreateNestedOneWithoutItem_tran_historyInput
+    users_item_tran_history_requested_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_requested_byTousersInput
+    fines?: finesCreateNestedManyWithoutItem_tran_historyInput
   }
 
-  export type book_tran_historyUncheckedCreateWithoutUsers_book_tran_history_approved_byTousersInput = {
+  export type item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_approved_byTousersInput = {
     id?: number
-    book_id?: number | null
+    item_id?: number | null
     tran_id?: number | null
-    status?: $Enums.book_tran_history_status
+    status?: $Enums.item_tran_history_status
     requested_by?: number | null
     requested_at?: Date | string | null
     approved_at?: Date | string | null
@@ -17379,16 +20598,16 @@ export namespace Prisma {
     date_due?: Date | string | null
     date_returned?: Date | string | null
     remarks?: string | null
-    fines?: finesUncheckedCreateNestedManyWithoutBook_tran_historyInput
+    fines?: finesUncheckedCreateNestedManyWithoutItem_tran_historyInput
   }
 
-  export type book_tran_historyCreateOrConnectWithoutUsers_book_tran_history_approved_byTousersInput = {
-    where: book_tran_historyWhereUniqueInput
-    create: XOR<book_tran_historyCreateWithoutUsers_book_tran_history_approved_byTousersInput, book_tran_historyUncheckedCreateWithoutUsers_book_tran_history_approved_byTousersInput>
+  export type item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_approved_byTousersInput = {
+    where: item_tran_historyWhereUniqueInput
+    create: XOR<item_tran_historyCreateWithoutUsers_item_tran_history_approved_byTousersInput, item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_approved_byTousersInput>
   }
 
-  export type book_tran_historyCreateManyUsers_book_tran_history_approved_byTousersInputEnvelope = {
-    data: book_tran_historyCreateManyUsers_book_tran_history_approved_byTousersInput | book_tran_historyCreateManyUsers_book_tran_history_approved_byTousersInput[]
+  export type item_tran_historyCreateManyUsers_item_tran_history_approved_byTousersInputEnvelope = {
+    data: item_tran_historyCreateManyUsers_item_tran_history_approved_byTousersInput | item_tran_historyCreateManyUsers_item_tran_history_approved_byTousersInput[]
     skipDuplicates?: boolean
   }
 
@@ -17398,12 +20617,12 @@ export namespace Prisma {
     status?: $Enums.fines_status | null
     created_at?: Date | string | null
     paid_at?: Date | string | null
-    book_tran_history?: book_tran_historyCreateNestedOneWithoutFinesInput
+    item_tran_history?: item_tran_historyCreateNestedOneWithoutFinesInput
   }
 
   export type finesUncheckedCreateWithoutUsersInput = {
     fine_id?: number
-    book_tran_history_id?: number | null
+    item_tran_history_id?: number | null
     amount?: Decimal | DecimalJsLike | number | string | null
     reason?: string | null
     status?: $Enums.fines_status | null
@@ -17444,21 +20663,23 @@ export namespace Prisma {
 
   export type notificationsCreateWithoutUsers_notifications_from_user_idTousersInput = {
     type?: $Enums.notifications_type | null
+    reservation_id?: number | null
     status?: $Enums.notifications_status | null
     message?: string | null
     created_at?: Date | string | null
     resolved_at?: Date | string | null
-    books?: booksCreateNestedOneWithoutNotificationsInput
+    library_items?: library_itemsCreateNestedOneWithoutNotificationsInput
     users_notifications_to_user_idTousers?: usersCreateNestedOneWithoutNotifications_notifications_to_user_idTousersInput
-    book_tran?: book_tranCreateNestedOneWithoutNotificationsInput
+    item_tran?: item_tranCreateNestedOneWithoutNotificationsInput
   }
 
   export type notificationsUncheckedCreateWithoutUsers_notifications_from_user_idTousersInput = {
     notification_id?: number
     type?: $Enums.notifications_type | null
-    book_id?: number | null
+    item_id?: number | null
     to_user_id?: number | null
     tran_id?: number | null
+    reservation_id?: number | null
     status?: $Enums.notifications_status | null
     message?: string | null
     created_at?: Date | string | null
@@ -17477,21 +20698,23 @@ export namespace Prisma {
 
   export type notificationsCreateWithoutUsers_notifications_to_user_idTousersInput = {
     type?: $Enums.notifications_type | null
+    reservation_id?: number | null
     status?: $Enums.notifications_status | null
     message?: string | null
     created_at?: Date | string | null
     resolved_at?: Date | string | null
-    books?: booksCreateNestedOneWithoutNotificationsInput
+    library_items?: library_itemsCreateNestedOneWithoutNotificationsInput
     users_notifications_from_user_idTousers?: usersCreateNestedOneWithoutNotifications_notifications_from_user_idTousersInput
-    book_tran?: book_tranCreateNestedOneWithoutNotificationsInput
+    item_tran?: item_tranCreateNestedOneWithoutNotificationsInput
   }
 
   export type notificationsUncheckedCreateWithoutUsers_notifications_to_user_idTousersInput = {
     notification_id?: number
     type?: $Enums.notifications_type | null
-    book_id?: number | null
+    item_id?: number | null
     from_user_id?: number | null
     tran_id?: number | null
+    reservation_id?: number | null
     status?: $Enums.notifications_status | null
     message?: string | null
     created_at?: Date | string | null
@@ -17510,12 +20733,12 @@ export namespace Prisma {
 
   export type user_wishlistCreateWithoutUsersInput = {
     created_at?: Date | string | null
-    books?: booksCreateNestedOneWithoutUser_wishlistInput
+    library_items?: library_itemsCreateNestedOneWithoutUser_wishlistInput
   }
 
   export type user_wishlistUncheckedCreateWithoutUsersInput = {
     id?: number
-    book_id?: number | null
+    item_id?: number | null
     created_at?: Date | string | null
   }
 
@@ -17529,52 +20752,77 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type book_tranUpsertWithWhereUniqueWithoutUsersInput = {
-    where: book_tranWhereUniqueInput
-    update: XOR<book_tranUpdateWithoutUsersInput, book_tranUncheckedUpdateWithoutUsersInput>
-    create: XOR<book_tranCreateWithoutUsersInput, book_tranUncheckedCreateWithoutUsersInput>
+  export type library_cardsCreateWithoutUsersInput = {
+    card_number: string
+    issued_at?: Date | string
+    expires_at?: Date | string | null
+    status?: $Enums.card_status
   }
 
-  export type book_tranUpdateWithWhereUniqueWithoutUsersInput = {
-    where: book_tranWhereUniqueInput
-    data: XOR<book_tranUpdateWithoutUsersInput, book_tranUncheckedUpdateWithoutUsersInput>
+  export type library_cardsUncheckedCreateWithoutUsersInput = {
+    card_id?: number
+    card_number: string
+    issued_at?: Date | string
+    expires_at?: Date | string | null
+    status?: $Enums.card_status
   }
 
-  export type book_tranUpdateManyWithWhereWithoutUsersInput = {
-    where: book_tranScalarWhereInput
-    data: XOR<book_tranUpdateManyMutationInput, book_tranUncheckedUpdateManyWithoutUsersInput>
+  export type library_cardsCreateOrConnectWithoutUsersInput = {
+    where: library_cardsWhereUniqueInput
+    create: XOR<library_cardsCreateWithoutUsersInput, library_cardsUncheckedCreateWithoutUsersInput>
   }
 
-  export type book_tran_historyUpsertWithWhereUniqueWithoutUsers_book_tran_history_requested_byTousersInput = {
-    where: book_tran_historyWhereUniqueInput
-    update: XOR<book_tran_historyUpdateWithoutUsers_book_tran_history_requested_byTousersInput, book_tran_historyUncheckedUpdateWithoutUsers_book_tran_history_requested_byTousersInput>
-    create: XOR<book_tran_historyCreateWithoutUsers_book_tran_history_requested_byTousersInput, book_tran_historyUncheckedCreateWithoutUsers_book_tran_history_requested_byTousersInput>
+  export type library_cardsCreateManyUsersInputEnvelope = {
+    data: library_cardsCreateManyUsersInput | library_cardsCreateManyUsersInput[]
+    skipDuplicates?: boolean
   }
 
-  export type book_tran_historyUpdateWithWhereUniqueWithoutUsers_book_tran_history_requested_byTousersInput = {
-    where: book_tran_historyWhereUniqueInput
-    data: XOR<book_tran_historyUpdateWithoutUsers_book_tran_history_requested_byTousersInput, book_tran_historyUncheckedUpdateWithoutUsers_book_tran_history_requested_byTousersInput>
+  export type item_tranUpsertWithWhereUniqueWithoutUsersInput = {
+    where: item_tranWhereUniqueInput
+    update: XOR<item_tranUpdateWithoutUsersInput, item_tranUncheckedUpdateWithoutUsersInput>
+    create: XOR<item_tranCreateWithoutUsersInput, item_tranUncheckedCreateWithoutUsersInput>
   }
 
-  export type book_tran_historyUpdateManyWithWhereWithoutUsers_book_tran_history_requested_byTousersInput = {
-    where: book_tran_historyScalarWhereInput
-    data: XOR<book_tran_historyUpdateManyMutationInput, book_tran_historyUncheckedUpdateManyWithoutUsers_book_tran_history_requested_byTousersInput>
+  export type item_tranUpdateWithWhereUniqueWithoutUsersInput = {
+    where: item_tranWhereUniqueInput
+    data: XOR<item_tranUpdateWithoutUsersInput, item_tranUncheckedUpdateWithoutUsersInput>
   }
 
-  export type book_tran_historyUpsertWithWhereUniqueWithoutUsers_book_tran_history_approved_byTousersInput = {
-    where: book_tran_historyWhereUniqueInput
-    update: XOR<book_tran_historyUpdateWithoutUsers_book_tran_history_approved_byTousersInput, book_tran_historyUncheckedUpdateWithoutUsers_book_tran_history_approved_byTousersInput>
-    create: XOR<book_tran_historyCreateWithoutUsers_book_tran_history_approved_byTousersInput, book_tran_historyUncheckedCreateWithoutUsers_book_tran_history_approved_byTousersInput>
+  export type item_tranUpdateManyWithWhereWithoutUsersInput = {
+    where: item_tranScalarWhereInput
+    data: XOR<item_tranUpdateManyMutationInput, item_tranUncheckedUpdateManyWithoutUsersInput>
   }
 
-  export type book_tran_historyUpdateWithWhereUniqueWithoutUsers_book_tran_history_approved_byTousersInput = {
-    where: book_tran_historyWhereUniqueInput
-    data: XOR<book_tran_historyUpdateWithoutUsers_book_tran_history_approved_byTousersInput, book_tran_historyUncheckedUpdateWithoutUsers_book_tran_history_approved_byTousersInput>
+  export type item_tran_historyUpsertWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput = {
+    where: item_tran_historyWhereUniqueInput
+    update: XOR<item_tran_historyUpdateWithoutUsers_item_tran_history_requested_byTousersInput, item_tran_historyUncheckedUpdateWithoutUsers_item_tran_history_requested_byTousersInput>
+    create: XOR<item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput, item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput>
   }
 
-  export type book_tran_historyUpdateManyWithWhereWithoutUsers_book_tran_history_approved_byTousersInput = {
-    where: book_tran_historyScalarWhereInput
-    data: XOR<book_tran_historyUpdateManyMutationInput, book_tran_historyUncheckedUpdateManyWithoutUsers_book_tran_history_approved_byTousersInput>
+  export type item_tran_historyUpdateWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput = {
+    where: item_tran_historyWhereUniqueInput
+    data: XOR<item_tran_historyUpdateWithoutUsers_item_tran_history_requested_byTousersInput, item_tran_historyUncheckedUpdateWithoutUsers_item_tran_history_requested_byTousersInput>
+  }
+
+  export type item_tran_historyUpdateManyWithWhereWithoutUsers_item_tran_history_requested_byTousersInput = {
+    where: item_tran_historyScalarWhereInput
+    data: XOR<item_tran_historyUpdateManyMutationInput, item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersInput>
+  }
+
+  export type item_tran_historyUpsertWithWhereUniqueWithoutUsers_item_tran_history_approved_byTousersInput = {
+    where: item_tran_historyWhereUniqueInput
+    update: XOR<item_tran_historyUpdateWithoutUsers_item_tran_history_approved_byTousersInput, item_tran_historyUncheckedUpdateWithoutUsers_item_tran_history_approved_byTousersInput>
+    create: XOR<item_tran_historyCreateWithoutUsers_item_tran_history_approved_byTousersInput, item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_approved_byTousersInput>
+  }
+
+  export type item_tran_historyUpdateWithWhereUniqueWithoutUsers_item_tran_history_approved_byTousersInput = {
+    where: item_tran_historyWhereUniqueInput
+    data: XOR<item_tran_historyUpdateWithoutUsers_item_tran_history_approved_byTousersInput, item_tran_historyUncheckedUpdateWithoutUsers_item_tran_history_approved_byTousersInput>
+  }
+
+  export type item_tran_historyUpdateManyWithWhereWithoutUsers_item_tran_history_approved_byTousersInput = {
+    where: item_tran_historyScalarWhereInput
+    data: XOR<item_tran_historyUpdateManyMutationInput, item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersInput>
   }
 
   export type finesUpsertWithWhereUniqueWithoutUsersInput = {
@@ -17667,10 +20915,148 @@ export namespace Prisma {
     data: XOR<user_wishlistUpdateManyMutationInput, user_wishlistUncheckedUpdateManyWithoutUsersInput>
   }
 
-  export type book_tran_historyCreateManyBook_tranInput = {
+  export type library_cardsUpsertWithWhereUniqueWithoutUsersInput = {
+    where: library_cardsWhereUniqueInput
+    update: XOR<library_cardsUpdateWithoutUsersInput, library_cardsUncheckedUpdateWithoutUsersInput>
+    create: XOR<library_cardsCreateWithoutUsersInput, library_cardsUncheckedCreateWithoutUsersInput>
+  }
+
+  export type library_cardsUpdateWithWhereUniqueWithoutUsersInput = {
+    where: library_cardsWhereUniqueInput
+    data: XOR<library_cardsUpdateWithoutUsersInput, library_cardsUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type library_cardsUpdateManyWithWhereWithoutUsersInput = {
+    where: library_cardsScalarWhereInput
+    data: XOR<library_cardsUpdateManyMutationInput, library_cardsUncheckedUpdateManyWithoutUsersInput>
+  }
+
+  export type library_cardsScalarWhereInput = {
+    AND?: library_cardsScalarWhereInput | library_cardsScalarWhereInput[]
+    OR?: library_cardsScalarWhereInput[]
+    NOT?: library_cardsScalarWhereInput | library_cardsScalarWhereInput[]
+    card_id?: IntFilter<"library_cards"> | number
+    user_id?: IntNullableFilter<"library_cards"> | number | null
+    card_number?: StringFilter<"library_cards"> | string
+    issued_at?: DateTimeFilter<"library_cards"> | Date | string
+    expires_at?: DateTimeNullableFilter<"library_cards"> | Date | string | null
+    status?: Enumcard_statusFilter<"library_cards"> | $Enums.card_status
+  }
+
+  export type usersCreateWithoutLibrary_cardsInput = {
+    name?: string | null
+    email?: string | null
+    password_hash?: string | null
+    role?: $Enums.users_role | null
+    status?: $Enums.users_status | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    gender?: $Enums.gender | null
+    phone_number?: string | null
+    birth_date?: Date | string | null
+    address?: string | null
+    profile_image_url?: string | null
+    item_tran?: item_tranCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
+    fines?: finesCreateNestedManyWithoutUsersInput
+    logs?: logsCreateNestedManyWithoutUsersInput
+    notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
+    notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
+    user_wishlist?: user_wishlistCreateNestedManyWithoutUsersInput
+  }
+
+  export type usersUncheckedCreateWithoutLibrary_cardsInput = {
+    user_id?: number
+    name?: string | null
+    email?: string | null
+    password_hash?: string | null
+    role?: $Enums.users_role | null
+    status?: $Enums.users_status | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    gender?: $Enums.gender | null
+    phone_number?: string | null
+    birth_date?: Date | string | null
+    address?: string | null
+    profile_image_url?: string | null
+    item_tran?: item_tranUncheckedCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
+    fines?: finesUncheckedCreateNestedManyWithoutUsersInput
+    logs?: logsUncheckedCreateNestedManyWithoutUsersInput
+    notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
+    notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
+    user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutUsersInput
+  }
+
+  export type usersCreateOrConnectWithoutLibrary_cardsInput = {
+    where: usersWhereUniqueInput
+    create: XOR<usersCreateWithoutLibrary_cardsInput, usersUncheckedCreateWithoutLibrary_cardsInput>
+  }
+
+  export type usersUpsertWithoutLibrary_cardsInput = {
+    update: XOR<usersUpdateWithoutLibrary_cardsInput, usersUncheckedUpdateWithoutLibrary_cardsInput>
+    create: XOR<usersCreateWithoutLibrary_cardsInput, usersUncheckedCreateWithoutLibrary_cardsInput>
+    where?: usersWhereInput
+  }
+
+  export type usersUpdateToOneWithWhereWithoutLibrary_cardsInput = {
+    where?: usersWhereInput
+    data: XOR<usersUpdateWithoutLibrary_cardsInput, usersUncheckedUpdateWithoutLibrary_cardsInput>
+  }
+
+  export type usersUpdateWithoutLibrary_cardsInput = {
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableEnumusers_roleFieldUpdateOperationsInput | $Enums.users_role | null
+    status?: NullableEnumusers_statusFieldUpdateOperationsInput | $Enums.users_status | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumgenderFieldUpdateOperationsInput | $Enums.gender | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
+    item_tran?: item_tranUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
+    fines?: finesUpdateManyWithoutUsersNestedInput
+    logs?: logsUpdateManyWithoutUsersNestedInput
+    notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
+    notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
+    user_wishlist?: user_wishlistUpdateManyWithoutUsersNestedInput
+  }
+
+  export type usersUncheckedUpdateWithoutLibrary_cardsInput = {
+    user_id?: IntFieldUpdateOperationsInput | number
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableEnumusers_roleFieldUpdateOperationsInput | $Enums.users_role | null
+    status?: NullableEnumusers_statusFieldUpdateOperationsInput | $Enums.users_status | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumgenderFieldUpdateOperationsInput | $Enums.gender | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
+    item_tran?: item_tranUncheckedUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
+    fines?: finesUncheckedUpdateManyWithoutUsersNestedInput
+    logs?: logsUncheckedUpdateManyWithoutUsersNestedInput
+    notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
+    notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
+    user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
+  }
+
+  export type item_tran_historyCreateManyItem_tranInput = {
     id?: number
-    book_id?: number | null
-    status?: $Enums.book_tran_history_status
+    item_id?: number | null
+    status?: $Enums.item_tran_history_status
     requested_by?: number | null
     approved_by?: number | null
     requested_at?: Date | string | null
@@ -17681,36 +21067,37 @@ export namespace Prisma {
     remarks?: string | null
   }
 
-  export type notificationsCreateManyBook_tranInput = {
+  export type notificationsCreateManyItem_tranInput = {
     notification_id?: number
     type?: $Enums.notifications_type | null
-    book_id?: number | null
+    item_id?: number | null
     from_user_id?: number | null
     to_user_id?: number | null
+    reservation_id?: number | null
     status?: $Enums.notifications_status | null
     message?: string | null
     created_at?: Date | string | null
     resolved_at?: Date | string | null
   }
 
-  export type book_tran_historyUpdateWithoutBook_tranInput = {
-    status?: Enumbook_tran_history_statusFieldUpdateOperationsInput | $Enums.book_tran_history_status
+  export type item_tran_historyUpdateWithoutItem_tranInput = {
+    status?: Enumitem_tran_history_statusFieldUpdateOperationsInput | $Enums.item_tran_history_status
     requested_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_issued?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_due?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_returned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    books?: booksUpdateOneWithoutBook_tran_historyNestedInput
-    users_book_tran_history_requested_byTousers?: usersUpdateOneWithoutBook_tran_history_book_tran_history_requested_byTousersNestedInput
-    users_book_tran_history_approved_byTousers?: usersUpdateOneWithoutBook_tran_history_book_tran_history_approved_byTousersNestedInput
-    fines?: finesUpdateManyWithoutBook_tran_historyNestedInput
+    library_items?: library_itemsUpdateOneWithoutItem_tran_historyNestedInput
+    users_item_tran_history_requested_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_requested_byTousersNestedInput
+    users_item_tran_history_approved_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_approved_byTousersNestedInput
+    fines?: finesUpdateManyWithoutItem_tran_historyNestedInput
   }
 
-  export type book_tran_historyUncheckedUpdateWithoutBook_tranInput = {
+  export type item_tran_historyUncheckedUpdateWithoutItem_tranInput = {
     id?: IntFieldUpdateOperationsInput | number
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: Enumbook_tran_history_statusFieldUpdateOperationsInput | $Enums.book_tran_history_status
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: Enumitem_tran_history_statusFieldUpdateOperationsInput | $Enums.item_tran_history_status
     requested_by?: NullableIntFieldUpdateOperationsInput | number | null
     approved_by?: NullableIntFieldUpdateOperationsInput | number | null
     requested_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17719,13 +21106,13 @@ export namespace Prisma {
     date_due?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_returned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    fines?: finesUncheckedUpdateManyWithoutBook_tran_historyNestedInput
+    fines?: finesUncheckedUpdateManyWithoutItem_tran_historyNestedInput
   }
 
-  export type book_tran_historyUncheckedUpdateManyWithoutBook_tranInput = {
+  export type item_tran_historyUncheckedUpdateManyWithoutItem_tranInput = {
     id?: IntFieldUpdateOperationsInput | number
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: Enumbook_tran_history_statusFieldUpdateOperationsInput | $Enums.book_tran_history_status
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: Enumitem_tran_history_statusFieldUpdateOperationsInput | $Enums.item_tran_history_status
     requested_by?: NullableIntFieldUpdateOperationsInput | number | null
     approved_by?: NullableIntFieldUpdateOperationsInput | number | null
     requested_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17736,42 +21123,45 @@ export namespace Prisma {
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type notificationsUpdateWithoutBook_tranInput = {
+  export type notificationsUpdateWithoutItem_tranInput = {
     type?: NullableEnumnotifications_typeFieldUpdateOperationsInput | $Enums.notifications_type | null
+    reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
     message?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     resolved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    books?: booksUpdateOneWithoutNotificationsNestedInput
+    library_items?: library_itemsUpdateOneWithoutNotificationsNestedInput
     users_notifications_from_user_idTousers?: usersUpdateOneWithoutNotifications_notifications_from_user_idTousersNestedInput
     users_notifications_to_user_idTousers?: usersUpdateOneWithoutNotifications_notifications_to_user_idTousersNestedInput
   }
 
-  export type notificationsUncheckedUpdateWithoutBook_tranInput = {
+  export type notificationsUncheckedUpdateWithoutItem_tranInput = {
     notification_id?: IntFieldUpdateOperationsInput | number
     type?: NullableEnumnotifications_typeFieldUpdateOperationsInput | $Enums.notifications_type | null
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
     from_user_id?: NullableIntFieldUpdateOperationsInput | number | null
     to_user_id?: NullableIntFieldUpdateOperationsInput | number | null
+    reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
     message?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     resolved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type notificationsUncheckedUpdateManyWithoutBook_tranInput = {
+  export type notificationsUncheckedUpdateManyWithoutItem_tranInput = {
     notification_id?: IntFieldUpdateOperationsInput | number
     type?: NullableEnumnotifications_typeFieldUpdateOperationsInput | $Enums.notifications_type | null
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
     from_user_id?: NullableIntFieldUpdateOperationsInput | number | null
     to_user_id?: NullableIntFieldUpdateOperationsInput | number | null
+    reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
     message?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     resolved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type finesCreateManyBook_tran_historyInput = {
+  export type finesCreateManyItem_tran_historyInput = {
     fine_id?: number
     user_id?: number | null
     amount?: Decimal | DecimalJsLike | number | string | null
@@ -17781,7 +21171,7 @@ export namespace Prisma {
     paid_at?: Date | string | null
   }
 
-  export type finesUpdateWithoutBook_tran_historyInput = {
+  export type finesUpdateWithoutItem_tran_historyInput = {
     amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableEnumfines_statusFieldUpdateOperationsInput | $Enums.fines_status | null
@@ -17790,7 +21180,7 @@ export namespace Prisma {
     users?: usersUpdateOneWithoutFinesNestedInput
   }
 
-  export type finesUncheckedUpdateWithoutBook_tran_historyInput = {
+  export type finesUncheckedUpdateWithoutItem_tran_historyInput = {
     fine_id?: IntFieldUpdateOperationsInput | number
     user_id?: NullableIntFieldUpdateOperationsInput | number | null
     amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -17800,7 +21190,7 @@ export namespace Prisma {
     paid_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type finesUncheckedUpdateManyWithoutBook_tran_historyInput = {
+  export type finesUncheckedUpdateManyWithoutItem_tran_historyInput = {
     fine_id?: IntFieldUpdateOperationsInput | number
     user_id?: NullableIntFieldUpdateOperationsInput | number | null
     amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -17810,17 +21200,17 @@ export namespace Prisma {
     paid_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type book_tranCreateManyBooksInput = {
+  export type item_tranCreateManyLibrary_itemsInput = {
     tran_id?: number
-    status?: $Enums.book_tran_status | null
+    status?: $Enums.item_tran_status | null
     user_id?: number | null
     record_status?: $Enums.record_status | null
   }
 
-  export type book_tran_historyCreateManyBooksInput = {
+  export type item_tran_historyCreateManyLibrary_itemsInput = {
     id?: number
     tran_id?: number | null
-    status?: $Enums.book_tran_history_status
+    status?: $Enums.item_tran_history_status
     requested_by?: number | null
     approved_by?: number | null
     requested_at?: Date | string | null
@@ -17831,66 +21221,67 @@ export namespace Prisma {
     remarks?: string | null
   }
 
-  export type notificationsCreateManyBooksInput = {
+  export type notificationsCreateManyLibrary_itemsInput = {
     notification_id?: number
     type?: $Enums.notifications_type | null
     from_user_id?: number | null
     to_user_id?: number | null
     tran_id?: number | null
+    reservation_id?: number | null
     status?: $Enums.notifications_status | null
     message?: string | null
     created_at?: Date | string | null
     resolved_at?: Date | string | null
   }
 
-  export type user_wishlistCreateManyBooksInput = {
+  export type user_wishlistCreateManyLibrary_itemsInput = {
     id?: number
     user_id?: number | null
     created_at?: Date | string | null
   }
 
-  export type book_tranUpdateWithoutBooksInput = {
-    status?: NullableEnumbook_tran_statusFieldUpdateOperationsInput | $Enums.book_tran_status | null
+  export type item_tranUpdateWithoutLibrary_itemsInput = {
+    status?: NullableEnumitem_tran_statusFieldUpdateOperationsInput | $Enums.item_tran_status | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
-    users?: usersUpdateOneWithoutBook_tranNestedInput
-    book_tran_history?: book_tran_historyUpdateManyWithoutBook_tranNestedInput
-    notifications?: notificationsUpdateManyWithoutBook_tranNestedInput
+    users?: usersUpdateOneWithoutItem_tranNestedInput
+    item_tran_history?: item_tran_historyUpdateManyWithoutItem_tranNestedInput
+    notifications?: notificationsUpdateManyWithoutItem_tranNestedInput
   }
 
-  export type book_tranUncheckedUpdateWithoutBooksInput = {
+  export type item_tranUncheckedUpdateWithoutLibrary_itemsInput = {
     tran_id?: IntFieldUpdateOperationsInput | number
-    status?: NullableEnumbook_tran_statusFieldUpdateOperationsInput | $Enums.book_tran_status | null
+    status?: NullableEnumitem_tran_statusFieldUpdateOperationsInput | $Enums.item_tran_status | null
     user_id?: NullableIntFieldUpdateOperationsInput | number | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
-    book_tran_history?: book_tran_historyUncheckedUpdateManyWithoutBook_tranNestedInput
-    notifications?: notificationsUncheckedUpdateManyWithoutBook_tranNestedInput
+    item_tran_history?: item_tran_historyUncheckedUpdateManyWithoutItem_tranNestedInput
+    notifications?: notificationsUncheckedUpdateManyWithoutItem_tranNestedInput
   }
 
-  export type book_tranUncheckedUpdateManyWithoutBooksInput = {
+  export type item_tranUncheckedUpdateManyWithoutLibrary_itemsInput = {
     tran_id?: IntFieldUpdateOperationsInput | number
-    status?: NullableEnumbook_tran_statusFieldUpdateOperationsInput | $Enums.book_tran_status | null
+    status?: NullableEnumitem_tran_statusFieldUpdateOperationsInput | $Enums.item_tran_status | null
     user_id?: NullableIntFieldUpdateOperationsInput | number | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
   }
 
-  export type book_tran_historyUpdateWithoutBooksInput = {
-    status?: Enumbook_tran_history_statusFieldUpdateOperationsInput | $Enums.book_tran_history_status
+  export type item_tran_historyUpdateWithoutLibrary_itemsInput = {
+    status?: Enumitem_tran_history_statusFieldUpdateOperationsInput | $Enums.item_tran_history_status
     requested_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_issued?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_due?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_returned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    book_tran?: book_tranUpdateOneWithoutBook_tran_historyNestedInput
-    users_book_tran_history_requested_byTousers?: usersUpdateOneWithoutBook_tran_history_book_tran_history_requested_byTousersNestedInput
-    users_book_tran_history_approved_byTousers?: usersUpdateOneWithoutBook_tran_history_book_tran_history_approved_byTousersNestedInput
-    fines?: finesUpdateManyWithoutBook_tran_historyNestedInput
+    item_tran?: item_tranUpdateOneWithoutItem_tran_historyNestedInput
+    users_item_tran_history_requested_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_requested_byTousersNestedInput
+    users_item_tran_history_approved_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_approved_byTousersNestedInput
+    fines?: finesUpdateManyWithoutItem_tran_historyNestedInput
   }
 
-  export type book_tran_historyUncheckedUpdateWithoutBooksInput = {
+  export type item_tran_historyUncheckedUpdateWithoutLibrary_itemsInput = {
     id?: IntFieldUpdateOperationsInput | number
     tran_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: Enumbook_tran_history_statusFieldUpdateOperationsInput | $Enums.book_tran_history_status
+    status?: Enumitem_tran_history_statusFieldUpdateOperationsInput | $Enums.item_tran_history_status
     requested_by?: NullableIntFieldUpdateOperationsInput | number | null
     approved_by?: NullableIntFieldUpdateOperationsInput | number | null
     requested_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17899,13 +21290,13 @@ export namespace Prisma {
     date_due?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_returned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    fines?: finesUncheckedUpdateManyWithoutBook_tran_historyNestedInput
+    fines?: finesUncheckedUpdateManyWithoutItem_tran_historyNestedInput
   }
 
-  export type book_tran_historyUncheckedUpdateManyWithoutBooksInput = {
+  export type item_tran_historyUncheckedUpdateManyWithoutLibrary_itemsInput = {
     id?: IntFieldUpdateOperationsInput | number
     tran_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: Enumbook_tran_history_statusFieldUpdateOperationsInput | $Enums.book_tran_history_status
+    status?: Enumitem_tran_history_statusFieldUpdateOperationsInput | $Enums.item_tran_history_status
     requested_by?: NullableIntFieldUpdateOperationsInput | number | null
     approved_by?: NullableIntFieldUpdateOperationsInput | number | null
     requested_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17916,70 +21307,73 @@ export namespace Prisma {
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type notificationsUpdateWithoutBooksInput = {
+  export type notificationsUpdateWithoutLibrary_itemsInput = {
     type?: NullableEnumnotifications_typeFieldUpdateOperationsInput | $Enums.notifications_type | null
+    reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
     message?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     resolved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users_notifications_from_user_idTousers?: usersUpdateOneWithoutNotifications_notifications_from_user_idTousersNestedInput
     users_notifications_to_user_idTousers?: usersUpdateOneWithoutNotifications_notifications_to_user_idTousersNestedInput
-    book_tran?: book_tranUpdateOneWithoutNotificationsNestedInput
+    item_tran?: item_tranUpdateOneWithoutNotificationsNestedInput
   }
 
-  export type notificationsUncheckedUpdateWithoutBooksInput = {
+  export type notificationsUncheckedUpdateWithoutLibrary_itemsInput = {
     notification_id?: IntFieldUpdateOperationsInput | number
     type?: NullableEnumnotifications_typeFieldUpdateOperationsInput | $Enums.notifications_type | null
     from_user_id?: NullableIntFieldUpdateOperationsInput | number | null
     to_user_id?: NullableIntFieldUpdateOperationsInput | number | null
     tran_id?: NullableIntFieldUpdateOperationsInput | number | null
+    reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
     message?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     resolved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type notificationsUncheckedUpdateManyWithoutBooksInput = {
+  export type notificationsUncheckedUpdateManyWithoutLibrary_itemsInput = {
     notification_id?: IntFieldUpdateOperationsInput | number
     type?: NullableEnumnotifications_typeFieldUpdateOperationsInput | $Enums.notifications_type | null
     from_user_id?: NullableIntFieldUpdateOperationsInput | number | null
     to_user_id?: NullableIntFieldUpdateOperationsInput | number | null
     tran_id?: NullableIntFieldUpdateOperationsInput | number | null
+    reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
     message?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     resolved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type user_wishlistUpdateWithoutBooksInput = {
+  export type user_wishlistUpdateWithoutLibrary_itemsInput = {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users?: usersUpdateOneWithoutUser_wishlistNestedInput
   }
 
-  export type user_wishlistUncheckedUpdateWithoutBooksInput = {
+  export type user_wishlistUncheckedUpdateWithoutLibrary_itemsInput = {
     id?: IntFieldUpdateOperationsInput | number
     user_id?: NullableIntFieldUpdateOperationsInput | number | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type user_wishlistUncheckedUpdateManyWithoutBooksInput = {
+  export type user_wishlistUncheckedUpdateManyWithoutLibrary_itemsInput = {
     id?: IntFieldUpdateOperationsInput | number
     user_id?: NullableIntFieldUpdateOperationsInput | number | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type book_tranCreateManyUsersInput = {
+  export type item_tranCreateManyUsersInput = {
     tran_id?: number
-    book_id?: number | null
-    status?: $Enums.book_tran_status | null
+    item_id?: number | null
+    status?: $Enums.item_tran_status | null
     record_status?: $Enums.record_status | null
   }
 
-  export type book_tran_historyCreateManyUsers_book_tran_history_requested_byTousersInput = {
+  export type item_tran_historyCreateManyUsers_item_tran_history_requested_byTousersInput = {
     id?: number
-    book_id?: number | null
+    item_id?: number | null
     tran_id?: number | null
-    status?: $Enums.book_tran_history_status
+    status?: $Enums.item_tran_history_status
     approved_by?: number | null
     requested_at?: Date | string | null
     approved_at?: Date | string | null
@@ -17989,11 +21383,11 @@ export namespace Prisma {
     remarks?: string | null
   }
 
-  export type book_tran_historyCreateManyUsers_book_tran_history_approved_byTousersInput = {
+  export type item_tran_historyCreateManyUsers_item_tran_history_approved_byTousersInput = {
     id?: number
-    book_id?: number | null
+    item_id?: number | null
     tran_id?: number | null
-    status?: $Enums.book_tran_history_status
+    status?: $Enums.item_tran_history_status
     requested_by?: number | null
     requested_at?: Date | string | null
     approved_at?: Date | string | null
@@ -18005,7 +21399,7 @@ export namespace Prisma {
 
   export type finesCreateManyUsersInput = {
     fine_id?: number
-    book_tran_history_id?: number | null
+    item_tran_history_id?: number | null
     amount?: Decimal | DecimalJsLike | number | string | null
     reason?: string | null
     status?: $Enums.fines_status | null
@@ -18022,9 +21416,10 @@ export namespace Prisma {
   export type notificationsCreateManyUsers_notifications_from_user_idTousersInput = {
     notification_id?: number
     type?: $Enums.notifications_type | null
-    book_id?: number | null
+    item_id?: number | null
     to_user_id?: number | null
     tran_id?: number | null
+    reservation_id?: number | null
     status?: $Enums.notifications_status | null
     message?: string | null
     created_at?: Date | string | null
@@ -18034,9 +21429,10 @@ export namespace Prisma {
   export type notificationsCreateManyUsers_notifications_to_user_idTousersInput = {
     notification_id?: number
     type?: $Enums.notifications_type | null
-    book_id?: number | null
+    item_id?: number | null
     from_user_id?: number | null
     tran_id?: number | null
+    reservation_id?: number | null
     status?: $Enums.notifications_status | null
     message?: string | null
     created_at?: Date | string | null
@@ -18045,53 +21441,61 @@ export namespace Prisma {
 
   export type user_wishlistCreateManyUsersInput = {
     id?: number
-    book_id?: number | null
+    item_id?: number | null
     created_at?: Date | string | null
   }
 
-  export type book_tranUpdateWithoutUsersInput = {
-    status?: NullableEnumbook_tran_statusFieldUpdateOperationsInput | $Enums.book_tran_status | null
-    record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
-    books?: booksUpdateOneWithoutBook_tranNestedInput
-    book_tran_history?: book_tran_historyUpdateManyWithoutBook_tranNestedInput
-    notifications?: notificationsUpdateManyWithoutBook_tranNestedInput
+  export type library_cardsCreateManyUsersInput = {
+    card_id?: number
+    card_number: string
+    issued_at?: Date | string
+    expires_at?: Date | string | null
+    status?: $Enums.card_status
   }
 
-  export type book_tranUncheckedUpdateWithoutUsersInput = {
+  export type item_tranUpdateWithoutUsersInput = {
+    status?: NullableEnumitem_tran_statusFieldUpdateOperationsInput | $Enums.item_tran_status | null
+    record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
+    library_items?: library_itemsUpdateOneWithoutItem_tranNestedInput
+    item_tran_history?: item_tran_historyUpdateManyWithoutItem_tranNestedInput
+    notifications?: notificationsUpdateManyWithoutItem_tranNestedInput
+  }
+
+  export type item_tranUncheckedUpdateWithoutUsersInput = {
     tran_id?: IntFieldUpdateOperationsInput | number
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: NullableEnumbook_tran_statusFieldUpdateOperationsInput | $Enums.book_tran_status | null
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: NullableEnumitem_tran_statusFieldUpdateOperationsInput | $Enums.item_tran_status | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
-    book_tran_history?: book_tran_historyUncheckedUpdateManyWithoutBook_tranNestedInput
-    notifications?: notificationsUncheckedUpdateManyWithoutBook_tranNestedInput
+    item_tran_history?: item_tran_historyUncheckedUpdateManyWithoutItem_tranNestedInput
+    notifications?: notificationsUncheckedUpdateManyWithoutItem_tranNestedInput
   }
 
-  export type book_tranUncheckedUpdateManyWithoutUsersInput = {
+  export type item_tranUncheckedUpdateManyWithoutUsersInput = {
     tran_id?: IntFieldUpdateOperationsInput | number
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: NullableEnumbook_tran_statusFieldUpdateOperationsInput | $Enums.book_tran_status | null
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: NullableEnumitem_tran_statusFieldUpdateOperationsInput | $Enums.item_tran_status | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
   }
 
-  export type book_tran_historyUpdateWithoutUsers_book_tran_history_requested_byTousersInput = {
-    status?: Enumbook_tran_history_statusFieldUpdateOperationsInput | $Enums.book_tran_history_status
+  export type item_tran_historyUpdateWithoutUsers_item_tran_history_requested_byTousersInput = {
+    status?: Enumitem_tran_history_statusFieldUpdateOperationsInput | $Enums.item_tran_history_status
     requested_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_issued?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_due?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_returned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    books?: booksUpdateOneWithoutBook_tran_historyNestedInput
-    book_tran?: book_tranUpdateOneWithoutBook_tran_historyNestedInput
-    users_book_tran_history_approved_byTousers?: usersUpdateOneWithoutBook_tran_history_book_tran_history_approved_byTousersNestedInput
-    fines?: finesUpdateManyWithoutBook_tran_historyNestedInput
+    library_items?: library_itemsUpdateOneWithoutItem_tran_historyNestedInput
+    item_tran?: item_tranUpdateOneWithoutItem_tran_historyNestedInput
+    users_item_tran_history_approved_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_approved_byTousersNestedInput
+    fines?: finesUpdateManyWithoutItem_tran_historyNestedInput
   }
 
-  export type book_tran_historyUncheckedUpdateWithoutUsers_book_tran_history_requested_byTousersInput = {
+  export type item_tran_historyUncheckedUpdateWithoutUsers_item_tran_history_requested_byTousersInput = {
     id?: IntFieldUpdateOperationsInput | number
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
     tran_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: Enumbook_tran_history_statusFieldUpdateOperationsInput | $Enums.book_tran_history_status
+    status?: Enumitem_tran_history_statusFieldUpdateOperationsInput | $Enums.item_tran_history_status
     approved_by?: NullableIntFieldUpdateOperationsInput | number | null
     requested_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -18099,14 +21503,14 @@ export namespace Prisma {
     date_due?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_returned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    fines?: finesUncheckedUpdateManyWithoutBook_tran_historyNestedInput
+    fines?: finesUncheckedUpdateManyWithoutItem_tran_historyNestedInput
   }
 
-  export type book_tran_historyUncheckedUpdateManyWithoutUsers_book_tran_history_requested_byTousersInput = {
+  export type item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersInput = {
     id?: IntFieldUpdateOperationsInput | number
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
     tran_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: Enumbook_tran_history_statusFieldUpdateOperationsInput | $Enums.book_tran_history_status
+    status?: Enumitem_tran_history_statusFieldUpdateOperationsInput | $Enums.item_tran_history_status
     approved_by?: NullableIntFieldUpdateOperationsInput | number | null
     requested_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -18116,25 +21520,25 @@ export namespace Prisma {
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type book_tran_historyUpdateWithoutUsers_book_tran_history_approved_byTousersInput = {
-    status?: Enumbook_tran_history_statusFieldUpdateOperationsInput | $Enums.book_tran_history_status
+  export type item_tran_historyUpdateWithoutUsers_item_tran_history_approved_byTousersInput = {
+    status?: Enumitem_tran_history_statusFieldUpdateOperationsInput | $Enums.item_tran_history_status
     requested_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_issued?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_due?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_returned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    books?: booksUpdateOneWithoutBook_tran_historyNestedInput
-    book_tran?: book_tranUpdateOneWithoutBook_tran_historyNestedInput
-    users_book_tran_history_requested_byTousers?: usersUpdateOneWithoutBook_tran_history_book_tran_history_requested_byTousersNestedInput
-    fines?: finesUpdateManyWithoutBook_tran_historyNestedInput
+    library_items?: library_itemsUpdateOneWithoutItem_tran_historyNestedInput
+    item_tran?: item_tranUpdateOneWithoutItem_tran_historyNestedInput
+    users_item_tran_history_requested_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_requested_byTousersNestedInput
+    fines?: finesUpdateManyWithoutItem_tran_historyNestedInput
   }
 
-  export type book_tran_historyUncheckedUpdateWithoutUsers_book_tran_history_approved_byTousersInput = {
+  export type item_tran_historyUncheckedUpdateWithoutUsers_item_tran_history_approved_byTousersInput = {
     id?: IntFieldUpdateOperationsInput | number
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
     tran_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: Enumbook_tran_history_statusFieldUpdateOperationsInput | $Enums.book_tran_history_status
+    status?: Enumitem_tran_history_statusFieldUpdateOperationsInput | $Enums.item_tran_history_status
     requested_by?: NullableIntFieldUpdateOperationsInput | number | null
     requested_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -18142,14 +21546,14 @@ export namespace Prisma {
     date_due?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_returned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    fines?: finesUncheckedUpdateManyWithoutBook_tran_historyNestedInput
+    fines?: finesUncheckedUpdateManyWithoutItem_tran_historyNestedInput
   }
 
-  export type book_tran_historyUncheckedUpdateManyWithoutUsers_book_tran_history_approved_byTousersInput = {
+  export type item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersInput = {
     id?: IntFieldUpdateOperationsInput | number
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
     tran_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: Enumbook_tran_history_statusFieldUpdateOperationsInput | $Enums.book_tran_history_status
+    status?: Enumitem_tran_history_statusFieldUpdateOperationsInput | $Enums.item_tran_history_status
     requested_by?: NullableIntFieldUpdateOperationsInput | number | null
     requested_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -18165,12 +21569,12 @@ export namespace Prisma {
     status?: NullableEnumfines_statusFieldUpdateOperationsInput | $Enums.fines_status | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     paid_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    book_tran_history?: book_tran_historyUpdateOneWithoutFinesNestedInput
+    item_tran_history?: item_tran_historyUpdateOneWithoutFinesNestedInput
   }
 
   export type finesUncheckedUpdateWithoutUsersInput = {
     fine_id?: IntFieldUpdateOperationsInput | number
-    book_tran_history_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_tran_history_id?: NullableIntFieldUpdateOperationsInput | number | null
     amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableEnumfines_statusFieldUpdateOperationsInput | $Enums.fines_status | null
@@ -18180,7 +21584,7 @@ export namespace Prisma {
 
   export type finesUncheckedUpdateManyWithoutUsersInput = {
     fine_id?: IntFieldUpdateOperationsInput | number
-    book_tran_history_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_tran_history_id?: NullableIntFieldUpdateOperationsInput | number | null
     amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableEnumfines_statusFieldUpdateOperationsInput | $Enums.fines_status | null
@@ -18207,21 +21611,23 @@ export namespace Prisma {
 
   export type notificationsUpdateWithoutUsers_notifications_from_user_idTousersInput = {
     type?: NullableEnumnotifications_typeFieldUpdateOperationsInput | $Enums.notifications_type | null
+    reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
     message?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     resolved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    books?: booksUpdateOneWithoutNotificationsNestedInput
+    library_items?: library_itemsUpdateOneWithoutNotificationsNestedInput
     users_notifications_to_user_idTousers?: usersUpdateOneWithoutNotifications_notifications_to_user_idTousersNestedInput
-    book_tran?: book_tranUpdateOneWithoutNotificationsNestedInput
+    item_tran?: item_tranUpdateOneWithoutNotificationsNestedInput
   }
 
   export type notificationsUncheckedUpdateWithoutUsers_notifications_from_user_idTousersInput = {
     notification_id?: IntFieldUpdateOperationsInput | number
     type?: NullableEnumnotifications_typeFieldUpdateOperationsInput | $Enums.notifications_type | null
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
     to_user_id?: NullableIntFieldUpdateOperationsInput | number | null
     tran_id?: NullableIntFieldUpdateOperationsInput | number | null
+    reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
     message?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -18231,9 +21637,10 @@ export namespace Prisma {
   export type notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersInput = {
     notification_id?: IntFieldUpdateOperationsInput | number
     type?: NullableEnumnotifications_typeFieldUpdateOperationsInput | $Enums.notifications_type | null
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
     to_user_id?: NullableIntFieldUpdateOperationsInput | number | null
     tran_id?: NullableIntFieldUpdateOperationsInput | number | null
+    reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
     message?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -18242,21 +21649,23 @@ export namespace Prisma {
 
   export type notificationsUpdateWithoutUsers_notifications_to_user_idTousersInput = {
     type?: NullableEnumnotifications_typeFieldUpdateOperationsInput | $Enums.notifications_type | null
+    reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
     message?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     resolved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    books?: booksUpdateOneWithoutNotificationsNestedInput
+    library_items?: library_itemsUpdateOneWithoutNotificationsNestedInput
     users_notifications_from_user_idTousers?: usersUpdateOneWithoutNotifications_notifications_from_user_idTousersNestedInput
-    book_tran?: book_tranUpdateOneWithoutNotificationsNestedInput
+    item_tran?: item_tranUpdateOneWithoutNotificationsNestedInput
   }
 
   export type notificationsUncheckedUpdateWithoutUsers_notifications_to_user_idTousersInput = {
     notification_id?: IntFieldUpdateOperationsInput | number
     type?: NullableEnumnotifications_typeFieldUpdateOperationsInput | $Enums.notifications_type | null
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
     from_user_id?: NullableIntFieldUpdateOperationsInput | number | null
     tran_id?: NullableIntFieldUpdateOperationsInput | number | null
+    reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
     message?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -18266,9 +21675,10 @@ export namespace Prisma {
   export type notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersInput = {
     notification_id?: IntFieldUpdateOperationsInput | number
     type?: NullableEnumnotifications_typeFieldUpdateOperationsInput | $Enums.notifications_type | null
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
     from_user_id?: NullableIntFieldUpdateOperationsInput | number | null
     tran_id?: NullableIntFieldUpdateOperationsInput | number | null
+    reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
     message?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -18277,19 +21687,42 @@ export namespace Prisma {
 
   export type user_wishlistUpdateWithoutUsersInput = {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    books?: booksUpdateOneWithoutUser_wishlistNestedInput
+    library_items?: library_itemsUpdateOneWithoutUser_wishlistNestedInput
   }
 
   export type user_wishlistUncheckedUpdateWithoutUsersInput = {
     id?: IntFieldUpdateOperationsInput | number
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type user_wishlistUncheckedUpdateManyWithoutUsersInput = {
     id?: IntFieldUpdateOperationsInput | number
-    book_id?: NullableIntFieldUpdateOperationsInput | number | null
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type library_cardsUpdateWithoutUsersInput = {
+    card_number?: StringFieldUpdateOperationsInput | string
+    issued_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: Enumcard_statusFieldUpdateOperationsInput | $Enums.card_status
+  }
+
+  export type library_cardsUncheckedUpdateWithoutUsersInput = {
+    card_id?: IntFieldUpdateOperationsInput | number
+    card_number?: StringFieldUpdateOperationsInput | string
+    issued_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: Enumcard_statusFieldUpdateOperationsInput | $Enums.card_status
+  }
+
+  export type library_cardsUncheckedUpdateManyWithoutUsersInput = {
+    card_id?: IntFieldUpdateOperationsInput | number
+    card_number?: StringFieldUpdateOperationsInput | string
+    issued_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: Enumcard_statusFieldUpdateOperationsInput | $Enums.card_status
   }
 
 

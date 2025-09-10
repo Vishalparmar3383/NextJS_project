@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import {PrismaClient} from '@/generated/prisma'; // Adjust based on your project path
+import { PrismaClient } from '@/generated/prisma';
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-    const userId = await parseInt(params.id);
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    const userId = parseInt(id);
     const prisma = new PrismaClient();
 
     if (isNaN(userId)) {
@@ -10,36 +11,36 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     }
 
     try {
-
         const user = await prisma.users.findUnique({
             where: { user_id: userId },
             include: {
-                book_tran: {
+                item_tran: {
                     include: {
-                        books: true,
-                        book_tran_history: true,
-                        notifications: true,
+                        library_items: true,
+                        item_tran_history: true,
+                        // Please do not include `notifications` here, it's not valid on item_tran
                     },
                 },
-                book_tran_history_book_tran_history_requested_byTousers: {
+                item_tran_history_item_tran_history_requested_byTousers: {
                     include: {
-                        books: true,
-                        book_tran: true,
+                        library_items: true,
+                        item_tran: true,
                         fines: true,
                     },
                 },
-                book_tran_history_book_tran_history_approved_byTousers: true,
+                item_tran_history_item_tran_history_approved_byTousers: true,
                 fines: true,
                 logs: true,
                 user_wishlist: {
                     include: {
-                        books: true,
+                        library_items: true,
                     },
                 },
                 notifications_notifications_from_user_idTousers: true,
                 notifications_notifications_to_user_idTousers: true,
             },
         });
+
 
         if (!user) {
             return NextResponse.json({ success: false, message: 'User not found' }, { status: 404 });
@@ -49,14 +50,14 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
             return NextResponse.json({ success: false, message: 'Only patron details can be accessed' }, { status: 403 });
         }
 
-        const totalIssued = await prisma.book_tran_history.count({
+        const totalIssued = await prisma.item_tran_history.count({
             where: {
                 requested_by: userId,
                 status: 'issued',
             },
         });
 
-        const totalReturned = await prisma.book_tran_history.count({
+        const totalReturned = await prisma.item_tran_history.count({
             where: {
                 requested_by: userId,
                 status: 'returned',
@@ -72,14 +73,14 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
             },
         });
 
-        const currentIssuedBooks = await prisma.book_tran_history.findMany({
+        const currentIssuedItems = await prisma.item_tran_history.findMany({
             where: {
                 requested_by: userId,
                 status: 'issued',
                 date_returned: null,
             },
             include: {
-                books: true,
+                library_items: true,
             },
         });
 
@@ -89,7 +90,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
                 totalIssued,
                 totalReturned,
                 totalFines: totalFines._sum.amount || 0,
-                currentIssuedBooks,
+                currentIssuedItems,
             },
         };
 

@@ -1,5 +1,4 @@
-// Debug utility for authentication issues
-import { verifyToken } from './jwt';
+import { verifyToken } from '@/app/utils/jwt';
 
 export function debugAuth(token: string) {
   // console.log('=== AUTH DEBUG ===');
@@ -19,4 +18,4 @@ export function debugAuth(token: string) {
   }
   
   return null;
-} 
+}

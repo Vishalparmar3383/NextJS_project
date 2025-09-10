@@ -24,7 +24,7 @@ export async function PUT(req: Request) {
         }
 
         userId = decoded.userId;
-
+        console.log(userId)
         // Get profile fields from request body
         const {
             name,
@@ -34,6 +34,8 @@ export async function PUT(req: Request) {
             birth_date,
             address
         } = await req.json();
+
+        // console.log("::::",name,email,"::::")
 
         // Update user profile in database
         await prisma.users.update({

@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@/generated/prisma';
-import { withRoleAuth, AuthenticatedRequest } from '@/app/utils/authMiddleware';
+import { withRoleAuth } from '@/app/utils/authMiddleware';
 
 const prisma = new PrismaClient();
 
-export const GET = withRoleAuth(['patron'])(async (req: AuthenticatedRequest) => {
+export const GET = withRoleAuth(['patron'])(async (req) => {
     if (!req.user) {
         return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
     }
@@ -23,7 +23,7 @@ export const GET = withRoleAuth(['patron'])(async (req: AuthenticatedRequest) =>
                 },
             },
             include: {
-                books: {
+                library_items: {
                     select: { title: true },
                 },
             },

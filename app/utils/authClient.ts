@@ -1,5 +1,3 @@
-// Client-side authentication utilities
-
 export interface User {
   id: number;
   name: string;
@@ -81,7 +79,6 @@ export async function makeAuthenticatedRequest(url: string, options: RequestInit
   });
 
   if (response.status === 401) {
-    // Token expired or invalid, redirect to login
     window.location.href = '/login';
     throw new Error('Authentication required');
   }

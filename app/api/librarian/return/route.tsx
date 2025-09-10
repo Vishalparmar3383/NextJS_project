@@ -1,34 +1,38 @@
 // app/api/librarian/return/route.ts
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@/generated/prisma';
+import { PrismaClient, item_tran_history_status } from '@/generated/prisma';
 import { withRoleAuth } from '@/app/utils/authMiddleware';
 
 const prisma = new PrismaClient();
 
-export const GET = withRoleAuth(['librarian'])(async (req) => {
-    const userId = req.user!.userId;
+export const GET = withRoleAuth(['librarian'])(
+    async (req) => {
+        const userId = req.user!.userId;
 
-    try {
-        const returnedBooks = await prisma.book_tran_history.findMany({
-            where: {
-                status: 'returned',
-                books: {
-                    librarian_id: userId,
+        try {
+            const returnedItems = await prisma.item_tran_history.findMany({
+                where: {
+                    status: item_tran_history_status.returned,
+                    library_items: {
+                        librarian_id: userId,
+                    },
                 },
-            },
-            include: {
-                books: true,
-                users_book_tran_history_requested_byTousers: true,
-                users_book_tran_history_approved_byTousers: true,
-            },
-            orderBy: {
-                date_returned: 'desc',
-            },
-        });
+                include: {
+                    library_items: true,
+                    users_item_tran_history_requested_byTousers: true,
+                    users_item_tran_history_approved_byTousers: true,
+                },
+                orderBy: {
+                    date_returned: 'desc',
+                },
+            });
 
-        return NextResponse.json({ data: returnedBooks });
-    } catch (error) {
-        console.error('Error fetching returned books:', error);
-        return NextResponse.json({ message: 'Server error' }, { status: 500 });
+            return NextResponse.json({ success: true, data: returnedItems });
+        } catch (error) {
+            console.error('Error fetching returned items:', error);
+            return NextResponse.json({ success: false, message: 'Server error' }, { status: 500 });
+        } finally {
+            await prisma.$disconnect();
+        }
     }
-});
+);

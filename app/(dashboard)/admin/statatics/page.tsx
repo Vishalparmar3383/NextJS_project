@@ -74,9 +74,9 @@ export default function AdminStatisticsPage() {
                     />
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
                         <StatsCard
-                            title="Books"
-                            value={data.bookAnalytics.totalBooks}
-                            icon="📚"
+                            title="Items"
+                            value={data.itemAnalytics.totalItems}
+                            icon="📦"
                             gradient="from-blue-500 to-blue-600"
                             bgGradient="from-blue-50 to-blue-100"
                         />
@@ -195,12 +195,12 @@ export default function AdminStatisticsPage() {
                     </ChartSection>
                 </section>
 
-                {/* ===== Top Borrowed Books ===== */}
+                {/* ===== Top Borrowed Items ===== */}
                 <section>
                     <SectionHeader
                         icon="🏆"
-                        title="Top 5 Borrowed Books"
-                        description="Most popular books in your collection"
+                        title="Top 5 Borrowed Items"
+                        description="Most popular items in your collection"
                     />
                     <div className="space-y-4">
                         {data.topBorrowed.map((b: any, idx: number) => (
@@ -280,29 +280,29 @@ export default function AdminStatisticsPage() {
                     </div>
                 </section>
 
-                {/* ===== Book Analytics ===== */}
+                {/* ===== Item Analytics ===== */}
                 <section>
                     <SectionHeader
-                        icon="📚"
-                        title="Book Analytics"
-                        description="Detailed insights into your book collection"
+                        icon="📦"
+                        title="Item Analytics"
+                        description="Detailed insights into your item collection"
                     />
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <DistributionCard
                             title="Genre Distribution"
-                            data={data.bookAnalytics.genreDistribution}
+                            data={data.itemAnalytics.genreDistribution}
                             keyProp="genre"
                             countProp="_count.genre"
                             icon="📖"
                             color="indigo"
                         />
-                        <AvailabilityCard data={data.bookAnalytics.availability} />
+                        <AvailabilityCard data={data.itemAnalytics.availability} />
                         <InfoCard
                             title="Monthly Additions"
                             icon="📅"
                             color="teal"
                         >
-                            {data.bookAnalytics.monthlyAdditions.map((m: any, i: number) => (
+                            {data.itemAnalytics.monthlyAdditions.map((m: any, i: number) => (
                                 <div key={i} className="flex items-center justify-between py-2 border-b border-slate-100 last:border-b-0">
                                     <span className="font-medium text-slate-700">{m.month}</span>
                                     <span className="bg-teal-100 text-teal-700 px-2 py-1 rounded-full text-sm font-medium">
@@ -356,8 +356,8 @@ export default function AdminStatisticsPage() {
                     />
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <StatsCard
-                            title="Overdue Books"
-                            value={data.systemActivity.overdueBooks}
+                            title="Overdue Items"
+                            value={data.systemActivity.overdueItems}
                             icon="⏰"
                             gradient="from-red-500 to-red-600"
                             bgGradient="from-red-50 to-red-100"
@@ -537,7 +537,7 @@ function AvailabilityCard({ data }: { data: any[] }) {
                 <div className="w-10 h-10 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center">
                     <span className="text-white text-lg">📊</span>
                 </div>
-                <h3 className="font-semibold text-slate-800">Book Availability</h3>
+                <h3 className="font-semibold text-slate-800">Item Availability</h3>
             </div>
             <div className="space-y-2">
                 {data.map((item: any, idx: number) => (

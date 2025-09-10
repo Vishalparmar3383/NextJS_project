@@ -7,14 +7,21 @@ interface Patron {
     user_id: number;
     name: string;
     email: string;
-    booksRead: number;
+    itemsRequested: number;
+}
+
+interface ApiResponse {
+    success: boolean;
+    data: Patron[];
+    message?: string;
 }
 
 export default function PatronsPage() {
     const [patrons, setPatrons] = useState<Patron[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
-    const [sortBy, setSortBy] = useState<'name' | 'email' | 'booksRead'>('name');
+    const [sortBy, setSortBy] = useState<'name' | 'email' | 'itemsRequested'>('name');
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
@@ -22,10 +29,16 @@ export default function PatronsPage() {
         const fetchPatrons = async () => {
             try {
                 const res = await fetch('/api/librarian/patrons');
-                const data = await res.json();
-                setPatrons(data);
+                const data: ApiResponse = await res.json();
+
+                if (data.success && data.data) {
+                    setPatrons(data.data);
+                } else {
+                    setError(data.message || 'Failed to fetch patrons');
+                }
             } catch (error) {
                 console.error('Error fetching patrons:', error);
+                setError('Failed to load patrons');
             } finally {
                 setLoading(false);
             }
@@ -56,21 +69,20 @@ export default function PatronsPage() {
         });
 
     const totalPatrons = patrons.length;
-    const activeReaders = patrons.filter(p => p.booksRead > 0).length;
-    const averageBooksRead =
+    const activeUsers = patrons.filter(p => p.itemsRequested > 0).length;
+    const averageItemsRequested =
         patrons.length > 0
             ? Math.round(
-                patrons.reduce((sum, p) => sum + (p.booksRead ?? 0), 0) / patrons.length
+                patrons.reduce((sum, p) => sum + (p.itemsRequested ?? 0), 0) / patrons.length
             )
             : 0;
 
-
-    const getReadingLevel = (booksRead: number) => {
-        if (booksRead >= 20) return { level: 'Expert Reader', color: 'text-purple-700 bg-purple-100', icon: Award };
-        if (booksRead >= 10) return { level: 'Avid Reader', color: 'text-blue-700 bg-blue-100', icon: TrendingUp };
-        if (booksRead >= 5) return { level: 'Regular Reader', color: 'text-green-700 bg-green-100', icon: BookOpen };
-        if (booksRead > 0) return { level: 'New Reader', color: 'text-yellow-700 bg-yellow-100', icon: UserCheck };
-        return { level: 'No Activity', color: 'text-gray-600 bg-gray-100', icon: Users };
+    const getActivityLevel = (itemsRequested: number) => {
+        if (itemsRequested >= 20) return { level: 'Super User', color: 'text-purple-700 bg-purple-100', icon: Award };
+        if (itemsRequested >= 10) return { level: 'Active User', color: 'text-blue-700 bg-blue-100', icon: TrendingUp };
+        if (itemsRequested >= 5) return { level: 'Regular User', color: 'text-green-700 bg-green-100', icon: BookOpen };
+        if (itemsRequested > 0) return { level: 'New User', color: 'text-yellow-700 bg-yellow-100', icon: UserCheck };
+        return { level: 'Inactive', color: 'text-gray-600 bg-gray-100', icon: Users };
     };
 
     if (loading) {
@@ -81,6 +93,24 @@ export default function PatronsPage() {
                         <div className="text-center">
                             <div className="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin mx-auto mb-4"></div>
                             <p className="text-slate-700 text-lg">Loading patrons...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-6">
+                <div className="max-w-7xl mx-auto">
+                    <div className="flex items-center justify-center min-h-[400px]">
+                        <div className="text-center">
+                            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <Users className="w-8 h-8 text-red-600" />
+                            </div>
+                            <h3 className="text-xl font-semibold text-slate-800 mb-2">Error Loading Patrons</h3>
+                            <p className="text-slate-600">{error}</p>
                         </div>
                     </div>
                 </div>
@@ -99,7 +129,7 @@ export default function PatronsPage() {
                         </div>
                         <div>
                             <h1 className="text-3xl font-bold text-slate-900">Library Patrons</h1>
-                            <p className="text-slate-700">Manage your library members</p>
+                            <p className="text-slate-700">Manage your library members and track their activity</p>
                         </div>
                     </div>
 
@@ -120,11 +150,11 @@ export default function PatronsPage() {
                         <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-lg">
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
-                                    <BookOpen className="w-5 h-5 text-green-600" />
+                                    <UserCheck className="w-5 h-5 text-green-600" />
                                 </div>
                                 <div>
-                                    <p className="text-slate-700 text-sm font-medium">Active Readers</p>
-                                    <p className="text-2xl font-bold text-slate-900">{activeReaders}</p>
+                                    <p className="text-slate-700 text-sm font-medium">Active Users</p>
+                                    <p className="text-2xl font-bold text-slate-900">{activeUsers}</p>
                                 </div>
                             </div>
                         </div>
@@ -135,8 +165,8 @@ export default function PatronsPage() {
                                     <TrendingUp className="w-5 h-5 text-purple-600" />
                                 </div>
                                 <div>
-                                    <p className="text-slate-700 text-sm font-medium">Avg. Books Read</p>
-                                    <p className="text-2xl font-bold text-slate-900">{averageBooksRead}</p>
+                                    <p className="text-slate-700 text-sm font-medium">Avg. Items Requested</p>
+                                    <p className="text-2xl font-bold text-slate-900">{averageItemsRequested}</p>
                                 </div>
                             </div>
                         </div>
@@ -162,12 +192,12 @@ export default function PatronsPage() {
                                 <span className="text-slate-700 font-medium text-sm">Sort by:</span>
                                 <select
                                     value={sortBy}
-                                    onChange={(e) => setSortBy(e.target.value as 'name' | 'email' | 'booksRead')}
+                                    onChange={(e) => setSortBy(e.target.value as 'name' | 'email' | 'itemsRequested')}
                                     className="px-4 py-3 rounded-xl border border-slate-300 bg-white/80 focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 outline-none transition-all duration-200 text-slate-800"
                                 >
                                     <option value="name">Name</option>
                                     <option value="email">Email</option>
-                                    <option value="booksRead">Books Read</option>
+                                    <option value="itemsRequested">Items Requested</option>
                                 </select>
 
                                 <button
@@ -202,15 +232,19 @@ export default function PatronsPage() {
                 {filteredPatrons.length === 0 ? (
                     <div className="text-center py-12">
                         <Users className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-                        <h3 className="text-xl font-semibold text-slate-800 mb-2">No patrons found</h3>
-                        <p className="text-slate-600">Try adjusting your search terms</p>
+                        <h3 className="text-xl font-semibold text-slate-800 mb-2">
+                            {searchTerm ? 'No patrons found' : 'No patrons registered'}
+                        </h3>
+                        <p className="text-slate-600">
+                            {searchTerm ? 'Try adjusting your search terms' : 'No library members have been registered yet'}
+                        </p>
                     </div>
                 ) : viewMode === 'grid' ? (
                     /* Grid View */
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {filteredPatrons.map((patron) => {
-                            const readingLevel = getReadingLevel(patron.booksRead);
-                            const LevelIcon = readingLevel.icon;
+                            const activityLevel = getActivityLevel(patron.itemsRequested);
+                            const LevelIcon = activityLevel.icon;
 
                             return (
                                 <div key={patron.user_id} className="group bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-200">
@@ -219,9 +253,9 @@ export default function PatronsPage() {
                                             <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">
                                                 {patron.name.charAt(0).toUpperCase()}
                                             </div>
-                                            <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${readingLevel.color}`}>
+                                            <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${activityLevel.color}`}>
                                                 <LevelIcon className="w-3 h-3" />
-                                                {readingLevel.level}
+                                                {activityLevel.level}
                                             </span>
                                         </div>
 
@@ -235,7 +269,7 @@ export default function PatronsPage() {
                                             </div>
                                             <div className="flex items-center gap-2 text-slate-700">
                                                 <BookOpen className="w-4 h-4 text-indigo-600" />
-                                                <span className="text-sm font-medium">{patron.booksRead} books read</span>
+                                                <span className="text-sm font-medium">{patron.itemsRequested} items requested</span>
                                             </div>
                                         </div>
                                     </div>
@@ -252,14 +286,14 @@ export default function PatronsPage() {
                                     <tr className="bg-slate-50/50 border-b border-slate-200">
                                         <th className="text-left py-4 px-6 font-semibold text-slate-800">Patron</th>
                                         <th className="text-left py-4 px-6 font-semibold text-slate-800">Email</th>
-                                        <th className="text-center py-4 px-6 font-semibold text-slate-800">Books Read</th>
-                                        <th className="text-center py-4 px-6 font-semibold text-slate-800">Reading Level</th>
+                                        <th className="text-center py-4 px-6 font-semibold text-slate-800">Items Requested</th>
+                                        <th className="text-center py-4 px-6 font-semibold text-slate-800">Activity Level</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {filteredPatrons.map((patron) => {
-                                        const readingLevel = getReadingLevel(patron.booksRead);
-                                        const LevelIcon = readingLevel.icon;
+                                        const activityLevel = getActivityLevel(patron.itemsRequested);
+                                        const LevelIcon = activityLevel.icon;
 
                                         return (
                                             <tr key={patron.user_id} className="border-b border-slate-100 last:border-b-0 hover:bg-slate-50/50 transition-colors duration-200">
@@ -283,13 +317,13 @@ export default function PatronsPage() {
                                                 <td className="py-4 px-6 text-center">
                                                     <div className="flex items-center justify-center gap-2">
                                                         <BookOpen className="w-4 h-4 text-indigo-600" />
-                                                        <span className="font-semibold text-slate-900">{patron.booksRead}</span>
+                                                        <span className="font-semibold text-slate-900">{patron.itemsRequested}</span>
                                                     </div>
                                                 </td>
                                                 <td className="py-4 px-6 text-center">
-                                                    <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${readingLevel.color}`}>
+                                                    <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold ${activityLevel.color}`}>
                                                         <LevelIcon className="w-3 h-3" />
-                                                        {readingLevel.level}
+                                                        {activityLevel.level}
                                                     </span>
                                                 </td>
                                             </tr>

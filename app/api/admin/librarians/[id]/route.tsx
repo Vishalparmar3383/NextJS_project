@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@/generated/prisma'; // Adjust if needed
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-    const librarianId = parseInt(params.id);
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    const librarianId = parseInt(id);
     const prisma = new PrismaClient();
 
     if (isNaN(librarianId)) {
@@ -18,60 +19,60 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
             return NextResponse.json({ success: false, message: 'Librarian not found' }, { status: 404 });
         }
 
-        // ✅ Books managed by the librarian
-        const booksManaged = await prisma.books.findMany({
+        // Items managed by the librarian
+        const itemsManaged = await prisma.library_items.findMany({
             where: { librarian_id: librarianId },
             select: {
-                book_id: true,
+                item_id: true,
                 title: true,
                 author: true,
                 genre: true,
                 year: true,
                 _count: {
                     select: {
-                        book_tran: true, // This counts how many entries exist in book_tran for each book
+                        item_tran: true, // Count transactions for each item
                     },
                 },
             },
         });
 
-
-        // ✅ Book transactions approved
-        const approvedTransactions = await prisma.book_tran_history.findMany({
+        // Item transactions approved by the librarian
+        const approvedTransactions = await prisma.item_tran_history.findMany({
             where: { approved_by: librarianId },
             include: {
-                users_book_tran_history_requested_byTousers: {
+                users_item_tran_history_requested_byTousers: {
                     select: { name: true },
                 },
-                books: {
+                library_items: {
                     select: { title: true },
                 },
             },
             take: 10,
         });
 
-        // ✅ Logs
+        // Logs for librarian
         const logs = await prisma.logs.findMany({
             where: { user_id: librarianId },
             take: 10,
         });
 
-        // ✅ Notifications handled
+        // Notifications sent by librarian
         const notificationsSent = await prisma.notifications.findMany({
             where: { from_user_id: librarianId },
             orderBy: { created_at: 'desc' },
             take: 5,
         });
 
+        // Notifications received by librarian
         const notificationsReceived = await prisma.notifications.findMany({
             where: { to_user_id: librarianId },
             orderBy: { created_at: 'desc' },
             take: 5,
         });
 
-        // ✅ Summary stats
+        // Summary stats
         const summary = {
-            totalBooksManaged: booksManaged.length,
+            totalItemsManaged: itemsManaged.length,
             totalApprovedTransactions: approvedTransactions.length,
             totalLogs: logs.length,
             totalNotifications: notificationsSent.length + notificationsReceived.length,
@@ -86,7 +87,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
                 role: user.role,
             },
             summary,
-            booksManaged,
+            itemsManaged,
             approvedTransactions,
             logs,
             notifications: {

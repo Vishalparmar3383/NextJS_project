@@ -1,6 +1,6 @@
 import * as jose from 'jose';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export interface JWTPayload {
   userId: number;
@@ -10,8 +10,8 @@ export interface JWTPayload {
 }
 
 export async function generateToken(payload: JWTPayload): Promise<string> {
-  console.log('Generating token with secret:', JWT_SECRET ? 'SECRET_EXISTS' : 'NO_SECRET');
-  console.log('Token payload:', payload);
+  // console.log('Generating token with secret:', JWT_SECRET ? 'SECRET_EXISTS' : 'NO_SECRET');
+  // console.log('Token payload:', payload);
   
   const secret = new TextEncoder().encode(JWT_SECRET);
   const token = await new jose.SignJWT(payload)
@@ -20,19 +20,19 @@ export async function generateToken(payload: JWTPayload): Promise<string> {
     .setExpirationTime('24h')
     .sign(secret);
   
-  console.log('Generated token:', token.substring(0, 20) + '...');
+  // console.log('Generated token:', token.substring(0, 20) + '...');
   return token;
 }
 
 export async function verifyToken(token: string): Promise<JWTPayload | null> {
   try {
-    console.log('Verifying token with secret:', JWT_SECRET ? 'SECRET_EXISTS' : 'NO_SECRET');
-    console.log('Token to verify:', token.substring(0, 20) + '...');
+    // console.log('Verifying token with secret:', JWT_SECRET ? 'SECRET_EXISTS' : 'NO_SECRET');
+    // console.log('Token to verify:', token.substring(0, 20) + '...');
     
     const secret = new TextEncoder().encode(JWT_SECRET);
     const { payload } = await jose.jwtVerify(token, secret);
     
-    console.log('Token verification successful:', payload);
+    // console.log('Token verification successful:', payload);
     return {
       userId: payload.userId as number,
       email: payload.email as string,

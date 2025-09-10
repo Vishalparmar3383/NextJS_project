@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-import { withRoleAuth, AuthenticatedRequest } from '@/app/utils/authMiddleware';
+import { withRoleAuth } from '@/app/utils/authMiddleware';
 import { PrismaClient } from '@/generated/prisma';
 
 const prisma = new PrismaClient();
 
-export const GET = withRoleAuth(['patron'])(async (req: AuthenticatedRequest) => {
+export const GET = withRoleAuth(['patron'])(async (req) => {
     if (!req.user) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -27,5 +27,5 @@ export const GET = withRoleAuth(['patron'])(async (req: AuthenticatedRequest) =>
         return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    return NextResponse.json(user);
+    return NextResponse.json({user});
 });

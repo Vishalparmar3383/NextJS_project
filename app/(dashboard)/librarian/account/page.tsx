@@ -3,36 +3,40 @@
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
-interface Librarian {
+interface User {
     user_id: number;
     name: string;
     email: string;
-    role: string;
-    status: string;
     gender: string;
-    address: string;
+    birth_date: string | null;
     phone_number: string;
-    birth_date: string;
-    book_tran: any[];
-    genresWithCount?: {
-        genre: string;
-        count: number;
-    }[];
+    role: string;
+    address: string;
+    status: string;
 }
 
+interface GenreCount {
+    genre: string;
+    count: number;
+}
+
+interface LibrarianAccountData {
+    user: User;
+    genresWithCount: GenreCount[];
+}
 
 export default function LibrarianAccountPage() {
-    const [librarian, setLibrarian] = useState<Librarian | null>(null);
+    const [accountData, setAccountData] = useState<LibrarianAccountData | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchLibrarian = async () => {
             try {
-                const res = await fetch(`/api/librarian/account`);
+                const res = await fetch('/api/librarian/account');
                 const data = await res.json();
 
                 if (res.ok) {
-                    setLibrarian(data);
+                    setAccountData(data);
                 } else {
                     console.error('Error fetching librarian:', data.error);
                 }
@@ -89,7 +93,7 @@ export default function LibrarianAccountPage() {
         );
     }
 
-    if (!librarian) {
+    if (!accountData) {
         return (
             <div className="min-h-screen bg-gray-50">
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -107,6 +111,9 @@ export default function LibrarianAccountPage() {
         );
     }
 
+    const { user, genresWithCount } = accountData;
+    const totalItems = genresWithCount.reduce((total, genre) => total + genre.count, 0);
+
     return (
         <div className="min-h-screen bg-gray-50">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -119,7 +126,7 @@ export default function LibrarianAccountPage() {
 
                 <Link
                     href="/librarian/account/edit"
-                    className="group inline-flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                    className="group inline-flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 mb-6"
                 >
                     <svg className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -127,25 +134,26 @@ export default function LibrarianAccountPage() {
                     Edit Profile
                 </Link>
 
+                {/* Profile Header */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
                     <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-8">
                         <div className="flex items-center">
                             <div className="flex-shrink-0">
                                 <div className="h-20 w-20 bg-white rounded-full flex items-center justify-center shadow-lg">
                                     <span className="text-2xl font-bold text-blue-600">
-                                        {librarian.name?.charAt(0)?.toUpperCase() || 'L'}
+                                        {user.name?.charAt(0)?.toUpperCase() || 'L'}
                                     </span>
                                 </div>
                             </div>
                             <div className="ml-6">
-                                <h2 className="text-2xl font-bold text-white">{librarian.name}</h2>
-                                <p className="text-blue-100 text-lg">{librarian.email}</p>
+                                <h2 className="text-2xl font-bold text-white">{user.name}</h2>
+                                <p className="text-blue-100 text-lg">{user.email}</p>
                                 <div className="flex items-center space-x-3 mt-3">
-                                    <span className={getRoleBadge(librarian.role)}>
-                                        {librarian.role}
+                                    <span className={getRoleBadge(user.role)}>
+                                        {user.role}
                                     </span>
-                                    <span className={getStatusBadge(librarian.status)}>
-                                        {librarian.status}
+                                    <span className={getStatusBadge(user.status)}>
+                                        {user.status}
                                     </span>
                                 </div>
                             </div>
@@ -153,26 +161,58 @@ export default function LibrarianAccountPage() {
                     </div>
                 </div>
 
+                {/* Stats Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                         <div className="flex items-center">
                             <div className="flex-shrink-0">
                                 <div className="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center">
                                     <svg className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div className="ml-4">
+                                <p className="text-sm font-medium text-gray-500">Total Items</p>
+                                <p className="text-2xl font-bold text-gray-900">{totalItems}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <div className="flex items-center">
+                            <div className="flex-shrink-0">
+                                <div className="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                                    <svg className="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                                     </svg>
                                 </div>
                             </div>
                             <div className="ml-4">
-                                <p className="text-sm font-medium text-gray-500">Total Books</p>
-                                <p className="text-2xl font-bold text-gray-900">
-                                    {librarian.genresWithCount?.reduce((total, genre) => total + genre.count, 0) || 0}
-                                </p>
+                                <p className="text-sm font-medium text-gray-500">Genres Managed</p>
+                                <p className="text-2xl font-bold text-gray-900">{genresWithCount.length}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <div className="flex items-center">
+                            <div className="flex-shrink-0">
+                                <div className="h-12 w-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                                    <svg className="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div className="ml-4">
+                                <p className="text-sm font-medium text-gray-500">User ID</p>
+                                <p className="text-2xl font-bold text-gray-900">#{user.user_id}</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                {/* Genres Section */}
                 <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg border border-gray-200 overflow-hidden mb-6">
                     <div className="bg-gradient-to-r from-blue-600 to-indigo-700 px-6 py-4">
                         <h3 className="text-xl font-bold text-white flex items-center gap-2">
@@ -187,13 +227,13 @@ export default function LibrarianAccountPage() {
                         <div className="sticky top-0 bg-gray-100 px-6 py-3 border-b border-gray-300">
                             <div className="flex justify-between items-center font-semibold text-gray-700">
                                 <span className="text-base">Genre</span>
-                                <span className="text-base">Book Count</span>
+                                <span className="text-base">Item Count</span>
                             </div>
                         </div>
 
                         <div className="h-full overflow-y-auto px-6 py-2">
                             <div className="space-y-1">
-                                {librarian.genresWithCount?.map(({ genre, count }, idx) => (
+                                {genresWithCount.map(({ genre, count }, idx) => (
                                     <div
                                         key={idx}
                                         className="flex justify-between items-center py-3 px-3 rounded-lg hover:bg-blue-50 transition-all duration-200 group border-b border-gray-100 last:border-b-0"
@@ -214,14 +254,15 @@ export default function LibrarianAccountPage() {
 
                     <div className="bg-gray-50 px-6 py-3 border-t border-gray-200">
                         <div className="flex justify-between items-center text-sm font-medium text-gray-600">
-                            <span>Total Genres</span>
-                            <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full">
-                                {librarian.genresWithCount?.length || 0}
+                            <span>Total Items Across All Genres</span>
+                            <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full font-bold">
+                                {totalItems}
                             </span>
                         </div>
                     </div>
                 </div>
 
+                {/* Account Information */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                     <div className="px-6 py-4 border-b border-gray-200">
                         <h3 className="text-lg font-semibold text-gray-900">Account Information</h3>
@@ -231,47 +272,44 @@ export default function LibrarianAccountPage() {
                         <dl className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <dt className="text-sm font-medium text-gray-500 mb-1">Full Name</dt>
-                                <dd className="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-md">{librarian.name}</dd>
+                                <dd className="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-md">{user.name}</dd>
                             </div>
                             <div>
                                 <dt className="text-sm font-medium text-gray-500 mb-1">Email Address</dt>
-                                <dd className="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-md">{librarian.email}</dd>
+                                <dd className="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-md">{user.email}</dd>
                             </div>
                             <div>
                                 <dt className="text-sm font-medium text-gray-500 mb-1">Role</dt>
                                 <dd className="text-sm">
-                                    <span className={getRoleBadge(librarian.role)}>{librarian.role}</span>
+                                    <span className={getRoleBadge(user.role)}>{user.role}</span>
                                 </dd>
                             </div>
                             <div>
                                 <dt className="text-sm font-medium text-gray-500 mb-1">Account Status</dt>
                                 <dd className="text-sm">
-                                    <span className={getStatusBadge(librarian.status)}>{librarian.status}</span>
+                                    <span className={getStatusBadge(user.status)}>{user.status}</span>
                                 </dd>
                             </div>
-
-                            {/* Additional fields: */}
                             <div>
                                 <dt className="text-sm font-medium text-gray-500 mb-1">Gender</dt>
-                                <dd className="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-md">{librarian.gender || 'Not specified'}</dd>
+                                <dd className="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-md capitalize">{user.gender || 'Not specified'}</dd>
                             </div>
                             <div>
                                 <dt className="text-sm font-medium text-gray-500 mb-1">Phone Number</dt>
-                                <dd className="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-md">{librarian.phone_number || 'Not specified'}</dd>
+                                <dd className="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-md">{user.phone_number || 'Not specified'}</dd>
                             </div>
                             <div>
                                 <dt className="text-sm font-medium text-gray-500 mb-1">Birth Date</dt>
                                 <dd className="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-md">
-                                    {librarian.birth_date ? new Date(librarian.birth_date).toLocaleDateString() : 'Not specified'}
+                                    {user.birth_date ? new Date(user.birth_date).toLocaleDateString() : 'Not specified'}
                                 </dd>
                             </div>
                             <div>
                                 <dt className="text-sm font-medium text-gray-500 mb-1">Address</dt>
-                                <dd className="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-md">{librarian.address || 'Not specified'}</dd>
+                                <dd className="text-sm text-gray-900 bg-gray-50 px-3 py-2 rounded-md">{user.address || 'Not specified'}</dd>
                             </div>
                         </dl>
                     </div>
-
                 </div>
             </div>
         </div>

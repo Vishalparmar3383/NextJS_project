@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@/generated/prisma';
+import { PrismaClient, item_tran_status, item_tran_history_status, record_status, notifications_type, notifications_status } from '@/generated/prisma';
 import { withRoleAuth } from '@/app/utils/authMiddleware';
 
 const prisma = new PrismaClient();
@@ -23,190 +22,200 @@ export const GET = withRoleAuth(['librarian'])(async (req) => {
         const daysBack = 30;
         const startDate = getDateNDaysAgo(daysBack);
 
-        // Prepare last 30 days labels
-        const last30Days = Array.from({ length: daysBack }, (_, i) => {
+        // Prepare labels for last 30 days
+        const last30Days = Array.from({ length: daysBack }).map((_, i) => {
             const d = new Date();
             d.setDate(d.getDate() - (daysBack - 1 - i));
             return formatDate(d);
         });
 
-        // Fetch summary stats - Fixed the queries
         const [available, issued, pending, overdueCount] = await Promise.all([
-            // Count books that are available (based on book_tran status)
-            prisma.book_tran.count({
+            // Count available item copies managed by librarian
+            prisma.item_tran.count({
                 where: {
-                    status: 'available',
-                    record_status: 'active',
-                    books: { librarian_id: userId }
+                    status: item_tran_status.available,
+                    record_status: record_status.active,
+                    library_items: {
+                        librarian_id: userId,
+                        record_status: record_status.active
+                    }
                 }
             }),
-            // Count books that are currently issued
-            prisma.book_tran.count({
+
+            // Count issued items managed by librarian
+            prisma.item_tran.count({
                 where: {
-                    status: 'not_available',
-                    record_status: 'active',
-                    books: { librarian_id: userId }
+                    status: item_tran_status.not_available,
+                    record_status: record_status.active,
+                    library_items: {
+                        librarian_id: userId,
+                        record_status: record_status.active
+                    }
                 }
             }),
-            // Count pending requests and returned books awaiting approval
-            prisma.book_tran_history.count({
+
+            // Count pending requests and returns awaiting approval
+            prisma.item_tran_history.count({
                 where: {
                     OR: [
                         {
-                            status: 'pending',
-                            books: { librarian_id: userId }
+                            status: item_tran_history_status.pending,
+                            library_items: {
+                                librarian_id: userId,
+                                record_status: record_status.active
+                            }
                         },
                         {
-                            status: 'returned',
-                            books: { librarian_id: userId },
+                            status: item_tran_history_status.returned,
+                            library_items: {
+                                librarian_id: userId,
+                                record_status: record_status.active
+                            },
                             approved_at: null
-                        },
-                    ],
+                        }
+                    ]
                 }
             }),
-            // Count overdue books
-            prisma.book_tran_history.count({
+
+            // Count overdue items
+            prisma.item_tran_history.count({
                 where: {
-                    status: 'issued',
+                    status: item_tran_history_status.issued,
                     date_due: { lt: new Date() },
                     date_returned: null,
-                    books: { librarian_id: userId },
+                    library_items: {
+                        librarian_id: userId,
+                        record_status: record_status.active
+                    }
                 }
             }),
         ]);
 
-        // Get unique genres for this librarian's books
-        const genres = await prisma.books.findMany({
+        // Get distinct genres for items managed by librarian
+        const genresRaw = await prisma.library_items.findMany({
             where: {
                 librarian_id: userId,
                 genre: { not: null },
-                record_status: 'active',
+                record_status: record_status.active,
             },
             distinct: ['genre'],
             select: { genre: true },
         });
 
-        // First, let's get all book_tran_history IDs for books managed by this librarian
-        const librarianBookHistoryIds = await prisma.book_tran_history.findMany({
+        const genres = genresRaw.map(g => g.genre);
+
+        // Get all item transaction history IDs for items managed by librarian
+        const librarianItemHistoryIdsRaw = await prisma.item_tran_history.findMany({
             where: {
-                books: { librarian_id: userId }
+                library_items: {
+                    librarian_id: userId,
+                    record_status: record_status.active,
+                }
             },
             select: { id: true }
         });
 
-        const historyIds = librarianBookHistoryIds.map(h => h.id);
+        const librarianItemHistoryIds = librarianItemHistoryIdsRaw.map(h => h.id);
 
-        // Now get fines using these IDs
-        const [actualFinesUnpaid, actualFinesCollected] = await Promise.all([
-            // Unpaid fines
+        // Aggregate fines for those history records
+        const [finesUnpaidAgg, finesCollectedAgg] = await Promise.all([
             prisma.fines.aggregate({
                 where: {
                     status: 'unpaid',
-                    book_tran_history_id: { in: historyIds }
+                    item_tran_history_id: { in: librarianItemHistoryIds },
                 },
                 _sum: { amount: true },
             }),
-            // Collected fines in last 30 days
             prisma.fines.aggregate({
                 where: {
                     status: 'paid',
                     paid_at: { gte: startDate },
-                    book_tran_history_id: { in: historyIds }
+                    item_tran_history_id: { in: librarianItemHistoryIds },
                 },
-                _sum: { amount: true }
+                _sum: { amount: true },
             }),
         ]);
 
-        // Debug log
-        // console.log('Fines Debug:', {
-        //     historyIds: historyIds.length,
-        //     unpaidSum: actualFinesUnpaid._sum?.amount,
-        //     collectedSum: actualFinesCollected._sum?.amount
-        // });
-
-        // Top 5 borrowed books last 30 days - Let's get the data differently
-        const topBorrowedRaw = await prisma.book_tran_history.findMany({
+        // Top borrowed items in last 30 days
+        const topBorrowedRaw = await prisma.item_tran_history.groupBy({
+            by: ['item_id'],
             where: {
-                books: { librarian_id: userId },
-                AND: [
-                    {
-                        OR: [
-                            { status: 'issued', date_issued: { gte: startDate } },
-                            { status: 'returned', date_issued: { not: null, gte: startDate } },
-                        ],
-                    },
-                ],
-            },
-            select: {
-                book_id: true,
-                books: {
-                    select: {
-                        book_id: true,
-                        title: true,
-                        author: true,
-                    },
+                library_items: {
+                    librarian_id: userId,
+                    record_status: record_status.active,
                 },
+                status: {
+                    in: [item_tran_history_status.issued, item_tran_history_status.returned],
+                },
+                date_issued: { gte: startDate }
             },
-        });
-
-
-        // Group and count manually
-        const bookCounts: Record<number, { count: number; book: any }> = {};
-        topBorrowedRaw.forEach(item => {
-            if (item.book_id) {
-                if (!bookCounts[item.book_id]) {
-                    bookCounts[item.book_id] = { count: 0, book: item.books };
+            _count: {
+                item_id: true
+            },
+            orderBy: {
+                _count: {
+                    item_id: 'desc'
                 }
-                bookCounts[item.book_id].count++;
-            }
+            },
+            take: 5,
         });
 
-        // Convert to array and sort
-        const topBorrowedWithDetails = Object.entries(bookCounts)
-            .map(([bookId, data]) => ({
-                book_id: parseInt(bookId),
-                _count: { book_id: data.count },
-                book_details: data.book
-            }))
-            .sort((a, b) => b._count.book_id - a._count.book_id)
-            .slice(0, 5);
+        // Fetch detailed info for top borrowed items
+        const topBorrowedItems = await Promise.all(topBorrowedRaw.map(async (entry) => {
+            const item = await prisma.library_items.findUnique({
+                where: { item_id: entry.item_id! },
+                select: {
+                    item_id: true,
+                    title: true,
+                    author: true,
+                    genre: true,
+                    image_url: true,
+                    location: true,
+                    record_status: true,
+                }
+            });
+            return {
+                item,
+                borrowCount: entry._count.item_id,
+            };
+        }));
 
-        // Fetch recent issued and returned transactions for chart
-        // 📌 Fetch recent issue and return notifications instead of book_tran_history
-        const notificationsData = await prisma.notifications.findMany({
+        // Fetch issuance and return notifications for chart data
+        const notifications = await prisma.notifications.findMany({
             where: {
-                from_user_id: userId, // librarian who created/approved these
-                type: { in: ['issue', 'return'] },
+                from_user_id: userId,
+                type: { in: [notifications_type.issue, notifications_type.return] },
                 created_at: { gte: startDate },
-                status: 'approved'
+                status: notifications_status.approved,
             },
             select: {
                 type: true,
-                created_at: true
+                created_at: true,
             }
         });
 
-        // Prepare data for chart – same structure
         const issuedCounts: Record<string, number> = {};
         const returnedCounts: Record<string, number> = {};
-        last30Days.forEach(d => {
-            issuedCounts[d] = 0;
-            returnedCounts[d] = 0;
+
+        last30Days.forEach(day => {
+            issuedCounts[day] = 0;
+            returnedCounts[day] = 0;
         });
 
-        notificationsData.forEach(n => {
-            const day = formatDate(n.created_at!);
-            if (n.type === 'issue' && issuedCounts.hasOwnProperty(day)) {
-                issuedCounts[day]++;
-            } else if (n.type === 'return' && returnedCounts.hasOwnProperty(day)) {
-                returnedCounts[day]++;
+        notifications.forEach(note => {
+            const day = formatDate(note.created_at!);
+            if (day in issuedCounts) {
+                if (note.type === notifications_type.issue) issuedCounts[day]++;
+                if (note.type === notifications_type.return) returnedCounts[day]++;
             }
         });
 
-
-        // Calculate additional metrics
-        const totalBooks = await prisma.books.count({
-            where: { librarian_id: userId }
+        // Total managed items count
+        const totalItems = await prisma.library_items.count({
+            where: {
+                librarian_id: userId,
+                record_status: record_status.active,
+            }
         });
 
         return NextResponse.json({
@@ -216,17 +225,18 @@ export const GET = withRoleAuth(['librarian'])(async (req) => {
                 issued,
                 pending,
                 overdueCount,
-                totalFinesUnpaid: Number(actualFinesUnpaid._sum?.amount ?? 0),
-                collectedFines: Number(actualFinesCollected._sum?.amount ?? 0),
-                totalBooks,
+                totalItems,
+                finesUnpaid: Number(finesUnpaidAgg._sum.amount ?? 0),
+                finesCollected: Number(finesCollectedAgg._sum.amount ?? 0),
             },
-            genres: genres.filter(g => g.genre !== null),
-            topBorrowedBooks: topBorrowedWithDetails,
+            genres,
+            topBorrowedItems,
+
             chartData: {
                 days: last30Days,
                 issued: last30Days.map(d => issuedCounts[d]),
                 returned: last30Days.map(d => returnedCounts[d]),
-            },
+            }
         });
 
     } catch (error) {
@@ -234,7 +244,7 @@ export const GET = withRoleAuth(['librarian'])(async (req) => {
         return NextResponse.json({
             success: false,
             message: 'Internal Server Error',
-            error: process.env.NODE_ENV === 'development' && error instanceof Error ? error.message : undefined
+            error: process.env.NODE_ENV === 'development' && error instanceof Error ? error.message : undefined,
         }, { status: 500 });
     } finally {
         await prisma.$disconnect();

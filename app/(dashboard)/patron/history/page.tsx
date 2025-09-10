@@ -5,24 +5,28 @@
 import { useEffect, useState } from 'react';
 import ConfirmDialog from '@/app/components/ConfirmDialog'; // Adjust import path if needed
 
-type HistoryEntry = {
+type BorrowHistoryEntry = {
     id: number;
-    book_tran: {
-        books: {
-            title: string;
-            image_url?: string;
-        } | null;
+    item: {
+        item_id: number;
+        title: string | null;
+        author: string;
+        item_type: string;
+        image_url?: string | null;
+        location?: string | null;
     } | null;
+    status: string;
+    requested_at: string | null;
+    approved_at: string | null;
     date_issued: string | null;
     date_due: string | null;
     date_returned: string | null;
-    status: string;
-    fine: number;
-    fine_status?: 'paid' | 'unpaid';
+    approved_by?: { name: string; email: string } | null;
+    remarks: string | null;
 };
 
 type Stats = {
-    booksRead: number;
+    itemsRead: number;
     currentlyBorrowed: number;
     favorites: number;
     totalFines: number;
@@ -31,9 +35,9 @@ type Stats = {
 };
 
 export default function BorrowingHistory() {
-    const [history, setHistory] = useState<HistoryEntry[]>([]);
+    const [borrowHistory, setBorrowHistory] = useState<BorrowHistoryEntry[]>([]);
     const [stats, setStats] = useState<Stats>({
-        booksRead: 0,
+        itemsRead: 0,
         currentlyBorrowed: 0,
         favorites: 0,
         totalFines: 0,
@@ -50,50 +54,39 @@ export default function BorrowingHistory() {
     };
 
     useEffect(() => {
-        const fetchData = async () => {
+        async function fetchData() {
             try {
                 const [historyRes, statsRes] = await Promise.all([
-                    fetch('/api/patron/history'),
-                    fetch('/api/patron/stats'),
+                    fetch('/api/patron/history', { credentials: 'include' }),
+                    fetch('/api/patron/stats', { credentials: 'include' }),
                 ]);
                 const historyData = await historyRes.json();
                 const statsData = await statsRes.json();
-
+                console.log(statsData)
                 if (historyRes.ok) {
-                    const hist = historyData.history || [];
-                    let totalPaid = 0;
-                    let totalUnpaid = 0;
-                    hist.forEach((entry: any) => {
-                        if (entry.fineStatus === 'paid') {
-                            totalPaid += entry.fine || 0;
-                        } else if (entry.fineStatus === 'unpaid') {
-                            totalUnpaid += entry.fine || 0;
-                        }
-                    });
-
-                    setHistory(hist);
-
-                    setStats({
-                        booksRead: statsData.booksRead ?? 0,
-                        currentlyBorrowed: statsData.currentlyBorrowed ?? 0,
-                        favorites: statsData.favorites ?? 0,
-                        totalFines: totalPaid + totalUnpaid,
-                        totalPaidFines: totalPaid,
-                        totalUnpaidFines: totalUnpaid,
-                    });
+                    setBorrowHistory(historyData.borrowHistory || []);
                 } else {
-                    setStats(statsData || {});
+                    setBorrowHistory([]);
                 }
+
+                setStats({
+                    itemsRead: statsData.itemsRead ?? 0,
+                    currentlyBorrowed: statsData.currentlyBorrowed ?? 0,
+                    favorites: statsData.favorites ?? 0,
+                    totalFines: statsData.totalFines ?? 0,
+                    totalPaidFines: statsData.totalPaid ?? 0,
+                    totalUnpaidFines: statsData.totalUnpaid ?? 0,
+                });
+                console.log(stats)
+
             } catch (error) {
                 console.error('Error fetching borrowing history or stats:', error);
             } finally {
                 setLoading(false);
             }
-        };
-
+        }
         fetchData();
     }, []);
-
 
     const getStatusColor = (status: string) => {
         switch (status.toLowerCase()) {
@@ -101,6 +94,8 @@ export default function BorrowingHistory() {
                 return 'bg-green-100 text-green-800 border-green-200';
             case 'issued':
                 return 'bg-blue-100 text-blue-800 border-blue-200';
+            case 'pending':
+                return 'bg-yellow-100 text-yellow-800 border-yellow-200';
             case 'rejected':
                 return 'bg-red-100 text-red-800 border-red-200';
             default:
@@ -108,7 +103,12 @@ export default function BorrowingHistory() {
         }
     };
 
-    // Handler for paying fines with simulated delay and confirmation
+    const formatDate = (dateStr: string | null) => {
+        if (!dateStr) return '-';
+        const d = new Date(dateStr);
+        return d.toLocaleDateString();
+    };
+
     const handlePayFines = async () => {
         setConfirmPayOpen(false);
         setPaying(true);
@@ -116,25 +116,24 @@ export default function BorrowingHistory() {
         try {
             const res = await fetch('/api/patron/history/finepay', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({}),
+                credentials: 'include',
             });
 
             if (!res.ok) throw new Error('Payment failed');
 
-            // Refresh stats and history from server
+            // Refresh data
             const [historyRes, statsRes] = await Promise.all([
-                fetch('/api/patron/history'),
-                fetch('/api/patron/stats'),
+                fetch('/api/patron/history', { credentials: 'include' }),
+                fetch('/api/patron/stats', { credentials: 'include' }),
             ]);
             const historyData = await historyRes.json();
             const statsData = await statsRes.json();
 
-            setHistory(historyData.history ?? []);
+            setBorrowHistory(historyData.borrowHistory ?? []);
             setStats({
-                booksRead: statsData.booksRead ?? 0,
+                itemsRead: statsData.itemsRead ?? 0,
                 currentlyBorrowed: statsData.currentlyBorrowed ?? 0,
                 favorites: statsData.favorites ?? 0,
                 totalFines: statsData.totalFines ?? 0,
@@ -143,13 +142,12 @@ export default function BorrowingHistory() {
             });
 
             showSnackbar('Fines paid successfully!', 'success');
-        } catch (error) {
+        } catch {
             showSnackbar('Failed to pay fines. Please try again.', 'error');
         } finally {
             setPaying(false);
         }
     };
-
 
     if (loading) {
         return (
@@ -159,21 +157,18 @@ export default function BorrowingHistory() {
                         <div className="h-8 bg-slate-300 rounded w-64 mx-auto mb-8"></div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                             {[...Array(4)].map((_, i) => (
-                                <div key={i} className="bg-white p-6 rounded-xl shadow-lg">
-                                    <div className="h-8 bg-slate-300 rounded w-16 mx-auto mb-2"></div>
-                                    <div className="h-4 bg-slate-300 rounded w-20 mx-auto"></div>
-                                </div>
+                                <div key={i} className="bg-white p-6 rounded-xl shadow-lg" />
                             ))}
                         </div>
                         <div className="bg-white rounded-xl shadow-lg p-6">
                             <div className="space-y-4">
                                 {[...Array(5)].map((_, i) => (
-                                    <div key={i} className="h-16 bg-slate-200 rounded"></div>
+                                    <div key={i} className="h-16 bg-slate-200 rounded" />
                                 ))}
                             </div>
                         </div>
+                        <p className="text-center mt-6 text-slate-600">Loading...</p>
                     </div>
-                    <p className="text-center mt-6 text-slate-600">Loading...</p>
                 </div>
             </div>
         );
@@ -205,8 +200,8 @@ export default function BorrowingHistory() {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                             </svg>
                         </div>
-                        <div className="text-3xl font-bold text-indigo-600 mb-1">{stats.booksRead}</div>
-                        <div className="text-sm font-medium text-slate-600">Books Read</div>
+                        <div className="text-3xl font-bold text-indigo-600 mb-1">{stats.itemsRead}</div>
+                        <div className="text-sm font-medium text-slate-600">Items Read</div>
                     </div>
 
                     <div className="bg-white rounded-xl shadow-lg p-6 text-center border border-slate-200 hover:shadow-xl transition-shadow">
@@ -240,14 +235,14 @@ export default function BorrowingHistory() {
                     </div>
                 </div>
 
-                {/* New Paid and Unpaid Fines Info */}
+                {/* Paid and Unpaid Fines */}
                 <div className="flex justify-center space-x-10 mb-6">
                     <div className="bg-green-100 text-green-800 p-4 rounded-lg shadow-md text-center w-40">
-                        <div className="text-lg font-semibold">${Number(stats.totalPaidFines).toFixed(2)}</div>
+                        <div className="text-lg font-semibold">₹{Number(stats.totalPaidFines).toFixed(2)}</div>
                         <div className="text-sm font-medium">Total Paid Fines</div>
                     </div>
                     <div className="bg-red-100 text-red-800 p-4 rounded-lg shadow-md text-center w-40">
-                        <div className="text-lg font-semibold">${Number(stats.totalUnpaidFines).toFixed(2)}</div>
+                        <div className="text-lg font-semibold">₹{Number(stats.totalUnpaidFines).toFixed(2)}</div>
                         <div className="text-sm font-medium">Total Unpaid Fines</div>
                     </div>
                 </div>
@@ -266,7 +261,7 @@ export default function BorrowingHistory() {
                     </div>
                 )}
 
-                {/* Confirm Dialog for paying fines */}
+                {/* Confirm Dialog */}
                 <ConfirmDialog
                     open={confirmPayOpen}
                     title="Confirm Pay Fines"
@@ -278,14 +273,19 @@ export default function BorrowingHistory() {
                     onCancel={() => setConfirmPayOpen(false)}
                 />
 
-                {/* History Table */}
+                {/* Borrow History Table */}
                 <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200">
                     <div className="bg-gradient-to-r from-slate-800 to-slate-700 px-6 py-4">
                         <h2 className="text-xl font-bold text-white flex items-center gap-2">
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                                />
                             </svg>
-                            Reading History
+                            Borrowing History
                         </h2>
                     </div>
 
@@ -294,50 +294,59 @@ export default function BorrowingHistory() {
                             <thead className="bg-slate-50 border-b-2 border-slate-200">
                                 <tr>
                                     <th className="text-left px-6 py-4 font-semibold text-slate-700 text-sm uppercase tracking-wider">Title</th>
+                                    <th className="text-left px-6 py-4 font-semibold text-slate-700 text-sm uppercase tracking-wider">Requested</th>
+                                    <th className="text-left px-6 py-4 font-semibold text-slate-700 text-sm uppercase tracking-wider">Approved</th>
                                     <th className="text-left px-6 py-4 font-semibold text-slate-700 text-sm uppercase tracking-wider">Issued</th>
                                     <th className="text-left px-6 py-4 font-semibold text-slate-700 text-sm uppercase tracking-wider">Due</th>
                                     <th className="text-left px-6 py-4 font-semibold text-slate-700 text-sm uppercase tracking-wider">Returned</th>
                                     <th className="text-left px-6 py-4 font-semibold text-slate-700 text-sm uppercase tracking-wider">Status</th>
-                                    <th className="text-left px-6 py-4 font-semibold text-slate-700 text-sm uppercase tracking-wider">Fine</th>
+                                    <th className="text-left px-6 py-4 font-semibold text-slate-700 text-sm uppercase tracking-wider">Remarks</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100">
-                                {history.length === 0 ? (
+                                {borrowHistory.length === 0 ? (
                                     <tr>
-                                        <td colSpan={7} className="px-6 py-12 text-center">
+                                        <td colSpan={8} className="px-6 py-12 text-center">
                                             <div className="flex flex-col items-center">
                                                 <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
-                                                    <svg className="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                                    <svg
+                                                        className="w-8 h-8 text-slate-400"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth={2}
+                                                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                                                        />
                                                     </svg>
                                                 </div>
                                                 <h3 className="text-lg font-semibold text-slate-700 mb-2">No Borrowing History</h3>
-                                                <p className="text-slate-500">Start your reading journey by borrowing your first book!</p>
+                                                <p className="text-slate-500">Start your reading journey by borrowing your first item!</p>
                                             </div>
                                         </td>
                                     </tr>
                                 ) : (
-                                    history.map((entry) => (
+                                    borrowHistory.map((entry) => (
                                         <tr key={entry.id} className="hover:bg-slate-50 transition-colors duration-200">
+                                            <td className="px-6 py-4 font-semibold text-slate-800">{entry.item?.title || 'Untitled'}</td>
+                                            <td className="px-6 py-4 text-slate-600">{formatDate(entry.requested_at)}</td>
+                                            <td className="px-6 py-4 text-slate-600">{formatDate(entry.approved_at)}</td>
+                                            <td className="px-6 py-4 text-slate-600">{formatDate(entry.date_issued)}</td>
+                                            <td className="px-6 py-4 text-slate-600">{formatDate(entry.date_due)}</td>
+                                            <td className="px-6 py-4 text-slate-600">{formatDate(entry.date_returned)}</td>
                                             <td className="px-6 py-4">
-                                                <div className="font-semibold text-slate-800">{entry.book_tran?.books?.title?.trim() || 'Untitled'}</div>
-                                            </td>
-                                            <td className="px-6 py-4 text-slate-600">{entry.date_issued ? new Date(entry.date_issued).toLocaleDateString() : '-'}</td>
-                                            <td className="px-6 py-4 text-slate-600">{entry.date_due ? new Date(entry.date_due).toLocaleDateString() : '-'}</td>
-                                            <td className="px-6 py-4 text-slate-600">{entry.date_returned ? new Date(entry.date_returned).toLocaleDateString() : '-'}</td>
-                                            <td className="px-6 py-4">
-                                                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border ${(entry.date_issued === null && entry.status != 'pending')?getStatusColor('rejected'):getStatusColor(entry.status)}`}>
-                                                    {entry.date_issued === null && entry.status != 'pending'
-                                                        ? 'Rejected'
-                                                        : entry.status.charAt(0).toUpperCase() + entry.status.slice(1)
-                                                    }
+                                                <span
+                                                    className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border ${getStatusColor(
+                                                        entry.status
+                                                    )}`}
+                                                >
+                                                    {entry.status.charAt(0).toUpperCase() + entry.status.slice(1)}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4">
-                                                <span className="text-red-600 font-bold text-lg">
-                                                    {entry.fine != null && entry.fine > 0 ? `₹${Number(entry.fine).toFixed(2)}` : '-'}
-                                                </span>
-                                            </td>
+                                            <td className="px-6 py-4 text-slate-600">{entry.remarks || '-'}</td>
                                         </tr>
                                     ))
                                 )}
@@ -345,23 +354,23 @@ export default function BorrowingHistory() {
                         </table>
                     </div>
                 </div>
-            </div>
 
-            {/* Snackbar */}
-            {snackbar && (
-                <div
-                    className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg text-white font-semibold z-50 ${snackbar.type === 'success'
-                        ? 'bg-green-600'
-                        : snackbar.type === 'error'
-                            ? 'bg-red-600'
-                            : 'bg-gray-600'
-                        }`}
-                    role="alert"
-                    onClick={() => setSnackbar(null)}
-                >
-                    {snackbar.message}
-                </div>
-            )}
+                {/* Snackbar */}
+                {snackbar && (
+                    <div
+                        className={`fixed bottom-4 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-lg shadow-lg text-white font-semibold z-50 ${snackbar.type === 'success'
+                                ? 'bg-green-600'
+                                : snackbar.type === 'error'
+                                    ? 'bg-red-600'
+                                    : 'bg-gray-600'
+                            }`}
+                        role="alert"
+                        onClick={() => setSnackbar(null)}
+                    >
+                        {snackbar.message}
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
