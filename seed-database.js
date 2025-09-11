@@ -1,519 +1,2693 @@
-const { PrismaClient } = require('./generated/prisma');
-const bcrypt = require('bcryptjs');
+const { PrismaClient } = require("./generated/prisma");
+const bcrypt = require("bcryptjs");
+const fs = require("fs");
 
 const prisma = new PrismaClient();
 
-// Sample library items data
-const libraryItems = [
-    // Books
-    {
-        title: "The Great Gatsby",
-        author: "F. Scott Fitzgerald",
-        isbn: "9780743273565",
-        year: 1925,
-        genre: "Fiction",
-        item_type: "book",
-        publisher: "Scribner",
-        language: "English",
-        pages: 180,
-        subject: "American Literature",
-        keywords: "classic, jazz age, wealth, love",
-        description: "A classic American novel set in the Jazz Age, exploring themes of wealth, love, and the American Dream.",
-        location: "Fiction Section A-1",
-        quantity: 3
-    },
-    {
-        title: "To Kill a Mockingbird",
-        author: "Harper Lee",
-        isbn: "9780061120084",
-        year: 1960,
-        genre: "Fiction",
-        item_type: "book",
-        publisher: "J.B. Lippincott & Co.",
-        language: "English",
-        pages: 281,
-        subject: "American Literature",
-        keywords: "racism, justice, childhood, Alabama",
-        description: "A powerful story of racial injustice and childhood innocence in the American South.",
-        location: "Fiction Section A-2",
-        quantity: 2
-    },
-    {
-        title: "1984",
-        author: "George Orwell",
-        isbn: "9780451524935",
-        year: 1949,
-        genre: "Dystopian Fiction",
-        item_type: "book",
-        publisher: "Secker & Warburg",
-        language: "English",
-        pages: 328,
-        subject: "Political Fiction",
-        keywords: "totalitarianism, surveillance, dystopia",
-        description: "A dystopian social science fiction novel about totalitarian control and surveillance.",
-        location: "Fiction Section B-1",
-        quantity: 4
-    },
-    {
-        title: "Pride and Prejudice",
-        author: "Jane Austen",
-        isbn: "9780141439518",
-        year: 1813,
-        genre: "Romance",
-        item_type: "book",
-        publisher: "T. Egerton",
-        language: "English",
-        pages: 432,
-        subject: "British Literature",
-        keywords: "romance, marriage, social class, England",
-        description: "A romantic novel about Elizabeth Bennet and Mr. Darcy in Georgian England.",
-        location: "Fiction Section C-1",
-        quantity: 2
-    },
-    {
-        title: "The Catcher in the Rye",
-        author: "J.D. Salinger",
-        isbn: "9780316769174",
-        year: 1951,
-        genre: "Coming-of-age",
-        item_type: "book",
-        publisher: "Little, Brown and Company",
-        language: "English",
-        pages: 277,
-        subject: "American Literature",
-        keywords: "teenage, rebellion, alienation, New York",
-        description: "A coming-of-age story about teenage rebellion and alienation.",
-        location: "Fiction Section A-3",
-        quantity: 3
-    },
-    // Journals
-    {
-        title: "Nature",
-        author: "Various Authors",
-        isbn: "0028-0836",
-        year: 2024,
-        genre: "Science",
-        item_type: "journal",
-        publisher: "Nature Publishing Group",
-        language: "English",
-        pages: 120,
-        subject: "Natural Sciences",
-        keywords: "science, research, biology, physics, chemistry",
-        description: "Weekly international journal publishing peer-reviewed research in all fields of science and technology.",
-        location: "Journal Section J-1",
-        quantity: 1
-    },
-    {
-        title: "Science",
-        author: "Various Authors",
-        isbn: "0036-8075",
-        year: 2024,
-        genre: "Science",
-        item_type: "journal",
-        publisher: "American Association for the Advancement of Science",
-        language: "English",
-        pages: 80,
-        subject: "Scientific Research",
-        keywords: "research, discovery, innovation, technology",
-        description: "Weekly peer-reviewed general science journal.",
-        location: "Journal Section J-2",
-        quantity: 1
-    },
-    // Multimedia
-    {
-        title: "Planet Earth II",
-        author: "BBC Natural History Unit",
-        isbn: "B01M0ZQX8N",
-        year: 2016,
-        genre: "Documentary",
-        item_type: "multimedia",
-        publisher: "BBC",
-        language: "English",
-        duration: 360,
-        format: "Blu-ray",
-        subject: "Nature Documentary",
-        keywords: "nature, wildlife, planet, environment",
-        description: "Award-winning nature documentary series showcasing the planet's most spectacular natural events.",
-        location: "Multimedia Section M-1",
-        quantity: 2
-    },
-    {
-        title: "The Lord of the Rings: The Fellowship of the Ring",
-        author: "Peter Jackson",
-        isbn: "B00005JLYT",
-        year: 2001,
-        genre: "Fantasy",
-        item_type: "multimedia",
-        publisher: "New Line Cinema",
-        language: "English",
-        duration: 178,
-        format: "DVD",
-        subject: "Fantasy Film",
-        keywords: "fantasy, adventure, magic, Middle-earth",
-        description: "Epic fantasy film adaptation of J.R.R. Tolkien's novel.",
-        location: "Multimedia Section M-2",
-        quantity: 3
-    },
-    // Newspapers
-    {
-        title: "The New York Times",
-        author: "Various Journalists",
-        isbn: "0362-4331",
-        year: 2024,
-        genre: "News",
-        item_type: "newspaper",
-        publisher: "The New York Times Company",
-        language: "English",
-        pages: 40,
-        subject: "General News",
-        keywords: "news, politics, world events, journalism",
-        description: "Daily American newspaper based in New York City.",
-        location: "Newspaper Section N-1",
-        quantity: 1
-    },
-    // Magazines
-    {
-        title: "National Geographic",
-        author: "Various Authors",
-        isbn: "0027-9358",
-        year: 2024,
-        genre: "Science & Nature",
-        item_type: "magazine",
-        publisher: "National Geographic Society",
-        language: "English",
-        pages: 120,
-        subject: "Geography & Science",
-        keywords: "geography, nature, culture, photography",
-        description: "Monthly magazine featuring articles about geography, history, and world culture.",
-        location: "Magazine Section MG-1",
-        quantity: 1
-    },
-    // Thesis
-    {
-        title: "Machine Learning Applications in Healthcare",
-        author: "Dr. Sarah Johnson",
-        isbn: null,
-        year: 2023,
-        genre: "Academic",
-        item_type: "thesis",
-        publisher: "University of Technology",
-        language: "English",
-        pages: 150,
-        subject: "Computer Science",
-        keywords: "machine learning, healthcare, AI, medical technology",
-        description: "Doctoral thesis exploring the applications of machine learning in healthcare systems.",
-        location: "Thesis Section T-1",
-        quantity: 1
-    },
-    // Reports
-    {
-        title: "Climate Change Impact Assessment 2024",
-        author: "Environmental Research Institute",
-        isbn: null,
-        year: 2024,
-        genre: "Research",
-        item_type: "report",
-        publisher: "ERI Publications",
-        language: "English",
-        pages: 200,
-        subject: "Environmental Science",
-        keywords: "climate change, environment, research, sustainability",
-        description: "Comprehensive report on the current state of climate change and its global impacts.",
-        location: "Report Section R-1",
-        quantity: 1
-    }
+// Sample pools to generate diverse library items
+const ITEM_TYPES = [
+  "book",
+  "journal",
+  "multimedia",
+  "newspaper",
+  "magazine",
+  "thesis",
+  "report",
+  "other",
 ];
 
+const GENRES_BY_TYPE = {
+  book: [
+    "Fiction",
+    "Romance",
+    "Science Fiction",
+    "Fantasy",
+    "Mystery",
+    "Historical",
+    "Non-Fiction",
+    "Biography",
+    "Dystopian Fiction",
+    "Coming-of-age",
+  ],
+  journal: [
+    "Science",
+    "Medicine",
+    "Engineering",
+    "Computer Science",
+    "Mathematics",
+    "Psychology",
+  ],
+  multimedia: [
+    "Documentary",
+    "Fantasy",
+    "Drama",
+    "Education",
+    "History",
+    "Nature",
+  ],
+  newspaper: ["News", "Business", "Sports", "Technology", "World"],
+  magazine: [
+    "Science & Nature",
+    "Technology",
+    "Lifestyle",
+    "Travel",
+    "Art & Design",
+  ],
+  thesis: ["Academic", "Computer Science", "Physics", "Economics", "Sociology"],
+  report: [
+    "Research",
+    "Environmental Science",
+    "Policy",
+    "Finance",
+    "Education",
+  ],
+  other: ["General"],
+};
+
+const TITLE_SEEDS = {
+  book: [
+    "The Great Gatsby",
+    "To Kill a Mockingbird",
+    "1984",
+    "Pride and Prejudice",
+    "The Catcher in the Rye",
+    "Moby-Dick",
+    "War and Peace",
+    "Brave New World",
+    "The Hobbit",
+    "Jane Eyre",
+  ],
+  journal: [
+    "Nature",
+    "Science",
+    "The Lancet",
+    "IEEE Transactions",
+    "ACM Computing Surveys",
+    "Cell",
+    "PNAS",
+  ],
+  multimedia: [
+    "Planet Earth II",
+    "The Fellowship of the Ring",
+    "The Social Dilemma",
+    "Cosmos",
+    "Blue Planet",
+  ],
+  newspaper: [
+    "The New York Times",
+    "The Guardian",
+    "The Washington Post",
+    "The Times",
+    "The Wall Street Journal",
+  ],
+  magazine: [
+    "National Geographic",
+    "Wired",
+    "Time",
+    "The Economist",
+    "Scientific American",
+  ],
+  thesis: [
+    "Applications of Machine Learning",
+    "Quantum Computing Advances",
+    "Behavioral Economics Study",
+    "Urban Sociology Analysis",
+    "Educational Outcomes Research",
+  ],
+  report: [
+    "Climate Change Impact Assessment",
+    "Annual Financial Overview",
+    "Public Policy Review",
+    "Global Education Report",
+  ],
+  other: ["General Reference Compendium", "Encyclopedic Overview"],
+};
+
+const AUTHORS = [
+  "F. Scott Fitzgerald",
+  "Harper Lee",
+  "George Orwell",
+  "Jane Austen",
+  "J.D. Salinger",
+  "J.R.R. Tolkien",
+  "Isaac Asimov",
+  "Arthur C. Clarke",
+  "Mary Shelley",
+  "Agatha Christie",
+  "Various Authors",
+  "Peter Jackson",
+  "BBC Natural History Unit",
+];
+
+// Some known ISBNs to enable real cover images where possible (Open Library covers)
+const KNOWN_ISBNS = [
+  "9780743273565",
+  "9780061120084",
+  "9780451524935",
+  "9780141439518",
+  "9780316769174",
+  "9780261103573",
+  "9780553382563",
+  "9780385490818",
+  "9780307474278",
+  "9780307277671",
+];
+
+function pick<T>(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function maybe(value, probability = 0.7) {
+  return Math.random() < probability ? value : null;
+}
+
+function buildImageUrlFromIsbn(isbn) {
+  if (!isbn) return null;
+  return `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`;
+}
+
+// Legacy examples retained as seeds to improve realism
+const libraryItems = [
+  {
+    id: 1,
+    title: "The Great Gatsby",
+    author: "F. Scott Fitzgerald",
+    isbn: "9780743273565",
+    year: 1925,
+    genre: "Literary Fiction",
+    item_type: "book",
+    publisher: "Scribner",
+    language: "English",
+    pages: 180,
+    subject: "American Literature",
+    keywords: "classic, jazz age, wealth, love",
+    description:
+      "A classic American novel set in the Jazz Age, exploring themes of wealth, love, and the American Dream.",
+    location: "Fiction Section A-1",
+    quantity: 3,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/The_Great_Gatsby",
+  },
+  {
+    id: 2,
+    title: "Pride and Prejudice",
+    author: "Jane Austen",
+    isbn: "9780141439518",
+    year: 1813,
+    genre: "Romance",
+    item_type: "book",
+    publisher: "T. Egerton",
+    language: "English",
+    pages: 432,
+    subject: "British Literature",
+    keywords: "romance, marriage, social class, England",
+    description:
+      "A romantic novel about Elizabeth Bennet and Mr. Darcy in Georgian England.",
+    location: "Fiction Section C-1",
+    quantity: 2,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/Pride_and_Prejudice",
+  },
+  {
+    id: 3,
+    title: "1984",
+    author: "George Orwell",
+    isbn: "9780451524935",
+    year: 1949,
+    genre: "Dystopian Fiction",
+    item_type: "book",
+    publisher: "Secker & Warburg",
+    language: "English",
+    pages: 328,
+    subject: "Political Fiction",
+    keywords: "totalitarianism, surveillance, dystopia",
+    description:
+      "A dystopian social science fiction novel about totalitarian control and surveillance.",
+    location: "Fiction Section B-1",
+    quantity: 4,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/Nineteen_Eighty-Four",
+  },
+  {
+    id: 4,
+    title: "The Lord of the Rings",
+    author: "J.R.R. Tolkien",
+    isbn: "9780544003415",
+    year: 1954,
+    genre: "Fantasy",
+    item_type: "book",
+    publisher: "George Allen & Unwin",
+    language: "English",
+    pages: 1216,
+    subject: "Fantasy Literature",
+    keywords: "fantasy, magic, adventure, middle-earth",
+    description:
+      "Epic high-fantasy novel about the journey to destroy the One Ring.",
+    location: "Fiction Section F-1",
+    quantity: 3,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/The_Lord_of_the_Rings",
+  },
+  {
+    id: 5,
+    title: "Agatha Christie's Murder on the Orient Express",
+    author: "Agatha Christie",
+    isbn: "9780062693662",
+    year: 1934,
+    genre: "Mystery",
+    item_type: "book",
+    publisher: "Collins Crime Club",
+    language: "English",
+    pages: 256,
+    subject: "Crime Fiction",
+    keywords: "mystery, detective, murder, train",
+    description:
+      "Hercule Poirot investigates a murder aboard the famous Orient Express.",
+    location: "Fiction Section M-1",
+    quantity: 2,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/Murder_on_the_Orient_Express",
+  },
+  {
+    id: 6,
+    title: "Dune",
+    author: "Frank Herbert",
+    isbn: "9780441172719",
+    year: 1965,
+    genre: "Science Fiction",
+    item_type: "book",
+    publisher: "Chilton Books",
+    language: "English",
+    pages: 688,
+    subject: "Science Fiction",
+    keywords: "space, desert planet, politics, ecology",
+    description: "Epic science fiction novel set on the desert planet Arrakis.",
+    location: "Fiction Section SF-1",
+    quantity: 3,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/Dune_(novel)",
+  },
+  {
+    id: 7,
+    title: "The Shining",
+    author: "Stephen King",
+    isbn: "9780307743657",
+    year: 1977,
+    genre: "Horror",
+    item_type: "book",
+    publisher: "Doubleday",
+    language: "English",
+    pages: 447,
+    subject: "Horror Fiction",
+    keywords: "horror, supernatural, hotel, isolation",
+    description:
+      "Psychological horror novel about a family isolated in a haunted hotel.",
+    location: "Fiction Section H-1",
+    quantity: 2,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/The_Shining_(novel)",
+  },
+  {
+    id: 8,
+    title: "Gone Girl",
+    author: "Gillian Flynn",
+    isbn: "9780307588371",
+    year: 2012,
+    genre: "Psychological Thriller",
+    item_type: "book",
+    publisher: "Crown Publishing Group",
+    language: "English",
+    pages: 419,
+    subject: "Contemporary Fiction",
+    keywords: "thriller, marriage, disappearance, twist",
+    description:
+      "Psychological thriller about a wife's disappearance and the secrets it reveals.",
+    location: "Fiction Section T-1",
+    quantity: 4,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/Gone_Girl",
+  },
+  {
+    id: 9,
+    title: "The Notebook",
+    author: "Nicholas Sparks",
+    isbn: "9780446605236",
+    year: 1996,
+    genre: "Contemporary Romance",
+    item_type: "book",
+    publisher: "Warner Books",
+    language: "English",
+    pages: 214,
+    subject: "Romance Fiction",
+    keywords: "love, memory, aging, devotion",
+    description:
+      "A romantic story about enduring love through the challenges of time and memory loss.",
+    location: "Fiction Section R-2",
+    quantity: 3,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/The_Notebook",
+  },
+  {
+    id: 10,
+    title: "The Adventures of Tom Sawyer",
+    author: "Mark Twain",
+    isbn: "9780486400778",
+    year: 1876,
+    genre: "Adventure",
+    item_type: "book",
+    publisher: "American Publishing Company",
+    language: "English",
+    pages: 274,
+    subject: "Children's Literature",
+    keywords: "adventure, childhood, Mississippi, friendship",
+    description:
+      "Classic adventure novel about a mischievous boy growing up along the Mississippi River.",
+    location: "Children's Section C-1",
+    quantity: 3,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/The_Adventures_of_Tom_Sawyer",
+  },
+  {
+    id: 11,
+    title: "Sapiens: A Brief History of Humankind",
+    author: "Yuval Noah Harari",
+    isbn: "9780062316097",
+    year: 2014,
+    genre: "History",
+    item_type: "book",
+    publisher: "Harper",
+    language: "English",
+    pages: 443,
+    subject: "Anthropology",
+    keywords: "human evolution, civilization, society, culture",
+    description:
+      "An exploration of the history and impact of the human species on Earth.",
+    location: "Non-fiction Section H-1",
+    quantity: 3,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/Sapiens:_A_Brief_History_of_Humankind",
+  },
+  {
+    id: 12,
+    title: "Steve Jobs",
+    author: "Walter Isaacson",
+    isbn: "9781451648539",
+    year: 2011,
+    genre: "Biography",
+    item_type: "book",
+    publisher: "Simon & Schuster",
+    language: "English",
+    pages: 656,
+    subject: "Biography",
+    keywords: "technology, innovation, Apple, entrepreneur",
+    description: "Authorized biography of Apple co-founder Steve Jobs.",
+    location: "Biography Section B-1",
+    quantity: 2,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/Steve_Jobs_(book)",
+  },
+  {
+    id: 13,
+    title: "A Brief History of Time",
+    author: "Stephen Hawking",
+    isbn: "9780553380163",
+    year: 1988,
+    genre: "Science",
+    item_type: "book",
+    publisher: "Bantam Books",
+    language: "English",
+    pages: 256,
+    subject: "Physics",
+    keywords: "cosmology, black holes, universe, physics",
+    description:
+      "Popular science book about cosmology and the nature of the universe.",
+    location: "Science Section S-1",
+    quantity: 4,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/A_Brief_History_of_Time",
+  },
+  {
+    id: 14,
+    title: "The 7 Habits of Highly Effective People",
+    author: "Stephen Covey",
+    isbn: "9781982137274",
+    year: 1989,
+    genre: "Self-Help",
+    item_type: "book",
+    publisher: "Free Press",
+    language: "English",
+    pages: 381,
+    subject: "Personal Development",
+    keywords: "productivity, leadership, success, habits",
+    description:
+      "Self-help book about principles for personal and professional effectiveness.",
+    location: "Self-Help Section SH-1",
+    quantity: 5,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/The_7_Habits_of_Highly_Effective_People",
+  },
+  {
+    id: 15,
+    title: "Into the Wild",
+    author: "Jon Krakauer",
+    isbn: "9780385486804",
+    year: 1996,
+    genre: "Travel/Adventure",
+    item_type: "book",
+    publisher: "Villard",
+    language: "English",
+    pages: 207,
+    subject: "Travel Literature",
+    keywords: "adventure, wilderness, Alaska, survival",
+    description:
+      "True story of Christopher McCandless's journey into the Alaskan wilderness.",
+    location: "Travel Section T-1",
+    quantity: 2,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/Into_the_Wild",
+  },
+  {
+    id: 16,
+    title: "Oxford English Dictionary",
+    author: "Oxford University Press",
+    isbn: "9780198611868",
+    year: 2012,
+    genre: "Reference",
+    item_type: "dictionary",
+    publisher: "Oxford University Press",
+    language: "English",
+    pages: 21730,
+    subject: "Linguistics",
+    keywords: "dictionary, English language, definitions",
+    description: "Comprehensive dictionary of the English language.",
+    location: "Reference Section R-1",
+    quantity: 1,
+    image: null,
+    url: "https://www.oed.com/",
+  },
+  {
+    id: 17,
+    title: "Encyclopedia Britannica",
+    author: "Encyclopedia Britannica Inc.",
+    isbn: "9781593392932",
+    year: 2010,
+    genre: "Reference",
+    item_type: "encyclopedia",
+    publisher: "Encyclopedia Britannica Inc.",
+    language: "English",
+    pages: 32640,
+    subject: "General Knowledge",
+    keywords: "encyclopedia, knowledge, reference",
+    description:
+      "Comprehensive general encyclopedia covering all fields of knowledge.",
+    location: "Reference Section R-2",
+    quantity: 1,
+    image: null,
+    url: "https://www.britannica.com/",
+  },
+  {
+    id: 18,
+    title: "World Atlas",
+    author: "National Geographic",
+    isbn: "9781426218996",
+    year: 2020,
+    genre: "Geography",
+    item_type: "atlas",
+    publisher: "National Geographic",
+    language: "English",
+    pages: 448,
+    subject: "Geography",
+    keywords: "maps, countries, geography, world",
+    description:
+      "Comprehensive atlas of the world with detailed maps and geographical information.",
+    location: "Reference Section R-3",
+    quantity: 2,
+    image: null,
+    url: "https://www.nationalgeographic.com/",
+  },
+  {
+    id: 19,
+    title: "Thesaurus of English Words and Phrases",
+    author: "Peter Mark Roget",
+    isbn: "9780140515039",
+    year: 2000,
+    genre: "Reference",
+    item_type: "thesaurus",
+    publisher: "Penguin Classics",
+    language: "English",
+    pages: 1312,
+    subject: "Linguistics",
+    keywords: "synonyms, antonyms, vocabulary, words",
+    description:
+      "Classic thesaurus organizing English words and phrases by meaning.",
+    location: "Reference Section R-4",
+    quantity: 3,
+    image: null,
+    url: null,
+  },
+  {
+    id: 20,
+    title: "MLA Handbook for Writers of Research Papers",
+    author: "Modern Language Association",
+    isbn: "9781603292627",
+    year: 2016,
+    genre: "Academic Reference",
+    item_type: "handbook",
+    publisher: "Modern Language Association",
+    language: "English",
+    pages: 146,
+    subject: "Academic Writing",
+    keywords: "citation, research, writing, MLA",
+    description: "Official guide to MLA citation style and academic writing.",
+    location: "Reference Section R-5",
+    quantity: 4,
+    image: null,
+    url: "https://www.mla.org/",
+  },
+  {
+    id: 21,
+    title: "The Joy of Cooking",
+    author: "Irma S. Rombauer",
+    isbn: "9780743246262",
+    year: 2006,
+    genre: "Cookbook",
+    item_type: "cookbook",
+    publisher: "Scribner",
+    language: "English",
+    pages: 1152,
+    subject: "Culinary Arts",
+    keywords: "recipes, cooking, baking, techniques",
+    description:
+      "Comprehensive cookbook with over 4,500 recipes and cooking techniques.",
+    location: "Cooking Section C-1",
+    quantity: 3,
+    image: null,
+    url: null,
+  },
+  {
+    id: 22,
+    title: "Salt, Fat, Acid, Heat",
+    author: "Samin Nosrat",
+    isbn: "9781476753836",
+    year: 2017,
+    genre: "Cookbook",
+    item_type: "cookbook",
+    publisher: "Simon & Schuster",
+    language: "English",
+    pages: 472,
+    subject: "Culinary Arts",
+    keywords: "cooking techniques, flavor, fundamentals",
+    description:
+      "Guide to mastering the four fundamental elements of good cooking.",
+    location: "Cooking Section C-2",
+    quantity: 2,
+    image: null,
+    url: null,
+  },
+  {
+    id: 23,
+    title: "Italian Cooking Encyclopedia",
+    author: "Anna Del Conte",
+    isbn: "9781846819636",
+    year: 2013,
+    genre: "International Cuisine",
+    item_type: "cookbook",
+    publisher: "Hermes House",
+    language: "English",
+    pages: 512,
+    subject: "Italian Cuisine",
+    keywords: "Italian food, pasta, Mediterranean, recipes",
+    description:
+      "Comprehensive guide to traditional Italian cooking with over 300 recipes.",
+    location: "Cooking Section C-3",
+    quantity: 2,
+    image: null,
+    url: null,
+  },
+  {
+    id: 24,
+    title: "The Complete Vegetarian Cookbook",
+    author: "America's Test Kitchen",
+    isbn: "9781936493968",
+    year: 2015,
+    genre: "Vegetarian Cookbook",
+    item_type: "cookbook",
+    publisher: "America's Test Kitchen",
+    language: "English",
+    pages: 464,
+    subject: "Vegetarian Cooking",
+    keywords: "vegetarian, plant-based, healthy recipes",
+    description: "Over 700 foolproof vegetarian recipes tested and perfected.",
+    location: "Cooking Section C-4",
+    quantity: 3,
+    image: null,
+    url: null,
+  },
+  {
+    id: 25,
+    title: "Mastering the Art of French Cooking",
+    author: "Julia Child",
+    isbn: "9780375413407",
+    year: 2001,
+    genre: "French Cuisine",
+    item_type: "cookbook",
+    publisher: "Knopf",
+    language: "English",
+    pages: 752,
+    subject: "French Cuisine",
+    keywords: "French cooking, classic techniques, gourmet",
+    description:
+      "Classic cookbook that brought French cooking to American kitchens.",
+    location: "Cooking Section C-5",
+    quantity: 2,
+    image: null,
+    url: null,
+  },
+  {
+    id: 26,
+    title: "Leaves of Grass",
+    author: "Walt Whitman",
+    isbn: "9780486456768",
+    year: 1855,
+    genre: "Poetry",
+    item_type: "poetry",
+    publisher: "Dover Publications",
+    language: "English",
+    pages: 416,
+    subject: "American Poetry",
+    keywords: "free verse, democracy, nature, spirituality",
+    description:
+      "Groundbreaking collection of American poetry celebrating democracy and the human spirit.",
+    location: "Poetry Section P-1",
+    quantity: 2,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/Leaves_of_Grass",
+  },
+  {
+    id: 27,
+    title: "The Complete Poems of Emily Dickinson",
+    author: "Emily Dickinson",
+    isbn: "9780316184137",
+    year: 1976,
+    genre: "Poetry",
+    item_type: "poetry",
+    publisher: "Little, Brown and Company",
+    language: "English",
+    pages: 770,
+    subject: "American Poetry",
+    keywords: "nature, death, immortality, solitude",
+    description:
+      "Complete collection of Emily Dickinson's innovative and influential poems.",
+    location: "Poetry Section P-2",
+    quantity: 3,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/Emily_Dickinson",
+  },
+  {
+    id: 28,
+    title: "The Poetry of Robert Frost",
+    author: "Robert Frost",
+    isbn: "9780805069860",
+    year: 1979,
+    genre: "Poetry",
+    item_type: "poetry",
+    publisher: "Henry Holt and Co.",
+    language: "English",
+    pages: 607,
+    subject: "American Poetry",
+    keywords: "nature, rural life, New England, metaphor",
+    description:
+      "Comprehensive collection of Robert Frost's nature poetry and rural themes.",
+    location: "Poetry Section P-3",
+    quantity: 2,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/Robert_Frost",
+  },
+  {
+    id: 29,
+    title: "Milk and Honey",
+    author: "Rupi Kaur",
+    isbn: "9781449474256",
+    year: 2014,
+    genre: "Contemporary Poetry",
+    item_type: "poetry",
+    publisher: "Andrews McMeel Publishing",
+    language: "English",
+    pages: 208,
+    subject: "Contemporary Poetry",
+    keywords: "feminism, healing, trauma, love",
+    description:
+      "Contemporary poetry collection about survival, healing, and femininity.",
+    location: "Poetry Section P-4",
+    quantity: 4,
+    image: null,
+    url: null,
+  },
+  {
+    id: 30,
+    title: "Selected Poems",
+    author: "Langston Hughes",
+    isbn: "9780679728184",
+    year: 1990,
+    genre: "Poetry",
+    item_type: "poetry",
+    publisher: "Vintage Books",
+    language: "English",
+    pages: 297,
+    subject: "African American Poetry",
+    keywords: "jazz, blues, Harlem Renaissance, civil rights",
+    description:
+      "Essential collection of poems by the influential Harlem Renaissance poet.",
+    location: "Poetry Section P-5",
+    quantity: 3,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/Langston_Hughes",
+  },
+  {
+    id: 31,
+    title: "The Story of Art",
+    author: "E.H. Gombrich",
+    isbn: "9780714832470",
+    year: 2006,
+    genre: "Art History",
+    item_type: "art_book",
+    publisher: "Phaidon Press",
+    language: "English",
+    pages: 688,
+    subject: "Art History",
+    keywords: "painting, sculpture, art movements, artists",
+    description:
+      "Classic introduction to the history of art from cave paintings to modern art.",
+    location: "Art Section A-1",
+    quantity: 2,
+    image: null,
+    url: null,
+  },
+  {
+    id: 32,
+    title: "Van Gogh: The Complete Paintings",
+    author: "Ingo F. Walther",
+    isbn: "9783836541220",
+    year: 2012,
+    genre: "Art Monograph",
+    item_type: "art_book",
+    publisher: "Taschen",
+    language: "English",
+    pages: 740,
+    subject: "Post-Impressionism",
+    keywords: "Van Gogh, impressionism, painting, Netherlands",
+    description:
+      "Comprehensive catalog of Vincent van Gogh's complete paintings.",
+    location: "Art Section A-2",
+    quantity: 1,
+    image: null,
+    url: null,
+  },
+  {
+    id: 33,
+    title: "Photography: The Definitive Visual History",
+    author: "Tom Ang",
+    isbn: "9781465422880",
+    year: 2014,
+    genre: "Photography",
+    item_type: "art_book",
+    publisher: "DK",
+    language: "English",
+    pages: 360,
+    subject: "Photography",
+    keywords: "photography, visual arts, techniques, history",
+    description: "Comprehensive guide to the art and history of photography.",
+    location: "Art Section A-3",
+    quantity: 3,
+    image: null,
+    url: null,
+  },
+  {
+    id: 34,
+    title: "Ways of Seeing",
+    author: "John Berger",
+    isbn: "9780140135152",
+    year: 1972,
+    genre: "Art Criticism",
+    item_type: "art_book",
+    publisher: "Penguin Books",
+    language: "English",
+    pages: 176,
+    subject: "Art Theory",
+    keywords: "visual culture, perception, art criticism",
+    description:
+      "Influential work on how we look at and understand visual art.",
+    location: "Art Section A-4",
+    quantity: 2,
+    image: null,
+    url: null,
+  },
+  {
+    id: 35,
+    title: "The Art of Color",
+    author: "Johannes Itten",
+    isbn: "9780471289289",
+    year: 1973,
+    genre: "Art Theory",
+    item_type: "art_book",
+    publisher: "Wiley",
+    language: "English",
+    pages: 160,
+    subject: "Color Theory",
+    keywords: "color theory, design, painting, visual arts",
+    description:
+      "Classic text on color theory and its application in art and design.",
+    location: "Art Section A-5",
+    quantity: 2,
+    image: null,
+    url: null,
+  },
+  {
+    id: 36,
+    title: "Where the Wild Things Are",
+    author: "Maurice Sendak",
+    isbn: "9780064431781",
+    year: 1963,
+    genre: "Children's Picture Book",
+    item_type: "children_book",
+    publisher: "Harper & Row",
+    language: "English",
+    pages: 40,
+    subject: "Children's Literature",
+    keywords: "imagination, adventure, childhood, monsters",
+    description:
+      "Classic children's picture book about Max's journey to the land of Wild Things.",
+    location: "Children's Section CH-1",
+    quantity: 5,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/Where_the_Wild_Things_Are",
+  },
+  {
+    id: 37,
+    title: "The Cat in the Hat",
+    author: "Dr. Seuss",
+    isbn: "9780394800011",
+    year: 1957,
+    genre: "Children's Picture Book",
+    item_type: "children_book",
+    publisher: "Random House",
+    language: "English",
+    pages: 61,
+    subject: "Early Reader",
+    keywords: "rhyme, fun, chaos, responsibility",
+    description:
+      "Beloved children's book about a mischievous cat who visits two children.",
+    location: "Children's Section CH-2",
+    quantity: 4,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/The_Cat_in_the_Hat",
+  },
+  {
+    id: 38,
+    title: "Charlotte's Web",
+    author: "E.B. White",
+    isbn: "9780064400558",
+    year: 1952,
+    genre: "Children's Novel",
+    item_type: "children_book",
+    publisher: "Harper & Brothers",
+    language: "English",
+    pages: 192,
+    subject: "Children's Literature",
+    keywords: "friendship, farm animals, life and death",
+    description:
+      "Timeless story of friendship between a pig named Wilbur and a spider named Charlotte.",
+    location: "Children's Section CH-3",
+    quantity: 3,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/Charlotte's_Web",
+  },
+  {
+    id: 39,
+    title: "Harry Potter and the Philosopher's Stone",
+    author: "J.K. Rowling",
+    isbn: "9780747532699",
+    year: 1997,
+    genre: "Children's Fantasy",
+    item_type: "children_book",
+    publisher: "Bloomsbury",
+    language: "English",
+    pages: 223,
+    subject: "Fantasy Literature",
+    keywords: "magic, wizards, school, friendship, adventure",
+    description:
+      "First book in the Harry Potter series about a young wizard's adventures.",
+    location: "Children's Section CH-4",
+    quantity: 6,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/Harry_Potter_and_the_Philosopher's_Stone",
+  },
+  {
+    id: 40,
+    title: "The Very Hungry Caterpillar",
+    author: "Eric Carle",
+    isbn: "9780399226908",
+    year: 1969,
+    genre: "Children's Picture Book",
+    item_type: "children_book",
+    publisher: "World Publishing Company",
+    language: "English",
+    pages: 32,
+    subject: "Early Learning",
+    keywords: "metamorphosis, counting, days of week, growth",
+    description:
+      "Classic picture book teaching about metamorphosis and the days of the week.",
+    location: "Children's Section CH-5",
+    quantity: 4,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/The_Very_Hungry_Caterpillar",
+  },
+  {
+    id: 41,
+    title: "Goodnight Moon",
+    author: "Margaret Wise Brown",
+    isbn: "9780064430173",
+    year: 1947,
+    genre: "Children's Picture Book",
+    item_type: "children_book",
+    publisher: "Harper & Brothers",
+    language: "English",
+    pages: 32,
+    subject: "Bedtime Story",
+    keywords: "bedtime, routine, comfort, sleep",
+    description:
+      "Beloved bedtime story about a young rabbit saying goodnight to everything.",
+    location: "Children's Section CH-6",
+    quantity: 5,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/Goodnight_Moon",
+  },
+  {
+    id: 42,
+    title: "The Lion, the Witch and the Wardrobe",
+    author: "C.S. Lewis",
+    isbn: "9780064471046",
+    year: 1950,
+    genre: "Children's Fantasy",
+    item_type: "children_book",
+    publisher: "Geoffrey Bles",
+    language: "English",
+    pages: 208,
+    subject: "Fantasy Literature",
+    keywords: "Narnia, fantasy, adventure, allegory",
+    description:
+      "First published book in The Chronicles of Narnia fantasy series.",
+    location: "Children's Section CH-7",
+    quantity: 3,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/The_Lion,_the_Witch_and_the_Wardrobe",
+  },
+  {
+    id: 43,
+    title: "Matilda",
+    author: "Roald Dahl",
+    isbn: "9780142410370",
+    year: 1988,
+    genre: "Children's Novel",
+    item_type: "children_book",
+    publisher: "Jonathan Cape",
+    language: "English",
+    pages: 240,
+    subject: "Children's Literature",
+    keywords: "telekinesis, school, reading, empowerment",
+    description:
+      "Story of a brilliant girl with telekinetic powers who overcomes adversity.",
+    location: "Children's Section CH-8",
+    quantity: 4,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/Matilda_(novel)",
+  },
+  {
+    id: 44,
+    title: "The Giving Tree",
+    author: "Shel Silverstein",
+    isbn: "9780060256654",
+    year: 1964,
+    genre: "Children's Picture Book",
+    item_type: "children_book",
+    publisher: "Harper & Row",
+    language: "English",
+    pages: 64,
+    subject: "Life Lessons",
+    keywords: "selflessness, giving, love, relationships",
+    description:
+      "Allegorical picture book about the relationship between a tree and a boy.",
+    location: "Children's Section CH-9",
+    quantity: 3,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/The_Giving_Tree",
+  },
+  {
+    id: 45,
+    title: "Green Eggs and Ham",
+    author: "Dr. Seuss",
+    isbn: "9780394800165",
+    year: 1960,
+    genre: "Children's Picture Book",
+    item_type: "children_book",
+    publisher: "Beginner Books",
+    language: "English",
+    pages: 62,
+    subject: "Early Reader",
+    keywords: "persistence, trying new things, vocabulary",
+    description:
+      "Simple vocabulary book about trying new things, written with only 50 words.",
+    location: "Children's Section CH-10",
+    quantity: 4,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/Green_Eggs_and_Ham",
+  },
+  {
+    id: 46,
+    title: "Campbell Biology",
+    author: "Neil A. Campbell",
+    isbn: "9780134093413",
+    year: 2016,
+    genre: "Textbook",
+    item_type: "textbook",
+    publisher: "Pearson",
+    language: "English",
+    pages: 1488,
+    subject: "Biology",
+    keywords: "cell biology, genetics, evolution, ecology",
+    description:
+      "Comprehensive undergraduate biology textbook covering all major areas.",
+    location: "Textbook Section T-1",
+    quantity: 5,
+    image: null,
+    url: null,
+  },
+  {
+    id: 47,
+    title: "Calculus: Early Transcendentals",
+    author: "James Stewart",
+    isbn: "9781285741550",
+    year: 2015,
+    genre: "Mathematics Textbook",
+    item_type: "textbook",
+    publisher: "Cengage Learning",
+    language: "English",
+    pages: 1368,
+    subject: "Mathematics",
+    keywords: "calculus, derivatives, integrals, limits",
+    description:
+      "Standard calculus textbook for undergraduate mathematics courses.",
+    location: "Textbook Section T-2",
+    quantity: 4,
+    image: null,
+    url: null,
+  },
+  {
+    id: 48,
+    title: "Psychology: The Science of Mind and Behaviour",
+    author: "Michael W. Passer",
+    isbn: "9780077128883",
+    year: 2014,
+    genre: "Psychology Textbook",
+    item_type: "textbook",
+    publisher: "McGraw-Hill",
+    language: "English",
+    pages: 896,
+    subject: "Psychology",
+    keywords: "cognitive psychology, behavior, research methods",
+    description:
+      "Comprehensive introduction to psychological science and research.",
+    location: "Textbook Section T-3",
+    quantity: 3,
+    image: null,
+    url: null,
+  },
+  {
+    id: 49,
+    title: "Introduction to Algorithms",
+    author: "Thomas H. Cormen",
+    isbn: "9780262533058",
+    year: 2009,
+    genre: "Computer Science Textbook",
+    item_type: "textbook",
+    publisher: "MIT Press",
+    language: "English",
+    pages: 1312,
+    subject: "Computer Science",
+    keywords: "algorithms, data structures, complexity, programming",
+    description: "Comprehensive textbook on algorithms and data structures.",
+    location: "Textbook Section T-4",
+    quantity: 3,
+    image: null,
+    url: null,
+  },
+  {
+    id: 50,
+    title: "Principles of Economics",
+    author: "N. Gregory Mankiw",
+    isbn: "9781305585126",
+    year: 2017,
+    genre: "Economics Textbook",
+    item_type: "textbook",
+    publisher: "Cengage Learning",
+    language: "English",
+    pages: 888,
+    subject: "Economics",
+    keywords: "microeconomics, macroeconomics, markets, policy",
+    description:
+      "Introduction to economic principles and their real-world applications.",
+    location: "Textbook Section T-5",
+    quantity: 4,
+    image: null,
+    url: null,
+  },
+  {
+    id: 51,
+    title: "Planet Earth II",
+    author: "BBC Natural History Unit",
+    isbn: "B01M0ZQX8N",
+    year: 2016,
+    genre: "Documentary",
+    item_type: "bluray",
+    publisher: "BBC",
+    language: "English",
+    duration: 360,
+    format: "Blu-ray",
+    subject: "Nature Documentary",
+    keywords: "nature, wildlife, planet, environment",
+    description:
+      "Award-winning nature documentary series showcasing the planet's most spectacular natural events.",
+    location: "Multimedia Section M-1",
+    quantity: 2,
+    image: null,
+    url: "https://www.bbc.co.uk/programmes/p02544td",
+  },
+  {
+    id: 52,
+    title: "The Godfather Trilogy",
+    author: "Francis Ford Coppola",
+    isbn: "B000MLRZ24",
+    year: 2008,
+    genre: "Crime Drama",
+    item_type: "dvd",
+    publisher: "Paramount Pictures",
+    language: "English",
+    duration: 537,
+    format: "DVD",
+    subject: "Classic Cinema",
+    keywords: "mafia, family, crime, drama",
+    description: "Complete trilogy of the classic Godfather films.",
+    location: "Multimedia Section M-2",
+    quantity: 3,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/The_Godfather",
+  },
+  {
+    id: 53,
+    title: "Becoming by Michelle Obama",
+    author: "Michelle Obama",
+    isbn: "1524763136",
+    year: 2018,
+    genre: "Memoir",
+    item_type: "audiobook",
+    publisher: "Random House Audio",
+    language: "English",
+    duration: 1140,
+    format: "CD",
+    subject: "Biography",
+    keywords: "memoir, first lady, inspiration, politics",
+    description:
+      "Memoir of former First Lady Michelle Obama, narrated by the author.",
+    location: "Audiobook Section A-1",
+    quantity: 2,
+    image: null,
+    url: null,
+  },
+  {
+    id: 54,
+    title: "Abbey Road",
+    author: "The Beatles",
+    isbn: "B000002UAL",
+    year: 1969,
+    genre: "Rock Music",
+    item_type: "cd",
+    publisher: "Apple Records",
+    language: "English",
+    duration: 47,
+    format: "CD",
+    subject: "Music",
+    keywords: "Beatles, rock, psychedelic, classic",
+    description:
+      "Final studio album recorded by The Beatles, featuring iconic songs.",
+    location: "Music Section MU-1",
+    quantity: 3,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/Abbey_Road",
+  },
+  {
+    id: 55,
+    title: "Kind of Blue",
+    author: "Miles Davis",
+    isbn: "B000000YCO",
+    year: 1959,
+    genre: "Jazz",
+    item_type: "cd",
+    publisher: "Columbia Records",
+    language: "Instrumental",
+    duration: 46,
+    format: "CD",
+    subject: "Jazz Music",
+    keywords: "jazz, improvisation, modal, trumpet",
+    description:
+      "Landmark jazz album that revolutionized the genre with modal jazz.",
+    location: "Music Section MU-2",
+    quantity: 2,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/Kind_of_Blue",
+  },
+  {
+    id: 56,
+    title: "The Lord of the Rings: The Fellowship of the Ring",
+    author: "Peter Jackson",
+    isbn: "B00005JLYT",
+    year: 2001,
+    genre: "Fantasy Adventure",
+    item_type: "dvd",
+    publisher: "New Line Cinema",
+    language: "English",
+    duration: 178,
+    format: "DVD",
+    subject: "Fantasy Film",
+    keywords: "fantasy, adventure, magic, Middle-earth",
+    description: "Epic fantasy film adaptation of J.R.R. Tolkien's novel.",
+    location: "Multimedia Section M-3",
+    quantity: 3,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/The_Lord_of_the_Rings:_The_Fellowship_of_the_Ring",
+  },
+  {
+    id: 57,
+    title: "Mozart: Complete Piano Sonatas",
+    author: "Wolfgang Amadeus Mozart",
+    isbn: "B000001GQW",
+    year: 2000,
+    genre: "Classical Music",
+    item_type: "cd",
+    publisher: "Deutsche Grammophon",
+    language: "Instrumental",
+    duration: 285,
+    format: "CD Box Set",
+    subject: "Classical Music",
+    keywords: "Mozart, piano, sonatas, classical",
+    description:
+      "Complete collection of Mozart's piano sonatas performed by leading pianists.",
+    location: "Music Section MU-3",
+    quantity: 1,
+    image: null,
+    url: null,
+  },
+  {
+    id: 58,
+    title: "Frozen",
+    author: "Disney",
+    isbn: "B00GJJ1B6S",
+    year: 2013,
+    genre: "Family Animation",
+    item_type: "bluray",
+    publisher: "Walt Disney Studios",
+    language: "English",
+    duration: 102,
+    format: "Blu-ray",
+    subject: "Children's Film",
+    keywords: "animation, musical, family, Disney",
+    description:
+      "Animated Disney musical about two sisters and the power of love.",
+    location: "Multimedia Section M-4",
+    quantity: 4,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/Frozen_(2013_film)",
+  },
+  {
+    id: 59,
+    title: "TED Talks: Ideas Worth Spreading",
+    author: "Various Speakers",
+    isbn: "B01N7MQXQX",
+    year: 2017,
+    genre: "Educational",
+    item_type: "dvd",
+    publisher: "TED",
+    language: "English",
+    duration: 480,
+    format: "DVD",
+    subject: "Education",
+    keywords: "innovation, technology, education, inspiration",
+    description:
+      "Collection of inspiring TED talks from leading thinkers and innovators.",
+    location: "Educational Section E-1",
+    quantity: 2,
+    image: null,
+    url: "https://www.ted.com/",
+  },
+  {
+    id: 60,
+    title: "The Blue Planet",
+    author: "BBC Natural History Unit",
+    isbn: "B00005Q3V7",
+    year: 2001,
+    genre: "Documentary",
+    item_type: "dvd",
+    publisher: "BBC",
+    language: "English",
+    duration: 400,
+    format: "DVD",
+    subject: "Marine Biology",
+    keywords: "ocean, marine life, documentary, nature",
+    description:
+      "Groundbreaking documentary series exploring Earth's oceans and marine life.",
+    location: "Multimedia Section M-5",
+    quantity: 2,
+    image: null,
+    url: "https://www.bbc.co.uk/programmes/b0074dlr",
+  },
+  {
+    id: 61,
+    title: "Nature",
+    author: "Various Authors",
+    isbn: "0028-0836",
+    year: 2024,
+    genre: "Scientific Journal",
+    item_type: "journal",
+    publisher: "Nature Publishing Group",
+    language: "English",
+    pages: 120,
+    subject: "Natural Sciences",
+    keywords: "science, research, biology, physics, chemistry",
+    description:
+      "Weekly international journal publishing peer-reviewed research in all fields of science and technology.",
+    location: "Journal Section J-1",
+    quantity: 1,
+    image: null,
+    url: "https://www.nature.com/",
+  },
+  {
+    id: 62,
+    title: "Science",
+    author: "Various Authors",
+    isbn: "0036-8075",
+    year: 2024,
+    genre: "Scientific Journal",
+    item_type: "journal",
+    publisher: "American Association for the Advancement of Science",
+    language: "English",
+    pages: 80,
+    subject: "Scientific Research",
+    keywords: "research, discovery, innovation, technology",
+    description: "Weekly peer-reviewed general science journal.",
+    location: "Journal Section J-2",
+    quantity: 1,
+    image: null,
+    url: "https://www.science.org/",
+  },
+  {
+    id: 63,
+    title: "The New England Journal of Medicine",
+    author: "Various Authors",
+    isbn: "0028-4793",
+    year: 2024,
+    genre: "Medical Journal",
+    item_type: "journal",
+    publisher: "Massachusetts Medical Society",
+    language: "English",
+    pages: 96,
+    subject: "Medicine",
+    keywords: "medicine, healthcare, clinical research, medical practice",
+    description:
+      "Prestigious medical journal publishing clinical research and medical advances.",
+    location: "Journal Section J-3",
+    quantity: 1,
+    image: null,
+    url: "https://www.nejm.org/",
+  },
+  {
+    id: 64,
+    title: "Journal of Computer Science",
+    author: "Various Authors",
+    isbn: "1549-3636",
+    year: 2024,
+    genre: "Technology Journal",
+    item_type: "journal",
+    publisher: "Science Publications",
+    language: "English",
+    pages: 64,
+    subject: "Computer Science",
+    keywords: "programming, algorithms, artificial intelligence, software",
+    description:
+      "Peer-reviewed journal covering advances in computer science and technology.",
+    location: "Journal Section J-4",
+    quantity: 1,
+    image: null,
+    url: null,
+  },
+  {
+    id: 65,
+    title: "The American Economic Review",
+    author: "Various Authors",
+    isbn: "0002-8282",
+    year: 2024,
+    genre: "Economics Journal",
+    item_type: "journal",
+    publisher: "American Economic Association",
+    language: "English",
+    pages: 120,
+    subject: "Economics",
+    keywords: "economics, policy, markets, research",
+    description:
+      "Leading journal in economics publishing theoretical and empirical research.",
+    location: "Journal Section J-5",
+    quantity: 1,
+    image: null,
+    url: "https://www.aeaweb.org/journals/aer",
+  },
+  {
+    id: 66,
+    title: "National Geographic",
+    author: "Various Authors",
+    isbn: "0027-9358",
+    year: 2024,
+    genre: "Science & Nature Magazine",
+    item_type: "magazine",
+    publisher: "National Geographic Society",
+    language: "English",
+    pages: 120,
+    subject: "Geography & Science",
+    keywords: "geography, nature, culture, photography",
+    description:
+      "Monthly magazine featuring articles about geography, history, and world culture.",
+    location: "Magazine Section MG-1",
+    quantity: 1,
+    image: null,
+    url: "https://www.nationalgeographic.com/",
+  },
+  {
+    id: 67,
+    title: "Time Magazine",
+    author: "Various Authors",
+    isbn: "0040-781X",
+    year: 2024,
+    genre: "News Magazine",
+    item_type: "magazine",
+    publisher: "Time USA",
+    language: "English",
+    pages: 64,
+    subject: "Current Affairs",
+    keywords: "news, politics, world events, culture",
+    description:
+      "Weekly news magazine covering politics, world events, and cultural topics.",
+    location: "Magazine Section MG-2",
+    quantity: 1,
+    image: null,
+    url: "https://time.com/",
+  },
+  {
+    id: 68,
+    title: "Scientific American",
+    author: "Various Authors",
+    isbn: "0036-8733",
+    year: 2024,
+    genre: "Science Magazine",
+    item_type: "magazine",
+    publisher: "Springer Nature",
+    language: "English",
+    pages: 80,
+    subject: "Popular Science",
+    keywords: "science, technology, research, innovation",
+    description:
+      "Monthly magazine making scientific research accessible to general readers.",
+    location: "Magazine Section MG-3",
+    quantity: 1,
+    image: null,
+    url: "https://www.scientificamerican.com/",
+  },
+  {
+    id: 69,
+    title: "Vogue",
+    author: "Various Authors",
+    isbn: "0042-8000",
+    year: 2024,
+    genre: "Fashion Magazine",
+    item_type: "magazine",
+    publisher: "Cond\u00e9 Nast",
+    language: "English",
+    pages: 200,
+    subject: "Fashion & Culture",
+    keywords: "fashion, style, beauty, culture",
+    description:
+      "Leading fashion magazine covering haute couture and cultural trends.",
+    location: "Magazine Section MG-4",
+    quantity: 1,
+    image: null,
+    url: "https://www.vogue.com/",
+  },
+  {
+    id: 70,
+    title: "The Economist",
+    author: "Various Authors",
+    isbn: "0013-0613",
+    year: 2024,
+    genre: "Business Magazine",
+    item_type: "magazine",
+    publisher: "The Economist Group",
+    language: "English",
+    pages: 88,
+    subject: "Economics & Politics",
+    keywords: "economics, politics, business, international affairs",
+    description:
+      "Weekly magazine focused on international politics, business, and economics.",
+    location: "Magazine Section MG-5",
+    quantity: 1,
+    image: null,
+    url: "https://www.economist.com/",
+  },
+  {
+    id: 71,
+    title: "The New York Times",
+    author: "Various Journalists",
+    isbn: "0362-4331",
+    year: 2024,
+    genre: "Daily Newspaper",
+    item_type: "newspaper",
+    publisher: "The New York Times Company",
+    language: "English",
+    pages: 40,
+    subject: "General News",
+    keywords: "news, politics, world events, journalism",
+    description: "Daily American newspaper based in New York City.",
+    location: "Newspaper Section N-1",
+    quantity: 1,
+    image: null,
+    url: "https://www.nytimes.com/",
+  },
+  {
+    id: 72,
+    title: "The Guardian",
+    author: "Various Journalists",
+    isbn: "0261-3077",
+    year: 2024,
+    genre: "Daily Newspaper",
+    item_type: "newspaper",
+    publisher: "Guardian Media Group",
+    language: "English",
+    pages: 48,
+    subject: "International News",
+    keywords: "news, politics, environment, culture",
+    description:
+      "British daily newspaper with international coverage and progressive perspective.",
+    location: "Newspaper Section N-2",
+    quantity: 1,
+    image: null,
+    url: "https://www.theguardian.com/",
+  },
+  {
+    id: 73,
+    title: "The Wall Street Journal",
+    author: "Various Journalists",
+    isbn: "0099-9660",
+    year: 2024,
+    genre: "Business Newspaper",
+    item_type: "newspaper",
+    publisher: "Dow Jones & Company",
+    language: "English",
+    pages: 36,
+    subject: "Business & Finance",
+    keywords: "business, finance, markets, economics",
+    description: "Leading American business-focused newspaper.",
+    location: "Newspaper Section N-3",
+    quantity: 1,
+    image: null,
+    url: "https://www.wsj.com/",
+  },
+  {
+    id: 74,
+    title: "Beethoven's Symphony No. 9 in D minor",
+    author: "Ludwig van Beethoven",
+    isbn: null,
+    year: 1824,
+    genre: "Classical Score",
+    item_type: "music_score",
+    publisher: "G. Schirmer",
+    language: "Musical Notation",
+    pages: 280,
+    subject: "Classical Music",
+    keywords: "symphony, classical, orchestral, choral",
+    description:
+      "Full orchestral score of Beethoven's Ninth Symphony including the 'Ode to Joy'.",
+    location: "Music Score Section MS-1",
+    quantity: 2,
+    image: null,
+    url: null,
+  },
+  {
+    id: 75,
+    title: "The Real Book: Jazz Standards",
+    author: "Various Composers",
+    isbn: "9780634060380",
+    year: 2005,
+    genre: "Jazz Compilation",
+    item_type: "music_score",
+    publisher: "Hal Leonard",
+    language: "Musical Notation",
+    pages: 462,
+    subject: "Jazz Music",
+    keywords: "jazz standards, improvisation, lead sheets",
+    description:
+      "Collection of jazz standards with melody lines and chord symbols.",
+    location: "Music Score Section MS-2",
+    quantity: 3,
+    image: null,
+    url: null,
+  },
+  {
+    id: 76,
+    title: "Complete Bach Chorales",
+    author: "Johann Sebastian Bach",
+    isbn: "9780486231778",
+    year: 1985,
+    genre: "Sacred Music Score",
+    item_type: "music_score",
+    publisher: "Dover Publications",
+    language: "Musical Notation",
+    pages: 256,
+    subject: "Baroque Music",
+    keywords: "chorales, baroque, sacred music, Bach",
+    description:
+      "Complete collection of Bach's four-part chorales for study and performance.",
+    location: "Music Score Section MS-3",
+    quantity: 2,
+    image: null,
+    url: null,
+  },
+  {
+    id: 77,
+    title: "Chess Master Tournament Set",
+    author: "Various",
+    isbn: null,
+    year: 2020,
+    genre: "Board Game",
+    item_type: "game",
+    publisher: "Chess USA",
+    language: "Universal",
+    pages: null,
+    subject: "Strategy Games",
+    keywords: "chess, strategy, tournament, board game",
+    description:
+      "Professional tournament chess set with weighted pieces and vinyl board.",
+    location: "Games Section G-1",
+    quantity: 3,
+    image: null,
+    url: null,
+  },
+  {
+    id: 78,
+    title: "Scrabble Deluxe Edition",
+    author: "Alfred Mosher Butts",
+    isbn: null,
+    year: 2019,
+    genre: "Word Game",
+    item_type: "game",
+    publisher: "Hasbro",
+    language: "English",
+    pages: null,
+    subject: "Word Games",
+    keywords: "vocabulary, spelling, word formation, strategy",
+    description:
+      "Classic word formation game with rotating board and premium tiles.",
+    location: "Games Section G-2",
+    quantity: 2,
+    image: null,
+    url: null,
+  },
+  {
+    id: 79,
+    title: "Pandemic Board Game",
+    author: "Matt Leacock",
+    isbn: null,
+    year: 2008,
+    genre: "Cooperative Strategy Game",
+    item_type: "game",
+    publisher: "Z-Man Games",
+    language: "English",
+    pages: null,
+    subject: "Strategy Games",
+    keywords: "cooperation, strategy, disease control, teamwork",
+    description:
+      "Cooperative board game where players work together to save the world from diseases.",
+    location: "Games Section G-3",
+    quantity: 2,
+    image: null,
+    url: null,
+  },
+  {
+    id: 80,
+    title: "Portal Video Game",
+    author: "Valve Corporation",
+    isbn: "B000PS2XES",
+    year: 2007,
+    genre: "Puzzle Video Game",
+    item_type: "video_game",
+    publisher: "Valve",
+    language: "English",
+    pages: null,
+    subject: "Gaming",
+    keywords: "puzzle, physics, portal gun, science fiction",
+    description:
+      "Innovative first-person puzzle-platform video game featuring portal mechanics.",
+    location: "Video Games Section VG-1",
+    quantity: 2,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/Portal_(video_game)",
+  },
+  {
+    id: 81,
+    title: "Topographic Map of the Grand Canyon",
+    author: "U.S. Geological Survey",
+    isbn: null,
+    year: 2022,
+    genre: "Topographic Map",
+    item_type: "map",
+    publisher: "USGS",
+    language: "English",
+    pages: 1,
+    subject: "Geography",
+    keywords: "topography, Grand Canyon, elevation, hiking",
+    description:
+      "Detailed topographic map showing elevation contours and trails of Grand Canyon National Park.",
+    location: "Maps Section MAP-1",
+    quantity: 5,
+    image: null,
+    url: "https://www.usgs.gov/",
+  },
+  {
+    id: 82,
+    title: "Historical Map Collection: Medieval Europe",
+    author: "Historical Cartography Institute",
+    isbn: "9781234567891",
+    year: 2021,
+    genre: "Historical Maps",
+    item_type: "map_collection",
+    publisher: "Academic Press",
+    language: "English",
+    pages: 48,
+    subject: "Medieval History",
+    keywords: "medieval, Europe, kingdoms, trade routes",
+    description:
+      "Collection of historical maps showing political boundaries and trade routes in Medieval Europe.",
+    location: "Maps Section MAP-2",
+    quantity: 2,
+    image: null,
+    url: null,
+  },
+  {
+    id: 83,
+    title: "World Climate Zones Map",
+    author: "National Weather Service",
+    isbn: null,
+    year: 2023,
+    genre: "Climate Map",
+    item_type: "map",
+    publisher: "NOAA",
+    language: "English",
+    pages: 1,
+    subject: "Climatology",
+    keywords: "climate, weather patterns, global zones",
+    description:
+      "Large-format map showing global climate zones and weather patterns.",
+    location: "Maps Section MAP-3",
+    quantity: 3,
+    image: null,
+    url: "https://www.weather.gov/",
+  },
+  {
+    id: 84,
+    title: "Watchmen",
+    author: "Alan Moore",
+    isbn: "9781401245252",
+    year: 1987,
+    genre: "Superhero Graphic Novel",
+    item_type: "graphic_novel",
+    publisher: "DC Comics",
+    language: "English",
+    pages: 416,
+    subject: "Comic Literature",
+    keywords: "superheroes, dystopia, moral complexity, noir",
+    description:
+      "Groundbreaking graphic novel that redefined the superhero genre.",
+    location: "Graphic Novel Section GN-1",
+    quantity: 3,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/Watchmen",
+  },
+  {
+    id: 85,
+    title: "Persepolis",
+    author: "Marjane Satrapi",
+    isbn: "9780375714573",
+    year: 2003,
+    genre: "Autobiographical Graphic Novel",
+    item_type: "graphic_novel",
+    publisher: "Pantheon Books",
+    language: "English",
+    pages: 341,
+    subject: "Memoir",
+    keywords: "Iran, revolution, coming-of-age, autobiography",
+    description:
+      "Autobiographical graphic novel about growing up during the Iranian Revolution.",
+    location: "Graphic Novel Section GN-2",
+    quantity: 4,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/Persepolis_(comics)",
+  },
+  {
+    id: 86,
+    title: "Maus",
+    author: "Art Spiegelman",
+    isbn: "9780679406419",
+    year: 1991,
+    genre: "Historical Graphic Novel",
+    item_type: "graphic_novel",
+    publisher: "Pantheon Books",
+    language: "English",
+    pages: 296,
+    subject: "Holocaust Literature",
+    keywords: "Holocaust, World War II, biography, memory",
+    description:
+      "Pulitzer Prize-winning graphic novel about the Holocaust and its aftermath.",
+    location: "Graphic Novel Section GN-3",
+    quantity: 2,
+    image: null,
+    url: "https://en.wikipedia.org/wiki/Maus",
+  },
+  {
+    id: 87,
+    title: "Climate Change Impact Assessment 2024",
+    author: "Environmental Research Institute",
+    isbn: null,
+    year: 2024,
+    genre: "Environmental Report",
+    item_type: "report",
+    publisher: "ERI Publications",
+    language: "English",
+    pages: 200,
+    subject: "Environmental Science",
+    keywords: "climate change, environment, research, sustainability",
+    description:
+      "Comprehensive report on the current state of climate change and its global impacts.",
+    location: "Report Section R-1",
+    quantity: 1,
+    image: null,
+    url: null,
+  },
+  {
+    id: 88,
+    title: "Global Economic Outlook 2024",
+    author: "International Monetary Fund",
+    isbn: "9789464827203",
+    year: 2024,
+    genre: "Economic Report",
+    item_type: "report",
+    publisher: "IMF",
+    language: "English",
+    pages: 156,
+    subject: "Economics",
+    keywords: "economy, growth, inflation, global markets",
+    description:
+      "Annual report analyzing global economic trends and forecasts.",
+    location: "Report Section R-2",
+    quantity: 2,
+    image: null,
+    url: "https://www.imf.org/",
+  },
+  {
+    id: 89,
+    title: "Digital Education Technology Survey",
+    author: "Education Technology Institute",
+    isbn: null,
+    year: 2024,
+    genre: "Educational Research",
+    item_type: "report",
+    publisher: "ETI Press",
+    language: "English",
+    pages: 85,
+    subject: "Educational Technology",
+    keywords: "digital learning, technology, education, online learning",
+    description:
+      "Survey report on the adoption and effectiveness of digital education technologies.",
+    location: "Report Section R-3",
+    quantity: 3,
+    image: null,
+    url: null,
+  },
+  {
+    id: 90,
+    title: "Machine Learning Applications in Healthcare",
+    author: "Dr. Sarah Johnson",
+    isbn: null,
+    year: 2023,
+    genre: "Computer Science Thesis",
+    item_type: "thesis",
+    publisher: "University of Technology",
+    language: "English",
+    pages: 150,
+    subject: "Computer Science",
+    keywords: "machine learning, healthcare, AI, medical technology",
+    description:"Doctoral thesis exploring the applications of machine learning in healthcare systems.",
+    location: "Thesis Section T-1",
+    quantity: 1,
+    image: null,
+    url: null,
+  },
+  {
+    id: 91,
+    title: "Sustainable Urban Planning in Smart Cities",
+    author: "Dr. Michael Chen",
+    isbn: null,
+    year: 2023,
+    genre: "Urban Planning Thesis",
+    item_type: "thesis",
+    publisher: "Metropolitan University",
+    language: "English",
+    pages: 185,
+    subject: "Urban Planning",
+    keywords: "smart cities, sustainability, urban development, technology",
+    description:
+      "PhD dissertation on integrating sustainability principles in smart city development.",
+    location: "Thesis Section T-2",
+    quantity: 1,
+    image: null,
+    url: null,
+  },
+  {
+    id: 92,
+    title: "Neural Networks in Financial Forecasting",
+    author: "Dr. Lisa Rodriguez",
+    isbn: null,
+    year: 2024,
+    genre: "Finance Thesis",
+    item_type: "thesis",
+    publisher: "Business School",
+    language: "English",
+    pages: 132,
+    subject: "Financial Technology",
+    keywords: "neural networks, finance, forecasting, algorithmic trading",
+    description:
+      "Master's thesis on the application of neural networks in financial market prediction.",
+    location: "Thesis Section T-3",
+    quantity: 1,
+    image: null,
+    url: null,
+  },
+  {
+    id: 93,
+    title: "Digital Photography Course",
+    author: "Photo Masters Academy",
+    isbn: "B07K3FQWR5",
+    year: 2022,
+    genre: "Educational Software",
+    item_type: "digital_media",
+    publisher: "Digital Learning Corp",
+    language: "English",
+    duration: 180,
+    format: "USB Drive",
+    subject: "Photography",
+    keywords: "photography, digital cameras, editing, composition",
+    description:
+      "Interactive digital course covering digital photography techniques and post-processing.",
+    location: "Digital Media Section DM-1",
+    quantity: 4,
+    image: null,
+    url: null,
+  },
+  {
+    id: 94,
+    title: "Language Learning Software: Spanish",
+    author: "Polyglot Systems",
+    isbn: "B08H9LMNQ3",
+    year: 2023,
+    genre: "Language Learning Software",
+    item_type: "software",
+    publisher: "EduTech Solutions",
+    language: "Spanish/English",
+    duration: 240,
+    format: "Digital Download",
+    subject: "Language Learning",
+    keywords: "Spanish, language learning, conversation, grammar",
+    description:
+      "Comprehensive Spanish language learning software with interactive exercises.",
+    location: "Software Section SW-1",
+    quantity: 5,
+    image: null,
+    url: null,
+  },
+  {
+    id: 95,
+    title: "Virtual Reality History Experience: Ancient Rome",
+    author: "Historic VR Productions",
+    isbn: "B09VRLMNX7",
+    year: 2023,
+    genre: "Educational VR",
+    item_type: "vr_content",
+    publisher: "VR Education Ltd",
+    language: "English",
+    duration: 90,
+    format: "VR Headset Content",
+    subject: "Ancient History",
+    keywords: "virtual reality, ancient Rome, immersive learning, history",
+    description:
+      "Immersive VR experience allowing users to explore ancient Roman civilization.",
+    location: "VR Section VR-1",
+    quantity: 2,
+    image: null,
+    url: null,
+  },
+  {
+    id: 96,
+    title: "Rare Manuscript: Medieval Illuminated Bible",
+    author: "Anonymous Medieval Scribes",
+    isbn: null,
+    year: 1200,
+    genre: "Historical Manuscript",
+    item_type: "manuscript",
+    publisher: "Monastery Press",
+    language: "Latin",
+    pages: 312,
+    subject: "Medieval Studies",
+    keywords: "illuminated manuscript, medieval, Bible, calligraphy",
+    description:
+      "Rare 13th-century illuminated manuscript Bible with gold leaf decorations.",
+    location: "Rare Books Section RB-1",
+    quantity: 1,
+    image: null,
+    url: null,
+  },
+  {
+    id: 97,
+    title: "University Yearbook 2024",
+    author: "Student Publications Board",
+    isbn: null,
+    year: 2024,
+    genre: "Yearbook",
+    item_type: "yearbook",
+    publisher: "University Press",
+    language: "English",
+    pages: 256,
+    subject: "University History",
+    keywords: "graduation, students, faculty, university life",
+    description:
+      "Annual yearbook documenting university life, students, and events for 2024.",
+    location: "Archives Section AR-1",
+    quantity: 3,
+    image: null,
+    url: null,
+  },
+  {
+    id: 98,
+    title: "Local History Photo Archive Collection",
+    author: "City Historical Society",
+    isbn: null,
+    year: 2023,
+    genre: "Historical Archive",
+    item_type: "photo_collection",
+    publisher: "Historical Society Press",
+    language: "English",
+    pages: 150,
+    subject: "Local History",
+    keywords: "photographs, local history, community, historical documentation",
+    description:
+      "Digitized collection of historical photographs documenting local community development.",
+    location: "Archives Section AR-2",
+    quantity: 2,
+    image: null,
+    url: null,
+  },
+  {
+    id: 99,
+    title: "Community Health Services Directory",
+    author: "Public Health Department",
+    isbn: null,
+    year: 2024,
+    genre: "Public Services Directory",
+    item_type: "directory",
+    publisher: "City Government",
+    language: "English",
+    pages: 64,
+    subject: "Public Health",
+    keywords: "healthcare, services, community resources, directory",
+    description:
+      "Comprehensive directory of local health services and community resources.",
+    location: "Reference Section R-10",
+    quantity: 5,
+    image: null,
+    url: null,
+  },
+  {
+    id: 100,
+    title: "Legal Case Studies Database",
+    author: "Law School Faculty",
+    isbn: "9781234567899",
+    year: 2024,
+    genre: "Legal Reference",
+    item_type: "database",
+    publisher: "Legal Education Press",
+    language: "English",
+    pages: 500,
+    subject: "Law",
+    keywords: "legal cases, jurisprudence, court decisions, legal research",
+    description:
+      "Comprehensive database of legal case studies for research and education.",
+    location: "Legal Section L-1",
+    quantity: 1,
+    image: null,
+    url: null,
+  },
+];
+
+// Export for use in other modules
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = libraryItems;
+}
+
+// Summary Statistics:
+// Total Items: 100
+// Unique Item Types: 34
+// Unique Genres: 84
+
+function generateLibraryItems(count = 100) {
+  const items = [];
+  let yearBase = 1950;
+  for (let i = 0; i < count; i++) {
+    const type = ITEM_TYPES[i % ITEM_TYPES.length];
+    const titleSeed = pick(TITLE_SEEDS[type] || TITLE_SEEDS.other);
+    const suffix = type === "book" ? "" : ` (${type})`;
+    const title = `${titleSeed}${suffix}${
+      i >= TITLE_SEEDS[type]?.length
+        ? ` #${Math.floor(i / ITEM_TYPES.length)}`
+        : ""
+    }`;
+    const author =
+      type === "journal" || type === "newspaper" || type === "magazine"
+        ? "Various Authors"
+        : pick(AUTHORS);
+    const isbn = type === "book" ? maybe(pick(KNOWN_ISBNS), 0.8) : null;
+    const genre = pick(GENRES_BY_TYPE[type] || GENRES_BY_TYPE.other);
+    const year = Math.min(2024, yearBase + (i % 75));
+    const pages =
+      type === "book" || type === "thesis" || type === "report"
+        ? maybe(120 + (i % 400))
+        : null;
+    const duration = type === "multimedia" ? maybe(60 + (i % 240)) : null;
+    const format =
+      type === "multimedia" ? pick(["DVD", "Blu-ray", "Digital"]) : null;
+    const publisher = pick([
+      "Scribner",
+      "Penguin",
+      "HarperCollins",
+      "Oxford Press",
+      "Cambridge Press",
+      "Random House",
+      "BBC",
+      "University Press",
+    ]);
+    const language = pick(["English", "Spanish", "French", "German"]);
+    const subject = pick([
+      "American Literature",
+      "Computer Science",
+      "Environmental Science",
+      "History",
+      "Geography",
+      "Physics",
+      "Finance",
+      "Policy",
+    ]);
+    const keywords = pick([
+      "classic, literature",
+      "science, research",
+      "education, study",
+      "nature, wildlife",
+      "technology, innovation",
+      "policy, government",
+      "finance, markets",
+    ]);
+    const description = `${titleSeed} - ${type} entry seeded for demo purposes.`;
+    const locationPrefix =
+      type === "book"
+        ? "Fiction"
+        : type.charAt(0).toUpperCase() + type.slice(1);
+    const location = `${locationPrefix} Section ${String.fromCharCode(
+      65 + (i % 6)
+    )}-${1 + (i % 5)}`;
+    const quantity = 1 + (i % 3);
+    const image_url = buildImageUrlFromIsbn(isbn);
+    items.push({
+      title,
+      author,
+      isbn,
+      year,
+      genre,
+      item_type: type,
+      publisher,
+      language,
+      pages,
+      duration,
+      format,
+      subject,
+      keywords,
+      description,
+      location,
+      quantity,
+      image_url,
+    });
+  }
+  return items;
+}
+
 async function createUsers() {
-    console.log('Creating users...');
-    
-    const users = [
-        // Librarians
-        {
-            name: "Emma Johnson",
-            email: "emma.johnson@example.com",
-            password: "Emma@123",
-            role: "librarian",
-            gender: "female",
-            phone_number: "+1-555-0101",
-            address: "123 Library Lane, Book City, BC 12345"
-        },
-        {
-            name: "Liam Smith",
-            email: "liam.smith@example.com",
-            password: "Liam@123",
-            role: "librarian",
-            gender: "male",
-            phone_number: "+1-555-0102",
-            address: "456 Knowledge Street, Reading Town, RT 67890"
-        },
-        {
-            name: "Olivia Brown",
-            email: "olivia.brown@example.com",
-            password: "Olivia@123",
-            role: "librarian",
-            gender: "female",
-            phone_number: "+1-555-0103",
-            address: "789 Wisdom Avenue, Study City, SC 54321"
-        },
-        {
-            name: "Noah Davis",
-            email: "noah.davis@example.com",
-            password: "Noah@123",
-            role: "librarian",
-            gender: "male",
-            phone_number: "+1-555-0104",
-            address: "321 Learning Boulevard, Education Town, ET 98765"
-        },
-        {
-            name: "Ava Wilson",
-            email: "ava.wilson@example.com",
-            password: "Ava@123",
-            role: "librarian",
-            gender: "female",
-            phone_number: "+1-555-0105",
-            address: "654 Research Road, Academic City, AC 13579"
-        },
-        // Patrons
-        {
-            name: "John Doe",
-            email: "john.doe@example.com",
-            password: "John@123",
-            role: "patron",
-            gender: "male",
-            phone_number: "+1-555-0201",
-            address: "100 Student Street, College Town, CT 11111"
-        },
-        {
-            name: "Jane Smith",
-            email: "jane.smith@example.com",
-            password: "Jane@123",
-            role: "patron",
-            gender: "female",
-            phone_number: "+1-555-0202",
-            address: "200 Scholar Lane, University City, UC 22222"
-        },
-        {
-            name: "Mark Lee",
-            email: "mark.lee@example.com",
-            password: "Mark@123",
-            role: "patron",
-            gender: "male",
-            phone_number: "+1-555-0203",
-            address: "300 Reader Road, Learning Town, LT 33333"
-        },
-        // Admin
-        {
-            name: "Admin",
-            email: "admin123@gmail.com",
-            password: "Admin@123",
-            role: "admin",
-            gender: "other",
-            phone_number: "+1-555-0001",
-            address: "500 Admin Plaza, System City, SC 00000"
-        }
-    ];
+  console.log("Creating users...");
 
-    for (const userData of users) {
-        try {
-            // Check if user already exists
-            const existingUser = await prisma.users.findUnique({
-                where: { email: userData.email }
-            });
+  const users = [
+    // Librarians
+    {
+      name: "Emma Johnson",
+      email: "emma.johnson@example.com",
+      password: "Emma@123",
+      role: "librarian",
+      gender: "female",
+      phone_number: "+1-555-0101",
+      address: "123 Library Lane, Book City, BC 12345",
+    },
+    {
+      name: "Liam Smith",
+      email: "liam.smith@example.com",
+      password: "Liam@123",
+      role: "librarian",
+      gender: "male",
+      phone_number: "+1-555-0102",
+      address: "456 Knowledge Street, Reading Town, RT 67890",
+    },
+    {
+      name: "Olivia Brown",
+      email: "olivia.brown@example.com",
+      password: "Olivia@123",
+      role: "librarian",
+      gender: "female",
+      phone_number: "+1-555-0103",
+      address: "789 Wisdom Avenue, Study City, SC 54321",
+    },
+    {
+      name: "Noah Davis",
+      email: "noah.davis@example.com",
+      password: "Noah@123",
+      role: "librarian",
+      gender: "male",
+      phone_number: "+1-555-0104",
+      address: "321 Learning Boulevard, Education Town, ET 98765",
+    },
+    {
+      name: "Ava Wilson",
+      email: "ava.wilson@example.com",
+      password: "Ava@123",
+      role: "librarian",
+      gender: "female",
+      phone_number: "+1-555-0105",
+      address: "654 Research Road, Academic City, AC 13579",
+    },
+    // Patrons
+    {
+      name: "John Doe",
+      email: "john.doe@example.com",
+      password: "John@123",
+      role: "patron",
+      gender: "male",
+      phone_number: "+1-555-0201",
+      address: "100 Student Street, College Town, CT 11111",
+    },
+    {
+      name: "Jane Smith",
+      email: "jane.smith@example.com",
+      password: "Jane@123",
+      role: "patron",
+      gender: "female",
+      phone_number: "+1-555-0202",
+      address: "200 Scholar Lane, University City, UC 22222",
+    },
+    {
+      name: "Mark Lee",
+      email: "mark.lee@example.com",
+      password: "Mark@123",
+      role: "patron",
+      gender: "male",
+      phone_number: "+1-555-0203",
+      address: "300 Reader Road, Learning Town, LT 33333",
+    },
+    // Admin
+    {
+      name: "Admin",
+      email: "admin123@gmail.com",
+      password: "Admin@123",
+      role: "admin",
+      gender: "other",
+      phone_number: "+1-555-0001",
+      address: "500 Admin Plaza, System City, SC 00000",
+    },
+  ];
 
-            if (existingUser) {
-                console.log(`User ${userData.email} already exists, skipping...`);
-                continue;
-            }
+  for (const userData of users) {
+    try {
+      // Check if user already exists
+      const existingUser = await prisma.users.findUnique({
+        where: { email: userData.email },
+      });
 
-            // Hash password
-            const hashedPassword = await bcrypt.hash(userData.password, 12);
+      if (existingUser) {
+        console.log(`User ${userData.email} already exists, skipping...`);
+        continue;
+      }
 
-            // Create user
-            const user = await prisma.users.create({
-                data: {
-                    name: userData.name,
-                    email: userData.email,
-                    password_hash: hashedPassword,
-                    role: userData.role,
-                    gender: userData.gender,
-                    phone_number: userData.phone_number,
-                    address: userData.address,
-                    status: 'active'
-                }
-            });
+      // Hash password
+      const hashedPassword = await bcrypt.hash(userData.password, 12);
 
-            console.log(`✅ Created ${userData.role}: ${userData.name} (${userData.email})`);
+      // Create user
+      const user = await prisma.users.create({
+        data: {
+          name: userData.name,
+          email: userData.email,
+          password_hash: hashedPassword,
+          role: userData.role,
+          gender: userData.gender,
+          phone_number: userData.phone_number,
+          address: userData.address,
+          status: "active",
+        },
+      });
 
-        } catch (error) {
-            console.error(`❌ Error creating user ${userData.email}:`, error.message);
-        }
+      console.log(
+        `✅ Created ${userData.role}: ${userData.name} (${userData.email})`
+      );
+    } catch (error) {
+      console.error(`❌ Error creating user ${userData.email}:`, error.message);
     }
+  }
 }
 
 async function createLibraryItems() {
-    console.log('\nCreating library items...');
-    
-    // Get a librarian to assign as the creator
-    const librarian = await prisma.users.findFirst({
-        where: { role: 'librarian' }
+  console.log("\nCreating library items...");
+
+  // Get all librarians to distribute items among them
+  const librarians = await prisma.users.findMany({
+    where: { role: "librarian" },
+    orderBy: { user_id: "asc" },
+  });
+
+  if (librarians.length === 0) {
+    console.error("No librarian found. Please create users first.");
+    return;
+  }
+
+  // Try to load provided item list from seed-items.json if available
+  let externalItems = null;
+  try {
+    if (fs.existsSync("./seed-items.json")) {
+      const raw = fs.readFileSync("./seed-items.json", "utf-8");
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) {
+        externalItems = parsed;
+        console.log(
+          `Found external seed-items.json with ${externalItems.length} records`
+        );
+      }
+    }
+  } catch (e) {
+    console.warn(
+      "Warning: Failed to read seed-items.json, falling back to generated items. Error:",
+      e.message
+    );
+  }
+
+  const normalizeItemType = (t) => {
+    if (!t) return "other";
+    const s = String(t).toLowerCase();
+    if (
+      [
+        "book",
+        "journal",
+        "multimedia",
+        "newspaper",
+        "magazine",
+        "thesis",
+        "report",
+        "other",
+      ].includes(s)
+    )
+      return s;
+    if (
+      [
+        "poetry",
+        "art_book",
+        "children_book",
+        "textbook",
+        "graphic_novel",
+        "encyclopedia",
+        "dictionary",
+        "atlas",
+        "yearbook",
+        "directory",
+        "database",
+        "handbook",
+        "cookbook",
+        "art",
+        "children",
+        "artbook",
+        "novel",
+      ].includes(s)
+    )
+      return "book";
+    if (
+      [
+        "bluray",
+        "dvd",
+        "cd",
+        "audiobook",
+        "digital_media",
+        "software",
+        "vr_content",
+        "video_game",
+      ].includes(s)
+    )
+      return "multimedia";
+    if (
+      [
+        "map",
+        "map_collection",
+        "music_score",
+        "game",
+        "photo_collection",
+        "manuscript",
+      ].includes(s)
+    )
+      return "other";
+    return "other";
+  };
+
+  const mapProvidedItems = (list) =>
+    list.map((it, i) => {
+      const isbn = it.isbn || null;
+      const img = it.image || null;
+      const image_url = img || buildImageUrlFromIsbn(isbn);
+      return {
+        title: it.title,
+        author: it.author || "Various Authors",
+        isbn: isbn,
+        year: it.year || null,
+        genre: it.genre || null,
+        item_type: normalizeItemType(it.item_type),
+        publisher: it.publisher || null,
+        language: it.language || "English",
+        pages: it.pages || null,
+        duration: it.duration || null,
+        format: it.format || null,
+        subject: it.subject || null,
+        keywords: it.keywords || null,
+        description: it.description || null,
+        location: it.location || `General Section G-${1 + (i % 5)}`,
+        quantity: it.quantity || 1,
+        image_url,
+      };
     });
 
-    if (!librarian) {
-        console.error('No librarian found. Please create users first.');
-        return;
+  // Build 100 diverse items: prefer external provided list; else generate
+  let allItems = [];
+  if (externalItems && externalItems.length > 0) {
+    allItems = mapProvidedItems(externalItems);
+  } else {
+    const generated = generateLibraryItems(100 - libraryItems.length);
+    allItems = [...libraryItems, ...generated];
+  }
+
+  for (let idx = 0; idx < allItems.length; idx++) {
+    const itemData = allItems[idx];
+    try {
+      // Check if item already exists
+      const existingItem = await prisma.library_items.findFirst({
+        where: {
+          title: itemData.title,
+          author: itemData.author,
+          item_type: itemData.item_type,
+        },
+      });
+
+      if (existingItem) {
+        console.log(`Item "${itemData.title}" already exists, skipping...`);
+        continue;
+      }
+
+      // Create library item
+      const item = await prisma.library_items.create({
+        data: {
+          title: itemData.title,
+          author: itemData.author,
+          isbn: itemData.isbn,
+          year: itemData.year,
+          genre: itemData.genre,
+          item_type: itemData.item_type,
+          publisher: itemData.publisher,
+          language: itemData.language,
+          pages: itemData.pages,
+          duration: itemData.duration,
+          format: itemData.format,
+          subject: itemData.subject,
+          keywords: itemData.keywords,
+          description: itemData.description,
+          location: itemData.location,
+          image_url: itemData.image_url || null,
+          librarian_id: librarians[idx % librarians.length].user_id,
+          record_status: "active",
+        },
+      });
+
+      // Create copies
+      const copies = Array.from({ length: itemData.quantity }, () => ({
+        item_id: item.item_id,
+        status: "available",
+        user_id: null,
+        record_status: "active",
+      }));
+
+      await prisma.item_tran.createMany({
+        data: copies,
+      });
+
+      console.log(
+        `✅ Created ${itemData.item_type}: "${itemData.title}" with ${itemData.quantity} copies`
+      );
+    } catch (error) {
+      console.error(
+        `❌ Error creating item "${itemData.title}":`,
+        error.message
+      );
     }
-
-    for (const itemData of libraryItems) {
-        try {
-            // Check if item already exists
-            const existingItem = await prisma.library_items.findFirst({
-                where: {
-                    title: itemData.title,
-                    author: itemData.author,
-                    item_type: itemData.item_type
-                }
-            });
-
-            if (existingItem) {
-                console.log(`Item "${itemData.title}" already exists, skipping...`);
-                continue;
-            }
-
-            // Create library item
-            const item = await prisma.library_items.create({
-                data: {
-                    title: itemData.title,
-                    author: itemData.author,
-                    isbn: itemData.isbn,
-                    year: itemData.year,
-                    genre: itemData.genre,
-                    item_type: itemData.item_type,
-                    publisher: itemData.publisher,
-                    language: itemData.language,
-                    pages: itemData.pages,
-                    duration: itemData.duration,
-                    format: itemData.format,
-                    subject: itemData.subject,
-                    keywords: itemData.keywords,
-                    description: itemData.description,
-                    location: itemData.location,
-                    librarian_id: librarian.user_id,
-                    record_status: 'active'
-                }
-            });
-
-            // Create copies
-            const copies = Array.from({ length: itemData.quantity }, () => ({
-                item_id: item.item_id,
-                status: 'available',
-                user_id: null,
-                record_status: 'active'
-            }));
-
-            await prisma.item_tran.createMany({
-                data: copies
-            });
-
-            console.log(`✅ Created ${itemData.item_type}: "${itemData.title}" with ${itemData.quantity} copies`);
-
-        } catch (error) {
-            console.error(`❌ Error creating item "${itemData.title}":`, error.message);
-        }
-    }
+  }
 }
 
 async function createSystemConfig() {
-    console.log('\nCreating system configuration...');
-    
-    const configs = [
-        {
-            config_key: 'max_borrow_days',
-            config_value: '14',
-            description: 'Maximum number of days items can be borrowed'
-        },
-        {
-            config_key: 'fine_per_day',
-            config_value: '1.00',
-            description: 'Fine amount per day for overdue items'
-        },
-        {
-            config_key: 'reservation_expiry_days',
-            config_value: '7',
-            description: 'Number of days reservations remain active'
-        },
-        {
-            config_key: 'max_reservations_per_user',
-            config_value: '5',
-            description: 'Maximum number of active reservations per user'
-        },
-        {
-            config_key: 'library_name',
-            config_value: 'Digital Library Management System',
-            description: 'Name of the library'
-        },
-        {
-            config_key: 'library_address',
-            config_value: '123 Knowledge Street, Learning City, LC 12345',
-            description: 'Library address'
-        },
-        {
-            config_key: 'library_phone',
-            config_value: '+1-555-LIBRARY',
-            description: 'Library contact phone number'
-        },
-        {
-            config_key: 'library_email',
-            config_value: 'info@library.com',
-            description: 'Library contact email'
-        }
-    ];
+  console.log("\nCreating system configuration...");
 
-    for (const config of configs) {
-        try {
-            await prisma.system_config.upsert({
-                where: { config_key: config.config_key },
-                update: {
-                    config_value: config.config_value,
-                    description: config.description
-                },
-                create: config
-            });
+  const configs = [
+    {
+      config_key: "max_borrow_days",
+      config_value: "14",
+      description: "Maximum number of days items can be borrowed",
+    },
+    {
+      config_key: "fine_per_day",
+      config_value: "5.00",
+      description: "Fine amount per day for overdue items",
+    },
+    {
+      config_key: "reservation_expiry_days",
+      config_value: "7",
+      description: "Number of days reservations remain active",
+    },
+    {
+      config_key: "max_reservations_per_user",
+      config_value: "5",
+      description: "Maximum number of active reservations per user",
+    },
+    {
+      config_key: "library_name",
+      config_value: "Digital Library Management System",
+      description: "Name of the library",
+    },
+    {
+      config_key: "library_address",
+      config_value: "123 Knowledge Street, Learning City, LC 12345",
+      description: "Library address",
+    },
+    {
+      config_key: "library_phone",
+      config_value: "+1-555-LIBRARY",
+      description: "Library contact phone number",
+    },
+    {
+      config_key: "library_email",
+      config_value: "info@library.com",
+      description: "Library contact email",
+    },
+  ];
 
-            console.log(`✅ Created/Updated config: ${config.config_key}`);
+  for (const config of configs) {
+    try {
+      await prisma.system_config.upsert({
+        where: { config_key: config.config_key },
+        update: {
+          config_value: config.config_value,
+          description: config.description,
+        },
+        create: config,
+      });
 
-        } catch (error) {
-            console.error(`❌ Error creating config ${config.config_key}:`, error.message);
-        }
+      console.log(`✅ Created/Updated config: ${config.config_key}`);
+    } catch (error) {
+      console.error(
+        `❌ Error creating config ${config.config_key}:`,
+        error.message
+      );
     }
+  }
 }
 
 async function main() {
-    try {
-        console.log('🌱 Starting database seeding...\n');
-        
-        await createUsers();
-        await createLibraryItems();
-        await createSystemConfig();
-        
-        console.log('\n🎉 Database seeding completed successfully!');
-        console.log('\n📋 Summary:');
-        console.log('- 5 Librarians created');
-        console.log('- 3 Patrons created');
-        console.log('- 1 Admin created');
-        console.log('- 13 Library items created with multiple copies');
-        console.log('- 8 System configurations created');
-        
-        console.log('\n🔑 Login Credentials:');
-        console.log('Admin: admin123@gmail.com / Admin@123');
-        console.log('Librarian: emma.johnson@example.com / Emma@123');
-        console.log('Patron: john.doe@example.com / John@123');
-        
-    } catch (error) {
-        console.error('❌ Seeding failed:', error);
-    } finally {
-        await prisma.$disconnect();
-    }
+  try {
+    console.log("🌱 Starting database seeding...\n");
+
+    await createUsers();
+    await createLibraryItems();
+    await createSystemConfig();
+
+    console.log("\n🎉 Database seeding completed successfully!");
+    console.log("\n📋 Summary:");
+    console.log("- 5 Librarians created");
+    console.log("- 3 Patrons created");
+    console.log("- 1 Admin created");
+    console.log("- 13 Library items created with multiple copies");
+    console.log("- 8 System configurations created");
+
+    console.log("\n🔑 Login Credentials:");
+    console.log("Admin: admin123@gmail.com / Admin@123");
+    console.log("Librarian: emma.johnson@example.com / Emma@123");
+    console.log("Patron: john.doe@example.com / John@123");
+  } catch (error) {
+    console.error("❌ Seeding failed:", error);
+  } finally {
+    await prisma.$disconnect();
+  }
 }
 
 main();

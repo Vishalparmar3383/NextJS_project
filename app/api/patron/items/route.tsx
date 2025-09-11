@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient, item_tran_status } from '@/generated/prisma';
 import { withAuth } from '@/app/utils/authMiddleware';
-import { verifyToken } from '@/app/utils/jwt';
 
 const prisma = new PrismaClient();
 

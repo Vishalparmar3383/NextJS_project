@@ -131,7 +131,6 @@ export const POST = withRoleAuth(['patron'])(async (req) => {
                     item_id: parseInt(item_id),
                     from_user_id: userId,
                     to_user_id: item.librarian_id,
-                    // Remove tran_id field as it's not related to item_tran
                     status: 'pending',
                     message: `Patron ${userEmail} has requested to borrow "${item.title}"`
                 }

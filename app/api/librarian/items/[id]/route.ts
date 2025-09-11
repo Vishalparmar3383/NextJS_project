@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { PrismaClient, record_status, } from "@/generated/prisma";
+import { PrismaClient, record_status, item_tran_status } from "@/generated/prisma";
 import { withRoleAuth } from "@/app/utils/authMiddleware";
 
 const prisma = new PrismaClient();
@@ -187,7 +187,6 @@ export const DELETE = withRoleAuth(["librarian"])(
                 record_status: record_status.active,
                 },
             },
-            // Optionally include fines lookup if needed to prevent deletion (if you handle fines)
             },
         });
 
@@ -263,6 +262,89 @@ export const DELETE = withRoleAuth(["librarian"])(
         );
         } finally {
         await prisma.$disconnect();
+        }
+    }
+);
+
+// PATCH update copies status (lost/damaged) for an item
+export const PATCH = withRoleAuth(["librarian"])(
+    async (req: Request, { params }: { params: { id: string } }) => {
+        const librarianId = (req as any).user?.userId;
+        const librarianEmail = (req as any).user?.email;
+        try {
+            const itemId = parseId(params.id);
+            if (!itemId) {
+                return NextResponse.json({ success: false, message: "Invalid item ID" }, { status: 400 });
+            }
+
+            const body = await req.json().catch(() => null) as { updates?: Array<{ tran_id: number; status: string }> } | null;
+            const updates = body?.updates || [];
+            if (!Array.isArray(updates) || updates.length === 0) {
+                return NextResponse.json({ success: false, message: "No updates provided" }, { status: 400 });
+            }
+
+            // Ensure the item belongs to the librarian
+            const owned = await prisma.library_items.findFirst({
+                where: { item_id: itemId, librarian_id: librarianId, record_status: record_status.active },
+                select: { item_id: true, title: true }
+            });
+            if (!owned) {
+                return NextResponse.json({ success: false, message: "Item not found" }, { status: 404 });
+            }
+
+            // Map incoming strings to Prisma enum
+            const mapToStatus = (s: string): item_tran_status | null => {
+                switch (s) {
+                    case 'available':
+                        return item_tran_status.available;
+                    case 'lost':
+                        return item_tran_status.lost;
+                    case 'damaged':
+                        return item_tran_status.damaged;
+                    case 'reserved':
+                        return item_tran_status.reserved;
+                    case 'not_available':
+                        return item_tran_status.not_available;
+                    default:
+                        return null;
+                }
+            };
+
+            // Update each specified transaction row for this item
+            await prisma.$transaction(async (tx) => {
+                for (const u of updates) {
+                    const nextStatus = mapToStatus(u.status);
+                    if (!nextStatus) {
+                        continue;
+                    }
+                    await tx.item_tran.updateMany({
+                        where: {
+                            tran_id: u.tran_id,
+                            item_id: itemId,
+                            record_status: record_status.active,
+                        },
+                        data: {
+                            status: nextStatus,
+                        }
+                    });
+                }
+
+                if (librarianId) {
+                    await tx.logs.create({
+                        data: {
+                            description: `Updated ${updates.length} copies for "${owned.title}" to lost/damaged by ${librarianEmail}`,
+                            user_id: librarianId,
+                        }
+                    });
+                }
+            });
+
+            return NextResponse.json({ success: true, message: "Copies updated" });
+        } catch (error) {
+            console.error("Error updating copies:", error);
+            return NextResponse.json({ success: false, message: "Failed to update copies" }, { status: 500 });
+        } finally {
+            await prisma.$disconnect();
         }
     }
 );

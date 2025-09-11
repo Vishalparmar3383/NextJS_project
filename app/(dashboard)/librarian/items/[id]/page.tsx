@@ -72,6 +72,10 @@ export default function ItemDetailPage() {
     const [snackbarMsg, setSnackbarMsg] = useState('');
     const [snackbarType, setSnackbarType] = useState<'success' | 'error' | 'info'>('info');
 
+    const [manageOpen, setManageOpen] = useState(false);
+    const [copiesEdits, setCopiesEdits] = useState<Record<number, string>>({});
+    const [savingCopies, setSavingCopies] = useState(false);
+
     useEffect(() => {
         const fetchItem = async () => {
             try {
@@ -90,25 +94,25 @@ export default function ItemDetailPage() {
     }, [itemId]);
 
     if (loading) {
-        // return (
-        //     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-4 sm:py-8 px-4">
-        //         <div className="max-w-7xl mx-auto">
-        //             <div className="flex items-center justify-center min-h-[60vh]">
-        //                 <div className="text-center space-y-6">
-        //                     <div className="relative">
-        //                         <div className="w-20 h-20 border-4 border-indigo-200 rounded-full animate-spin mx-auto"></div>
-        //                         <div className="w-16 h-16 border-4 border-t-indigo-600 rounded-full animate-spin mx-auto absolute top-2 left-1/2 transform -translate-x-1/2"></div>
-        //                     </div>
-        //                     <div className="space-y-2">
-        //                         <p className="text-slate-700 text-xl font-medium">Loading item details...</p>
-        //                         <p className="text-slate-500 text-sm">Please wait while we fetch the data</p>
-        //                     </div>
-        //                 </div>
-        //             </div>
-        //         </div>
-        //     </div>
-        // );
-        <Atom color={["#32cd32", "#327fcd", "#cd32cd", "#cd8032"]} />
+        return (
+            <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-4 sm:py-8 px-4">
+                <div className="max-w-7xl mx-auto">
+                    <div className="flex items-center justify-center min-h-[60vh]">
+                        <div className="text-center space-y-6">
+                            <div className="relative">
+                                <div className="w-20 h-20 border-4 border-indigo-200 rounded-full animate-spin mx-auto"></div>
+                                <div className="w-16 h-16 border-4 border-t-indigo-600 rounded-full animate-spin mx-auto absolute top-2 left-1/2 transform -translate-x-1/2"></div>
+                            </div>
+                            <div className="space-y-2">
+                                <p className="text-slate-700 text-xl font-medium">Loading item details...</p>
+                                <p className="text-slate-500 text-sm">Please wait while we fetch the data</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+        // <Atom color={["#32cd32", "#327fcd", "#cd32cd", "#cd8032"]} />
     }
 
     if (!item) {
@@ -287,11 +291,126 @@ export default function ItemDetailPage() {
                                 setSnackbarMsg={setSnackbarMsg}
                                 setSnackbarType={setSnackbarType}
                                 setSnackbarOpen={setSnackbarOpen}
+                                onManageCopies={() => {
+                                    const seed: Record<number, string> = {};
+                                    item.copies?.forEach(c => { seed[c.tran_id] = c.status; });
+                                    setCopiesEdits(seed);
+                                    setManageOpen(true);
+                                }}
                             />
                         </div>
                     </div>
                 </div>
 
+                {/* Manage Copies Modal */}
+                {manageOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.45)' }}>
+                        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl mx-4">
+                            <div className="p-5 border-b flex items-center justify-between">
+                                <h3 className="text-xl font-bold text-slate-900">Manage Copies</h3>
+                                <button
+                                    onClick={() => setManageOpen(false)}
+                                    className="text-slate-500 hover:text-slate-700"
+                                >
+                                    ✕
+                                </button>
+                            </div>
+                            <div className="p-5 max-h-[60vh] overflow-auto">
+                                {item.copies && item.copies.filter((c) => c.status !== 'not_available').length > 0 ? (
+                                    <table className="w-full">
+                                        <thead>
+                                            <tr className="text-left text-sm text-slate-600">
+                                                <th className="py-2">Tran ID</th>
+                                                <th className="py-2">Current</th>
+                                                <th className="py-2">Change To</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {item.copies.filter((c) => c.status !== 'not_available').map((c) => (
+                                                <tr key={c.tran_id} className="border-t">
+                                                    <td className="py-3 font-semibold text-slate-800">#{c.tran_id}</td>
+                                                    <td className="py-3">
+                                                        <span className="text-xs uppercase px-2 py-1 rounded bg-slate-100 text-slate-700">
+                                                            {c.status}
+                                                        </span>
+                                                    </td>
+                                                    <td className="py-3">
+                                                        <select
+                                                            className="border rounded px-3 py-2 text-sm"
+                                                            value={copiesEdits[c.tran_id] ?? c.status}
+                                                            onChange={(e) =>
+                                                                setCopiesEdits(prev => ({ ...prev, [c.tran_id]: e.target.value }))
+                                                            }
+                                                        >
+                                                            <option value={c.status}>No change</option>
+                                                            <option value="available">available</option>
+                                                            <option value="lost">lost</option>
+                                                            <option value="damaged">damaged</option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                ) : (
+                                    <div className="text-slate-600">No copies to manage.</div>
+                                )}
+                            </div>
+                            <div className="p-5 border-t flex items-center justify-end gap-3">
+                                <button
+                                    onClick={() => setManageOpen(false)}
+                                    className="px-4 py-2 rounded border border-slate-300 text-slate-700 hover:bg-slate-50"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    disabled={savingCopies}
+                                    onClick={async () => {
+                                        try {
+                                            setSavingCopies(true);
+                                            const updates = (item.copies || [])
+                                                .map(c => ({ tran_id: c.tran_id, current: c.status, next: copiesEdits[c.tran_id] ?? c.status }))
+                                                .filter(x => x.next !== x.current)
+                                                .map(x => ({ tran_id: x.tran_id, status: x.next }));
+                                            if (updates.length === 0) {
+                                                setManageOpen(false);
+                                                return;
+                                            }
+                                            const res = await fetch(`/api/librarian/items/${item.id}`, {
+                                                method: 'PATCH',
+                                                headers: { 'Content-Type': 'application/json' },
+                                                body: JSON.stringify({ updates }),
+                                            });
+                                            const data = await res.json();
+                                            if (res.ok && data.success) {
+                                                setSnackbarMsg('Copies updated successfully');
+                                                setSnackbarType('success');
+                                                setSnackbarOpen(true);
+                                                const r = await fetch(`/api/librarian/items/${itemId}`);
+                                                const j = await r.json();
+                                                if (j.success) setItem(j.item);
+                                                setManageOpen(false);
+                                            } else {
+                                                setSnackbarMsg(data.message || 'Failed to update copies');
+                                                setSnackbarType('error');
+                                                setSnackbarOpen(true);
+                                            }
+                                        } catch (e) {
+                                            setSnackbarMsg('Server error while updating copies');
+                                            setSnackbarType('error');
+                                            setSnackbarOpen(true);
+                                        } finally {
+                                            setSavingCopies(false);
+                                        }
+                                    }}
+                                    className="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-60"
+                                >
+                                    {savingCopies ? 'Saving...' : 'Save Changes'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
                 {/* Confirm Dialog */}
                 <ConfirmDialog
                     open={showConfirm}
@@ -512,6 +631,7 @@ export function ItemActions({
     setSnackbarMsg,
     setSnackbarType,
     setSnackbarOpen,
+    onManageCopies,
 }: {
     item: any,
     selectedItem: any,
@@ -521,6 +641,7 @@ export function ItemActions({
     setSnackbarMsg: any,
     setSnackbarType: any,
     setSnackbarOpen: any,
+    onManageCopies?: () => void,
 }) {
     const handleDelete = async () => {
         try {
@@ -576,11 +697,9 @@ export function ItemActions({
 
             {/* Enhanced feature buttons */}
             <div className="mt-4 grid grid-cols-2 gap-3">
-                <button className="bg-white/80 backdrop-blur-sm border border-slate-200 text-slate-700 px-4 py-3 rounded-xl hover:bg-white hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2 text-sm font-medium">
-                    <BookOpen className="w-4 h-4" />
-                    View History
-                </button>
-                <button className="bg-white/80 backdrop-blur-sm border border-slate-200 text-slate-700 px-4 py-3 rounded-xl hover:bg-white hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2 text-sm font-medium">
+                <button
+                    onClick={onManageCopies}
+                    className="bg-white/80 backdrop-blur-sm border border-slate-200 text-slate-700 px-4 py-3 rounded-xl hover:bg-white hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2 text-sm font-medium">
                     <Users className="w-4 h-4" />
                     Manage Copies
                 </button>

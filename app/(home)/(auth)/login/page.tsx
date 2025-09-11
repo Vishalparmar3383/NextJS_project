@@ -32,10 +32,10 @@ export default function LoginForm() {
         setStatus(null);
 
         try {
-            console.log('Attempting login with:', { email, role });
+            // console.log('Attempting login with:', { email, role });
             const { user, token } = await login(email, password, role);
 
-            console.log('Login successful:', { user, token: token ? 'exists' : 'missing' });
+            // console.log('Login successful:', { user, token: token ? 'exists' : 'missing' });
             setMessage('Login successful! Redirecting...');
             setStatus('success');
 
@@ -46,7 +46,7 @@ export default function LoginForm() {
 
             // Redirect after a short delay to show success message
             setTimeout(() => {
-                console.log('Redirecting to:', `/${role}`);
+                // console.log('Redirecting to:', `/${role}`);
                 router.push(`http://localhost:3000/${getDashboardPath(role)}`);
             }, 1000);
 

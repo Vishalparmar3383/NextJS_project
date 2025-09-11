@@ -7,12 +7,38 @@ import React, { useEffect, useState } from 'react';
 export default function AdminDashboard() {
     const [data, setData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const [configs, setConfigs] = useState<any>({});
+    const [loadingConfigs, setLoadingConfigs] = useState(true);
+    const [cfgDialogOpen, setCfgDialogOpen] = useState(false);
+    const [cfgKey, setCfgKey] = useState('');
+    const [cfgValue, setCfgValue] = useState('');
+    const [cfgDesc, setCfgDesc] = useState('');
+    const [cfgSaving, setCfgSaving] = useState(false);
+    const [cfgEditing, setCfgEditing] = useState(false);
+    const [cfgError, setCfgError] = useState<string | null>(null);
 
     useEffect(() => {
         fetch('/api/admin')
             .then((res) => res.json())
             .then(setData)
             .finally(() => setLoading(false));
+    }, []);
+
+    useEffect(() => {
+        const loadConfigs = async () => {
+            try {
+                const res = await fetch('/api/admin/config');
+                const json = await res.json();
+                if (json.success) {
+                    setConfigs(json.configs || {});
+                }
+            } catch (e) {
+                // no-op
+            } finally {
+                setLoadingConfigs(false);
+            }
+        };
+        loadConfigs();
     }, []);
 
     if (loading) {
@@ -176,6 +202,157 @@ export default function AdminDashboard() {
                         )}
                     </div>
                 </div>
+
+                <div className="max-w-7xl mx-auto mt-8">
+                <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center">
+                                <span className="text-white text-xl">⚙️</span>
+                            </div>
+                            <div>
+                                <h2 className="text-xl font-semibold text-slate-800">System Configuration</h2>
+                                <p className="text-slate-600 text-sm">View and update key-value settings</p>
+                            </div>
+                        </div>
+                        <button
+                            onClick={() => {
+                                setCfgEditing(false);
+                                setCfgKey('');
+                                setCfgValue('');
+                                setCfgDesc('');
+                                setCfgError(null);
+                                setCfgDialogOpen(true);
+                            }}
+                            className="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-semibold hover:from-indigo-700 hover:to-blue-700 shadow-sm"
+                        >
+                            Add Config
+                        </button>
+                    </div>
+
+                    {loadingConfigs ? (
+                        <div className="text-slate-500">Loading configs...</div>
+                    ) : (
+                        <div className="overflow-x-auto">
+                            <table className="min-w-full">
+                                <thead className="bg-slate-50">
+                                    <tr>
+                                        <th className="text-left text-sm font-semibold text-slate-700 px-3 py-2">Key</th>
+                                        <th className="text-left text-sm font-semibold text-slate-700 px-3 py-2">Value</th>
+                                        <th className="text-left text-sm font-semibold text-slate-700 px-3 py-2">Description</th>
+                                        <th className="text-left text-sm font-semibold text-slate-700 px-3 py-2">Updated</th>
+                                        <th className="px-3 py-2"></th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-200">
+                                    {Object.keys(configs).length === 0 && (
+                                        <tr>
+                                            <td colSpan={5} className="px-3 py-4 text-slate-500 text-sm">No configurations yet.</td>
+                                        </tr>
+                                    )}
+                                    {Object.entries<any>(configs).map(([key, cfg]) => (
+                                        <tr key={key} className="hover:bg-slate-50">
+                                            <td className="px-3 py-2 font-mono text-sm text-slate-800">{key}</td>
+                                            <td className="px-3 py-2 text-sm text-slate-700 break-all">{String(cfg.value ?? '')}</td>
+                                            <td className="px-3 py-2 text-sm text-slate-600">{cfg.description ?? ''}</td>
+                                            <td className="px-3 py-2 text-sm text-slate-500">{cfg.updated_at ? new Date(cfg.updated_at).toLocaleString() : '-'}</td>
+                                            <td className="px-3 py-2 text-right">
+                                                <button
+                                                    onClick={() => {
+                                                        setCfgEditing(true);
+                                                        setCfgKey(key);
+                                                        setCfgValue(String(cfg.value ?? ''));
+                                                        setCfgDesc(cfg.description ?? '');
+                                                        setCfgError(null);
+                                                        setCfgDialogOpen(true);
+                                                    }}
+                                                    className="px-3 py-1.5 rounded-md border border-slate-300 text-slate-700 hover:bg-slate-50 text-sm"
+                                                >
+                                                    Edit
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Manage Config Dialog */}
+            {cfgDialogOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.45)' }}>
+                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4">
+                        <div className="p-5 border-b flex items-center justify-between">
+                            <h3 className="text-xl font-bold text-slate-900">{cfgEditing ? 'Edit Config' : 'Add Config'}</h3>
+                            <button onClick={() => setCfgDialogOpen(false)} className="text-slate-500 hover:text-slate-700">✕</button>
+                        </div>
+                        <div className="p-5 space-y-4">
+                            {!cfgEditing && (
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 mb-1">Key</label>
+                                    <input value={cfgKey} onChange={(e) => setCfgKey(e.target.value)} className="w-full border rounded-lg px-3 py-2" placeholder="e.g., SITE_NAME" />
+                                </div>
+                            )}
+                            {cfgEditing && (
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 mb-1">Key</label>
+                                    <input value={cfgKey} disabled className="w-full border rounded-lg px-3 py-2 bg-slate-50 text-slate-500" />
+                                </div>
+                            )}
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">Value</label>
+                                <input value={cfgValue} onChange={(e) => setCfgValue(e.target.value)} className="w-full border rounded-lg px-3 py-2" placeholder="Value" />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">Description (optional)</label>
+                                <textarea value={cfgDesc} onChange={(e) => setCfgDesc(e.target.value)} className="w-full border rounded-lg px-3 py-2" rows={3} />
+                            </div>
+                            {cfgError && (
+                                <div className="text-sm text-red-600">{cfgError}</div>
+                            )}
+                        </div>
+                        <div className="p-5 border-t flex items-center justify-end gap-3">
+                            <button onClick={() => setCfgDialogOpen(false)} className="px-4 py-2 rounded border border-slate-300 text-slate-700 hover:bg-slate-50">Cancel</button>
+                            <button
+                                disabled={cfgSaving}
+                                onClick={async () => {
+                                    setCfgError(null);
+                                    if (!cfgKey && !cfgEditing) {
+                                        setCfgError('Config key is required');
+                                        return;
+                                    }
+                                    try {
+                                        setCfgSaving(true);
+                                        const res = await fetch('/api/admin/config', {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify({ config_key: cfgKey, config_value: cfgValue, description: cfgDesc })
+                                        });
+                                        const json = await res.json();
+                                        if (res.ok && json.success) {
+                                            const r = await fetch('/api/admin/config');
+                                            const j = await r.json();
+                                            if (j.success) setConfigs(j.configs || {});
+                                            setCfgDialogOpen(false);
+                                        } else {
+                                            setCfgError(json.message || 'Failed to save config');
+                                        }
+                                    } catch (e) {
+                                        setCfgError('Server error while saving config');
+                                    } finally {
+                                        setCfgSaving(false);
+                                    }
+                                }}
+                                className="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-60"
+                            >
+                                {cfgSaving ? 'Saving...' : 'Save Config'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
             </div>
         </div>
     );

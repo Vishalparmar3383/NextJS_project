@@ -191,7 +191,6 @@ exports.Prisma.NotificationsScalarFieldEnum = {
   item_id: 'item_id',
   from_user_id: 'from_user_id',
   to_user_id: 'to_user_id',
-  tran_id: 'tran_id',
   reservation_id: 'reservation_id',
   status: 'status',
   message: 'message',
@@ -237,15 +236,6 @@ exports.Prisma.System_configScalarFieldEnum = {
   config_value: 'config_value',
   description: 'description',
   updated_at: 'updated_at'
-};
-
-exports.Prisma.Library_cardsScalarFieldEnum = {
-  card_id: 'card_id',
-  user_id: 'user_id',
-  card_number: 'card_number',
-  issued_at: 'issued_at',
-  expires_at: 'expires_at',
-  status: 'status'
 };
 
 exports.Prisma.SortOrder = {
@@ -309,10 +299,6 @@ exports.Prisma.system_configOrderByRelevanceFieldEnum = {
   config_key: 'config_key',
   config_value: 'config_value',
   description: 'description'
-};
-
-exports.Prisma.library_cardsOrderByRelevanceFieldEnum = {
-  card_number: 'card_number'
 };
 exports.item_tran_status = exports.$Enums.item_tran_status = {
   available: 'available',
@@ -387,13 +373,6 @@ exports.gender = exports.$Enums.gender = {
   other: 'other'
 };
 
-exports.card_status = exports.$Enums.card_status = {
-  active: 'active',
-  expired: 'expired',
-  suspended: 'suspended',
-  cancelled: 'cancelled'
-};
-
 exports.Prisma.ModelName = {
   item_tran: 'item_tran',
   item_tran_history: 'item_tran_history',
@@ -404,8 +383,7 @@ exports.Prisma.ModelName = {
   user_wishlist: 'user_wishlist',
   users: 'users',
   contact_us: 'contact_us',
-  system_config: 'system_config',
-  library_cards: 'library_cards'
+  system_config: 'system_config'
 };
 
 /**

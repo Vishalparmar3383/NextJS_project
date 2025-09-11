@@ -63,11 +63,6 @@ export type contact_us = $Result.DefaultSelection<Prisma.$contact_usPayload>
  * 
  */
 export type system_config = $Result.DefaultSelection<Prisma.$system_configPayload>
-/**
- * Model library_cards
- * 
- */
-export type library_cards = $Result.DefaultSelection<Prisma.$library_cardsPayload>
 
 /**
  * Enums
@@ -186,16 +181,6 @@ export const reservation_status: {
 
 export type reservation_status = (typeof reservation_status)[keyof typeof reservation_status]
 
-
-export const card_status: {
-  active: 'active',
-  expired: 'expired',
-  suspended: 'suspended',
-  cancelled: 'cancelled'
-};
-
-export type card_status = (typeof card_status)[keyof typeof card_status]
-
 }
 
 export type record_status = $Enums.record_status
@@ -241,10 +226,6 @@ export const item_tran_history_status: typeof $Enums.item_tran_history_status
 export type reservation_status = $Enums.reservation_status
 
 export const reservation_status: typeof $Enums.reservation_status
-
-export type card_status = $Enums.card_status
-
-export const card_status: typeof $Enums.card_status
 
 /**
  * ##  Prisma Client ʲˢ
@@ -463,16 +444,6 @@ export class PrismaClient<
     * ```
     */
   get system_config(): Prisma.system_configDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.library_cards`: Exposes CRUD operations for the **library_cards** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Library_cards
-    * const library_cards = await prisma.library_cards.findMany()
-    * ```
-    */
-  get library_cards(): Prisma.library_cardsDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -922,8 +893,7 @@ export namespace Prisma {
     user_wishlist: 'user_wishlist',
     users: 'users',
     contact_us: 'contact_us',
-    system_config: 'system_config',
-    library_cards: 'library_cards'
+    system_config: 'system_config'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -942,7 +912,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "item_tran" | "item_tran_history" | "library_items" | "fines" | "logs" | "notifications" | "user_wishlist" | "users" | "contact_us" | "system_config" | "library_cards"
+      modelProps: "item_tran" | "item_tran_history" | "library_items" | "fines" | "logs" | "notifications" | "user_wishlist" | "users" | "contact_us" | "system_config"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1606,72 +1576,6 @@ export namespace Prisma {
           }
         }
       }
-      library_cards: {
-        payload: Prisma.$library_cardsPayload<ExtArgs>
-        fields: Prisma.library_cardsFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.library_cardsFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$library_cardsPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.library_cardsFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$library_cardsPayload>
-          }
-          findFirst: {
-            args: Prisma.library_cardsFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$library_cardsPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.library_cardsFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$library_cardsPayload>
-          }
-          findMany: {
-            args: Prisma.library_cardsFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$library_cardsPayload>[]
-          }
-          create: {
-            args: Prisma.library_cardsCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$library_cardsPayload>
-          }
-          createMany: {
-            args: Prisma.library_cardsCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          delete: {
-            args: Prisma.library_cardsDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$library_cardsPayload>
-          }
-          update: {
-            args: Prisma.library_cardsUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$library_cardsPayload>
-          }
-          deleteMany: {
-            args: Prisma.library_cardsDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.library_cardsUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.library_cardsUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$library_cardsPayload>
-          }
-          aggregate: {
-            args: Prisma.Library_cardsAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateLibrary_cards>
-          }
-          groupBy: {
-            args: Prisma.library_cardsGroupByArgs<ExtArgs>
-            result: $Utils.Optional<Library_cardsGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.library_cardsCountArgs<ExtArgs>
-            result: $Utils.Optional<Library_cardsCountAggregateOutputType> | number
-          }
-        }
-      }
     }
   } & {
     other: {
@@ -1774,7 +1678,6 @@ export namespace Prisma {
     users?: usersOmit
     contact_us?: contact_usOmit
     system_config?: system_configOmit
-    library_cards?: library_cardsOmit
   }
 
   /* Types for Logging */
@@ -1856,12 +1759,10 @@ export namespace Prisma {
 
   export type Item_tranCountOutputType = {
     item_tran_history: number
-    notifications: number
   }
 
   export type Item_tranCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     item_tran_history?: boolean | Item_tranCountOutputTypeCountItem_tran_historyArgs
-    notifications?: boolean | Item_tranCountOutputTypeCountNotificationsArgs
   }
 
   // Custom InputTypes
@@ -1880,13 +1781,6 @@ export namespace Prisma {
    */
   export type Item_tranCountOutputTypeCountItem_tran_historyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: item_tran_historyWhereInput
-  }
-
-  /**
-   * Item_tranCountOutputType without action
-   */
-  export type Item_tranCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: notificationsWhereInput
   }
 
 
@@ -1992,7 +1886,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers: number
     notifications_notifications_to_user_idTousers: number
     user_wishlist: number
-    library_cards: number
   }
 
   export type UsersCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2004,7 +1897,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: boolean | UsersCountOutputTypeCountNotifications_notifications_from_user_idTousersArgs
     notifications_notifications_to_user_idTousers?: boolean | UsersCountOutputTypeCountNotifications_notifications_to_user_idTousersArgs
     user_wishlist?: boolean | UsersCountOutputTypeCountUser_wishlistArgs
-    library_cards?: boolean | UsersCountOutputTypeCountLibrary_cardsArgs
   }
 
   // Custom InputTypes
@@ -2072,13 +1964,6 @@ export namespace Prisma {
    */
   export type UsersCountOutputTypeCountUser_wishlistArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: user_wishlistWhereInput
-  }
-
-  /**
-   * UsersCountOutputType without action
-   */
-  export type UsersCountOutputTypeCountLibrary_cardsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: library_cardsWhereInput
   }
 
 
@@ -2295,7 +2180,6 @@ export namespace Prisma {
     library_items?: boolean | item_tran$library_itemsArgs<ExtArgs>
     users?: boolean | item_tran$usersArgs<ExtArgs>
     item_tran_history?: boolean | item_tran$item_tran_historyArgs<ExtArgs>
-    notifications?: boolean | item_tran$notificationsArgs<ExtArgs>
     _count?: boolean | Item_tranCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["item_tran"]>
 
@@ -2314,7 +2198,6 @@ export namespace Prisma {
     library_items?: boolean | item_tran$library_itemsArgs<ExtArgs>
     users?: boolean | item_tran$usersArgs<ExtArgs>
     item_tran_history?: boolean | item_tran$item_tran_historyArgs<ExtArgs>
-    notifications?: boolean | item_tran$notificationsArgs<ExtArgs>
     _count?: boolean | Item_tranCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -2324,7 +2207,6 @@ export namespace Prisma {
       library_items: Prisma.$library_itemsPayload<ExtArgs> | null
       users: Prisma.$usersPayload<ExtArgs> | null
       item_tran_history: Prisma.$item_tran_historyPayload<ExtArgs>[]
-      notifications: Prisma.$notificationsPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       tran_id: number
@@ -2675,7 +2557,6 @@ export namespace Prisma {
     library_items<T extends item_tran$library_itemsArgs<ExtArgs> = {}>(args?: Subset<T, item_tran$library_itemsArgs<ExtArgs>>): Prisma__library_itemsClient<$Result.GetResult<Prisma.$library_itemsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     users<T extends item_tran$usersArgs<ExtArgs> = {}>(args?: Subset<T, item_tran$usersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     item_tran_history<T extends item_tran$item_tran_historyArgs<ExtArgs> = {}>(args?: Subset<T, item_tran$item_tran_historyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$item_tran_historyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    notifications<T extends item_tran$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, item_tran$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$notificationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3112,30 +2993,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: Item_tran_historyScalarFieldEnum | Item_tran_historyScalarFieldEnum[]
-  }
-
-  /**
-   * item_tran.notifications
-   */
-  export type item_tran$notificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the notifications
-     */
-    select?: notificationsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the notifications
-     */
-    omit?: notificationsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: notificationsInclude<ExtArgs> | null
-    where?: notificationsWhereInput
-    orderBy?: notificationsOrderByWithRelationInput | notificationsOrderByWithRelationInput[]
-    cursor?: notificationsWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: NotificationsScalarFieldEnum | NotificationsScalarFieldEnum[]
   }
 
   /**
@@ -7619,7 +7476,6 @@ export namespace Prisma {
     item_id: number | null
     from_user_id: number | null
     to_user_id: number | null
-    tran_id: number | null
     reservation_id: number | null
   }
 
@@ -7628,7 +7484,6 @@ export namespace Prisma {
     item_id: number | null
     from_user_id: number | null
     to_user_id: number | null
-    tran_id: number | null
     reservation_id: number | null
   }
 
@@ -7638,7 +7493,6 @@ export namespace Prisma {
     item_id: number | null
     from_user_id: number | null
     to_user_id: number | null
-    tran_id: number | null
     reservation_id: number | null
     status: $Enums.notifications_status | null
     message: string | null
@@ -7652,7 +7506,6 @@ export namespace Prisma {
     item_id: number | null
     from_user_id: number | null
     to_user_id: number | null
-    tran_id: number | null
     reservation_id: number | null
     status: $Enums.notifications_status | null
     message: string | null
@@ -7666,7 +7519,6 @@ export namespace Prisma {
     item_id: number
     from_user_id: number
     to_user_id: number
-    tran_id: number
     reservation_id: number
     status: number
     message: number
@@ -7681,7 +7533,6 @@ export namespace Prisma {
     item_id?: true
     from_user_id?: true
     to_user_id?: true
-    tran_id?: true
     reservation_id?: true
   }
 
@@ -7690,7 +7541,6 @@ export namespace Prisma {
     item_id?: true
     from_user_id?: true
     to_user_id?: true
-    tran_id?: true
     reservation_id?: true
   }
 
@@ -7700,7 +7550,6 @@ export namespace Prisma {
     item_id?: true
     from_user_id?: true
     to_user_id?: true
-    tran_id?: true
     reservation_id?: true
     status?: true
     message?: true
@@ -7714,7 +7563,6 @@ export namespace Prisma {
     item_id?: true
     from_user_id?: true
     to_user_id?: true
-    tran_id?: true
     reservation_id?: true
     status?: true
     message?: true
@@ -7728,7 +7576,6 @@ export namespace Prisma {
     item_id?: true
     from_user_id?: true
     to_user_id?: true
-    tran_id?: true
     reservation_id?: true
     status?: true
     message?: true
@@ -7829,7 +7676,6 @@ export namespace Prisma {
     item_id: number | null
     from_user_id: number | null
     to_user_id: number | null
-    tran_id: number | null
     reservation_id: number | null
     status: $Enums.notifications_status | null
     message: string | null
@@ -7862,7 +7708,6 @@ export namespace Prisma {
     item_id?: boolean
     from_user_id?: boolean
     to_user_id?: boolean
-    tran_id?: boolean
     reservation_id?: boolean
     status?: boolean
     message?: boolean
@@ -7871,7 +7716,6 @@ export namespace Prisma {
     library_items?: boolean | notifications$library_itemsArgs<ExtArgs>
     users_notifications_from_user_idTousers?: boolean | notifications$users_notifications_from_user_idTousersArgs<ExtArgs>
     users_notifications_to_user_idTousers?: boolean | notifications$users_notifications_to_user_idTousersArgs<ExtArgs>
-    item_tran?: boolean | notifications$item_tranArgs<ExtArgs>
   }, ExtArgs["result"]["notifications"]>
 
 
@@ -7882,7 +7726,6 @@ export namespace Prisma {
     item_id?: boolean
     from_user_id?: boolean
     to_user_id?: boolean
-    tran_id?: boolean
     reservation_id?: boolean
     status?: boolean
     message?: boolean
@@ -7890,12 +7733,11 @@ export namespace Prisma {
     resolved_at?: boolean
   }
 
-  export type notificationsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"notification_id" | "type" | "item_id" | "from_user_id" | "to_user_id" | "tran_id" | "reservation_id" | "status" | "message" | "created_at" | "resolved_at", ExtArgs["result"]["notifications"]>
+  export type notificationsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"notification_id" | "type" | "item_id" | "from_user_id" | "to_user_id" | "reservation_id" | "status" | "message" | "created_at" | "resolved_at", ExtArgs["result"]["notifications"]>
   export type notificationsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     library_items?: boolean | notifications$library_itemsArgs<ExtArgs>
     users_notifications_from_user_idTousers?: boolean | notifications$users_notifications_from_user_idTousersArgs<ExtArgs>
     users_notifications_to_user_idTousers?: boolean | notifications$users_notifications_to_user_idTousersArgs<ExtArgs>
-    item_tran?: boolean | notifications$item_tranArgs<ExtArgs>
   }
 
   export type $notificationsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7904,7 +7746,6 @@ export namespace Prisma {
       library_items: Prisma.$library_itemsPayload<ExtArgs> | null
       users_notifications_from_user_idTousers: Prisma.$usersPayload<ExtArgs> | null
       users_notifications_to_user_idTousers: Prisma.$usersPayload<ExtArgs> | null
-      item_tran: Prisma.$item_tranPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       notification_id: number
@@ -7912,7 +7753,6 @@ export namespace Prisma {
       item_id: number | null
       from_user_id: number | null
       to_user_id: number | null
-      tran_id: number | null
       reservation_id: number | null
       status: $Enums.notifications_status | null
       message: string | null
@@ -8261,7 +8101,6 @@ export namespace Prisma {
     library_items<T extends notifications$library_itemsArgs<ExtArgs> = {}>(args?: Subset<T, notifications$library_itemsArgs<ExtArgs>>): Prisma__library_itemsClient<$Result.GetResult<Prisma.$library_itemsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     users_notifications_from_user_idTousers<T extends notifications$users_notifications_from_user_idTousersArgs<ExtArgs> = {}>(args?: Subset<T, notifications$users_notifications_from_user_idTousersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     users_notifications_to_user_idTousers<T extends notifications$users_notifications_to_user_idTousersArgs<ExtArgs> = {}>(args?: Subset<T, notifications$users_notifications_to_user_idTousersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    item_tran<T extends notifications$item_tranArgs<ExtArgs> = {}>(args?: Subset<T, notifications$item_tranArgs<ExtArgs>>): Prisma__item_tranClient<$Result.GetResult<Prisma.$item_tranPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8296,7 +8135,6 @@ export namespace Prisma {
     readonly item_id: FieldRef<"notifications", 'Int'>
     readonly from_user_id: FieldRef<"notifications", 'Int'>
     readonly to_user_id: FieldRef<"notifications", 'Int'>
-    readonly tran_id: FieldRef<"notifications", 'Int'>
     readonly reservation_id: FieldRef<"notifications", 'Int'>
     readonly status: FieldRef<"notifications", 'notifications_status'>
     readonly message: FieldRef<"notifications", 'String'>
@@ -8699,25 +8537,6 @@ export namespace Prisma {
      */
     include?: usersInclude<ExtArgs> | null
     where?: usersWhereInput
-  }
-
-  /**
-   * notifications.item_tran
-   */
-  export type notifications$item_tranArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the item_tran
-     */
-    select?: item_tranSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the item_tran
-     */
-    omit?: item_tranOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: item_tranInclude<ExtArgs> | null
-    where?: item_tranWhereInput
   }
 
   /**
@@ -10011,7 +9830,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: boolean | users$notifications_notifications_from_user_idTousersArgs<ExtArgs>
     notifications_notifications_to_user_idTousers?: boolean | users$notifications_notifications_to_user_idTousersArgs<ExtArgs>
     user_wishlist?: boolean | users$user_wishlistArgs<ExtArgs>
-    library_cards?: boolean | users$library_cardsArgs<ExtArgs>
     _count?: boolean | UsersCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["users"]>
 
@@ -10043,7 +9861,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: boolean | users$notifications_notifications_from_user_idTousersArgs<ExtArgs>
     notifications_notifications_to_user_idTousers?: boolean | users$notifications_notifications_to_user_idTousersArgs<ExtArgs>
     user_wishlist?: boolean | users$user_wishlistArgs<ExtArgs>
-    library_cards?: boolean | users$library_cardsArgs<ExtArgs>
     _count?: boolean | UsersCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -10058,7 +9875,6 @@ export namespace Prisma {
       notifications_notifications_from_user_idTousers: Prisma.$notificationsPayload<ExtArgs>[]
       notifications_notifications_to_user_idTousers: Prisma.$notificationsPayload<ExtArgs>[]
       user_wishlist: Prisma.$user_wishlistPayload<ExtArgs>[]
-      library_cards: Prisma.$library_cardsPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       user_id: number
@@ -10422,7 +10238,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers<T extends users$notifications_notifications_from_user_idTousersArgs<ExtArgs> = {}>(args?: Subset<T, users$notifications_notifications_from_user_idTousersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$notificationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications_notifications_to_user_idTousers<T extends users$notifications_notifications_to_user_idTousersArgs<ExtArgs> = {}>(args?: Subset<T, users$notifications_notifications_to_user_idTousersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$notificationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     user_wishlist<T extends users$user_wishlistArgs<ExtArgs> = {}>(args?: Subset<T, users$user_wishlistArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$user_wishlistPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    library_cards<T extends users$library_cardsArgs<ExtArgs> = {}>(args?: Subset<T, users$library_cardsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$library_cardsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10997,30 +10812,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: User_wishlistScalarFieldEnum | User_wishlistScalarFieldEnum[]
-  }
-
-  /**
-   * users.library_cards
-   */
-  export type users$library_cardsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the library_cards
-     */
-    select?: library_cardsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the library_cards
-     */
-    omit?: library_cardsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: library_cardsInclude<ExtArgs> | null
-    where?: library_cardsWhereInput
-    orderBy?: library_cardsOrderByWithRelationInput | library_cardsOrderByWithRelationInput[]
-    cursor?: library_cardsWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: Library_cardsScalarFieldEnum | Library_cardsScalarFieldEnum[]
   }
 
   /**
@@ -12886,1003 +12677,6 @@ export namespace Prisma {
 
 
   /**
-   * Model library_cards
-   */
-
-  export type AggregateLibrary_cards = {
-    _count: Library_cardsCountAggregateOutputType | null
-    _avg: Library_cardsAvgAggregateOutputType | null
-    _sum: Library_cardsSumAggregateOutputType | null
-    _min: Library_cardsMinAggregateOutputType | null
-    _max: Library_cardsMaxAggregateOutputType | null
-  }
-
-  export type Library_cardsAvgAggregateOutputType = {
-    card_id: number | null
-    user_id: number | null
-  }
-
-  export type Library_cardsSumAggregateOutputType = {
-    card_id: number | null
-    user_id: number | null
-  }
-
-  export type Library_cardsMinAggregateOutputType = {
-    card_id: number | null
-    user_id: number | null
-    card_number: string | null
-    issued_at: Date | null
-    expires_at: Date | null
-    status: $Enums.card_status | null
-  }
-
-  export type Library_cardsMaxAggregateOutputType = {
-    card_id: number | null
-    user_id: number | null
-    card_number: string | null
-    issued_at: Date | null
-    expires_at: Date | null
-    status: $Enums.card_status | null
-  }
-
-  export type Library_cardsCountAggregateOutputType = {
-    card_id: number
-    user_id: number
-    card_number: number
-    issued_at: number
-    expires_at: number
-    status: number
-    _all: number
-  }
-
-
-  export type Library_cardsAvgAggregateInputType = {
-    card_id?: true
-    user_id?: true
-  }
-
-  export type Library_cardsSumAggregateInputType = {
-    card_id?: true
-    user_id?: true
-  }
-
-  export type Library_cardsMinAggregateInputType = {
-    card_id?: true
-    user_id?: true
-    card_number?: true
-    issued_at?: true
-    expires_at?: true
-    status?: true
-  }
-
-  export type Library_cardsMaxAggregateInputType = {
-    card_id?: true
-    user_id?: true
-    card_number?: true
-    issued_at?: true
-    expires_at?: true
-    status?: true
-  }
-
-  export type Library_cardsCountAggregateInputType = {
-    card_id?: true
-    user_id?: true
-    card_number?: true
-    issued_at?: true
-    expires_at?: true
-    status?: true
-    _all?: true
-  }
-
-  export type Library_cardsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which library_cards to aggregate.
-     */
-    where?: library_cardsWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of library_cards to fetch.
-     */
-    orderBy?: library_cardsOrderByWithRelationInput | library_cardsOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: library_cardsWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` library_cards from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` library_cards.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned library_cards
-    **/
-    _count?: true | Library_cardsCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: Library_cardsAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: Library_cardsSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: Library_cardsMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: Library_cardsMaxAggregateInputType
-  }
-
-  export type GetLibrary_cardsAggregateType<T extends Library_cardsAggregateArgs> = {
-        [P in keyof T & keyof AggregateLibrary_cards]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateLibrary_cards[P]>
-      : GetScalarType<T[P], AggregateLibrary_cards[P]>
-  }
-
-
-
-
-  export type library_cardsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: library_cardsWhereInput
-    orderBy?: library_cardsOrderByWithAggregationInput | library_cardsOrderByWithAggregationInput[]
-    by: Library_cardsScalarFieldEnum[] | Library_cardsScalarFieldEnum
-    having?: library_cardsScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: Library_cardsCountAggregateInputType | true
-    _avg?: Library_cardsAvgAggregateInputType
-    _sum?: Library_cardsSumAggregateInputType
-    _min?: Library_cardsMinAggregateInputType
-    _max?: Library_cardsMaxAggregateInputType
-  }
-
-  export type Library_cardsGroupByOutputType = {
-    card_id: number
-    user_id: number | null
-    card_number: string
-    issued_at: Date
-    expires_at: Date | null
-    status: $Enums.card_status
-    _count: Library_cardsCountAggregateOutputType | null
-    _avg: Library_cardsAvgAggregateOutputType | null
-    _sum: Library_cardsSumAggregateOutputType | null
-    _min: Library_cardsMinAggregateOutputType | null
-    _max: Library_cardsMaxAggregateOutputType | null
-  }
-
-  type GetLibrary_cardsGroupByPayload<T extends library_cardsGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<Library_cardsGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof Library_cardsGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], Library_cardsGroupByOutputType[P]>
-            : GetScalarType<T[P], Library_cardsGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type library_cardsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    card_id?: boolean
-    user_id?: boolean
-    card_number?: boolean
-    issued_at?: boolean
-    expires_at?: boolean
-    status?: boolean
-    users?: boolean | library_cards$usersArgs<ExtArgs>
-  }, ExtArgs["result"]["library_cards"]>
-
-
-
-  export type library_cardsSelectScalar = {
-    card_id?: boolean
-    user_id?: boolean
-    card_number?: boolean
-    issued_at?: boolean
-    expires_at?: boolean
-    status?: boolean
-  }
-
-  export type library_cardsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"card_id" | "user_id" | "card_number" | "issued_at" | "expires_at" | "status", ExtArgs["result"]["library_cards"]>
-  export type library_cardsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    users?: boolean | library_cards$usersArgs<ExtArgs>
-  }
-
-  export type $library_cardsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "library_cards"
-    objects: {
-      users: Prisma.$usersPayload<ExtArgs> | null
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      card_id: number
-      user_id: number | null
-      card_number: string
-      issued_at: Date
-      expires_at: Date | null
-      status: $Enums.card_status
-    }, ExtArgs["result"]["library_cards"]>
-    composites: {}
-  }
-
-  type library_cardsGetPayload<S extends boolean | null | undefined | library_cardsDefaultArgs> = $Result.GetResult<Prisma.$library_cardsPayload, S>
-
-  type library_cardsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<library_cardsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: Library_cardsCountAggregateInputType | true
-    }
-
-  export interface library_cardsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['library_cards'], meta: { name: 'library_cards' } }
-    /**
-     * Find zero or one Library_cards that matches the filter.
-     * @param {library_cardsFindUniqueArgs} args - Arguments to find a Library_cards
-     * @example
-     * // Get one Library_cards
-     * const library_cards = await prisma.library_cards.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends library_cardsFindUniqueArgs>(args: SelectSubset<T, library_cardsFindUniqueArgs<ExtArgs>>): Prisma__library_cardsClient<$Result.GetResult<Prisma.$library_cardsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Library_cards that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {library_cardsFindUniqueOrThrowArgs} args - Arguments to find a Library_cards
-     * @example
-     * // Get one Library_cards
-     * const library_cards = await prisma.library_cards.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends library_cardsFindUniqueOrThrowArgs>(args: SelectSubset<T, library_cardsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__library_cardsClient<$Result.GetResult<Prisma.$library_cardsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Library_cards that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {library_cardsFindFirstArgs} args - Arguments to find a Library_cards
-     * @example
-     * // Get one Library_cards
-     * const library_cards = await prisma.library_cards.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends library_cardsFindFirstArgs>(args?: SelectSubset<T, library_cardsFindFirstArgs<ExtArgs>>): Prisma__library_cardsClient<$Result.GetResult<Prisma.$library_cardsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Library_cards that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {library_cardsFindFirstOrThrowArgs} args - Arguments to find a Library_cards
-     * @example
-     * // Get one Library_cards
-     * const library_cards = await prisma.library_cards.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends library_cardsFindFirstOrThrowArgs>(args?: SelectSubset<T, library_cardsFindFirstOrThrowArgs<ExtArgs>>): Prisma__library_cardsClient<$Result.GetResult<Prisma.$library_cardsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Library_cards that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {library_cardsFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Library_cards
-     * const library_cards = await prisma.library_cards.findMany()
-     * 
-     * // Get first 10 Library_cards
-     * const library_cards = await prisma.library_cards.findMany({ take: 10 })
-     * 
-     * // Only select the `card_id`
-     * const library_cardsWithCard_idOnly = await prisma.library_cards.findMany({ select: { card_id: true } })
-     * 
-     */
-    findMany<T extends library_cardsFindManyArgs>(args?: SelectSubset<T, library_cardsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$library_cardsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Library_cards.
-     * @param {library_cardsCreateArgs} args - Arguments to create a Library_cards.
-     * @example
-     * // Create one Library_cards
-     * const Library_cards = await prisma.library_cards.create({
-     *   data: {
-     *     // ... data to create a Library_cards
-     *   }
-     * })
-     * 
-     */
-    create<T extends library_cardsCreateArgs>(args: SelectSubset<T, library_cardsCreateArgs<ExtArgs>>): Prisma__library_cardsClient<$Result.GetResult<Prisma.$library_cardsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Library_cards.
-     * @param {library_cardsCreateManyArgs} args - Arguments to create many Library_cards.
-     * @example
-     * // Create many Library_cards
-     * const library_cards = await prisma.library_cards.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends library_cardsCreateManyArgs>(args?: SelectSubset<T, library_cardsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a Library_cards.
-     * @param {library_cardsDeleteArgs} args - Arguments to delete one Library_cards.
-     * @example
-     * // Delete one Library_cards
-     * const Library_cards = await prisma.library_cards.delete({
-     *   where: {
-     *     // ... filter to delete one Library_cards
-     *   }
-     * })
-     * 
-     */
-    delete<T extends library_cardsDeleteArgs>(args: SelectSubset<T, library_cardsDeleteArgs<ExtArgs>>): Prisma__library_cardsClient<$Result.GetResult<Prisma.$library_cardsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Library_cards.
-     * @param {library_cardsUpdateArgs} args - Arguments to update one Library_cards.
-     * @example
-     * // Update one Library_cards
-     * const library_cards = await prisma.library_cards.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends library_cardsUpdateArgs>(args: SelectSubset<T, library_cardsUpdateArgs<ExtArgs>>): Prisma__library_cardsClient<$Result.GetResult<Prisma.$library_cardsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Library_cards.
-     * @param {library_cardsDeleteManyArgs} args - Arguments to filter Library_cards to delete.
-     * @example
-     * // Delete a few Library_cards
-     * const { count } = await prisma.library_cards.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends library_cardsDeleteManyArgs>(args?: SelectSubset<T, library_cardsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Library_cards.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {library_cardsUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Library_cards
-     * const library_cards = await prisma.library_cards.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends library_cardsUpdateManyArgs>(args: SelectSubset<T, library_cardsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one Library_cards.
-     * @param {library_cardsUpsertArgs} args - Arguments to update or create a Library_cards.
-     * @example
-     * // Update or create a Library_cards
-     * const library_cards = await prisma.library_cards.upsert({
-     *   create: {
-     *     // ... data to create a Library_cards
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Library_cards we want to update
-     *   }
-     * })
-     */
-    upsert<T extends library_cardsUpsertArgs>(args: SelectSubset<T, library_cardsUpsertArgs<ExtArgs>>): Prisma__library_cardsClient<$Result.GetResult<Prisma.$library_cardsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Library_cards.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {library_cardsCountArgs} args - Arguments to filter Library_cards to count.
-     * @example
-     * // Count the number of Library_cards
-     * const count = await prisma.library_cards.count({
-     *   where: {
-     *     // ... the filter for the Library_cards we want to count
-     *   }
-     * })
-    **/
-    count<T extends library_cardsCountArgs>(
-      args?: Subset<T, library_cardsCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], Library_cardsCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Library_cards.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {Library_cardsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends Library_cardsAggregateArgs>(args: Subset<T, Library_cardsAggregateArgs>): Prisma.PrismaPromise<GetLibrary_cardsAggregateType<T>>
-
-    /**
-     * Group by Library_cards.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {library_cardsGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends library_cardsGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: library_cardsGroupByArgs['orderBy'] }
-        : { orderBy?: library_cardsGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, library_cardsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLibrary_cardsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the library_cards model
-   */
-  readonly fields: library_cardsFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for library_cards.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__library_cardsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    users<T extends library_cards$usersArgs<ExtArgs> = {}>(args?: Subset<T, library_cards$usersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the library_cards model
-   */
-  interface library_cardsFieldRefs {
-    readonly card_id: FieldRef<"library_cards", 'Int'>
-    readonly user_id: FieldRef<"library_cards", 'Int'>
-    readonly card_number: FieldRef<"library_cards", 'String'>
-    readonly issued_at: FieldRef<"library_cards", 'DateTime'>
-    readonly expires_at: FieldRef<"library_cards", 'DateTime'>
-    readonly status: FieldRef<"library_cards", 'card_status'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * library_cards findUnique
-   */
-  export type library_cardsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the library_cards
-     */
-    select?: library_cardsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the library_cards
-     */
-    omit?: library_cardsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: library_cardsInclude<ExtArgs> | null
-    /**
-     * Filter, which library_cards to fetch.
-     */
-    where: library_cardsWhereUniqueInput
-  }
-
-  /**
-   * library_cards findUniqueOrThrow
-   */
-  export type library_cardsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the library_cards
-     */
-    select?: library_cardsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the library_cards
-     */
-    omit?: library_cardsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: library_cardsInclude<ExtArgs> | null
-    /**
-     * Filter, which library_cards to fetch.
-     */
-    where: library_cardsWhereUniqueInput
-  }
-
-  /**
-   * library_cards findFirst
-   */
-  export type library_cardsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the library_cards
-     */
-    select?: library_cardsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the library_cards
-     */
-    omit?: library_cardsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: library_cardsInclude<ExtArgs> | null
-    /**
-     * Filter, which library_cards to fetch.
-     */
-    where?: library_cardsWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of library_cards to fetch.
-     */
-    orderBy?: library_cardsOrderByWithRelationInput | library_cardsOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for library_cards.
-     */
-    cursor?: library_cardsWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` library_cards from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` library_cards.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of library_cards.
-     */
-    distinct?: Library_cardsScalarFieldEnum | Library_cardsScalarFieldEnum[]
-  }
-
-  /**
-   * library_cards findFirstOrThrow
-   */
-  export type library_cardsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the library_cards
-     */
-    select?: library_cardsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the library_cards
-     */
-    omit?: library_cardsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: library_cardsInclude<ExtArgs> | null
-    /**
-     * Filter, which library_cards to fetch.
-     */
-    where?: library_cardsWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of library_cards to fetch.
-     */
-    orderBy?: library_cardsOrderByWithRelationInput | library_cardsOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for library_cards.
-     */
-    cursor?: library_cardsWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` library_cards from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` library_cards.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of library_cards.
-     */
-    distinct?: Library_cardsScalarFieldEnum | Library_cardsScalarFieldEnum[]
-  }
-
-  /**
-   * library_cards findMany
-   */
-  export type library_cardsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the library_cards
-     */
-    select?: library_cardsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the library_cards
-     */
-    omit?: library_cardsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: library_cardsInclude<ExtArgs> | null
-    /**
-     * Filter, which library_cards to fetch.
-     */
-    where?: library_cardsWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of library_cards to fetch.
-     */
-    orderBy?: library_cardsOrderByWithRelationInput | library_cardsOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing library_cards.
-     */
-    cursor?: library_cardsWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` library_cards from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` library_cards.
-     */
-    skip?: number
-    distinct?: Library_cardsScalarFieldEnum | Library_cardsScalarFieldEnum[]
-  }
-
-  /**
-   * library_cards create
-   */
-  export type library_cardsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the library_cards
-     */
-    select?: library_cardsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the library_cards
-     */
-    omit?: library_cardsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: library_cardsInclude<ExtArgs> | null
-    /**
-     * The data needed to create a library_cards.
-     */
-    data: XOR<library_cardsCreateInput, library_cardsUncheckedCreateInput>
-  }
-
-  /**
-   * library_cards createMany
-   */
-  export type library_cardsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many library_cards.
-     */
-    data: library_cardsCreateManyInput | library_cardsCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * library_cards update
-   */
-  export type library_cardsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the library_cards
-     */
-    select?: library_cardsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the library_cards
-     */
-    omit?: library_cardsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: library_cardsInclude<ExtArgs> | null
-    /**
-     * The data needed to update a library_cards.
-     */
-    data: XOR<library_cardsUpdateInput, library_cardsUncheckedUpdateInput>
-    /**
-     * Choose, which library_cards to update.
-     */
-    where: library_cardsWhereUniqueInput
-  }
-
-  /**
-   * library_cards updateMany
-   */
-  export type library_cardsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update library_cards.
-     */
-    data: XOR<library_cardsUpdateManyMutationInput, library_cardsUncheckedUpdateManyInput>
-    /**
-     * Filter which library_cards to update
-     */
-    where?: library_cardsWhereInput
-    /**
-     * Limit how many library_cards to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * library_cards upsert
-   */
-  export type library_cardsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the library_cards
-     */
-    select?: library_cardsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the library_cards
-     */
-    omit?: library_cardsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: library_cardsInclude<ExtArgs> | null
-    /**
-     * The filter to search for the library_cards to update in case it exists.
-     */
-    where: library_cardsWhereUniqueInput
-    /**
-     * In case the library_cards found by the `where` argument doesn't exist, create a new library_cards with this data.
-     */
-    create: XOR<library_cardsCreateInput, library_cardsUncheckedCreateInput>
-    /**
-     * In case the library_cards was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<library_cardsUpdateInput, library_cardsUncheckedUpdateInput>
-  }
-
-  /**
-   * library_cards delete
-   */
-  export type library_cardsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the library_cards
-     */
-    select?: library_cardsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the library_cards
-     */
-    omit?: library_cardsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: library_cardsInclude<ExtArgs> | null
-    /**
-     * Filter which library_cards to delete.
-     */
-    where: library_cardsWhereUniqueInput
-  }
-
-  /**
-   * library_cards deleteMany
-   */
-  export type library_cardsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which library_cards to delete
-     */
-    where?: library_cardsWhereInput
-    /**
-     * Limit how many library_cards to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * library_cards.users
-   */
-  export type library_cards$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the users
-     */
-    select?: usersSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the users
-     */
-    omit?: usersOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: usersInclude<ExtArgs> | null
-    where?: usersWhereInput
-  }
-
-  /**
-   * library_cards without action
-   */
-  export type library_cardsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the library_cards
-     */
-    select?: library_cardsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the library_cards
-     */
-    omit?: library_cardsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: library_cardsInclude<ExtArgs> | null
-  }
-
-
-  /**
    * Enums
    */
 
@@ -13982,7 +12776,6 @@ export namespace Prisma {
     item_id: 'item_id',
     from_user_id: 'from_user_id',
     to_user_id: 'to_user_id',
-    tran_id: 'tran_id',
     reservation_id: 'reservation_id',
     status: 'status',
     message: 'message',
@@ -14043,18 +12836,6 @@ export namespace Prisma {
   };
 
   export type System_configScalarFieldEnum = (typeof System_configScalarFieldEnum)[keyof typeof System_configScalarFieldEnum]
-
-
-  export const Library_cardsScalarFieldEnum: {
-    card_id: 'card_id',
-    user_id: 'user_id',
-    card_number: 'card_number',
-    issued_at: 'issued_at',
-    expires_at: 'expires_at',
-    status: 'status'
-  };
-
-  export type Library_cardsScalarFieldEnum = (typeof Library_cardsScalarFieldEnum)[keyof typeof Library_cardsScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -14148,13 +12929,6 @@ export namespace Prisma {
   };
 
   export type system_configOrderByRelevanceFieldEnum = (typeof system_configOrderByRelevanceFieldEnum)[keyof typeof system_configOrderByRelevanceFieldEnum]
-
-
-  export const library_cardsOrderByRelevanceFieldEnum: {
-    card_number: 'card_number'
-  };
-
-  export type library_cardsOrderByRelevanceFieldEnum = (typeof library_cardsOrderByRelevanceFieldEnum)[keyof typeof library_cardsOrderByRelevanceFieldEnum]
 
 
   /**
@@ -14261,13 +13035,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'card_status'
-   */
-  export type Enumcard_statusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'card_status'>
-    
-
-
-  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -14289,7 +13056,6 @@ export namespace Prisma {
     library_items?: XOR<Library_itemsNullableScalarRelationFilter, library_itemsWhereInput> | null
     users?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
     item_tran_history?: Item_tran_historyListRelationFilter
-    notifications?: NotificationsListRelationFilter
   }
 
   export type item_tranOrderByWithRelationInput = {
@@ -14301,7 +13067,6 @@ export namespace Prisma {
     library_items?: library_itemsOrderByWithRelationInput
     users?: usersOrderByWithRelationInput
     item_tran_history?: item_tran_historyOrderByRelationAggregateInput
-    notifications?: notificationsOrderByRelationAggregateInput
   }
 
   export type item_tranWhereUniqueInput = Prisma.AtLeast<{
@@ -14316,7 +13081,6 @@ export namespace Prisma {
     library_items?: XOR<Library_itemsNullableScalarRelationFilter, library_itemsWhereInput> | null
     users?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
     item_tran_history?: Item_tran_historyListRelationFilter
-    notifications?: NotificationsListRelationFilter
   }, "tran_id">
 
   export type item_tranOrderByWithAggregationInput = {
@@ -14733,7 +13497,6 @@ export namespace Prisma {
     item_id?: IntNullableFilter<"notifications"> | number | null
     from_user_id?: IntNullableFilter<"notifications"> | number | null
     to_user_id?: IntNullableFilter<"notifications"> | number | null
-    tran_id?: IntNullableFilter<"notifications"> | number | null
     reservation_id?: IntNullableFilter<"notifications"> | number | null
     status?: Enumnotifications_statusNullableFilter<"notifications"> | $Enums.notifications_status | null
     message?: StringNullableFilter<"notifications"> | string | null
@@ -14742,7 +13505,6 @@ export namespace Prisma {
     library_items?: XOR<Library_itemsNullableScalarRelationFilter, library_itemsWhereInput> | null
     users_notifications_from_user_idTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
     users_notifications_to_user_idTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
-    item_tran?: XOR<Item_tranNullableScalarRelationFilter, item_tranWhereInput> | null
   }
 
   export type notificationsOrderByWithRelationInput = {
@@ -14751,7 +13513,6 @@ export namespace Prisma {
     item_id?: SortOrderInput | SortOrder
     from_user_id?: SortOrderInput | SortOrder
     to_user_id?: SortOrderInput | SortOrder
-    tran_id?: SortOrderInput | SortOrder
     reservation_id?: SortOrderInput | SortOrder
     status?: SortOrderInput | SortOrder
     message?: SortOrderInput | SortOrder
@@ -14760,7 +13521,6 @@ export namespace Prisma {
     library_items?: library_itemsOrderByWithRelationInput
     users_notifications_from_user_idTousers?: usersOrderByWithRelationInput
     users_notifications_to_user_idTousers?: usersOrderByWithRelationInput
-    item_tran?: item_tranOrderByWithRelationInput
     _relevance?: notificationsOrderByRelevanceInput
   }
 
@@ -14773,7 +13533,6 @@ export namespace Prisma {
     item_id?: IntNullableFilter<"notifications"> | number | null
     from_user_id?: IntNullableFilter<"notifications"> | number | null
     to_user_id?: IntNullableFilter<"notifications"> | number | null
-    tran_id?: IntNullableFilter<"notifications"> | number | null
     reservation_id?: IntNullableFilter<"notifications"> | number | null
     status?: Enumnotifications_statusNullableFilter<"notifications"> | $Enums.notifications_status | null
     message?: StringNullableFilter<"notifications"> | string | null
@@ -14782,7 +13541,6 @@ export namespace Prisma {
     library_items?: XOR<Library_itemsNullableScalarRelationFilter, library_itemsWhereInput> | null
     users_notifications_from_user_idTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
     users_notifications_to_user_idTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
-    item_tran?: XOR<Item_tranNullableScalarRelationFilter, item_tranWhereInput> | null
   }, "notification_id">
 
   export type notificationsOrderByWithAggregationInput = {
@@ -14791,7 +13549,6 @@ export namespace Prisma {
     item_id?: SortOrderInput | SortOrder
     from_user_id?: SortOrderInput | SortOrder
     to_user_id?: SortOrderInput | SortOrder
-    tran_id?: SortOrderInput | SortOrder
     reservation_id?: SortOrderInput | SortOrder
     status?: SortOrderInput | SortOrder
     message?: SortOrderInput | SortOrder
@@ -14813,7 +13570,6 @@ export namespace Prisma {
     item_id?: IntNullableWithAggregatesFilter<"notifications"> | number | null
     from_user_id?: IntNullableWithAggregatesFilter<"notifications"> | number | null
     to_user_id?: IntNullableWithAggregatesFilter<"notifications"> | number | null
-    tran_id?: IntNullableWithAggregatesFilter<"notifications"> | number | null
     reservation_id?: IntNullableWithAggregatesFilter<"notifications"> | number | null
     status?: Enumnotifications_statusNullableWithAggregatesFilter<"notifications"> | $Enums.notifications_status | null
     message?: StringNullableWithAggregatesFilter<"notifications"> | string | null
@@ -14901,7 +13657,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: NotificationsListRelationFilter
     notifications_notifications_to_user_idTousers?: NotificationsListRelationFilter
     user_wishlist?: User_wishlistListRelationFilter
-    library_cards?: Library_cardsListRelationFilter
   }
 
   export type usersOrderByWithRelationInput = {
@@ -14926,7 +13681,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: notificationsOrderByRelationAggregateInput
     notifications_notifications_to_user_idTousers?: notificationsOrderByRelationAggregateInput
     user_wishlist?: user_wishlistOrderByRelationAggregateInput
-    library_cards?: library_cardsOrderByRelationAggregateInput
     _relevance?: usersOrderByRelevanceInput
   }
 
@@ -14955,7 +13709,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: NotificationsListRelationFilter
     notifications_notifications_to_user_idTousers?: NotificationsListRelationFilter
     user_wishlist?: User_wishlistListRelationFilter
-    library_cards?: Library_cardsListRelationFilter
   }, "user_id" | "email">
 
   export type usersOrderByWithAggregationInput = {
@@ -15113,76 +13866,12 @@ export namespace Prisma {
     updated_at?: DateTimeWithAggregatesFilter<"system_config"> | Date | string
   }
 
-  export type library_cardsWhereInput = {
-    AND?: library_cardsWhereInput | library_cardsWhereInput[]
-    OR?: library_cardsWhereInput[]
-    NOT?: library_cardsWhereInput | library_cardsWhereInput[]
-    card_id?: IntFilter<"library_cards"> | number
-    user_id?: IntNullableFilter<"library_cards"> | number | null
-    card_number?: StringFilter<"library_cards"> | string
-    issued_at?: DateTimeFilter<"library_cards"> | Date | string
-    expires_at?: DateTimeNullableFilter<"library_cards"> | Date | string | null
-    status?: Enumcard_statusFilter<"library_cards"> | $Enums.card_status
-    users?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
-  }
-
-  export type library_cardsOrderByWithRelationInput = {
-    card_id?: SortOrder
-    user_id?: SortOrderInput | SortOrder
-    card_number?: SortOrder
-    issued_at?: SortOrder
-    expires_at?: SortOrderInput | SortOrder
-    status?: SortOrder
-    users?: usersOrderByWithRelationInput
-    _relevance?: library_cardsOrderByRelevanceInput
-  }
-
-  export type library_cardsWhereUniqueInput = Prisma.AtLeast<{
-    card_id?: number
-    card_number?: string
-    AND?: library_cardsWhereInput | library_cardsWhereInput[]
-    OR?: library_cardsWhereInput[]
-    NOT?: library_cardsWhereInput | library_cardsWhereInput[]
-    user_id?: IntNullableFilter<"library_cards"> | number | null
-    issued_at?: DateTimeFilter<"library_cards"> | Date | string
-    expires_at?: DateTimeNullableFilter<"library_cards"> | Date | string | null
-    status?: Enumcard_statusFilter<"library_cards"> | $Enums.card_status
-    users?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
-  }, "card_id" | "card_number">
-
-  export type library_cardsOrderByWithAggregationInput = {
-    card_id?: SortOrder
-    user_id?: SortOrderInput | SortOrder
-    card_number?: SortOrder
-    issued_at?: SortOrder
-    expires_at?: SortOrderInput | SortOrder
-    status?: SortOrder
-    _count?: library_cardsCountOrderByAggregateInput
-    _avg?: library_cardsAvgOrderByAggregateInput
-    _max?: library_cardsMaxOrderByAggregateInput
-    _min?: library_cardsMinOrderByAggregateInput
-    _sum?: library_cardsSumOrderByAggregateInput
-  }
-
-  export type library_cardsScalarWhereWithAggregatesInput = {
-    AND?: library_cardsScalarWhereWithAggregatesInput | library_cardsScalarWhereWithAggregatesInput[]
-    OR?: library_cardsScalarWhereWithAggregatesInput[]
-    NOT?: library_cardsScalarWhereWithAggregatesInput | library_cardsScalarWhereWithAggregatesInput[]
-    card_id?: IntWithAggregatesFilter<"library_cards"> | number
-    user_id?: IntNullableWithAggregatesFilter<"library_cards"> | number | null
-    card_number?: StringWithAggregatesFilter<"library_cards"> | string
-    issued_at?: DateTimeWithAggregatesFilter<"library_cards"> | Date | string
-    expires_at?: DateTimeNullableWithAggregatesFilter<"library_cards"> | Date | string | null
-    status?: Enumcard_statusWithAggregatesFilter<"library_cards"> | $Enums.card_status
-  }
-
   export type item_tranCreateInput = {
     status?: $Enums.item_tran_status | null
     record_status?: $Enums.record_status | null
     library_items?: library_itemsCreateNestedOneWithoutItem_tranInput
     users?: usersCreateNestedOneWithoutItem_tranInput
     item_tran_history?: item_tran_historyCreateNestedManyWithoutItem_tranInput
-    notifications?: notificationsCreateNestedManyWithoutItem_tranInput
   }
 
   export type item_tranUncheckedCreateInput = {
@@ -15192,7 +13881,6 @@ export namespace Prisma {
     user_id?: number | null
     record_status?: $Enums.record_status | null
     item_tran_history?: item_tran_historyUncheckedCreateNestedManyWithoutItem_tranInput
-    notifications?: notificationsUncheckedCreateNestedManyWithoutItem_tranInput
   }
 
   export type item_tranUpdateInput = {
@@ -15201,7 +13889,6 @@ export namespace Prisma {
     library_items?: library_itemsUpdateOneWithoutItem_tranNestedInput
     users?: usersUpdateOneWithoutItem_tranNestedInput
     item_tran_history?: item_tran_historyUpdateManyWithoutItem_tranNestedInput
-    notifications?: notificationsUpdateManyWithoutItem_tranNestedInput
   }
 
   export type item_tranUncheckedUpdateInput = {
@@ -15211,7 +13898,6 @@ export namespace Prisma {
     user_id?: NullableIntFieldUpdateOperationsInput | number | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
     item_tran_history?: item_tran_historyUncheckedUpdateManyWithoutItem_tranNestedInput
-    notifications?: notificationsUncheckedUpdateManyWithoutItem_tranNestedInput
   }
 
   export type item_tranCreateManyInput = {
@@ -15645,7 +14331,6 @@ export namespace Prisma {
     library_items?: library_itemsCreateNestedOneWithoutNotificationsInput
     users_notifications_from_user_idTousers?: usersCreateNestedOneWithoutNotifications_notifications_from_user_idTousersInput
     users_notifications_to_user_idTousers?: usersCreateNestedOneWithoutNotifications_notifications_to_user_idTousersInput
-    item_tran?: item_tranCreateNestedOneWithoutNotificationsInput
   }
 
   export type notificationsUncheckedCreateInput = {
@@ -15654,7 +14339,6 @@ export namespace Prisma {
     item_id?: number | null
     from_user_id?: number | null
     to_user_id?: number | null
-    tran_id?: number | null
     reservation_id?: number | null
     status?: $Enums.notifications_status | null
     message?: string | null
@@ -15672,7 +14356,6 @@ export namespace Prisma {
     library_items?: library_itemsUpdateOneWithoutNotificationsNestedInput
     users_notifications_from_user_idTousers?: usersUpdateOneWithoutNotifications_notifications_from_user_idTousersNestedInput
     users_notifications_to_user_idTousers?: usersUpdateOneWithoutNotifications_notifications_to_user_idTousersNestedInput
-    item_tran?: item_tranUpdateOneWithoutNotificationsNestedInput
   }
 
   export type notificationsUncheckedUpdateInput = {
@@ -15681,7 +14364,6 @@ export namespace Prisma {
     item_id?: NullableIntFieldUpdateOperationsInput | number | null
     from_user_id?: NullableIntFieldUpdateOperationsInput | number | null
     to_user_id?: NullableIntFieldUpdateOperationsInput | number | null
-    tran_id?: NullableIntFieldUpdateOperationsInput | number | null
     reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
     message?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15695,7 +14377,6 @@ export namespace Prisma {
     item_id?: number | null
     from_user_id?: number | null
     to_user_id?: number | null
-    tran_id?: number | null
     reservation_id?: number | null
     status?: $Enums.notifications_status | null
     message?: string | null
@@ -15718,7 +14399,6 @@ export namespace Prisma {
     item_id?: NullableIntFieldUpdateOperationsInput | number | null
     from_user_id?: NullableIntFieldUpdateOperationsInput | number | null
     to_user_id?: NullableIntFieldUpdateOperationsInput | number | null
-    tran_id?: NullableIntFieldUpdateOperationsInput | number | null
     reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
     message?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15791,7 +14471,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistCreateNestedManyWithoutUsersInput
-    library_cards?: library_cardsCreateNestedManyWithoutUsersInput
   }
 
   export type usersUncheckedCreateInput = {
@@ -15816,7 +14495,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutUsersInput
-    library_cards?: library_cardsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type usersUpdateInput = {
@@ -15840,7 +14518,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUpdateManyWithoutUsersNestedInput
-    library_cards?: library_cardsUpdateManyWithoutUsersNestedInput
   }
 
   export type usersUncheckedUpdateInput = {
@@ -15865,7 +14542,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
-    library_cards?: library_cardsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type usersCreateManyInput = {
@@ -16028,65 +14704,6 @@ export namespace Prisma {
     updated_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type library_cardsCreateInput = {
-    card_number: string
-    issued_at?: Date | string
-    expires_at?: Date | string | null
-    status?: $Enums.card_status
-    users?: usersCreateNestedOneWithoutLibrary_cardsInput
-  }
-
-  export type library_cardsUncheckedCreateInput = {
-    card_id?: number
-    user_id?: number | null
-    card_number: string
-    issued_at?: Date | string
-    expires_at?: Date | string | null
-    status?: $Enums.card_status
-  }
-
-  export type library_cardsUpdateInput = {
-    card_number?: StringFieldUpdateOperationsInput | string
-    issued_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: Enumcard_statusFieldUpdateOperationsInput | $Enums.card_status
-    users?: usersUpdateOneWithoutLibrary_cardsNestedInput
-  }
-
-  export type library_cardsUncheckedUpdateInput = {
-    card_id?: IntFieldUpdateOperationsInput | number
-    user_id?: NullableIntFieldUpdateOperationsInput | number | null
-    card_number?: StringFieldUpdateOperationsInput | string
-    issued_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: Enumcard_statusFieldUpdateOperationsInput | $Enums.card_status
-  }
-
-  export type library_cardsCreateManyInput = {
-    card_id?: number
-    user_id?: number | null
-    card_number: string
-    issued_at?: Date | string
-    expires_at?: Date | string | null
-    status?: $Enums.card_status
-  }
-
-  export type library_cardsUpdateManyMutationInput = {
-    card_number?: StringFieldUpdateOperationsInput | string
-    issued_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: Enumcard_statusFieldUpdateOperationsInput | $Enums.card_status
-  }
-
-  export type library_cardsUncheckedUpdateManyInput = {
-    card_id?: IntFieldUpdateOperationsInput | number
-    user_id?: NullableIntFieldUpdateOperationsInput | number | null
-    card_number?: StringFieldUpdateOperationsInput | string
-    issued_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: Enumcard_statusFieldUpdateOperationsInput | $Enums.card_status
-  }
-
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[]
@@ -16139,22 +14756,12 @@ export namespace Prisma {
     none?: item_tran_historyWhereInput
   }
 
-  export type NotificationsListRelationFilter = {
-    every?: notificationsWhereInput
-    some?: notificationsWhereInput
-    none?: notificationsWhereInput
-  }
-
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
   }
 
   export type item_tran_historyOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type notificationsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -16431,6 +15038,12 @@ export namespace Prisma {
     none?: item_tranWhereInput
   }
 
+  export type NotificationsListRelationFilter = {
+    every?: notificationsWhereInput
+    some?: notificationsWhereInput
+    none?: notificationsWhereInput
+  }
+
   export type User_wishlistListRelationFilter = {
     every?: user_wishlistWhereInput
     some?: user_wishlistWhereInput
@@ -16438,6 +15051,10 @@ export namespace Prisma {
   }
 
   export type item_tranOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type notificationsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -16737,7 +15354,6 @@ export namespace Prisma {
     item_id?: SortOrder
     from_user_id?: SortOrder
     to_user_id?: SortOrder
-    tran_id?: SortOrder
     reservation_id?: SortOrder
     status?: SortOrder
     message?: SortOrder
@@ -16750,7 +15366,6 @@ export namespace Prisma {
     item_id?: SortOrder
     from_user_id?: SortOrder
     to_user_id?: SortOrder
-    tran_id?: SortOrder
     reservation_id?: SortOrder
   }
 
@@ -16760,7 +15375,6 @@ export namespace Prisma {
     item_id?: SortOrder
     from_user_id?: SortOrder
     to_user_id?: SortOrder
-    tran_id?: SortOrder
     reservation_id?: SortOrder
     status?: SortOrder
     message?: SortOrder
@@ -16774,7 +15388,6 @@ export namespace Prisma {
     item_id?: SortOrder
     from_user_id?: SortOrder
     to_user_id?: SortOrder
-    tran_id?: SortOrder
     reservation_id?: SortOrder
     status?: SortOrder
     message?: SortOrder
@@ -16787,7 +15400,6 @@ export namespace Prisma {
     item_id?: SortOrder
     from_user_id?: SortOrder
     to_user_id?: SortOrder
-    tran_id?: SortOrder
     reservation_id?: SortOrder
   }
 
@@ -16871,17 +15483,7 @@ export namespace Prisma {
     none?: logsWhereInput
   }
 
-  export type Library_cardsListRelationFilter = {
-    every?: library_cardsWhereInput
-    some?: library_cardsWhereInput
-    none?: library_cardsWhereInput
-  }
-
   export type logsOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type library_cardsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -17081,66 +15683,6 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type Enumcard_statusFilter<$PrismaModel = never> = {
-    equals?: $Enums.card_status | Enumcard_statusFieldRefInput<$PrismaModel>
-    in?: $Enums.card_status[]
-    notIn?: $Enums.card_status[]
-    not?: NestedEnumcard_statusFilter<$PrismaModel> | $Enums.card_status
-  }
-
-  export type library_cardsOrderByRelevanceInput = {
-    fields: library_cardsOrderByRelevanceFieldEnum | library_cardsOrderByRelevanceFieldEnum[]
-    sort: SortOrder
-    search: string
-  }
-
-  export type library_cardsCountOrderByAggregateInput = {
-    card_id?: SortOrder
-    user_id?: SortOrder
-    card_number?: SortOrder
-    issued_at?: SortOrder
-    expires_at?: SortOrder
-    status?: SortOrder
-  }
-
-  export type library_cardsAvgOrderByAggregateInput = {
-    card_id?: SortOrder
-    user_id?: SortOrder
-  }
-
-  export type library_cardsMaxOrderByAggregateInput = {
-    card_id?: SortOrder
-    user_id?: SortOrder
-    card_number?: SortOrder
-    issued_at?: SortOrder
-    expires_at?: SortOrder
-    status?: SortOrder
-  }
-
-  export type library_cardsMinOrderByAggregateInput = {
-    card_id?: SortOrder
-    user_id?: SortOrder
-    card_number?: SortOrder
-    issued_at?: SortOrder
-    expires_at?: SortOrder
-    status?: SortOrder
-  }
-
-  export type library_cardsSumOrderByAggregateInput = {
-    card_id?: SortOrder
-    user_id?: SortOrder
-  }
-
-  export type Enumcard_statusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.card_status | Enumcard_statusFieldRefInput<$PrismaModel>
-    in?: $Enums.card_status[]
-    notIn?: $Enums.card_status[]
-    not?: NestedEnumcard_statusWithAggregatesFilter<$PrismaModel> | $Enums.card_status
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumcard_statusFilter<$PrismaModel>
-    _max?: NestedEnumcard_statusFilter<$PrismaModel>
-  }
-
   export type library_itemsCreateNestedOneWithoutItem_tranInput = {
     create?: XOR<library_itemsCreateWithoutItem_tranInput, library_itemsUncheckedCreateWithoutItem_tranInput>
     connectOrCreate?: library_itemsCreateOrConnectWithoutItem_tranInput
@@ -17160,25 +15702,11 @@ export namespace Prisma {
     connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
   }
 
-  export type notificationsCreateNestedManyWithoutItem_tranInput = {
-    create?: XOR<notificationsCreateWithoutItem_tranInput, notificationsUncheckedCreateWithoutItem_tranInput> | notificationsCreateWithoutItem_tranInput[] | notificationsUncheckedCreateWithoutItem_tranInput[]
-    connectOrCreate?: notificationsCreateOrConnectWithoutItem_tranInput | notificationsCreateOrConnectWithoutItem_tranInput[]
-    createMany?: notificationsCreateManyItem_tranInputEnvelope
-    connect?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
-  }
-
   export type item_tran_historyUncheckedCreateNestedManyWithoutItem_tranInput = {
     create?: XOR<item_tran_historyCreateWithoutItem_tranInput, item_tran_historyUncheckedCreateWithoutItem_tranInput> | item_tran_historyCreateWithoutItem_tranInput[] | item_tran_historyUncheckedCreateWithoutItem_tranInput[]
     connectOrCreate?: item_tran_historyCreateOrConnectWithoutItem_tranInput | item_tran_historyCreateOrConnectWithoutItem_tranInput[]
     createMany?: item_tran_historyCreateManyItem_tranInputEnvelope
     connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
-  }
-
-  export type notificationsUncheckedCreateNestedManyWithoutItem_tranInput = {
-    create?: XOR<notificationsCreateWithoutItem_tranInput, notificationsUncheckedCreateWithoutItem_tranInput> | notificationsCreateWithoutItem_tranInput[] | notificationsUncheckedCreateWithoutItem_tranInput[]
-    connectOrCreate?: notificationsCreateOrConnectWithoutItem_tranInput | notificationsCreateOrConnectWithoutItem_tranInput[]
-    createMany?: notificationsCreateManyItem_tranInputEnvelope
-    connect?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
   }
 
   export type NullableEnumitem_tran_statusFieldUpdateOperationsInput = {
@@ -17223,20 +15751,6 @@ export namespace Prisma {
     deleteMany?: item_tran_historyScalarWhereInput | item_tran_historyScalarWhereInput[]
   }
 
-  export type notificationsUpdateManyWithoutItem_tranNestedInput = {
-    create?: XOR<notificationsCreateWithoutItem_tranInput, notificationsUncheckedCreateWithoutItem_tranInput> | notificationsCreateWithoutItem_tranInput[] | notificationsUncheckedCreateWithoutItem_tranInput[]
-    connectOrCreate?: notificationsCreateOrConnectWithoutItem_tranInput | notificationsCreateOrConnectWithoutItem_tranInput[]
-    upsert?: notificationsUpsertWithWhereUniqueWithoutItem_tranInput | notificationsUpsertWithWhereUniqueWithoutItem_tranInput[]
-    createMany?: notificationsCreateManyItem_tranInputEnvelope
-    set?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
-    disconnect?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
-    delete?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
-    connect?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
-    update?: notificationsUpdateWithWhereUniqueWithoutItem_tranInput | notificationsUpdateWithWhereUniqueWithoutItem_tranInput[]
-    updateMany?: notificationsUpdateManyWithWhereWithoutItem_tranInput | notificationsUpdateManyWithWhereWithoutItem_tranInput[]
-    deleteMany?: notificationsScalarWhereInput | notificationsScalarWhereInput[]
-  }
-
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -17265,20 +15779,6 @@ export namespace Prisma {
     update?: item_tran_historyUpdateWithWhereUniqueWithoutItem_tranInput | item_tran_historyUpdateWithWhereUniqueWithoutItem_tranInput[]
     updateMany?: item_tran_historyUpdateManyWithWhereWithoutItem_tranInput | item_tran_historyUpdateManyWithWhereWithoutItem_tranInput[]
     deleteMany?: item_tran_historyScalarWhereInput | item_tran_historyScalarWhereInput[]
-  }
-
-  export type notificationsUncheckedUpdateManyWithoutItem_tranNestedInput = {
-    create?: XOR<notificationsCreateWithoutItem_tranInput, notificationsUncheckedCreateWithoutItem_tranInput> | notificationsCreateWithoutItem_tranInput[] | notificationsUncheckedCreateWithoutItem_tranInput[]
-    connectOrCreate?: notificationsCreateOrConnectWithoutItem_tranInput | notificationsCreateOrConnectWithoutItem_tranInput[]
-    upsert?: notificationsUpsertWithWhereUniqueWithoutItem_tranInput | notificationsUpsertWithWhereUniqueWithoutItem_tranInput[]
-    createMany?: notificationsCreateManyItem_tranInputEnvelope
-    set?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
-    disconnect?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
-    delete?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
-    connect?: notificationsWhereUniqueInput | notificationsWhereUniqueInput[]
-    update?: notificationsUpdateWithWhereUniqueWithoutItem_tranInput | notificationsUpdateWithWhereUniqueWithoutItem_tranInput[]
-    updateMany?: notificationsUpdateManyWithWhereWithoutItem_tranInput | notificationsUpdateManyWithWhereWithoutItem_tranInput[]
-    deleteMany?: notificationsScalarWhereInput | notificationsScalarWhereInput[]
   }
 
   export type library_itemsCreateNestedOneWithoutItem_tran_historyInput = {
@@ -17651,12 +16151,6 @@ export namespace Prisma {
     connect?: usersWhereUniqueInput
   }
 
-  export type item_tranCreateNestedOneWithoutNotificationsInput = {
-    create?: XOR<item_tranCreateWithoutNotificationsInput, item_tranUncheckedCreateWithoutNotificationsInput>
-    connectOrCreate?: item_tranCreateOrConnectWithoutNotificationsInput
-    connect?: item_tranWhereUniqueInput
-  }
-
   export type NullableEnumnotifications_typeFieldUpdateOperationsInput = {
     set?: $Enums.notifications_type | null
   }
@@ -17693,16 +16187,6 @@ export namespace Prisma {
     delete?: usersWhereInput | boolean
     connect?: usersWhereUniqueInput
     update?: XOR<XOR<usersUpdateToOneWithWhereWithoutNotifications_notifications_to_user_idTousersInput, usersUpdateWithoutNotifications_notifications_to_user_idTousersInput>, usersUncheckedUpdateWithoutNotifications_notifications_to_user_idTousersInput>
-  }
-
-  export type item_tranUpdateOneWithoutNotificationsNestedInput = {
-    create?: XOR<item_tranCreateWithoutNotificationsInput, item_tranUncheckedCreateWithoutNotificationsInput>
-    connectOrCreate?: item_tranCreateOrConnectWithoutNotificationsInput
-    upsert?: item_tranUpsertWithoutNotificationsInput
-    disconnect?: item_tranWhereInput | boolean
-    delete?: item_tranWhereInput | boolean
-    connect?: item_tranWhereUniqueInput
-    update?: XOR<XOR<item_tranUpdateToOneWithWhereWithoutNotificationsInput, item_tranUpdateWithoutNotificationsInput>, item_tranUncheckedUpdateWithoutNotificationsInput>
   }
 
   export type usersCreateNestedOneWithoutUser_wishlistInput = {
@@ -17793,13 +16277,6 @@ export namespace Prisma {
     connect?: user_wishlistWhereUniqueInput | user_wishlistWhereUniqueInput[]
   }
 
-  export type library_cardsCreateNestedManyWithoutUsersInput = {
-    create?: XOR<library_cardsCreateWithoutUsersInput, library_cardsUncheckedCreateWithoutUsersInput> | library_cardsCreateWithoutUsersInput[] | library_cardsUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: library_cardsCreateOrConnectWithoutUsersInput | library_cardsCreateOrConnectWithoutUsersInput[]
-    createMany?: library_cardsCreateManyUsersInputEnvelope
-    connect?: library_cardsWhereUniqueInput | library_cardsWhereUniqueInput[]
-  }
-
   export type item_tranUncheckedCreateNestedManyWithoutUsersInput = {
     create?: XOR<item_tranCreateWithoutUsersInput, item_tranUncheckedCreateWithoutUsersInput> | item_tranCreateWithoutUsersInput[] | item_tranUncheckedCreateWithoutUsersInput[]
     connectOrCreate?: item_tranCreateOrConnectWithoutUsersInput | item_tranCreateOrConnectWithoutUsersInput[]
@@ -17854,13 +16331,6 @@ export namespace Prisma {
     connectOrCreate?: user_wishlistCreateOrConnectWithoutUsersInput | user_wishlistCreateOrConnectWithoutUsersInput[]
     createMany?: user_wishlistCreateManyUsersInputEnvelope
     connect?: user_wishlistWhereUniqueInput | user_wishlistWhereUniqueInput[]
-  }
-
-  export type library_cardsUncheckedCreateNestedManyWithoutUsersInput = {
-    create?: XOR<library_cardsCreateWithoutUsersInput, library_cardsUncheckedCreateWithoutUsersInput> | library_cardsCreateWithoutUsersInput[] | library_cardsUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: library_cardsCreateOrConnectWithoutUsersInput | library_cardsCreateOrConnectWithoutUsersInput[]
-    createMany?: library_cardsCreateManyUsersInputEnvelope
-    connect?: library_cardsWhereUniqueInput | library_cardsWhereUniqueInput[]
   }
 
   export type NullableEnumusers_roleFieldUpdateOperationsInput = {
@@ -17987,20 +16457,6 @@ export namespace Prisma {
     deleteMany?: user_wishlistScalarWhereInput | user_wishlistScalarWhereInput[]
   }
 
-  export type library_cardsUpdateManyWithoutUsersNestedInput = {
-    create?: XOR<library_cardsCreateWithoutUsersInput, library_cardsUncheckedCreateWithoutUsersInput> | library_cardsCreateWithoutUsersInput[] | library_cardsUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: library_cardsCreateOrConnectWithoutUsersInput | library_cardsCreateOrConnectWithoutUsersInput[]
-    upsert?: library_cardsUpsertWithWhereUniqueWithoutUsersInput | library_cardsUpsertWithWhereUniqueWithoutUsersInput[]
-    createMany?: library_cardsCreateManyUsersInputEnvelope
-    set?: library_cardsWhereUniqueInput | library_cardsWhereUniqueInput[]
-    disconnect?: library_cardsWhereUniqueInput | library_cardsWhereUniqueInput[]
-    delete?: library_cardsWhereUniqueInput | library_cardsWhereUniqueInput[]
-    connect?: library_cardsWhereUniqueInput | library_cardsWhereUniqueInput[]
-    update?: library_cardsUpdateWithWhereUniqueWithoutUsersInput | library_cardsUpdateWithWhereUniqueWithoutUsersInput[]
-    updateMany?: library_cardsUpdateManyWithWhereWithoutUsersInput | library_cardsUpdateManyWithWhereWithoutUsersInput[]
-    deleteMany?: library_cardsScalarWhereInput | library_cardsScalarWhereInput[]
-  }
-
   export type item_tranUncheckedUpdateManyWithoutUsersNestedInput = {
     create?: XOR<item_tranCreateWithoutUsersInput, item_tranUncheckedCreateWithoutUsersInput> | item_tranCreateWithoutUsersInput[] | item_tranUncheckedCreateWithoutUsersInput[]
     connectOrCreate?: item_tranCreateOrConnectWithoutUsersInput | item_tranCreateOrConnectWithoutUsersInput[]
@@ -18113,42 +16569,8 @@ export namespace Prisma {
     deleteMany?: user_wishlistScalarWhereInput | user_wishlistScalarWhereInput[]
   }
 
-  export type library_cardsUncheckedUpdateManyWithoutUsersNestedInput = {
-    create?: XOR<library_cardsCreateWithoutUsersInput, library_cardsUncheckedCreateWithoutUsersInput> | library_cardsCreateWithoutUsersInput[] | library_cardsUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: library_cardsCreateOrConnectWithoutUsersInput | library_cardsCreateOrConnectWithoutUsersInput[]
-    upsert?: library_cardsUpsertWithWhereUniqueWithoutUsersInput | library_cardsUpsertWithWhereUniqueWithoutUsersInput[]
-    createMany?: library_cardsCreateManyUsersInputEnvelope
-    set?: library_cardsWhereUniqueInput | library_cardsWhereUniqueInput[]
-    disconnect?: library_cardsWhereUniqueInput | library_cardsWhereUniqueInput[]
-    delete?: library_cardsWhereUniqueInput | library_cardsWhereUniqueInput[]
-    connect?: library_cardsWhereUniqueInput | library_cardsWhereUniqueInput[]
-    update?: library_cardsUpdateWithWhereUniqueWithoutUsersInput | library_cardsUpdateWithWhereUniqueWithoutUsersInput[]
-    updateMany?: library_cardsUpdateManyWithWhereWithoutUsersInput | library_cardsUpdateManyWithWhereWithoutUsersInput[]
-    deleteMany?: library_cardsScalarWhereInput | library_cardsScalarWhereInput[]
-  }
-
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
-  }
-
-  export type usersCreateNestedOneWithoutLibrary_cardsInput = {
-    create?: XOR<usersCreateWithoutLibrary_cardsInput, usersUncheckedCreateWithoutLibrary_cardsInput>
-    connectOrCreate?: usersCreateOrConnectWithoutLibrary_cardsInput
-    connect?: usersWhereUniqueInput
-  }
-
-  export type Enumcard_statusFieldUpdateOperationsInput = {
-    set?: $Enums.card_status
-  }
-
-  export type usersUpdateOneWithoutLibrary_cardsNestedInput = {
-    create?: XOR<usersCreateWithoutLibrary_cardsInput, usersUncheckedCreateWithoutLibrary_cardsInput>
-    connectOrCreate?: usersCreateOrConnectWithoutLibrary_cardsInput
-    upsert?: usersUpsertWithoutLibrary_cardsInput
-    disconnect?: usersWhereInput | boolean
-    delete?: usersWhereInput | boolean
-    connect?: usersWhereUniqueInput
-    update?: XOR<XOR<usersUpdateToOneWithWhereWithoutLibrary_cardsInput, usersUpdateWithoutLibrary_cardsInput>, usersUncheckedUpdateWithoutLibrary_cardsInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -18540,23 +16962,6 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedEnumcard_statusFilter<$PrismaModel = never> = {
-    equals?: $Enums.card_status | Enumcard_statusFieldRefInput<$PrismaModel>
-    in?: $Enums.card_status[]
-    notIn?: $Enums.card_status[]
-    not?: NestedEnumcard_statusFilter<$PrismaModel> | $Enums.card_status
-  }
-
-  export type NestedEnumcard_statusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.card_status | Enumcard_statusFieldRefInput<$PrismaModel>
-    in?: $Enums.card_status[]
-    notIn?: $Enums.card_status[]
-    not?: NestedEnumcard_statusWithAggregatesFilter<$PrismaModel> | $Enums.card_status
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumcard_statusFilter<$PrismaModel>
-    _max?: NestedEnumcard_statusFilter<$PrismaModel>
-  }
-
   export type library_itemsCreateWithoutItem_tranInput = {
     title?: string | null
     author: string
@@ -18635,7 +17040,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistCreateNestedManyWithoutUsersInput
-    library_cards?: library_cardsCreateNestedManyWithoutUsersInput
   }
 
   export type usersUncheckedCreateWithoutItem_tranInput = {
@@ -18659,7 +17063,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutUsersInput
-    library_cards?: library_cardsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type usersCreateOrConnectWithoutItem_tranInput = {
@@ -18703,41 +17106,6 @@ export namespace Prisma {
 
   export type item_tran_historyCreateManyItem_tranInputEnvelope = {
     data: item_tran_historyCreateManyItem_tranInput | item_tran_historyCreateManyItem_tranInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type notificationsCreateWithoutItem_tranInput = {
-    type?: $Enums.notifications_type | null
-    reservation_id?: number | null
-    status?: $Enums.notifications_status | null
-    message?: string | null
-    created_at?: Date | string | null
-    resolved_at?: Date | string | null
-    library_items?: library_itemsCreateNestedOneWithoutNotificationsInput
-    users_notifications_from_user_idTousers?: usersCreateNestedOneWithoutNotifications_notifications_from_user_idTousersInput
-    users_notifications_to_user_idTousers?: usersCreateNestedOneWithoutNotifications_notifications_to_user_idTousersInput
-  }
-
-  export type notificationsUncheckedCreateWithoutItem_tranInput = {
-    notification_id?: number
-    type?: $Enums.notifications_type | null
-    item_id?: number | null
-    from_user_id?: number | null
-    to_user_id?: number | null
-    reservation_id?: number | null
-    status?: $Enums.notifications_status | null
-    message?: string | null
-    created_at?: Date | string | null
-    resolved_at?: Date | string | null
-  }
-
-  export type notificationsCreateOrConnectWithoutItem_tranInput = {
-    where: notificationsWhereUniqueInput
-    create: XOR<notificationsCreateWithoutItem_tranInput, notificationsUncheckedCreateWithoutItem_tranInput>
-  }
-
-  export type notificationsCreateManyItem_tranInputEnvelope = {
-    data: notificationsCreateManyItem_tranInput | notificationsCreateManyItem_tranInput[]
     skipDuplicates?: boolean
   }
 
@@ -18836,7 +17204,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUpdateManyWithoutUsersNestedInput
-    library_cards?: library_cardsUpdateManyWithoutUsersNestedInput
   }
 
   export type usersUncheckedUpdateWithoutItem_tranInput = {
@@ -18860,7 +17227,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
-    library_cards?: library_cardsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type item_tran_historyUpsertWithWhereUniqueWithoutItem_tranInput = {
@@ -18895,39 +17261,6 @@ export namespace Prisma {
     date_due?: DateTimeNullableFilter<"item_tran_history"> | Date | string | null
     date_returned?: DateTimeNullableFilter<"item_tran_history"> | Date | string | null
     remarks?: StringNullableFilter<"item_tran_history"> | string | null
-  }
-
-  export type notificationsUpsertWithWhereUniqueWithoutItem_tranInput = {
-    where: notificationsWhereUniqueInput
-    update: XOR<notificationsUpdateWithoutItem_tranInput, notificationsUncheckedUpdateWithoutItem_tranInput>
-    create: XOR<notificationsCreateWithoutItem_tranInput, notificationsUncheckedCreateWithoutItem_tranInput>
-  }
-
-  export type notificationsUpdateWithWhereUniqueWithoutItem_tranInput = {
-    where: notificationsWhereUniqueInput
-    data: XOR<notificationsUpdateWithoutItem_tranInput, notificationsUncheckedUpdateWithoutItem_tranInput>
-  }
-
-  export type notificationsUpdateManyWithWhereWithoutItem_tranInput = {
-    where: notificationsScalarWhereInput
-    data: XOR<notificationsUpdateManyMutationInput, notificationsUncheckedUpdateManyWithoutItem_tranInput>
-  }
-
-  export type notificationsScalarWhereInput = {
-    AND?: notificationsScalarWhereInput | notificationsScalarWhereInput[]
-    OR?: notificationsScalarWhereInput[]
-    NOT?: notificationsScalarWhereInput | notificationsScalarWhereInput[]
-    notification_id?: IntFilter<"notifications"> | number
-    type?: Enumnotifications_typeNullableFilter<"notifications"> | $Enums.notifications_type | null
-    item_id?: IntNullableFilter<"notifications"> | number | null
-    from_user_id?: IntNullableFilter<"notifications"> | number | null
-    to_user_id?: IntNullableFilter<"notifications"> | number | null
-    tran_id?: IntNullableFilter<"notifications"> | number | null
-    reservation_id?: IntNullableFilter<"notifications"> | number | null
-    status?: Enumnotifications_statusNullableFilter<"notifications"> | $Enums.notifications_status | null
-    message?: StringNullableFilter<"notifications"> | string | null
-    created_at?: DateTimeNullableFilter<"notifications"> | Date | string | null
-    resolved_at?: DateTimeNullableFilter<"notifications"> | Date | string | null
   }
 
   export type library_itemsCreateWithoutItem_tran_historyInput = {
@@ -18993,7 +17326,6 @@ export namespace Prisma {
     record_status?: $Enums.record_status | null
     library_items?: library_itemsCreateNestedOneWithoutItem_tranInput
     users?: usersCreateNestedOneWithoutItem_tranInput
-    notifications?: notificationsCreateNestedManyWithoutItem_tranInput
   }
 
   export type item_tranUncheckedCreateWithoutItem_tran_historyInput = {
@@ -19002,7 +17334,6 @@ export namespace Prisma {
     status?: $Enums.item_tran_status | null
     user_id?: number | null
     record_status?: $Enums.record_status | null
-    notifications?: notificationsUncheckedCreateNestedManyWithoutItem_tranInput
   }
 
   export type item_tranCreateOrConnectWithoutItem_tran_historyInput = {
@@ -19030,7 +17361,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistCreateNestedManyWithoutUsersInput
-    library_cards?: library_cardsCreateNestedManyWithoutUsersInput
   }
 
   export type usersUncheckedCreateWithoutItem_tran_history_item_tran_history_requested_byTousersInput = {
@@ -19054,7 +17384,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutUsersInput
-    library_cards?: library_cardsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type usersCreateOrConnectWithoutItem_tran_history_item_tran_history_requested_byTousersInput = {
@@ -19082,7 +17411,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistCreateNestedManyWithoutUsersInput
-    library_cards?: library_cardsCreateNestedManyWithoutUsersInput
   }
 
   export type usersUncheckedCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
@@ -19106,7 +17434,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutUsersInput
-    library_cards?: library_cardsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type usersCreateOrConnectWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
@@ -19223,7 +17550,6 @@ export namespace Prisma {
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
     library_items?: library_itemsUpdateOneWithoutItem_tranNestedInput
     users?: usersUpdateOneWithoutItem_tranNestedInput
-    notifications?: notificationsUpdateManyWithoutItem_tranNestedInput
   }
 
   export type item_tranUncheckedUpdateWithoutItem_tran_historyInput = {
@@ -19232,7 +17558,6 @@ export namespace Prisma {
     status?: NullableEnumitem_tran_statusFieldUpdateOperationsInput | $Enums.item_tran_status | null
     user_id?: NullableIntFieldUpdateOperationsInput | number | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
-    notifications?: notificationsUncheckedUpdateManyWithoutItem_tranNestedInput
   }
 
   export type usersUpsertWithoutItem_tran_history_item_tran_history_requested_byTousersInput = {
@@ -19266,7 +17591,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUpdateManyWithoutUsersNestedInput
-    library_cards?: library_cardsUpdateManyWithoutUsersNestedInput
   }
 
   export type usersUncheckedUpdateWithoutItem_tran_history_item_tran_history_requested_byTousersInput = {
@@ -19290,7 +17614,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
-    library_cards?: library_cardsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type usersUpsertWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
@@ -19324,7 +17647,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUpdateManyWithoutUsersNestedInput
-    library_cards?: library_cardsUpdateManyWithoutUsersNestedInput
   }
 
   export type usersUncheckedUpdateWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
@@ -19348,7 +17670,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
-    library_cards?: library_cardsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type finesUpsertWithWhereUniqueWithoutItem_tran_historyInput = {
@@ -19386,7 +17707,6 @@ export namespace Prisma {
     record_status?: $Enums.record_status | null
     users?: usersCreateNestedOneWithoutItem_tranInput
     item_tran_history?: item_tran_historyCreateNestedManyWithoutItem_tranInput
-    notifications?: notificationsCreateNestedManyWithoutItem_tranInput
   }
 
   export type item_tranUncheckedCreateWithoutLibrary_itemsInput = {
@@ -19395,7 +17715,6 @@ export namespace Prisma {
     user_id?: number | null
     record_status?: $Enums.record_status | null
     item_tran_history?: item_tran_historyUncheckedCreateNestedManyWithoutItem_tranInput
-    notifications?: notificationsUncheckedCreateNestedManyWithoutItem_tranInput
   }
 
   export type item_tranCreateOrConnectWithoutLibrary_itemsInput = {
@@ -19456,7 +17775,6 @@ export namespace Prisma {
     resolved_at?: Date | string | null
     users_notifications_from_user_idTousers?: usersCreateNestedOneWithoutNotifications_notifications_from_user_idTousersInput
     users_notifications_to_user_idTousers?: usersCreateNestedOneWithoutNotifications_notifications_to_user_idTousersInput
-    item_tran?: item_tranCreateNestedOneWithoutNotificationsInput
   }
 
   export type notificationsUncheckedCreateWithoutLibrary_itemsInput = {
@@ -19464,7 +17782,6 @@ export namespace Prisma {
     type?: $Enums.notifications_type | null
     from_user_id?: number | null
     to_user_id?: number | null
-    tran_id?: number | null
     reservation_id?: number | null
     status?: $Enums.notifications_status | null
     message?: string | null
@@ -19562,6 +17879,22 @@ export namespace Prisma {
     data: XOR<notificationsUpdateManyMutationInput, notificationsUncheckedUpdateManyWithoutLibrary_itemsInput>
   }
 
+  export type notificationsScalarWhereInput = {
+    AND?: notificationsScalarWhereInput | notificationsScalarWhereInput[]
+    OR?: notificationsScalarWhereInput[]
+    NOT?: notificationsScalarWhereInput | notificationsScalarWhereInput[]
+    notification_id?: IntFilter<"notifications"> | number
+    type?: Enumnotifications_typeNullableFilter<"notifications"> | $Enums.notifications_type | null
+    item_id?: IntNullableFilter<"notifications"> | number | null
+    from_user_id?: IntNullableFilter<"notifications"> | number | null
+    to_user_id?: IntNullableFilter<"notifications"> | number | null
+    reservation_id?: IntNullableFilter<"notifications"> | number | null
+    status?: Enumnotifications_statusNullableFilter<"notifications"> | $Enums.notifications_status | null
+    message?: StringNullableFilter<"notifications"> | string | null
+    created_at?: DateTimeNullableFilter<"notifications"> | Date | string | null
+    resolved_at?: DateTimeNullableFilter<"notifications"> | Date | string | null
+  }
+
   export type user_wishlistUpsertWithWhereUniqueWithoutLibrary_itemsInput = {
     where: user_wishlistWhereUniqueInput
     update: XOR<user_wishlistUpdateWithoutLibrary_itemsInput, user_wishlistUncheckedUpdateWithoutLibrary_itemsInput>
@@ -19608,7 +17941,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistCreateNestedManyWithoutUsersInput
-    library_cards?: library_cardsCreateNestedManyWithoutUsersInput
   }
 
   export type usersUncheckedCreateWithoutFinesInput = {
@@ -19632,7 +17964,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutUsersInput
-    library_cards?: library_cardsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type usersCreateOrConnectWithoutFinesInput = {
@@ -19705,7 +18036,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUpdateManyWithoutUsersNestedInput
-    library_cards?: library_cardsUpdateManyWithoutUsersNestedInput
   }
 
   export type usersUncheckedUpdateWithoutFinesInput = {
@@ -19729,7 +18059,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
-    library_cards?: library_cardsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type item_tran_historyUpsertWithoutFinesInput = {
@@ -19792,7 +18121,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistCreateNestedManyWithoutUsersInput
-    library_cards?: library_cardsCreateNestedManyWithoutUsersInput
   }
 
   export type usersUncheckedCreateWithoutLogsInput = {
@@ -19816,7 +18144,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutUsersInput
-    library_cards?: library_cardsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type usersCreateOrConnectWithoutLogsInput = {
@@ -19855,7 +18182,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUpdateManyWithoutUsersNestedInput
-    library_cards?: library_cardsUpdateManyWithoutUsersNestedInput
   }
 
   export type usersUncheckedUpdateWithoutLogsInput = {
@@ -19879,7 +18205,6 @@ export namespace Prisma {
     notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
-    library_cards?: library_cardsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type library_itemsCreateWithoutNotificationsInput = {
@@ -19960,7 +18285,6 @@ export namespace Prisma {
     logs?: logsCreateNestedManyWithoutUsersInput
     notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistCreateNestedManyWithoutUsersInput
-    library_cards?: library_cardsCreateNestedManyWithoutUsersInput
   }
 
   export type usersUncheckedCreateWithoutNotifications_notifications_from_user_idTousersInput = {
@@ -19984,7 +18308,6 @@ export namespace Prisma {
     logs?: logsUncheckedCreateNestedManyWithoutUsersInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutUsersInput
-    library_cards?: library_cardsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type usersCreateOrConnectWithoutNotifications_notifications_from_user_idTousersInput = {
@@ -20012,7 +18335,6 @@ export namespace Prisma {
     logs?: logsCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     user_wishlist?: user_wishlistCreateNestedManyWithoutUsersInput
-    library_cards?: library_cardsCreateNestedManyWithoutUsersInput
   }
 
   export type usersUncheckedCreateWithoutNotifications_notifications_to_user_idTousersInput = {
@@ -20036,34 +18358,11 @@ export namespace Prisma {
     logs?: logsUncheckedCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutUsersInput
-    library_cards?: library_cardsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type usersCreateOrConnectWithoutNotifications_notifications_to_user_idTousersInput = {
     where: usersWhereUniqueInput
     create: XOR<usersCreateWithoutNotifications_notifications_to_user_idTousersInput, usersUncheckedCreateWithoutNotifications_notifications_to_user_idTousersInput>
-  }
-
-  export type item_tranCreateWithoutNotificationsInput = {
-    status?: $Enums.item_tran_status | null
-    record_status?: $Enums.record_status | null
-    library_items?: library_itemsCreateNestedOneWithoutItem_tranInput
-    users?: usersCreateNestedOneWithoutItem_tranInput
-    item_tran_history?: item_tran_historyCreateNestedManyWithoutItem_tranInput
-  }
-
-  export type item_tranUncheckedCreateWithoutNotificationsInput = {
-    tran_id?: number
-    item_id?: number | null
-    status?: $Enums.item_tran_status | null
-    user_id?: number | null
-    record_status?: $Enums.record_status | null
-    item_tran_history?: item_tran_historyUncheckedCreateNestedManyWithoutItem_tranInput
-  }
-
-  export type item_tranCreateOrConnectWithoutNotificationsInput = {
-    where: item_tranWhereUniqueInput
-    create: XOR<item_tranCreateWithoutNotificationsInput, item_tranUncheckedCreateWithoutNotificationsInput>
   }
 
   export type library_itemsUpsertWithoutNotificationsInput = {
@@ -20161,7 +18460,6 @@ export namespace Prisma {
     logs?: logsUpdateManyWithoutUsersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUpdateManyWithoutUsersNestedInput
-    library_cards?: library_cardsUpdateManyWithoutUsersNestedInput
   }
 
   export type usersUncheckedUpdateWithoutNotifications_notifications_from_user_idTousersInput = {
@@ -20185,7 +18483,6 @@ export namespace Prisma {
     logs?: logsUncheckedUpdateManyWithoutUsersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
-    library_cards?: library_cardsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type usersUpsertWithoutNotifications_notifications_to_user_idTousersInput = {
@@ -20219,7 +18516,6 @@ export namespace Prisma {
     logs?: logsUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     user_wishlist?: user_wishlistUpdateManyWithoutUsersNestedInput
-    library_cards?: library_cardsUpdateManyWithoutUsersNestedInput
   }
 
   export type usersUncheckedUpdateWithoutNotifications_notifications_to_user_idTousersInput = {
@@ -20243,35 +18539,6 @@ export namespace Prisma {
     logs?: logsUncheckedUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
-    library_cards?: library_cardsUncheckedUpdateManyWithoutUsersNestedInput
-  }
-
-  export type item_tranUpsertWithoutNotificationsInput = {
-    update: XOR<item_tranUpdateWithoutNotificationsInput, item_tranUncheckedUpdateWithoutNotificationsInput>
-    create: XOR<item_tranCreateWithoutNotificationsInput, item_tranUncheckedCreateWithoutNotificationsInput>
-    where?: item_tranWhereInput
-  }
-
-  export type item_tranUpdateToOneWithWhereWithoutNotificationsInput = {
-    where?: item_tranWhereInput
-    data: XOR<item_tranUpdateWithoutNotificationsInput, item_tranUncheckedUpdateWithoutNotificationsInput>
-  }
-
-  export type item_tranUpdateWithoutNotificationsInput = {
-    status?: NullableEnumitem_tran_statusFieldUpdateOperationsInput | $Enums.item_tran_status | null
-    record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
-    library_items?: library_itemsUpdateOneWithoutItem_tranNestedInput
-    users?: usersUpdateOneWithoutItem_tranNestedInput
-    item_tran_history?: item_tran_historyUpdateManyWithoutItem_tranNestedInput
-  }
-
-  export type item_tranUncheckedUpdateWithoutNotificationsInput = {
-    tran_id?: IntFieldUpdateOperationsInput | number
-    item_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: NullableEnumitem_tran_statusFieldUpdateOperationsInput | $Enums.item_tran_status | null
-    user_id?: NullableIntFieldUpdateOperationsInput | number | null
-    record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
-    item_tran_history?: item_tran_historyUncheckedUpdateManyWithoutItem_tranNestedInput
   }
 
   export type usersCreateWithoutUser_wishlistInput = {
@@ -20294,7 +18561,6 @@ export namespace Prisma {
     logs?: logsCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
-    library_cards?: library_cardsCreateNestedManyWithoutUsersInput
   }
 
   export type usersUncheckedCreateWithoutUser_wishlistInput = {
@@ -20318,7 +18584,6 @@ export namespace Prisma {
     logs?: logsUncheckedCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
-    library_cards?: library_cardsUncheckedCreateNestedManyWithoutUsersInput
   }
 
   export type usersCreateOrConnectWithoutUser_wishlistInput = {
@@ -20415,7 +18680,6 @@ export namespace Prisma {
     logs?: logsUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
-    library_cards?: library_cardsUpdateManyWithoutUsersNestedInput
   }
 
   export type usersUncheckedUpdateWithoutUser_wishlistInput = {
@@ -20439,7 +18703,6 @@ export namespace Prisma {
     logs?: logsUncheckedUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
-    library_cards?: library_cardsUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type library_itemsUpsertWithoutUser_wishlistInput = {
@@ -20511,7 +18774,6 @@ export namespace Prisma {
     record_status?: $Enums.record_status | null
     library_items?: library_itemsCreateNestedOneWithoutItem_tranInput
     item_tran_history?: item_tran_historyCreateNestedManyWithoutItem_tranInput
-    notifications?: notificationsCreateNestedManyWithoutItem_tranInput
   }
 
   export type item_tranUncheckedCreateWithoutUsersInput = {
@@ -20520,7 +18782,6 @@ export namespace Prisma {
     status?: $Enums.item_tran_status | null
     record_status?: $Enums.record_status | null
     item_tran_history?: item_tran_historyUncheckedCreateNestedManyWithoutItem_tranInput
-    notifications?: notificationsUncheckedCreateNestedManyWithoutItem_tranInput
   }
 
   export type item_tranCreateOrConnectWithoutUsersInput = {
@@ -20670,7 +18931,6 @@ export namespace Prisma {
     resolved_at?: Date | string | null
     library_items?: library_itemsCreateNestedOneWithoutNotificationsInput
     users_notifications_to_user_idTousers?: usersCreateNestedOneWithoutNotifications_notifications_to_user_idTousersInput
-    item_tran?: item_tranCreateNestedOneWithoutNotificationsInput
   }
 
   export type notificationsUncheckedCreateWithoutUsers_notifications_from_user_idTousersInput = {
@@ -20678,7 +18938,6 @@ export namespace Prisma {
     type?: $Enums.notifications_type | null
     item_id?: number | null
     to_user_id?: number | null
-    tran_id?: number | null
     reservation_id?: number | null
     status?: $Enums.notifications_status | null
     message?: string | null
@@ -20705,7 +18964,6 @@ export namespace Prisma {
     resolved_at?: Date | string | null
     library_items?: library_itemsCreateNestedOneWithoutNotificationsInput
     users_notifications_from_user_idTousers?: usersCreateNestedOneWithoutNotifications_notifications_from_user_idTousersInput
-    item_tran?: item_tranCreateNestedOneWithoutNotificationsInput
   }
 
   export type notificationsUncheckedCreateWithoutUsers_notifications_to_user_idTousersInput = {
@@ -20713,7 +18971,6 @@ export namespace Prisma {
     type?: $Enums.notifications_type | null
     item_id?: number | null
     from_user_id?: number | null
-    tran_id?: number | null
     reservation_id?: number | null
     status?: $Enums.notifications_status | null
     message?: string | null
@@ -20749,31 +19006,6 @@ export namespace Prisma {
 
   export type user_wishlistCreateManyUsersInputEnvelope = {
     data: user_wishlistCreateManyUsersInput | user_wishlistCreateManyUsersInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type library_cardsCreateWithoutUsersInput = {
-    card_number: string
-    issued_at?: Date | string
-    expires_at?: Date | string | null
-    status?: $Enums.card_status
-  }
-
-  export type library_cardsUncheckedCreateWithoutUsersInput = {
-    card_id?: number
-    card_number: string
-    issued_at?: Date | string
-    expires_at?: Date | string | null
-    status?: $Enums.card_status
-  }
-
-  export type library_cardsCreateOrConnectWithoutUsersInput = {
-    where: library_cardsWhereUniqueInput
-    create: XOR<library_cardsCreateWithoutUsersInput, library_cardsUncheckedCreateWithoutUsersInput>
-  }
-
-  export type library_cardsCreateManyUsersInputEnvelope = {
-    data: library_cardsCreateManyUsersInput | library_cardsCreateManyUsersInput[]
     skipDuplicates?: boolean
   }
 
@@ -20915,144 +19147,6 @@ export namespace Prisma {
     data: XOR<user_wishlistUpdateManyMutationInput, user_wishlistUncheckedUpdateManyWithoutUsersInput>
   }
 
-  export type library_cardsUpsertWithWhereUniqueWithoutUsersInput = {
-    where: library_cardsWhereUniqueInput
-    update: XOR<library_cardsUpdateWithoutUsersInput, library_cardsUncheckedUpdateWithoutUsersInput>
-    create: XOR<library_cardsCreateWithoutUsersInput, library_cardsUncheckedCreateWithoutUsersInput>
-  }
-
-  export type library_cardsUpdateWithWhereUniqueWithoutUsersInput = {
-    where: library_cardsWhereUniqueInput
-    data: XOR<library_cardsUpdateWithoutUsersInput, library_cardsUncheckedUpdateWithoutUsersInput>
-  }
-
-  export type library_cardsUpdateManyWithWhereWithoutUsersInput = {
-    where: library_cardsScalarWhereInput
-    data: XOR<library_cardsUpdateManyMutationInput, library_cardsUncheckedUpdateManyWithoutUsersInput>
-  }
-
-  export type library_cardsScalarWhereInput = {
-    AND?: library_cardsScalarWhereInput | library_cardsScalarWhereInput[]
-    OR?: library_cardsScalarWhereInput[]
-    NOT?: library_cardsScalarWhereInput | library_cardsScalarWhereInput[]
-    card_id?: IntFilter<"library_cards"> | number
-    user_id?: IntNullableFilter<"library_cards"> | number | null
-    card_number?: StringFilter<"library_cards"> | string
-    issued_at?: DateTimeFilter<"library_cards"> | Date | string
-    expires_at?: DateTimeNullableFilter<"library_cards"> | Date | string | null
-    status?: Enumcard_statusFilter<"library_cards"> | $Enums.card_status
-  }
-
-  export type usersCreateWithoutLibrary_cardsInput = {
-    name?: string | null
-    email?: string | null
-    password_hash?: string | null
-    role?: $Enums.users_role | null
-    status?: $Enums.users_status | null
-    created_at?: Date | string | null
-    updated_at?: Date | string | null
-    gender?: $Enums.gender | null
-    phone_number?: string | null
-    birth_date?: Date | string | null
-    address?: string | null
-    profile_image_url?: string | null
-    item_tran?: item_tranCreateNestedManyWithoutUsersInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
-    fines?: finesCreateNestedManyWithoutUsersInput
-    logs?: logsCreateNestedManyWithoutUsersInput
-    notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
-    notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
-    user_wishlist?: user_wishlistCreateNestedManyWithoutUsersInput
-  }
-
-  export type usersUncheckedCreateWithoutLibrary_cardsInput = {
-    user_id?: number
-    name?: string | null
-    email?: string | null
-    password_hash?: string | null
-    role?: $Enums.users_role | null
-    status?: $Enums.users_status | null
-    created_at?: Date | string | null
-    updated_at?: Date | string | null
-    gender?: $Enums.gender | null
-    phone_number?: string | null
-    birth_date?: Date | string | null
-    address?: string | null
-    profile_image_url?: string | null
-    item_tran?: item_tranUncheckedCreateNestedManyWithoutUsersInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
-    fines?: finesUncheckedCreateNestedManyWithoutUsersInput
-    logs?: logsUncheckedCreateNestedManyWithoutUsersInput
-    notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
-    notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
-    user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutUsersInput
-  }
-
-  export type usersCreateOrConnectWithoutLibrary_cardsInput = {
-    where: usersWhereUniqueInput
-    create: XOR<usersCreateWithoutLibrary_cardsInput, usersUncheckedCreateWithoutLibrary_cardsInput>
-  }
-
-  export type usersUpsertWithoutLibrary_cardsInput = {
-    update: XOR<usersUpdateWithoutLibrary_cardsInput, usersUncheckedUpdateWithoutLibrary_cardsInput>
-    create: XOR<usersCreateWithoutLibrary_cardsInput, usersUncheckedCreateWithoutLibrary_cardsInput>
-    where?: usersWhereInput
-  }
-
-  export type usersUpdateToOneWithWhereWithoutLibrary_cardsInput = {
-    where?: usersWhereInput
-    data: XOR<usersUpdateWithoutLibrary_cardsInput, usersUncheckedUpdateWithoutLibrary_cardsInput>
-  }
-
-  export type usersUpdateWithoutLibrary_cardsInput = {
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    password_hash?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: NullableEnumusers_roleFieldUpdateOperationsInput | $Enums.users_role | null
-    status?: NullableEnumusers_statusFieldUpdateOperationsInput | $Enums.users_status | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableEnumgenderFieldUpdateOperationsInput | $Enums.gender | null
-    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
-    birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    item_tran?: item_tranUpdateManyWithoutUsersNestedInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
-    fines?: finesUpdateManyWithoutUsersNestedInput
-    logs?: logsUpdateManyWithoutUsersNestedInput
-    notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
-    notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
-    user_wishlist?: user_wishlistUpdateManyWithoutUsersNestedInput
-  }
-
-  export type usersUncheckedUpdateWithoutLibrary_cardsInput = {
-    user_id?: IntFieldUpdateOperationsInput | number
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    password_hash?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: NullableEnumusers_roleFieldUpdateOperationsInput | $Enums.users_role | null
-    status?: NullableEnumusers_statusFieldUpdateOperationsInput | $Enums.users_status | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableEnumgenderFieldUpdateOperationsInput | $Enums.gender | null
-    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
-    birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    item_tran?: item_tranUncheckedUpdateManyWithoutUsersNestedInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
-    fines?: finesUncheckedUpdateManyWithoutUsersNestedInput
-    logs?: logsUncheckedUpdateManyWithoutUsersNestedInput
-    notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
-    notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
-    user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
-  }
-
   export type item_tran_historyCreateManyItem_tranInput = {
     id?: number
     item_id?: number | null
@@ -21065,19 +19159,6 @@ export namespace Prisma {
     date_due?: Date | string | null
     date_returned?: Date | string | null
     remarks?: string | null
-  }
-
-  export type notificationsCreateManyItem_tranInput = {
-    notification_id?: number
-    type?: $Enums.notifications_type | null
-    item_id?: number | null
-    from_user_id?: number | null
-    to_user_id?: number | null
-    reservation_id?: number | null
-    status?: $Enums.notifications_status | null
-    message?: string | null
-    created_at?: Date | string | null
-    resolved_at?: Date | string | null
   }
 
   export type item_tran_historyUpdateWithoutItem_tranInput = {
@@ -21121,44 +19202,6 @@ export namespace Prisma {
     date_due?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_returned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type notificationsUpdateWithoutItem_tranInput = {
-    type?: NullableEnumnotifications_typeFieldUpdateOperationsInput | $Enums.notifications_type | null
-    reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
-    message?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    resolved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    library_items?: library_itemsUpdateOneWithoutNotificationsNestedInput
-    users_notifications_from_user_idTousers?: usersUpdateOneWithoutNotifications_notifications_from_user_idTousersNestedInput
-    users_notifications_to_user_idTousers?: usersUpdateOneWithoutNotifications_notifications_to_user_idTousersNestedInput
-  }
-
-  export type notificationsUncheckedUpdateWithoutItem_tranInput = {
-    notification_id?: IntFieldUpdateOperationsInput | number
-    type?: NullableEnumnotifications_typeFieldUpdateOperationsInput | $Enums.notifications_type | null
-    item_id?: NullableIntFieldUpdateOperationsInput | number | null
-    from_user_id?: NullableIntFieldUpdateOperationsInput | number | null
-    to_user_id?: NullableIntFieldUpdateOperationsInput | number | null
-    reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
-    message?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    resolved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type notificationsUncheckedUpdateManyWithoutItem_tranInput = {
-    notification_id?: IntFieldUpdateOperationsInput | number
-    type?: NullableEnumnotifications_typeFieldUpdateOperationsInput | $Enums.notifications_type | null
-    item_id?: NullableIntFieldUpdateOperationsInput | number | null
-    from_user_id?: NullableIntFieldUpdateOperationsInput | number | null
-    to_user_id?: NullableIntFieldUpdateOperationsInput | number | null
-    reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
-    message?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    resolved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type finesCreateManyItem_tran_historyInput = {
@@ -21226,7 +19269,6 @@ export namespace Prisma {
     type?: $Enums.notifications_type | null
     from_user_id?: number | null
     to_user_id?: number | null
-    tran_id?: number | null
     reservation_id?: number | null
     status?: $Enums.notifications_status | null
     message?: string | null
@@ -21245,7 +19287,6 @@ export namespace Prisma {
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
     users?: usersUpdateOneWithoutItem_tranNestedInput
     item_tran_history?: item_tran_historyUpdateManyWithoutItem_tranNestedInput
-    notifications?: notificationsUpdateManyWithoutItem_tranNestedInput
   }
 
   export type item_tranUncheckedUpdateWithoutLibrary_itemsInput = {
@@ -21254,7 +19295,6 @@ export namespace Prisma {
     user_id?: NullableIntFieldUpdateOperationsInput | number | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
     item_tran_history?: item_tran_historyUncheckedUpdateManyWithoutItem_tranNestedInput
-    notifications?: notificationsUncheckedUpdateManyWithoutItem_tranNestedInput
   }
 
   export type item_tranUncheckedUpdateManyWithoutLibrary_itemsInput = {
@@ -21316,7 +19356,6 @@ export namespace Prisma {
     resolved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     users_notifications_from_user_idTousers?: usersUpdateOneWithoutNotifications_notifications_from_user_idTousersNestedInput
     users_notifications_to_user_idTousers?: usersUpdateOneWithoutNotifications_notifications_to_user_idTousersNestedInput
-    item_tran?: item_tranUpdateOneWithoutNotificationsNestedInput
   }
 
   export type notificationsUncheckedUpdateWithoutLibrary_itemsInput = {
@@ -21324,7 +19363,6 @@ export namespace Prisma {
     type?: NullableEnumnotifications_typeFieldUpdateOperationsInput | $Enums.notifications_type | null
     from_user_id?: NullableIntFieldUpdateOperationsInput | number | null
     to_user_id?: NullableIntFieldUpdateOperationsInput | number | null
-    tran_id?: NullableIntFieldUpdateOperationsInput | number | null
     reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
     message?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21337,7 +19375,6 @@ export namespace Prisma {
     type?: NullableEnumnotifications_typeFieldUpdateOperationsInput | $Enums.notifications_type | null
     from_user_id?: NullableIntFieldUpdateOperationsInput | number | null
     to_user_id?: NullableIntFieldUpdateOperationsInput | number | null
-    tran_id?: NullableIntFieldUpdateOperationsInput | number | null
     reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
     message?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21418,7 +19455,6 @@ export namespace Prisma {
     type?: $Enums.notifications_type | null
     item_id?: number | null
     to_user_id?: number | null
-    tran_id?: number | null
     reservation_id?: number | null
     status?: $Enums.notifications_status | null
     message?: string | null
@@ -21431,7 +19467,6 @@ export namespace Prisma {
     type?: $Enums.notifications_type | null
     item_id?: number | null
     from_user_id?: number | null
-    tran_id?: number | null
     reservation_id?: number | null
     status?: $Enums.notifications_status | null
     message?: string | null
@@ -21445,20 +19480,11 @@ export namespace Prisma {
     created_at?: Date | string | null
   }
 
-  export type library_cardsCreateManyUsersInput = {
-    card_id?: number
-    card_number: string
-    issued_at?: Date | string
-    expires_at?: Date | string | null
-    status?: $Enums.card_status
-  }
-
   export type item_tranUpdateWithoutUsersInput = {
     status?: NullableEnumitem_tran_statusFieldUpdateOperationsInput | $Enums.item_tran_status | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
     library_items?: library_itemsUpdateOneWithoutItem_tranNestedInput
     item_tran_history?: item_tran_historyUpdateManyWithoutItem_tranNestedInput
-    notifications?: notificationsUpdateManyWithoutItem_tranNestedInput
   }
 
   export type item_tranUncheckedUpdateWithoutUsersInput = {
@@ -21467,7 +19493,6 @@ export namespace Prisma {
     status?: NullableEnumitem_tran_statusFieldUpdateOperationsInput | $Enums.item_tran_status | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
     item_tran_history?: item_tran_historyUncheckedUpdateManyWithoutItem_tranNestedInput
-    notifications?: notificationsUncheckedUpdateManyWithoutItem_tranNestedInput
   }
 
   export type item_tranUncheckedUpdateManyWithoutUsersInput = {
@@ -21618,7 +19643,6 @@ export namespace Prisma {
     resolved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     library_items?: library_itemsUpdateOneWithoutNotificationsNestedInput
     users_notifications_to_user_idTousers?: usersUpdateOneWithoutNotifications_notifications_to_user_idTousersNestedInput
-    item_tran?: item_tranUpdateOneWithoutNotificationsNestedInput
   }
 
   export type notificationsUncheckedUpdateWithoutUsers_notifications_from_user_idTousersInput = {
@@ -21626,7 +19650,6 @@ export namespace Prisma {
     type?: NullableEnumnotifications_typeFieldUpdateOperationsInput | $Enums.notifications_type | null
     item_id?: NullableIntFieldUpdateOperationsInput | number | null
     to_user_id?: NullableIntFieldUpdateOperationsInput | number | null
-    tran_id?: NullableIntFieldUpdateOperationsInput | number | null
     reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
     message?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21639,7 +19662,6 @@ export namespace Prisma {
     type?: NullableEnumnotifications_typeFieldUpdateOperationsInput | $Enums.notifications_type | null
     item_id?: NullableIntFieldUpdateOperationsInput | number | null
     to_user_id?: NullableIntFieldUpdateOperationsInput | number | null
-    tran_id?: NullableIntFieldUpdateOperationsInput | number | null
     reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
     message?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21656,7 +19678,6 @@ export namespace Prisma {
     resolved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     library_items?: library_itemsUpdateOneWithoutNotificationsNestedInput
     users_notifications_from_user_idTousers?: usersUpdateOneWithoutNotifications_notifications_from_user_idTousersNestedInput
-    item_tran?: item_tranUpdateOneWithoutNotificationsNestedInput
   }
 
   export type notificationsUncheckedUpdateWithoutUsers_notifications_to_user_idTousersInput = {
@@ -21664,7 +19685,6 @@ export namespace Prisma {
     type?: NullableEnumnotifications_typeFieldUpdateOperationsInput | $Enums.notifications_type | null
     item_id?: NullableIntFieldUpdateOperationsInput | number | null
     from_user_id?: NullableIntFieldUpdateOperationsInput | number | null
-    tran_id?: NullableIntFieldUpdateOperationsInput | number | null
     reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
     message?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21677,7 +19697,6 @@ export namespace Prisma {
     type?: NullableEnumnotifications_typeFieldUpdateOperationsInput | $Enums.notifications_type | null
     item_id?: NullableIntFieldUpdateOperationsInput | number | null
     from_user_id?: NullableIntFieldUpdateOperationsInput | number | null
-    tran_id?: NullableIntFieldUpdateOperationsInput | number | null
     reservation_id?: NullableIntFieldUpdateOperationsInput | number | null
     status?: NullableEnumnotifications_statusFieldUpdateOperationsInput | $Enums.notifications_status | null
     message?: NullableStringFieldUpdateOperationsInput | string | null
@@ -21700,29 +19719,6 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     item_id?: NullableIntFieldUpdateOperationsInput | number | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type library_cardsUpdateWithoutUsersInput = {
-    card_number?: StringFieldUpdateOperationsInput | string
-    issued_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: Enumcard_statusFieldUpdateOperationsInput | $Enums.card_status
-  }
-
-  export type library_cardsUncheckedUpdateWithoutUsersInput = {
-    card_id?: IntFieldUpdateOperationsInput | number
-    card_number?: StringFieldUpdateOperationsInput | string
-    issued_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: Enumcard_statusFieldUpdateOperationsInput | $Enums.card_status
-  }
-
-  export type library_cardsUncheckedUpdateManyWithoutUsersInput = {
-    card_id?: IntFieldUpdateOperationsInput | number
-    card_number?: StringFieldUpdateOperationsInput | string
-    issued_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    expires_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    status?: Enumcard_statusFieldUpdateOperationsInput | $Enums.card_status
   }
 
 
