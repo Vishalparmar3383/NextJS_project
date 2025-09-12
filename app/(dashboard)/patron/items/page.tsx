@@ -11,6 +11,7 @@ interface LibraryItem {
     year: number | null;
     genre: string | null;
     item_type: string;
+    image_url: string | null;
     publisher: string | null;
     language: string | null;
     pages: number | null;

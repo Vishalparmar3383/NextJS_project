@@ -47,7 +47,6 @@ export const POST = withRoleAuth(['patron'])(async (req) => {
                 },
             },
         });
-        console.log(":::: ",tranId ,"\n:::: ",existingTransaction);
 
         if (!existingTransaction) {
             return NextResponse.json(

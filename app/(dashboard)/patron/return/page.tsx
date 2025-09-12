@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
-
 import React, { useEffect, useState } from 'react';
 import ConfirmDialog from '@/app/components/ConfirmDialog';
 import Snackbar from '@/app/components/Snackbar';
@@ -58,6 +57,7 @@ export default function ReturnPage() {
     }, []);
 
     const onReturnClick = (tranId: number) => {
+        console.log('🎯 Return button clicked for ID:', tranId);
         setSelectedTranId(tranId);
         setConfirmOpen(true);
         setError(null);
@@ -120,7 +120,6 @@ export default function ReturnPage() {
                         </div>
                     )}
                 </div>
-
                 {/* Grid */}
                 {loading ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -164,7 +163,6 @@ export default function ReturnPage() {
                         ))}
                     </div>
                 )}
-
                 {/* Confirm */}
                 <ConfirmDialog
                     open={confirmOpen}
@@ -183,9 +181,13 @@ export default function ReturnPage() {
                         setSelectedTranId(null);
                     }}
                 />
-
                 {/* Snackbar */}
-                <Snackbar open={!!successMsg || !!error} message={successMsg || error || ''} type={successMsg ? 'success' : 'error'} onClose={() => { setSuccessMsg(null); setError(null) }} />
+                <Snackbar 
+                    open={!!successMsg || !!error} 
+                    message={successMsg || error || ''} 
+                    type={successMsg ? 'success' : 'error'} 
+                    onClose={() => { setSuccessMsg(null); setError(null) }} 
+                />
             </div>
         </div>
     );

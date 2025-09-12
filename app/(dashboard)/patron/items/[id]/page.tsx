@@ -12,6 +12,7 @@ interface LibraryItem {
     year: number | null;
     genre: string | null;
     item_type: string;
+    image_url: string | null;
     publisher: string | null;
     language: string | null;
     pages: number | null;
@@ -250,18 +251,32 @@ export default function ItemDetailPage() {
                     <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
                         <div className="md:flex">
                             {/* Item Image/Icon */}
-                            <div className="md:w-1/3 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center p-8">
-                                <div className="text-center">
-                                    <div className="w-24 h-24 mx-auto mb-4 text-gray-400">{getItemTypeIcon(item.item_type)}</div>
+                            <div className="md:w-1/3 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center p-8 relative">
+                                {item.image_url ? (
+                                    <img
+                                        src={item.image_url}
+                                        alt={item.title || 'Library Item'}
+                                        className="absolute inset-0 w-full h-full object-cover rounded-lg"
+                                        style={{ zIndex: 0 }}
+                                        onError={e => { e.currentTarget.style.display = 'none'; }}
+                                    />
+                                ) : (
+                                    <div className="w-24 h-24 mx-auto mb-4 text-gray-400 relative z-10">
+                                        {getItemTypeIcon(item.item_type)}
+                                    </div>
+                                )}
+
+                                <div className="text-center relative z-10">
                                     <span
                                         className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getItemTypeColor(
                                             item.item_type
-                                        )}`}
+                                        )} bg-white bg-opacity-80 backdrop-blur-sm`}
                                     >
                                         {item.item_type.charAt(0).toUpperCase() + item.item_type.slice(1)}
                                     </span>
                                 </div>
                             </div>
+
 
                             {/* Item Details */}
                             <div className="md:w-2/3 p-8">

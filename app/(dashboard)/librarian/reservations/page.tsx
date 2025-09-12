@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import ConfirmDialog from '@/app/components/ConfirmDialog';
 import Snackbar from '@/app/components/Snackbar';
 
-
 export default function ReservationsPage() {
     const [reservations, setReservations] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -233,7 +232,6 @@ export default function ReservationsPage() {
         return reservation.status === 'pending' && getRequestType(reservation) === 'issue';
     };
 
-
     return (
         <div className="min-h-screen bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -242,7 +240,7 @@ export default function ReservationsPage() {
                 <div className="mb-8">
                     <div className="flex items-center justify-between">
                         <div>
-                            <h1 className="text-3xl font-bold text-gray-900">Book Requests & Returns</h1>
+                            <h1 className="text-3xl font-bold text-gray-900">Book Requests &amp; Returns</h1>
                             <p className="mt-2 text-sm text-gray-600">
                                 Manage book issue requests and return approvals from library users
                             </p>
@@ -321,18 +319,18 @@ export default function ReservationsPage() {
                                                     </svg>
                                                 </div>
                                                 <div className="ml-4">
-                                                    <div className="text-sm font-semibold text-gray-900">{item.books?.title || 'Unknown Title'}</div>
-                                                    <div className="text-sm text-gray-500">{item.books?.author || 'Unknown Author'}</div>
+                                                    <div className="text-sm font-semibold text-gray-900">{item.library_items?.title || 'Unknown Title'}</div>
+                                                    <div className="text-sm text-gray-500">{item.library_items?.author || 'Unknown Author'}</div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 <div className="flex-shrink-0 h-8 w-8 bg-indigo-200 rounded-full flex items-center justify-center">
-                                                    <span className="text-xs font-medium text-indigo-700">{item.users_book_tran_history_requested_byTousers?.name?.charAt(0)?.toUpperCase() || '?'}</span>
+                                                    <span className="text-xs font-medium text-indigo-700">{item.users_item_tran_history_requested_byTousers?.name?.charAt(0)?.toUpperCase() || '?'}</span>
                                                 </div>
                                                 <div className="ml-3">
-                                                    <div className="text-sm font-medium text-gray-900">{item.users_book_tran_history_requested_byTousers?.name || '—'}</div>
+                                                    <div className="text-sm font-medium text-gray-900">{item.users_item_tran_history_requested_byTousers?.name || '—'}</div>
                                                     <div className="text-sm text-gray-500">{item.requested_at ? new Date(item.requested_at).toLocaleDateString() : '—'}</div>
                                                 </div>
                                             </div>
@@ -427,8 +425,8 @@ export default function ReservationsPage() {
                 }
                 message={
                     confirmAction === 'approve'
-                        ? `Are you sure you want to ${getRequestType(selectedReservation) === 'return' ? 'process the return' : 'approve the issue'} for "${selectedReservation?.books?.title || ''}"?`
-                        : `Are you sure you want to reject the ${getRequestType(selectedReservation)} for "${selectedReservation?.books?.title || ''}"?`
+                        ? `Are you sure you want to ${getRequestType(selectedReservation) === 'return' ? 'process the return' : 'approve the issue'} for "${selectedReservation?.library_items?.title || ''}"?`
+                        : `Are you sure you want to reject the ${getRequestType(selectedReservation)} for "${selectedReservation?.library_items?.title || ''}"?`
                 }
                 confirmText={
                     confirmAction === 'approve'
@@ -458,18 +456,18 @@ export default function ReservationsPage() {
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                 </div>
-                                <h4 className="text-lg font-semibold text-blue-900">Return Processing & Fine Assessment</h4>
+                                <h4 className="text-lg font-semibold text-blue-900">Return Processing &amp; Fine Assessment</h4>
                             </div>
 
                             {/* Book Return Summary */}
                             <div className="mb-4 p-4 bg-white border border-blue-200 rounded-lg">
                                 <div className="flex items-center justify-between mb-2">
                                     <span className="text-sm font-medium text-gray-700">Book Title:</span>
-                                    <span className="text-sm font-semibold text-gray-900">{selectedReservation?.books?.title}</span>
+                                    <span className="text-sm font-semibold text-gray-900">{selectedReservation?.library_items?.title}</span>
                                 </div>
                                 <div className="flex items-center justify-between mb-2">
                                     <span className="text-sm font-medium text-gray-700">Returned By:</span>
-                                    <span className="text-sm font-semibold text-gray-900">{selectedReservation?.users_book_tran_history_requested_byTousers?.name}</span>
+                                    <span className="text-sm font-semibold text-gray-900">{selectedReservation?.users_item_tran_history_requested_byTousers?.name}</span>
                                 </div>
                                 {selectedReservation?.date_due && (
                                     <div className="flex items-center justify-between">
@@ -490,7 +488,7 @@ export default function ReservationsPage() {
                                     </div>
                                     <div className="text-sm text-red-700 space-y-1">
                                         <div><span className="font-medium">Days Overdue:</span> {getDaysLate(selectedReservation.date_due)} days</div>
-                                        <div><span className="font-medium">Late Fee:</span> ${getPotentialFine(selectedReservation.date_due)} (${5}/day)</div>
+                                        <div><span className="font-medium">Late Fee:</span> ${getPotentialFine(selectedReservation.date_due)} ($5/day)</div>
                                     </div>
                                 </div>
                             )}
@@ -545,61 +543,6 @@ export default function ReservationsPage() {
                                             rows={3}
                                             className="block w-full px-3 py-2.5 border-2 border-blue-300 rounded-lg text-base text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white resize-none placeholder-gray-500"
                                         />
-                                    </div>
-                                </div>
-
-                                {/* Total Fine Summary */}
-                                <div className="border-t border-blue-200 pt-4">
-                                    <div className="p-4 bg-white border-2 border-gray-200 rounded-lg shadow-sm">
-                                        <h5 className="text-md font-semibold text-gray-800 mb-3 flex items-center">
-                                            <svg className="h-5 w-5 text-gray-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                                            </svg>
-                                            Fine Summary
-                                        </h5>
-                                        <div className="text-sm text-gray-700 space-y-2">
-                                            {selectedReservation?.date_due && (
-                                                <div className="flex justify-between items-center py-1">
-                                                    <span className="flex items-center">
-                                                        <svg className="h-4 w-4 text-red-500 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                        </svg>
-                                                        Late Return Fine:
-                                                    </span>
-                                                    <span className="font-semibold">${getPotentialFine(selectedReservation.date_due)}</span>
-                                                </div>
-                                            )}
-                                            {additionalFineAmount && parseFloat(additionalFineAmount) > 0 && (
-                                                <div className="flex justify-between items-center py-1">
-                                                    <span className="flex items-center">
-                                                        <svg className="h-4 w-4 text-orange-500 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-                                                        </svg>
-                                                        Book Damage Fine:
-                                                    </span>
-                                                    <span className="font-semibold">${parseFloat(additionalFineAmount).toFixed(2)}</span>
-                                                </div>
-                                            )}
-                                            <div className="flex justify-between items-center pt-2 mt-3 border-t border-gray-200">
-                                                <span className="font-semibold text-gray-900">Total Fine Amount:</span>
-                                                <span className="font-bold text-lg text-blue-600">
-                                                    ${selectedReservation?.date_due ?
-                                                        (getPotentialFine(selectedReservation.date_due) + (additionalFineAmount ? parseFloat(additionalFineAmount) : 0)).toFixed(2)
-                                                        : (additionalFineAmount ? parseFloat(additionalFineAmount) : 0).toFixed(2)
-                                                    }
-                                                </span>
-                                            </div>
-                                            {selectedReservation?.date_due && (getPotentialFine(selectedReservation.date_due) + (additionalFineAmount ? parseFloat(additionalFineAmount) : 0)) === 0 && (
-                                                <div className="text-center py-2">
-                                                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                                                        <svg className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                        </svg>
-                                                        No fines applicable
-                                                    </span>
-                                                </div>
-                                            )}
-                                        </div>
                                     </div>
                                 </div>
                             </div>

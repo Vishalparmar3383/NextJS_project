@@ -41,6 +41,7 @@ export const GET = withAuth(async (req: Request, { params }: { params: { id: str
             year: item.year,
             genre: item.genre,
             item_type: item.item_type,
+            image_url: item.image_url,
             publisher: item.publisher,
             language: item.language,
             pages: item.pages,

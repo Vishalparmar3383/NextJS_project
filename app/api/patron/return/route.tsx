@@ -14,8 +14,6 @@ export const GET = withRoleAuth(['patron'])(async (req) => {
             where: {
                 status: item_tran_history_status.issued,
                 requested_by: req.user.userId,
-                // Optionally filter active records only if applicable:
-                // AND: { item_tran: { record_status: 'active' } }
             },
             include: {
                 library_items: true,

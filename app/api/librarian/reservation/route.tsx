@@ -275,7 +275,7 @@ export const DELETE = withRoleAuth(['librarian'])(async (req: NextRequest) => {
             }
 
             await tx.notifications.updateMany({
-                where: { tran_id: reservation.tran_id, status: notifications_status.pending },
+                where: { status: notifications_status.pending },
                 data: { status: notifications_status.rejected, resolved_at: new Date() },
             });
 

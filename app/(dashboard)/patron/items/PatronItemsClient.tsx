@@ -14,6 +14,7 @@ interface LibraryItem {
     year: number | null;
     genre: string | null;
     item_type: string;
+    image_url: string | null;
     publisher: string | null;
     language: string | null;
     pages: number | null;
@@ -117,7 +118,7 @@ export default function PatronItemsClient({
 
     const filteredAndSortedItems = useMemo(() => {
         let filtered = mergedItems;
-        
+
         // Apply search filter
         if (searchTerm.trim()) {
             const search = searchTerm.toLowerCase();
@@ -144,7 +145,7 @@ export default function PatronItemsClient({
         filtered.sort((a, b) => {
             let aValue: string | number;
             let bValue: string | number;
-            
+
             switch (sortBy) {
                 case 'title':
                     aValue = a.title?.toLowerCase() || '';
@@ -170,7 +171,7 @@ export default function PatronItemsClient({
                     aValue = a.title?.toLowerCase() || '';
                     bValue = b.title?.toLowerCase() || '';
             }
-            
+
             if (typeof aValue === 'string' && typeof bValue === 'string') {
                 const comparison = aValue.localeCompare(bValue);
                 return sortOrder === 'asc' ? comparison : -comparison;
@@ -179,7 +180,7 @@ export default function PatronItemsClient({
                 return sortOrder === 'asc' ? comparison : -comparison;
             }
         });
-        
+
         return filtered;
     }, [mergedItems, searchTerm, sortBy, sortOrder, filterType, filterGenre]);
 
@@ -388,16 +389,35 @@ export default function PatronItemsClient({
 }
 
 // --- ItemCard Component ---
-function ItemCard({ item }: { item: LibraryItem;}) {
+function ItemCard({ item }: { item: LibraryItem; }) {
     return (
         <div
             className={`group bg-white rounded-2xl shadow-lg transform transition-all duration-300 overflow-hidden border border-gray-100 hover:shadow-2xl hover:-translate-y-1
             `}
         >
             <div className="relative overflow-hidden">
-                <div className="w-full h-44 xs:h-48 sm:h-56 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                    {getItemTypeIcon(item.item_type)}
+                <div className="relative w-full h-44 xs:h-48 sm:h-56 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center overflow-hidden">
+                    {item.image_url ? (
+                        <img
+                            src={item.image_url}
+                            alt={item.title || 'Library Item'}
+                            className="absolute inset-0 w-full h-full object-cover"
+                            onError={e => { e.currentTarget.style.display = 'none'; }}
+                        />
+                    ) : (
+                        <div className="flex items-center justify-center w-full h-full">
+                            {getItemTypeIcon(item.item_type)}
+                        </div>
+                    )}
+
+                    {/* Item Type Badge */}
+                    <div className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10">
+                        <span className={`inline-flex items-center px-2 py-1 sm:px-2.5 sm:py-1 rounded-full text-xs font-medium ${itemTypeColors[item.item_type] || 'bg-gray-100 text-gray-800'} backdrop-blur-sm`}>
+                            {item.item_type.charAt(0).toUpperCase() + item.item_type.slice(1)}
+                        </span>
+                    </div>
                 </div>
+
 
                 {/* Item Type Badge */}
                 <div className="absolute top-2 right-2 sm:top-3 sm:right-3">
@@ -461,7 +481,7 @@ function ItemCard({ item }: { item: LibraryItem;}) {
 }
 
 // --- ItemListItem Component ---
-function ItemListItem({ item }: { item: LibraryItem;}) {
+function ItemListItem({ item }: { item: LibraryItem; }) {
     return (
         <div
             className={`bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200 overflow-hidden border border-gray-100`}
@@ -469,7 +489,18 @@ function ItemListItem({ item }: { item: LibraryItem;}) {
             <div className="flex flex-col xs:flex-row p-4 sm:p-6 gap-3 sm:gap-6">
                 <div className="flex-shrink-0 mb-3 xs:mb-0 xs:mr-4 sm:mr-6">
                     <div className="w-20 h-28 sm:w-24 sm:h-32 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center">
-                        {getItemTypeIcon(item.item_type)}
+                        <div className="w-20 h-28 sm:w-24 sm:h-32 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
+                            {item.image_url ? (
+                                <img
+                                    src={item.image_url}
+                                    alt={item.title || 'Library Item'}
+                                    className="w-full h-full object-cover"
+                                />
+                            ) : (
+                                getItemTypeIcon(item.item_type)
+                            )}
+                        </div>
+
                     </div>
                 </div>
 
