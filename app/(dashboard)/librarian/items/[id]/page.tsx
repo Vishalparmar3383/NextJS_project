@@ -8,7 +8,6 @@ import Link from "next/link";
 import ConfirmDialog from "@/app/components/ConfirmDialog";
 import { useParams } from 'next/navigation';
 import Snackbar from "@/app/components/Snackbar";
-import {Atom} from "react-loading-indicators";
 
 interface Item {
     id: string;
@@ -262,8 +261,8 @@ export default function ItemDetailPage() {
                                         </h3>
                                         <div className="flex flex-wrap gap-2">
                                             {item.keywords.split(',').map((keyword, i) => (
-                                                <span 
-                                                    key={i} 
+                                                <span
+                                                    key={i}
                                                     className="inline-flex items-center px-4 py-2 rounded-full text-sm bg-white/80 text-slate-700 border border-slate-200 hover:bg-indigo-50 hover:border-indigo-300 transition-all duration-200 cursor-default shadow-sm"
                                                     style={{ animationDelay: `${i * 100}ms` }}
                                                 >
@@ -486,7 +485,7 @@ function StatusBadge({ label, value, color }: { label: string, value: number, co
 
 function DetailCard({ icon, title, content, delay }: { icon: JSX.Element, title: string, content: string, delay: string }) {
     return (
-        <div 
+        <div
             className="group bg-white/60 backdrop-blur-sm rounded-2xl p-5 border border-white/40 hover:bg-white/80 hover:shadow-lg hover:shadow-slate-200/30 hover:scale-105 transition-all duration-300 cursor-default"
             style={{ animationDelay: delay }}
         >
@@ -521,8 +520,8 @@ function CopiesInfo({ copies }: { copies: any[] }) {
                         <p className="text-slate-400 text-sm">Add copies to track availability</p>
                     </div>
                 ) : copies.map((copy, index) => (
-                    <div 
-                        key={copy.tran_id} 
+                    <div
+                        key={copy.tran_id}
                         className="bg-white/80 backdrop-blur-sm p-4 rounded-xl border border-white/50 hover:bg-white transition-all duration-200 shadow-sm"
                         style={{ animationDelay: `${index * 100}ms` }}
                     >
@@ -531,12 +530,11 @@ function CopiesInfo({ copies }: { copies: any[] }) {
                                 <div className="font-bold text-slate-800">Transaction #{copy.tran_id}</div>
                                 <div className="flex items-center gap-2">
                                     <span className="text-sm text-slate-600">Status:</span>
-                                    <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
-                                        copy.status === 'available' ? 'bg-green-100 text-green-700' :
-                                        copy.status === 'issued' ? 'bg-orange-100 text-orange-700' :
-                                        copy.status === 'reserved' ? 'bg-blue-100 text-blue-700' :
-                                        'bg-slate-100 text-slate-700'
-                                    }`}>
+                                    <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${copy.status === 'available' ? 'bg-green-100 text-green-700' :
+                                            copy.status === 'issued' ? 'bg-orange-100 text-orange-700' :
+                                                copy.status === 'reserved' ? 'bg-blue-100 text-blue-700' :
+                                                    'bg-slate-100 text-slate-700'
+                                        }`}>
                                         {copy.status}
                                     </span>
                                 </div>
@@ -595,12 +593,11 @@ function HistoryTable({ history }: { history: any[] }) {
                             {history.map((h, index) => (
                                 <tr key={h.id} className="hover:bg-slate-50/50 transition-colors duration-200" style={{ animationDelay: `${index * 50}ms` }}>
                                     <td className="py-3 px-4">
-                                        <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
-                                            h.status === 'approved' ? 'bg-green-100 text-green-700' :
-                                            h.status === 'issued' ? 'bg-blue-100 text-blue-700' :
-                                            h.status === 'returned' ? 'bg-slate-100 text-slate-700' :
-                                            'bg-orange-100 text-orange-700'
-                                        }`}>
+                                        <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${h.status === 'approved' ? 'bg-green-100 text-green-700' :
+                                                h.status === 'issued' ? 'bg-blue-100 text-blue-700' :
+                                                    h.status === 'returned' ? 'bg-slate-100 text-slate-700' :
+                                                        'bg-orange-100 text-orange-700'
+                                            }`}>
                                             {h.status}
                                         </span>
                                     </td>
@@ -622,7 +619,7 @@ function HistoryTable({ history }: { history: any[] }) {
     );
 }
 
-export function ItemActions({
+function ItemActions({
     item,
     selectedItem,
     setSelectedItem,

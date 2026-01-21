@@ -170,17 +170,6 @@ export const item_tran_history_status: {
 
 export type item_tran_history_status = (typeof item_tran_history_status)[keyof typeof item_tran_history_status]
 
-
-export const reservation_status: {
-  pending: 'pending',
-  active: 'active',
-  expired: 'expired',
-  cancelled: 'cancelled',
-  fulfilled: 'fulfilled'
-};
-
-export type reservation_status = (typeof reservation_status)[keyof typeof reservation_status]
-
 }
 
 export type record_status = $Enums.record_status
@@ -222,10 +211,6 @@ export const item_tran_status: typeof $Enums.item_tran_status
 export type item_tran_history_status = $Enums.item_tran_history_status
 
 export const item_tran_history_status: typeof $Enums.item_tran_history_status
-
-export type reservation_status = $Enums.reservation_status
-
-export const reservation_status: typeof $Enums.reservation_status
 
 /**
  * ##  Prisma Client ʲˢ
@@ -1878,10 +1863,10 @@ export namespace Prisma {
    */
 
   export type UsersCountOutputType = {
-    item_tran: number
-    item_tran_history_item_tran_history_requested_byTousers: number
-    item_tran_history_item_tran_history_approved_byTousers: number
     fines: number
+    item_tran: number
+    item_tran_history_item_tran_history_approved_byTousers: number
+    item_tran_history_item_tran_history_requested_byTousers: number
     logs: number
     notifications_notifications_from_user_idTousers: number
     notifications_notifications_to_user_idTousers: number
@@ -1889,10 +1874,10 @@ export namespace Prisma {
   }
 
   export type UsersCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    item_tran?: boolean | UsersCountOutputTypeCountItem_tranArgs
-    item_tran_history_item_tran_history_requested_byTousers?: boolean | UsersCountOutputTypeCountItem_tran_history_item_tran_history_requested_byTousersArgs
-    item_tran_history_item_tran_history_approved_byTousers?: boolean | UsersCountOutputTypeCountItem_tran_history_item_tran_history_approved_byTousersArgs
     fines?: boolean | UsersCountOutputTypeCountFinesArgs
+    item_tran?: boolean | UsersCountOutputTypeCountItem_tranArgs
+    item_tran_history_item_tran_history_approved_byTousers?: boolean | UsersCountOutputTypeCountItem_tran_history_item_tran_history_approved_byTousersArgs
+    item_tran_history_item_tran_history_requested_byTousers?: boolean | UsersCountOutputTypeCountItem_tran_history_item_tran_history_requested_byTousersArgs
     logs?: boolean | UsersCountOutputTypeCountLogsArgs
     notifications_notifications_from_user_idTousers?: boolean | UsersCountOutputTypeCountNotifications_notifications_from_user_idTousersArgs
     notifications_notifications_to_user_idTousers?: boolean | UsersCountOutputTypeCountNotifications_notifications_to_user_idTousersArgs
@@ -1913,15 +1898,15 @@ export namespace Prisma {
   /**
    * UsersCountOutputType without action
    */
-  export type UsersCountOutputTypeCountItem_tranArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: item_tranWhereInput
+  export type UsersCountOutputTypeCountFinesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: finesWhereInput
   }
 
   /**
    * UsersCountOutputType without action
    */
-  export type UsersCountOutputTypeCountItem_tran_history_item_tran_history_requested_byTousersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: item_tran_historyWhereInput
+  export type UsersCountOutputTypeCountItem_tranArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: item_tranWhereInput
   }
 
   /**
@@ -1934,8 +1919,8 @@ export namespace Prisma {
   /**
    * UsersCountOutputType without action
    */
-  export type UsersCountOutputTypeCountFinesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: finesWhereInput
+  export type UsersCountOutputTypeCountItem_tran_history_item_tran_history_requested_byTousersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: item_tran_historyWhereInput
   }
 
   /**
@@ -3284,11 +3269,11 @@ export namespace Prisma {
     date_due?: boolean
     date_returned?: boolean
     remarks?: boolean
-    library_items?: boolean | item_tran_history$library_itemsArgs<ExtArgs>
-    item_tran?: boolean | item_tran_history$item_tranArgs<ExtArgs>
-    users_item_tran_history_requested_byTousers?: boolean | item_tran_history$users_item_tran_history_requested_byTousersArgs<ExtArgs>
-    users_item_tran_history_approved_byTousers?: boolean | item_tran_history$users_item_tran_history_approved_byTousersArgs<ExtArgs>
     fines?: boolean | item_tran_history$finesArgs<ExtArgs>
+    users_item_tran_history_approved_byTousers?: boolean | item_tran_history$users_item_tran_history_approved_byTousersArgs<ExtArgs>
+    library_items?: boolean | item_tran_history$library_itemsArgs<ExtArgs>
+    users_item_tran_history_requested_byTousers?: boolean | item_tran_history$users_item_tran_history_requested_byTousersArgs<ExtArgs>
+    item_tran?: boolean | item_tran_history$item_tranArgs<ExtArgs>
     _count?: boolean | Item_tran_historyCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["item_tran_history"]>
 
@@ -3311,22 +3296,22 @@ export namespace Prisma {
 
   export type item_tran_historyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "item_id" | "tran_id" | "status" | "requested_by" | "approved_by" | "requested_at" | "approved_at" | "date_issued" | "date_due" | "date_returned" | "remarks", ExtArgs["result"]["item_tran_history"]>
   export type item_tran_historyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    library_items?: boolean | item_tran_history$library_itemsArgs<ExtArgs>
-    item_tran?: boolean | item_tran_history$item_tranArgs<ExtArgs>
-    users_item_tran_history_requested_byTousers?: boolean | item_tran_history$users_item_tran_history_requested_byTousersArgs<ExtArgs>
-    users_item_tran_history_approved_byTousers?: boolean | item_tran_history$users_item_tran_history_approved_byTousersArgs<ExtArgs>
     fines?: boolean | item_tran_history$finesArgs<ExtArgs>
+    users_item_tran_history_approved_byTousers?: boolean | item_tran_history$users_item_tran_history_approved_byTousersArgs<ExtArgs>
+    library_items?: boolean | item_tran_history$library_itemsArgs<ExtArgs>
+    users_item_tran_history_requested_byTousers?: boolean | item_tran_history$users_item_tran_history_requested_byTousersArgs<ExtArgs>
+    item_tran?: boolean | item_tran_history$item_tranArgs<ExtArgs>
     _count?: boolean | Item_tran_historyCountOutputTypeDefaultArgs<ExtArgs>
   }
 
   export type $item_tran_historyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "item_tran_history"
     objects: {
-      library_items: Prisma.$library_itemsPayload<ExtArgs> | null
-      item_tran: Prisma.$item_tranPayload<ExtArgs> | null
-      users_item_tran_history_requested_byTousers: Prisma.$usersPayload<ExtArgs> | null
-      users_item_tran_history_approved_byTousers: Prisma.$usersPayload<ExtArgs> | null
       fines: Prisma.$finesPayload<ExtArgs>[]
+      users_item_tran_history_approved_byTousers: Prisma.$usersPayload<ExtArgs> | null
+      library_items: Prisma.$library_itemsPayload<ExtArgs> | null
+      users_item_tran_history_requested_byTousers: Prisma.$usersPayload<ExtArgs> | null
+      item_tran: Prisma.$item_tranPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -3681,11 +3666,11 @@ export namespace Prisma {
    */
   export interface Prisma__item_tran_historyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    library_items<T extends item_tran_history$library_itemsArgs<ExtArgs> = {}>(args?: Subset<T, item_tran_history$library_itemsArgs<ExtArgs>>): Prisma__library_itemsClient<$Result.GetResult<Prisma.$library_itemsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    item_tran<T extends item_tran_history$item_tranArgs<ExtArgs> = {}>(args?: Subset<T, item_tran_history$item_tranArgs<ExtArgs>>): Prisma__item_tranClient<$Result.GetResult<Prisma.$item_tranPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    users_item_tran_history_requested_byTousers<T extends item_tran_history$users_item_tran_history_requested_byTousersArgs<ExtArgs> = {}>(args?: Subset<T, item_tran_history$users_item_tran_history_requested_byTousersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    users_item_tran_history_approved_byTousers<T extends item_tran_history$users_item_tran_history_approved_byTousersArgs<ExtArgs> = {}>(args?: Subset<T, item_tran_history$users_item_tran_history_approved_byTousersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     fines<T extends item_tran_history$finesArgs<ExtArgs> = {}>(args?: Subset<T, item_tran_history$finesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$finesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    users_item_tran_history_approved_byTousers<T extends item_tran_history$users_item_tran_history_approved_byTousersArgs<ExtArgs> = {}>(args?: Subset<T, item_tran_history$users_item_tran_history_approved_byTousersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    library_items<T extends item_tran_history$library_itemsArgs<ExtArgs> = {}>(args?: Subset<T, item_tran_history$library_itemsArgs<ExtArgs>>): Prisma__library_itemsClient<$Result.GetResult<Prisma.$library_itemsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    users_item_tran_history_requested_byTousers<T extends item_tran_history$users_item_tran_history_requested_byTousersArgs<ExtArgs> = {}>(args?: Subset<T, item_tran_history$users_item_tran_history_requested_byTousersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    item_tran<T extends item_tran_history$item_tranArgs<ExtArgs> = {}>(args?: Subset<T, item_tran_history$item_tranArgs<ExtArgs>>): Prisma__item_tranClient<$Result.GetResult<Prisma.$item_tranPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4070,60 +4055,27 @@ export namespace Prisma {
   }
 
   /**
-   * item_tran_history.library_items
+   * item_tran_history.fines
    */
-  export type item_tran_history$library_itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tran_history$finesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the library_items
+     * Select specific fields to fetch from the fines
      */
-    select?: library_itemsSelect<ExtArgs> | null
+    select?: finesSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the library_items
+     * Omit specific fields from the fines
      */
-    omit?: library_itemsOmit<ExtArgs> | null
+    omit?: finesOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: library_itemsInclude<ExtArgs> | null
-    where?: library_itemsWhereInput
-  }
-
-  /**
-   * item_tran_history.item_tran
-   */
-  export type item_tran_history$item_tranArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the item_tran
-     */
-    select?: item_tranSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the item_tran
-     */
-    omit?: item_tranOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: item_tranInclude<ExtArgs> | null
-    where?: item_tranWhereInput
-  }
-
-  /**
-   * item_tran_history.users_item_tran_history_requested_byTousers
-   */
-  export type item_tran_history$users_item_tran_history_requested_byTousersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the users
-     */
-    select?: usersSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the users
-     */
-    omit?: usersOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: usersInclude<ExtArgs> | null
-    where?: usersWhereInput
+    include?: finesInclude<ExtArgs> | null
+    where?: finesWhereInput
+    orderBy?: finesOrderByWithRelationInput | finesOrderByWithRelationInput[]
+    cursor?: finesWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FinesScalarFieldEnum | FinesScalarFieldEnum[]
   }
 
   /**
@@ -4146,27 +4098,60 @@ export namespace Prisma {
   }
 
   /**
-   * item_tran_history.fines
+   * item_tran_history.library_items
    */
-  export type item_tran_history$finesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type item_tran_history$library_itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the fines
+     * Select specific fields to fetch from the library_items
      */
-    select?: finesSelect<ExtArgs> | null
+    select?: library_itemsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the fines
+     * Omit specific fields from the library_items
      */
-    omit?: finesOmit<ExtArgs> | null
+    omit?: library_itemsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: finesInclude<ExtArgs> | null
-    where?: finesWhereInput
-    orderBy?: finesOrderByWithRelationInput | finesOrderByWithRelationInput[]
-    cursor?: finesWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: FinesScalarFieldEnum | FinesScalarFieldEnum[]
+    include?: library_itemsInclude<ExtArgs> | null
+    where?: library_itemsWhereInput
+  }
+
+  /**
+   * item_tran_history.users_item_tran_history_requested_byTousers
+   */
+  export type item_tran_history$users_item_tran_history_requested_byTousersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the users
+     */
+    select?: usersSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the users
+     */
+    omit?: usersOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: usersInclude<ExtArgs> | null
+    where?: usersWhereInput
+  }
+
+  /**
+   * item_tran_history.item_tran
+   */
+  export type item_tran_history$item_tranArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the item_tran
+     */
+    select?: item_tranSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the item_tran
+     */
+    omit?: item_tranOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: item_tranInclude<ExtArgs> | null
+    where?: item_tranWhereInput
   }
 
   /**
@@ -7713,9 +7698,9 @@ export namespace Prisma {
     message?: boolean
     created_at?: boolean
     resolved_at?: boolean
-    library_items?: boolean | notifications$library_itemsArgs<ExtArgs>
     users_notifications_from_user_idTousers?: boolean | notifications$users_notifications_from_user_idTousersArgs<ExtArgs>
     users_notifications_to_user_idTousers?: boolean | notifications$users_notifications_to_user_idTousersArgs<ExtArgs>
+    library_items?: boolean | notifications$library_itemsArgs<ExtArgs>
   }, ExtArgs["result"]["notifications"]>
 
 
@@ -7735,17 +7720,17 @@ export namespace Prisma {
 
   export type notificationsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"notification_id" | "type" | "item_id" | "from_user_id" | "to_user_id" | "reservation_id" | "status" | "message" | "created_at" | "resolved_at", ExtArgs["result"]["notifications"]>
   export type notificationsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    library_items?: boolean | notifications$library_itemsArgs<ExtArgs>
     users_notifications_from_user_idTousers?: boolean | notifications$users_notifications_from_user_idTousersArgs<ExtArgs>
     users_notifications_to_user_idTousers?: boolean | notifications$users_notifications_to_user_idTousersArgs<ExtArgs>
+    library_items?: boolean | notifications$library_itemsArgs<ExtArgs>
   }
 
   export type $notificationsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "notifications"
     objects: {
-      library_items: Prisma.$library_itemsPayload<ExtArgs> | null
       users_notifications_from_user_idTousers: Prisma.$usersPayload<ExtArgs> | null
       users_notifications_to_user_idTousers: Prisma.$usersPayload<ExtArgs> | null
+      library_items: Prisma.$library_itemsPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       notification_id: number
@@ -8098,9 +8083,9 @@ export namespace Prisma {
    */
   export interface Prisma__notificationsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    library_items<T extends notifications$library_itemsArgs<ExtArgs> = {}>(args?: Subset<T, notifications$library_itemsArgs<ExtArgs>>): Prisma__library_itemsClient<$Result.GetResult<Prisma.$library_itemsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     users_notifications_from_user_idTousers<T extends notifications$users_notifications_from_user_idTousersArgs<ExtArgs> = {}>(args?: Subset<T, notifications$users_notifications_from_user_idTousersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     users_notifications_to_user_idTousers<T extends notifications$users_notifications_to_user_idTousersArgs<ExtArgs> = {}>(args?: Subset<T, notifications$users_notifications_to_user_idTousersArgs<ExtArgs>>): Prisma__usersClient<$Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    library_items<T extends notifications$library_itemsArgs<ExtArgs> = {}>(args?: Subset<T, notifications$library_itemsArgs<ExtArgs>>): Prisma__library_itemsClient<$Result.GetResult<Prisma.$library_itemsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8483,25 +8468,6 @@ export namespace Prisma {
   }
 
   /**
-   * notifications.library_items
-   */
-  export type notifications$library_itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the library_items
-     */
-    select?: library_itemsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the library_items
-     */
-    omit?: library_itemsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: library_itemsInclude<ExtArgs> | null
-    where?: library_itemsWhereInput
-  }
-
-  /**
    * notifications.users_notifications_from_user_idTousers
    */
   export type notifications$users_notifications_from_user_idTousersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8537,6 +8503,25 @@ export namespace Prisma {
      */
     include?: usersInclude<ExtArgs> | null
     where?: usersWhereInput
+  }
+
+  /**
+   * notifications.library_items
+   */
+  export type notifications$library_itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the library_items
+     */
+    select?: library_itemsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the library_items
+     */
+    omit?: library_itemsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: library_itemsInclude<ExtArgs> | null
+    where?: library_itemsWhereInput
   }
 
   /**
@@ -9822,10 +9807,10 @@ export namespace Prisma {
     birth_date?: boolean
     address?: boolean
     profile_image_url?: boolean
-    item_tran?: boolean | users$item_tranArgs<ExtArgs>
-    item_tran_history_item_tran_history_requested_byTousers?: boolean | users$item_tran_history_item_tran_history_requested_byTousersArgs<ExtArgs>
-    item_tran_history_item_tran_history_approved_byTousers?: boolean | users$item_tran_history_item_tran_history_approved_byTousersArgs<ExtArgs>
     fines?: boolean | users$finesArgs<ExtArgs>
+    item_tran?: boolean | users$item_tranArgs<ExtArgs>
+    item_tran_history_item_tran_history_approved_byTousers?: boolean | users$item_tran_history_item_tran_history_approved_byTousersArgs<ExtArgs>
+    item_tran_history_item_tran_history_requested_byTousers?: boolean | users$item_tran_history_item_tran_history_requested_byTousersArgs<ExtArgs>
     logs?: boolean | users$logsArgs<ExtArgs>
     notifications_notifications_from_user_idTousers?: boolean | users$notifications_notifications_from_user_idTousersArgs<ExtArgs>
     notifications_notifications_to_user_idTousers?: boolean | users$notifications_notifications_to_user_idTousersArgs<ExtArgs>
@@ -9853,10 +9838,10 @@ export namespace Prisma {
 
   export type usersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"user_id" | "name" | "email" | "password_hash" | "role" | "status" | "created_at" | "updated_at" | "gender" | "phone_number" | "birth_date" | "address" | "profile_image_url", ExtArgs["result"]["users"]>
   export type usersInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    item_tran?: boolean | users$item_tranArgs<ExtArgs>
-    item_tran_history_item_tran_history_requested_byTousers?: boolean | users$item_tran_history_item_tran_history_requested_byTousersArgs<ExtArgs>
-    item_tran_history_item_tran_history_approved_byTousers?: boolean | users$item_tran_history_item_tran_history_approved_byTousersArgs<ExtArgs>
     fines?: boolean | users$finesArgs<ExtArgs>
+    item_tran?: boolean | users$item_tranArgs<ExtArgs>
+    item_tran_history_item_tran_history_approved_byTousers?: boolean | users$item_tran_history_item_tran_history_approved_byTousersArgs<ExtArgs>
+    item_tran_history_item_tran_history_requested_byTousers?: boolean | users$item_tran_history_item_tran_history_requested_byTousersArgs<ExtArgs>
     logs?: boolean | users$logsArgs<ExtArgs>
     notifications_notifications_from_user_idTousers?: boolean | users$notifications_notifications_from_user_idTousersArgs<ExtArgs>
     notifications_notifications_to_user_idTousers?: boolean | users$notifications_notifications_to_user_idTousersArgs<ExtArgs>
@@ -9867,10 +9852,10 @@ export namespace Prisma {
   export type $usersPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "users"
     objects: {
-      item_tran: Prisma.$item_tranPayload<ExtArgs>[]
-      item_tran_history_item_tran_history_requested_byTousers: Prisma.$item_tran_historyPayload<ExtArgs>[]
-      item_tran_history_item_tran_history_approved_byTousers: Prisma.$item_tran_historyPayload<ExtArgs>[]
       fines: Prisma.$finesPayload<ExtArgs>[]
+      item_tran: Prisma.$item_tranPayload<ExtArgs>[]
+      item_tran_history_item_tran_history_approved_byTousers: Prisma.$item_tran_historyPayload<ExtArgs>[]
+      item_tran_history_item_tran_history_requested_byTousers: Prisma.$item_tran_historyPayload<ExtArgs>[]
       logs: Prisma.$logsPayload<ExtArgs>[]
       notifications_notifications_from_user_idTousers: Prisma.$notificationsPayload<ExtArgs>[]
       notifications_notifications_to_user_idTousers: Prisma.$notificationsPayload<ExtArgs>[]
@@ -10230,10 +10215,10 @@ export namespace Prisma {
    */
   export interface Prisma__usersClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    item_tran<T extends users$item_tranArgs<ExtArgs> = {}>(args?: Subset<T, users$item_tranArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$item_tranPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    item_tran_history_item_tran_history_requested_byTousers<T extends users$item_tran_history_item_tran_history_requested_byTousersArgs<ExtArgs> = {}>(args?: Subset<T, users$item_tran_history_item_tran_history_requested_byTousersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$item_tran_historyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    item_tran_history_item_tran_history_approved_byTousers<T extends users$item_tran_history_item_tran_history_approved_byTousersArgs<ExtArgs> = {}>(args?: Subset<T, users$item_tran_history_item_tran_history_approved_byTousersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$item_tran_historyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     fines<T extends users$finesArgs<ExtArgs> = {}>(args?: Subset<T, users$finesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$finesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    item_tran<T extends users$item_tranArgs<ExtArgs> = {}>(args?: Subset<T, users$item_tranArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$item_tranPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    item_tran_history_item_tran_history_approved_byTousers<T extends users$item_tran_history_item_tran_history_approved_byTousersArgs<ExtArgs> = {}>(args?: Subset<T, users$item_tran_history_item_tran_history_approved_byTousersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$item_tran_historyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    item_tran_history_item_tran_history_requested_byTousers<T extends users$item_tran_history_item_tran_history_requested_byTousersArgs<ExtArgs> = {}>(args?: Subset<T, users$item_tran_history_item_tran_history_requested_byTousersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$item_tran_historyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     logs<T extends users$logsArgs<ExtArgs> = {}>(args?: Subset<T, users$logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$logsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications_notifications_from_user_idTousers<T extends users$notifications_notifications_from_user_idTousersArgs<ExtArgs> = {}>(args?: Subset<T, users$notifications_notifications_from_user_idTousersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$notificationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications_notifications_to_user_idTousers<T extends users$notifications_notifications_to_user_idTousersArgs<ExtArgs> = {}>(args?: Subset<T, users$notifications_notifications_to_user_idTousersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$notificationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -10623,6 +10608,30 @@ export namespace Prisma {
   }
 
   /**
+   * users.fines
+   */
+  export type users$finesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the fines
+     */
+    select?: finesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the fines
+     */
+    omit?: finesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: finesInclude<ExtArgs> | null
+    where?: finesWhereInput
+    orderBy?: finesOrderByWithRelationInput | finesOrderByWithRelationInput[]
+    cursor?: finesWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FinesScalarFieldEnum | FinesScalarFieldEnum[]
+  }
+
+  /**
    * users.item_tran
    */
   export type users$item_tranArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10644,30 +10653,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: Item_tranScalarFieldEnum | Item_tranScalarFieldEnum[]
-  }
-
-  /**
-   * users.item_tran_history_item_tran_history_requested_byTousers
-   */
-  export type users$item_tran_history_item_tran_history_requested_byTousersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the item_tran_history
-     */
-    select?: item_tran_historySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the item_tran_history
-     */
-    omit?: item_tran_historyOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: item_tran_historyInclude<ExtArgs> | null
-    where?: item_tran_historyWhereInput
-    orderBy?: item_tran_historyOrderByWithRelationInput | item_tran_historyOrderByWithRelationInput[]
-    cursor?: item_tran_historyWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: Item_tran_historyScalarFieldEnum | Item_tran_historyScalarFieldEnum[]
   }
 
   /**
@@ -10695,27 +10680,27 @@ export namespace Prisma {
   }
 
   /**
-   * users.fines
+   * users.item_tran_history_item_tran_history_requested_byTousers
    */
-  export type users$finesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type users$item_tran_history_item_tran_history_requested_byTousersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the fines
+     * Select specific fields to fetch from the item_tran_history
      */
-    select?: finesSelect<ExtArgs> | null
+    select?: item_tran_historySelect<ExtArgs> | null
     /**
-     * Omit specific fields from the fines
+     * Omit specific fields from the item_tran_history
      */
-    omit?: finesOmit<ExtArgs> | null
+    omit?: item_tran_historyOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: finesInclude<ExtArgs> | null
-    where?: finesWhereInput
-    orderBy?: finesOrderByWithRelationInput | finesOrderByWithRelationInput[]
-    cursor?: finesWhereUniqueInput
+    include?: item_tran_historyInclude<ExtArgs> | null
+    where?: item_tran_historyWhereInput
+    orderBy?: item_tran_historyOrderByWithRelationInput | item_tran_historyOrderByWithRelationInput[]
+    cursor?: item_tran_historyWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: FinesScalarFieldEnum | FinesScalarFieldEnum[]
+    distinct?: Item_tran_historyScalarFieldEnum | Item_tran_historyScalarFieldEnum[]
   }
 
   /**
@@ -13123,11 +13108,11 @@ export namespace Prisma {
     date_due?: DateTimeNullableFilter<"item_tran_history"> | Date | string | null
     date_returned?: DateTimeNullableFilter<"item_tran_history"> | Date | string | null
     remarks?: StringNullableFilter<"item_tran_history"> | string | null
-    library_items?: XOR<Library_itemsNullableScalarRelationFilter, library_itemsWhereInput> | null
-    item_tran?: XOR<Item_tranNullableScalarRelationFilter, item_tranWhereInput> | null
-    users_item_tran_history_requested_byTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
-    users_item_tran_history_approved_byTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
     fines?: FinesListRelationFilter
+    users_item_tran_history_approved_byTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
+    library_items?: XOR<Library_itemsNullableScalarRelationFilter, library_itemsWhereInput> | null
+    users_item_tran_history_requested_byTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
+    item_tran?: XOR<Item_tranNullableScalarRelationFilter, item_tranWhereInput> | null
   }
 
   export type item_tran_historyOrderByWithRelationInput = {
@@ -13143,11 +13128,11 @@ export namespace Prisma {
     date_due?: SortOrderInput | SortOrder
     date_returned?: SortOrderInput | SortOrder
     remarks?: SortOrderInput | SortOrder
-    library_items?: library_itemsOrderByWithRelationInput
-    item_tran?: item_tranOrderByWithRelationInput
-    users_item_tran_history_requested_byTousers?: usersOrderByWithRelationInput
-    users_item_tran_history_approved_byTousers?: usersOrderByWithRelationInput
     fines?: finesOrderByRelationAggregateInput
+    users_item_tran_history_approved_byTousers?: usersOrderByWithRelationInput
+    library_items?: library_itemsOrderByWithRelationInput
+    users_item_tran_history_requested_byTousers?: usersOrderByWithRelationInput
+    item_tran?: item_tranOrderByWithRelationInput
     _relevance?: item_tran_historyOrderByRelevanceInput
   }
 
@@ -13167,11 +13152,11 @@ export namespace Prisma {
     date_due?: DateTimeNullableFilter<"item_tran_history"> | Date | string | null
     date_returned?: DateTimeNullableFilter<"item_tran_history"> | Date | string | null
     remarks?: StringNullableFilter<"item_tran_history"> | string | null
-    library_items?: XOR<Library_itemsNullableScalarRelationFilter, library_itemsWhereInput> | null
-    item_tran?: XOR<Item_tranNullableScalarRelationFilter, item_tranWhereInput> | null
-    users_item_tran_history_requested_byTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
-    users_item_tran_history_approved_byTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
     fines?: FinesListRelationFilter
+    users_item_tran_history_approved_byTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
+    library_items?: XOR<Library_itemsNullableScalarRelationFilter, library_itemsWhereInput> | null
+    users_item_tran_history_requested_byTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
+    item_tran?: XOR<Item_tranNullableScalarRelationFilter, item_tranWhereInput> | null
   }, "id">
 
   export type item_tran_historyOrderByWithAggregationInput = {
@@ -13502,9 +13487,9 @@ export namespace Prisma {
     message?: StringNullableFilter<"notifications"> | string | null
     created_at?: DateTimeNullableFilter<"notifications"> | Date | string | null
     resolved_at?: DateTimeNullableFilter<"notifications"> | Date | string | null
-    library_items?: XOR<Library_itemsNullableScalarRelationFilter, library_itemsWhereInput> | null
     users_notifications_from_user_idTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
     users_notifications_to_user_idTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
+    library_items?: XOR<Library_itemsNullableScalarRelationFilter, library_itemsWhereInput> | null
   }
 
   export type notificationsOrderByWithRelationInput = {
@@ -13518,9 +13503,9 @@ export namespace Prisma {
     message?: SortOrderInput | SortOrder
     created_at?: SortOrderInput | SortOrder
     resolved_at?: SortOrderInput | SortOrder
-    library_items?: library_itemsOrderByWithRelationInput
     users_notifications_from_user_idTousers?: usersOrderByWithRelationInput
     users_notifications_to_user_idTousers?: usersOrderByWithRelationInput
+    library_items?: library_itemsOrderByWithRelationInput
     _relevance?: notificationsOrderByRelevanceInput
   }
 
@@ -13538,9 +13523,9 @@ export namespace Prisma {
     message?: StringNullableFilter<"notifications"> | string | null
     created_at?: DateTimeNullableFilter<"notifications"> | Date | string | null
     resolved_at?: DateTimeNullableFilter<"notifications"> | Date | string | null
-    library_items?: XOR<Library_itemsNullableScalarRelationFilter, library_itemsWhereInput> | null
     users_notifications_from_user_idTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
     users_notifications_to_user_idTousers?: XOR<UsersNullableScalarRelationFilter, usersWhereInput> | null
+    library_items?: XOR<Library_itemsNullableScalarRelationFilter, library_itemsWhereInput> | null
   }, "notification_id">
 
   export type notificationsOrderByWithAggregationInput = {
@@ -13649,10 +13634,10 @@ export namespace Prisma {
     birth_date?: DateTimeNullableFilter<"users"> | Date | string | null
     address?: StringNullableFilter<"users"> | string | null
     profile_image_url?: StringNullableFilter<"users"> | string | null
-    item_tran?: Item_tranListRelationFilter
-    item_tran_history_item_tran_history_requested_byTousers?: Item_tran_historyListRelationFilter
-    item_tran_history_item_tran_history_approved_byTousers?: Item_tran_historyListRelationFilter
     fines?: FinesListRelationFilter
+    item_tran?: Item_tranListRelationFilter
+    item_tran_history_item_tran_history_approved_byTousers?: Item_tran_historyListRelationFilter
+    item_tran_history_item_tran_history_requested_byTousers?: Item_tran_historyListRelationFilter
     logs?: LogsListRelationFilter
     notifications_notifications_from_user_idTousers?: NotificationsListRelationFilter
     notifications_notifications_to_user_idTousers?: NotificationsListRelationFilter
@@ -13673,10 +13658,10 @@ export namespace Prisma {
     birth_date?: SortOrderInput | SortOrder
     address?: SortOrderInput | SortOrder
     profile_image_url?: SortOrderInput | SortOrder
-    item_tran?: item_tranOrderByRelationAggregateInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyOrderByRelationAggregateInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyOrderByRelationAggregateInput
     fines?: finesOrderByRelationAggregateInput
+    item_tran?: item_tranOrderByRelationAggregateInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyOrderByRelationAggregateInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyOrderByRelationAggregateInput
     logs?: logsOrderByRelationAggregateInput
     notifications_notifications_from_user_idTousers?: notificationsOrderByRelationAggregateInput
     notifications_notifications_to_user_idTousers?: notificationsOrderByRelationAggregateInput
@@ -13701,10 +13686,10 @@ export namespace Prisma {
     birth_date?: DateTimeNullableFilter<"users"> | Date | string | null
     address?: StringNullableFilter<"users"> | string | null
     profile_image_url?: StringNullableFilter<"users"> | string | null
-    item_tran?: Item_tranListRelationFilter
-    item_tran_history_item_tran_history_requested_byTousers?: Item_tran_historyListRelationFilter
-    item_tran_history_item_tran_history_approved_byTousers?: Item_tran_historyListRelationFilter
     fines?: FinesListRelationFilter
+    item_tran?: Item_tranListRelationFilter
+    item_tran_history_item_tran_history_approved_byTousers?: Item_tran_historyListRelationFilter
+    item_tran_history_item_tran_history_requested_byTousers?: Item_tran_historyListRelationFilter
     logs?: LogsListRelationFilter
     notifications_notifications_from_user_idTousers?: NotificationsListRelationFilter
     notifications_notifications_to_user_idTousers?: NotificationsListRelationFilter
@@ -13929,11 +13914,11 @@ export namespace Prisma {
     date_due?: Date | string | null
     date_returned?: Date | string | null
     remarks?: string | null
-    library_items?: library_itemsCreateNestedOneWithoutItem_tran_historyInput
-    item_tran?: item_tranCreateNestedOneWithoutItem_tran_historyInput
-    users_item_tran_history_requested_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_requested_byTousersInput
-    users_item_tran_history_approved_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_approved_byTousersInput
     fines?: finesCreateNestedManyWithoutItem_tran_historyInput
+    users_item_tran_history_approved_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_approved_byTousersInput
+    library_items?: library_itemsCreateNestedOneWithoutItem_tran_historyInput
+    users_item_tran_history_requested_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_requested_byTousersInput
+    item_tran?: item_tranCreateNestedOneWithoutItem_tran_historyInput
   }
 
   export type item_tran_historyUncheckedCreateInput = {
@@ -13960,11 +13945,11 @@ export namespace Prisma {
     date_due?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_returned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    library_items?: library_itemsUpdateOneWithoutItem_tran_historyNestedInput
-    item_tran?: item_tranUpdateOneWithoutItem_tran_historyNestedInput
-    users_item_tran_history_requested_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_requested_byTousersNestedInput
-    users_item_tran_history_approved_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_approved_byTousersNestedInput
     fines?: finesUpdateManyWithoutItem_tran_historyNestedInput
+    users_item_tran_history_approved_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_approved_byTousersNestedInput
+    library_items?: library_itemsUpdateOneWithoutItem_tran_historyNestedInput
+    users_item_tran_history_requested_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_requested_byTousersNestedInput
+    item_tran?: item_tranUpdateOneWithoutItem_tran_historyNestedInput
   }
 
   export type item_tran_historyUncheckedUpdateInput = {
@@ -14328,9 +14313,9 @@ export namespace Prisma {
     message?: string | null
     created_at?: Date | string | null
     resolved_at?: Date | string | null
-    library_items?: library_itemsCreateNestedOneWithoutNotificationsInput
     users_notifications_from_user_idTousers?: usersCreateNestedOneWithoutNotifications_notifications_from_user_idTousersInput
     users_notifications_to_user_idTousers?: usersCreateNestedOneWithoutNotifications_notifications_to_user_idTousersInput
+    library_items?: library_itemsCreateNestedOneWithoutNotificationsInput
   }
 
   export type notificationsUncheckedCreateInput = {
@@ -14353,9 +14338,9 @@ export namespace Prisma {
     message?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     resolved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    library_items?: library_itemsUpdateOneWithoutNotificationsNestedInput
     users_notifications_from_user_idTousers?: usersUpdateOneWithoutNotifications_notifications_from_user_idTousersNestedInput
     users_notifications_to_user_idTousers?: usersUpdateOneWithoutNotifications_notifications_to_user_idTousersNestedInput
+    library_items?: library_itemsUpdateOneWithoutNotificationsNestedInput
   }
 
   export type notificationsUncheckedUpdateInput = {
@@ -14463,10 +14448,10 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    item_tran?: item_tranCreateNestedManyWithoutUsersInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
     fines?: finesCreateNestedManyWithoutUsersInput
+    item_tran?: item_tranCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
     logs?: logsCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
@@ -14487,10 +14472,10 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    item_tran?: item_tranUncheckedCreateNestedManyWithoutUsersInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
     fines?: finesUncheckedCreateNestedManyWithoutUsersInput
+    item_tran?: item_tranUncheckedCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
     logs?: logsUncheckedCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
@@ -14510,10 +14495,10 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    item_tran?: item_tranUpdateManyWithoutUsersNestedInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
     fines?: finesUpdateManyWithoutUsersNestedInput
+    item_tran?: item_tranUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
     logs?: logsUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
@@ -14534,10 +14519,10 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    item_tran?: item_tranUncheckedUpdateManyWithoutUsersNestedInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
     fines?: finesUncheckedUpdateManyWithoutUsersNestedInput
+    item_tran?: item_tranUncheckedUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
     logs?: logsUncheckedUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
@@ -14886,15 +14871,15 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type Item_tranNullableScalarRelationFilter = {
-    is?: item_tranWhereInput | null
-    isNot?: item_tranWhereInput | null
-  }
-
   export type FinesListRelationFilter = {
     every?: finesWhereInput
     some?: finesWhereInput
     none?: finesWhereInput
+  }
+
+  export type Item_tranNullableScalarRelationFilter = {
+    is?: item_tranWhereInput | null
+    isNot?: item_tranWhereInput | null
   }
 
   export type finesOrderByRelationAggregateInput = {
@@ -15781,22 +15766,11 @@ export namespace Prisma {
     deleteMany?: item_tran_historyScalarWhereInput | item_tran_historyScalarWhereInput[]
   }
 
-  export type library_itemsCreateNestedOneWithoutItem_tran_historyInput = {
-    create?: XOR<library_itemsCreateWithoutItem_tran_historyInput, library_itemsUncheckedCreateWithoutItem_tran_historyInput>
-    connectOrCreate?: library_itemsCreateOrConnectWithoutItem_tran_historyInput
-    connect?: library_itemsWhereUniqueInput
-  }
-
-  export type item_tranCreateNestedOneWithoutItem_tran_historyInput = {
-    create?: XOR<item_tranCreateWithoutItem_tran_historyInput, item_tranUncheckedCreateWithoutItem_tran_historyInput>
-    connectOrCreate?: item_tranCreateOrConnectWithoutItem_tran_historyInput
-    connect?: item_tranWhereUniqueInput
-  }
-
-  export type usersCreateNestedOneWithoutItem_tran_history_item_tran_history_requested_byTousersInput = {
-    create?: XOR<usersCreateWithoutItem_tran_history_item_tran_history_requested_byTousersInput, usersUncheckedCreateWithoutItem_tran_history_item_tran_history_requested_byTousersInput>
-    connectOrCreate?: usersCreateOrConnectWithoutItem_tran_history_item_tran_history_requested_byTousersInput
-    connect?: usersWhereUniqueInput
+  export type finesCreateNestedManyWithoutItem_tran_historyInput = {
+    create?: XOR<finesCreateWithoutItem_tran_historyInput, finesUncheckedCreateWithoutItem_tran_historyInput> | finesCreateWithoutItem_tran_historyInput[] | finesUncheckedCreateWithoutItem_tran_historyInput[]
+    connectOrCreate?: finesCreateOrConnectWithoutItem_tran_historyInput | finesCreateOrConnectWithoutItem_tran_historyInput[]
+    createMany?: finesCreateManyItem_tran_historyInputEnvelope
+    connect?: finesWhereUniqueInput | finesWhereUniqueInput[]
   }
 
   export type usersCreateNestedOneWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
@@ -15805,11 +15779,22 @@ export namespace Prisma {
     connect?: usersWhereUniqueInput
   }
 
-  export type finesCreateNestedManyWithoutItem_tran_historyInput = {
-    create?: XOR<finesCreateWithoutItem_tran_historyInput, finesUncheckedCreateWithoutItem_tran_historyInput> | finesCreateWithoutItem_tran_historyInput[] | finesUncheckedCreateWithoutItem_tran_historyInput[]
-    connectOrCreate?: finesCreateOrConnectWithoutItem_tran_historyInput | finesCreateOrConnectWithoutItem_tran_historyInput[]
-    createMany?: finesCreateManyItem_tran_historyInputEnvelope
-    connect?: finesWhereUniqueInput | finesWhereUniqueInput[]
+  export type library_itemsCreateNestedOneWithoutItem_tran_historyInput = {
+    create?: XOR<library_itemsCreateWithoutItem_tran_historyInput, library_itemsUncheckedCreateWithoutItem_tran_historyInput>
+    connectOrCreate?: library_itemsCreateOrConnectWithoutItem_tran_historyInput
+    connect?: library_itemsWhereUniqueInput
+  }
+
+  export type usersCreateNestedOneWithoutItem_tran_history_item_tran_history_requested_byTousersInput = {
+    create?: XOR<usersCreateWithoutItem_tran_history_item_tran_history_requested_byTousersInput, usersUncheckedCreateWithoutItem_tran_history_item_tran_history_requested_byTousersInput>
+    connectOrCreate?: usersCreateOrConnectWithoutItem_tran_history_item_tran_history_requested_byTousersInput
+    connect?: usersWhereUniqueInput
+  }
+
+  export type item_tranCreateNestedOneWithoutItem_tran_historyInput = {
+    create?: XOR<item_tranCreateWithoutItem_tran_historyInput, item_tranUncheckedCreateWithoutItem_tran_historyInput>
+    connectOrCreate?: item_tranCreateOrConnectWithoutItem_tran_historyInput
+    connect?: item_tranWhereUniqueInput
   }
 
   export type finesUncheckedCreateNestedManyWithoutItem_tran_historyInput = {
@@ -15831,46 +15816,6 @@ export namespace Prisma {
     set?: string | null
   }
 
-  export type library_itemsUpdateOneWithoutItem_tran_historyNestedInput = {
-    create?: XOR<library_itemsCreateWithoutItem_tran_historyInput, library_itemsUncheckedCreateWithoutItem_tran_historyInput>
-    connectOrCreate?: library_itemsCreateOrConnectWithoutItem_tran_historyInput
-    upsert?: library_itemsUpsertWithoutItem_tran_historyInput
-    disconnect?: library_itemsWhereInput | boolean
-    delete?: library_itemsWhereInput | boolean
-    connect?: library_itemsWhereUniqueInput
-    update?: XOR<XOR<library_itemsUpdateToOneWithWhereWithoutItem_tran_historyInput, library_itemsUpdateWithoutItem_tran_historyInput>, library_itemsUncheckedUpdateWithoutItem_tran_historyInput>
-  }
-
-  export type item_tranUpdateOneWithoutItem_tran_historyNestedInput = {
-    create?: XOR<item_tranCreateWithoutItem_tran_historyInput, item_tranUncheckedCreateWithoutItem_tran_historyInput>
-    connectOrCreate?: item_tranCreateOrConnectWithoutItem_tran_historyInput
-    upsert?: item_tranUpsertWithoutItem_tran_historyInput
-    disconnect?: item_tranWhereInput | boolean
-    delete?: item_tranWhereInput | boolean
-    connect?: item_tranWhereUniqueInput
-    update?: XOR<XOR<item_tranUpdateToOneWithWhereWithoutItem_tran_historyInput, item_tranUpdateWithoutItem_tran_historyInput>, item_tranUncheckedUpdateWithoutItem_tran_historyInput>
-  }
-
-  export type usersUpdateOneWithoutItem_tran_history_item_tran_history_requested_byTousersNestedInput = {
-    create?: XOR<usersCreateWithoutItem_tran_history_item_tran_history_requested_byTousersInput, usersUncheckedCreateWithoutItem_tran_history_item_tran_history_requested_byTousersInput>
-    connectOrCreate?: usersCreateOrConnectWithoutItem_tran_history_item_tran_history_requested_byTousersInput
-    upsert?: usersUpsertWithoutItem_tran_history_item_tran_history_requested_byTousersInput
-    disconnect?: usersWhereInput | boolean
-    delete?: usersWhereInput | boolean
-    connect?: usersWhereUniqueInput
-    update?: XOR<XOR<usersUpdateToOneWithWhereWithoutItem_tran_history_item_tran_history_requested_byTousersInput, usersUpdateWithoutItem_tran_history_item_tran_history_requested_byTousersInput>, usersUncheckedUpdateWithoutItem_tran_history_item_tran_history_requested_byTousersInput>
-  }
-
-  export type usersUpdateOneWithoutItem_tran_history_item_tran_history_approved_byTousersNestedInput = {
-    create?: XOR<usersCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput, usersUncheckedCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput>
-    connectOrCreate?: usersCreateOrConnectWithoutItem_tran_history_item_tran_history_approved_byTousersInput
-    upsert?: usersUpsertWithoutItem_tran_history_item_tran_history_approved_byTousersInput
-    disconnect?: usersWhereInput | boolean
-    delete?: usersWhereInput | boolean
-    connect?: usersWhereUniqueInput
-    update?: XOR<XOR<usersUpdateToOneWithWhereWithoutItem_tran_history_item_tran_history_approved_byTousersInput, usersUpdateWithoutItem_tran_history_item_tran_history_approved_byTousersInput>, usersUncheckedUpdateWithoutItem_tran_history_item_tran_history_approved_byTousersInput>
-  }
-
   export type finesUpdateManyWithoutItem_tran_historyNestedInput = {
     create?: XOR<finesCreateWithoutItem_tran_historyInput, finesUncheckedCreateWithoutItem_tran_historyInput> | finesCreateWithoutItem_tran_historyInput[] | finesUncheckedCreateWithoutItem_tran_historyInput[]
     connectOrCreate?: finesCreateOrConnectWithoutItem_tran_historyInput | finesCreateOrConnectWithoutItem_tran_historyInput[]
@@ -15883,6 +15828,46 @@ export namespace Prisma {
     update?: finesUpdateWithWhereUniqueWithoutItem_tran_historyInput | finesUpdateWithWhereUniqueWithoutItem_tran_historyInput[]
     updateMany?: finesUpdateManyWithWhereWithoutItem_tran_historyInput | finesUpdateManyWithWhereWithoutItem_tran_historyInput[]
     deleteMany?: finesScalarWhereInput | finesScalarWhereInput[]
+  }
+
+  export type usersUpdateOneWithoutItem_tran_history_item_tran_history_approved_byTousersNestedInput = {
+    create?: XOR<usersCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput, usersUncheckedCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput>
+    connectOrCreate?: usersCreateOrConnectWithoutItem_tran_history_item_tran_history_approved_byTousersInput
+    upsert?: usersUpsertWithoutItem_tran_history_item_tran_history_approved_byTousersInput
+    disconnect?: usersWhereInput | boolean
+    delete?: usersWhereInput | boolean
+    connect?: usersWhereUniqueInput
+    update?: XOR<XOR<usersUpdateToOneWithWhereWithoutItem_tran_history_item_tran_history_approved_byTousersInput, usersUpdateWithoutItem_tran_history_item_tran_history_approved_byTousersInput>, usersUncheckedUpdateWithoutItem_tran_history_item_tran_history_approved_byTousersInput>
+  }
+
+  export type library_itemsUpdateOneWithoutItem_tran_historyNestedInput = {
+    create?: XOR<library_itemsCreateWithoutItem_tran_historyInput, library_itemsUncheckedCreateWithoutItem_tran_historyInput>
+    connectOrCreate?: library_itemsCreateOrConnectWithoutItem_tran_historyInput
+    upsert?: library_itemsUpsertWithoutItem_tran_historyInput
+    disconnect?: library_itemsWhereInput | boolean
+    delete?: library_itemsWhereInput | boolean
+    connect?: library_itemsWhereUniqueInput
+    update?: XOR<XOR<library_itemsUpdateToOneWithWhereWithoutItem_tran_historyInput, library_itemsUpdateWithoutItem_tran_historyInput>, library_itemsUncheckedUpdateWithoutItem_tran_historyInput>
+  }
+
+  export type usersUpdateOneWithoutItem_tran_history_item_tran_history_requested_byTousersNestedInput = {
+    create?: XOR<usersCreateWithoutItem_tran_history_item_tran_history_requested_byTousersInput, usersUncheckedCreateWithoutItem_tran_history_item_tran_history_requested_byTousersInput>
+    connectOrCreate?: usersCreateOrConnectWithoutItem_tran_history_item_tran_history_requested_byTousersInput
+    upsert?: usersUpsertWithoutItem_tran_history_item_tran_history_requested_byTousersInput
+    disconnect?: usersWhereInput | boolean
+    delete?: usersWhereInput | boolean
+    connect?: usersWhereUniqueInput
+    update?: XOR<XOR<usersUpdateToOneWithWhereWithoutItem_tran_history_item_tran_history_requested_byTousersInput, usersUpdateWithoutItem_tran_history_item_tran_history_requested_byTousersInput>, usersUncheckedUpdateWithoutItem_tran_history_item_tran_history_requested_byTousersInput>
+  }
+
+  export type item_tranUpdateOneWithoutItem_tran_historyNestedInput = {
+    create?: XOR<item_tranCreateWithoutItem_tran_historyInput, item_tranUncheckedCreateWithoutItem_tran_historyInput>
+    connectOrCreate?: item_tranCreateOrConnectWithoutItem_tran_historyInput
+    upsert?: item_tranUpsertWithoutItem_tran_historyInput
+    disconnect?: item_tranWhereInput | boolean
+    delete?: item_tranWhereInput | boolean
+    connect?: item_tranWhereUniqueInput
+    update?: XOR<XOR<item_tranUpdateToOneWithWhereWithoutItem_tran_historyInput, item_tranUpdateWithoutItem_tran_historyInput>, item_tranUncheckedUpdateWithoutItem_tran_historyInput>
   }
 
   export type finesUncheckedUpdateManyWithoutItem_tran_historyNestedInput = {
@@ -16133,12 +16118,6 @@ export namespace Prisma {
     update?: XOR<XOR<usersUpdateToOneWithWhereWithoutLogsInput, usersUpdateWithoutLogsInput>, usersUncheckedUpdateWithoutLogsInput>
   }
 
-  export type library_itemsCreateNestedOneWithoutNotificationsInput = {
-    create?: XOR<library_itemsCreateWithoutNotificationsInput, library_itemsUncheckedCreateWithoutNotificationsInput>
-    connectOrCreate?: library_itemsCreateOrConnectWithoutNotificationsInput
-    connect?: library_itemsWhereUniqueInput
-  }
-
   export type usersCreateNestedOneWithoutNotifications_notifications_from_user_idTousersInput = {
     create?: XOR<usersCreateWithoutNotifications_notifications_from_user_idTousersInput, usersUncheckedCreateWithoutNotifications_notifications_from_user_idTousersInput>
     connectOrCreate?: usersCreateOrConnectWithoutNotifications_notifications_from_user_idTousersInput
@@ -16151,22 +16130,18 @@ export namespace Prisma {
     connect?: usersWhereUniqueInput
   }
 
+  export type library_itemsCreateNestedOneWithoutNotificationsInput = {
+    create?: XOR<library_itemsCreateWithoutNotificationsInput, library_itemsUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: library_itemsCreateOrConnectWithoutNotificationsInput
+    connect?: library_itemsWhereUniqueInput
+  }
+
   export type NullableEnumnotifications_typeFieldUpdateOperationsInput = {
     set?: $Enums.notifications_type | null
   }
 
   export type NullableEnumnotifications_statusFieldUpdateOperationsInput = {
     set?: $Enums.notifications_status | null
-  }
-
-  export type library_itemsUpdateOneWithoutNotificationsNestedInput = {
-    create?: XOR<library_itemsCreateWithoutNotificationsInput, library_itemsUncheckedCreateWithoutNotificationsInput>
-    connectOrCreate?: library_itemsCreateOrConnectWithoutNotificationsInput
-    upsert?: library_itemsUpsertWithoutNotificationsInput
-    disconnect?: library_itemsWhereInput | boolean
-    delete?: library_itemsWhereInput | boolean
-    connect?: library_itemsWhereUniqueInput
-    update?: XOR<XOR<library_itemsUpdateToOneWithWhereWithoutNotificationsInput, library_itemsUpdateWithoutNotificationsInput>, library_itemsUncheckedUpdateWithoutNotificationsInput>
   }
 
   export type usersUpdateOneWithoutNotifications_notifications_from_user_idTousersNestedInput = {
@@ -16187,6 +16162,16 @@ export namespace Prisma {
     delete?: usersWhereInput | boolean
     connect?: usersWhereUniqueInput
     update?: XOR<XOR<usersUpdateToOneWithWhereWithoutNotifications_notifications_to_user_idTousersInput, usersUpdateWithoutNotifications_notifications_to_user_idTousersInput>, usersUncheckedUpdateWithoutNotifications_notifications_to_user_idTousersInput>
+  }
+
+  export type library_itemsUpdateOneWithoutNotificationsNestedInput = {
+    create?: XOR<library_itemsCreateWithoutNotificationsInput, library_itemsUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: library_itemsCreateOrConnectWithoutNotificationsInput
+    upsert?: library_itemsUpsertWithoutNotificationsInput
+    disconnect?: library_itemsWhereInput | boolean
+    delete?: library_itemsWhereInput | boolean
+    connect?: library_itemsWhereUniqueInput
+    update?: XOR<XOR<library_itemsUpdateToOneWithWhereWithoutNotificationsInput, library_itemsUpdateWithoutNotificationsInput>, library_itemsUncheckedUpdateWithoutNotificationsInput>
   }
 
   export type usersCreateNestedOneWithoutUser_wishlistInput = {
@@ -16221,18 +16206,18 @@ export namespace Prisma {
     update?: XOR<XOR<library_itemsUpdateToOneWithWhereWithoutUser_wishlistInput, library_itemsUpdateWithoutUser_wishlistInput>, library_itemsUncheckedUpdateWithoutUser_wishlistInput>
   }
 
+  export type finesCreateNestedManyWithoutUsersInput = {
+    create?: XOR<finesCreateWithoutUsersInput, finesUncheckedCreateWithoutUsersInput> | finesCreateWithoutUsersInput[] | finesUncheckedCreateWithoutUsersInput[]
+    connectOrCreate?: finesCreateOrConnectWithoutUsersInput | finesCreateOrConnectWithoutUsersInput[]
+    createMany?: finesCreateManyUsersInputEnvelope
+    connect?: finesWhereUniqueInput | finesWhereUniqueInput[]
+  }
+
   export type item_tranCreateNestedManyWithoutUsersInput = {
     create?: XOR<item_tranCreateWithoutUsersInput, item_tranUncheckedCreateWithoutUsersInput> | item_tranCreateWithoutUsersInput[] | item_tranUncheckedCreateWithoutUsersInput[]
     connectOrCreate?: item_tranCreateOrConnectWithoutUsersInput | item_tranCreateOrConnectWithoutUsersInput[]
     createMany?: item_tranCreateManyUsersInputEnvelope
     connect?: item_tranWhereUniqueInput | item_tranWhereUniqueInput[]
-  }
-
-  export type item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput = {
-    create?: XOR<item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput, item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput> | item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput[] | item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput[]
-    connectOrCreate?: item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput[]
-    createMany?: item_tran_historyCreateManyUsers_item_tran_history_requested_byTousersInputEnvelope
-    connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
   }
 
   export type item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput = {
@@ -16242,11 +16227,11 @@ export namespace Prisma {
     connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
   }
 
-  export type finesCreateNestedManyWithoutUsersInput = {
-    create?: XOR<finesCreateWithoutUsersInput, finesUncheckedCreateWithoutUsersInput> | finesCreateWithoutUsersInput[] | finesUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: finesCreateOrConnectWithoutUsersInput | finesCreateOrConnectWithoutUsersInput[]
-    createMany?: finesCreateManyUsersInputEnvelope
-    connect?: finesWhereUniqueInput | finesWhereUniqueInput[]
+  export type item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput = {
+    create?: XOR<item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput, item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput> | item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput[] | item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput[]
+    connectOrCreate?: item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput[]
+    createMany?: item_tran_historyCreateManyUsers_item_tran_history_requested_byTousersInputEnvelope
+    connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
   }
 
   export type logsCreateNestedManyWithoutUsersInput = {
@@ -16277,18 +16262,18 @@ export namespace Prisma {
     connect?: user_wishlistWhereUniqueInput | user_wishlistWhereUniqueInput[]
   }
 
+  export type finesUncheckedCreateNestedManyWithoutUsersInput = {
+    create?: XOR<finesCreateWithoutUsersInput, finesUncheckedCreateWithoutUsersInput> | finesCreateWithoutUsersInput[] | finesUncheckedCreateWithoutUsersInput[]
+    connectOrCreate?: finesCreateOrConnectWithoutUsersInput | finesCreateOrConnectWithoutUsersInput[]
+    createMany?: finesCreateManyUsersInputEnvelope
+    connect?: finesWhereUniqueInput | finesWhereUniqueInput[]
+  }
+
   export type item_tranUncheckedCreateNestedManyWithoutUsersInput = {
     create?: XOR<item_tranCreateWithoutUsersInput, item_tranUncheckedCreateWithoutUsersInput> | item_tranCreateWithoutUsersInput[] | item_tranUncheckedCreateWithoutUsersInput[]
     connectOrCreate?: item_tranCreateOrConnectWithoutUsersInput | item_tranCreateOrConnectWithoutUsersInput[]
     createMany?: item_tranCreateManyUsersInputEnvelope
     connect?: item_tranWhereUniqueInput | item_tranWhereUniqueInput[]
-  }
-
-  export type item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput = {
-    create?: XOR<item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput, item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput> | item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput[] | item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput[]
-    connectOrCreate?: item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput[]
-    createMany?: item_tran_historyCreateManyUsers_item_tran_history_requested_byTousersInputEnvelope
-    connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
   }
 
   export type item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput = {
@@ -16298,11 +16283,11 @@ export namespace Prisma {
     connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
   }
 
-  export type finesUncheckedCreateNestedManyWithoutUsersInput = {
-    create?: XOR<finesCreateWithoutUsersInput, finesUncheckedCreateWithoutUsersInput> | finesCreateWithoutUsersInput[] | finesUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: finesCreateOrConnectWithoutUsersInput | finesCreateOrConnectWithoutUsersInput[]
-    createMany?: finesCreateManyUsersInputEnvelope
-    connect?: finesWhereUniqueInput | finesWhereUniqueInput[]
+  export type item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput = {
+    create?: XOR<item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput, item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput> | item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput[] | item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput[]
+    connectOrCreate?: item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput[]
+    createMany?: item_tran_historyCreateManyUsers_item_tran_history_requested_byTousersInputEnvelope
+    connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
   }
 
   export type logsUncheckedCreateNestedManyWithoutUsersInput = {
@@ -16345,6 +16330,20 @@ export namespace Prisma {
     set?: $Enums.gender | null
   }
 
+  export type finesUpdateManyWithoutUsersNestedInput = {
+    create?: XOR<finesCreateWithoutUsersInput, finesUncheckedCreateWithoutUsersInput> | finesCreateWithoutUsersInput[] | finesUncheckedCreateWithoutUsersInput[]
+    connectOrCreate?: finesCreateOrConnectWithoutUsersInput | finesCreateOrConnectWithoutUsersInput[]
+    upsert?: finesUpsertWithWhereUniqueWithoutUsersInput | finesUpsertWithWhereUniqueWithoutUsersInput[]
+    createMany?: finesCreateManyUsersInputEnvelope
+    set?: finesWhereUniqueInput | finesWhereUniqueInput[]
+    disconnect?: finesWhereUniqueInput | finesWhereUniqueInput[]
+    delete?: finesWhereUniqueInput | finesWhereUniqueInput[]
+    connect?: finesWhereUniqueInput | finesWhereUniqueInput[]
+    update?: finesUpdateWithWhereUniqueWithoutUsersInput | finesUpdateWithWhereUniqueWithoutUsersInput[]
+    updateMany?: finesUpdateManyWithWhereWithoutUsersInput | finesUpdateManyWithWhereWithoutUsersInput[]
+    deleteMany?: finesScalarWhereInput | finesScalarWhereInput[]
+  }
+
   export type item_tranUpdateManyWithoutUsersNestedInput = {
     create?: XOR<item_tranCreateWithoutUsersInput, item_tranUncheckedCreateWithoutUsersInput> | item_tranCreateWithoutUsersInput[] | item_tranUncheckedCreateWithoutUsersInput[]
     connectOrCreate?: item_tranCreateOrConnectWithoutUsersInput | item_tranCreateOrConnectWithoutUsersInput[]
@@ -16357,20 +16356,6 @@ export namespace Prisma {
     update?: item_tranUpdateWithWhereUniqueWithoutUsersInput | item_tranUpdateWithWhereUniqueWithoutUsersInput[]
     updateMany?: item_tranUpdateManyWithWhereWithoutUsersInput | item_tranUpdateManyWithWhereWithoutUsersInput[]
     deleteMany?: item_tranScalarWhereInput | item_tranScalarWhereInput[]
-  }
-
-  export type item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput = {
-    create?: XOR<item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput, item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput> | item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput[] | item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput[]
-    connectOrCreate?: item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput[]
-    upsert?: item_tran_historyUpsertWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyUpsertWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput[]
-    createMany?: item_tran_historyCreateManyUsers_item_tran_history_requested_byTousersInputEnvelope
-    set?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
-    disconnect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
-    delete?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
-    connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
-    update?: item_tran_historyUpdateWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyUpdateWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput[]
-    updateMany?: item_tran_historyUpdateManyWithWhereWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyUpdateManyWithWhereWithoutUsers_item_tran_history_requested_byTousersInput[]
-    deleteMany?: item_tran_historyScalarWhereInput | item_tran_historyScalarWhereInput[]
   }
 
   export type item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput = {
@@ -16387,18 +16372,18 @@ export namespace Prisma {
     deleteMany?: item_tran_historyScalarWhereInput | item_tran_historyScalarWhereInput[]
   }
 
-  export type finesUpdateManyWithoutUsersNestedInput = {
-    create?: XOR<finesCreateWithoutUsersInput, finesUncheckedCreateWithoutUsersInput> | finesCreateWithoutUsersInput[] | finesUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: finesCreateOrConnectWithoutUsersInput | finesCreateOrConnectWithoutUsersInput[]
-    upsert?: finesUpsertWithWhereUniqueWithoutUsersInput | finesUpsertWithWhereUniqueWithoutUsersInput[]
-    createMany?: finesCreateManyUsersInputEnvelope
-    set?: finesWhereUniqueInput | finesWhereUniqueInput[]
-    disconnect?: finesWhereUniqueInput | finesWhereUniqueInput[]
-    delete?: finesWhereUniqueInput | finesWhereUniqueInput[]
-    connect?: finesWhereUniqueInput | finesWhereUniqueInput[]
-    update?: finesUpdateWithWhereUniqueWithoutUsersInput | finesUpdateWithWhereUniqueWithoutUsersInput[]
-    updateMany?: finesUpdateManyWithWhereWithoutUsersInput | finesUpdateManyWithWhereWithoutUsersInput[]
-    deleteMany?: finesScalarWhereInput | finesScalarWhereInput[]
+  export type item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput = {
+    create?: XOR<item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput, item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput> | item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput[] | item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput[]
+    connectOrCreate?: item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput[]
+    upsert?: item_tran_historyUpsertWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyUpsertWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput[]
+    createMany?: item_tran_historyCreateManyUsers_item_tran_history_requested_byTousersInputEnvelope
+    set?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    disconnect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    delete?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    update?: item_tran_historyUpdateWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyUpdateWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput[]
+    updateMany?: item_tran_historyUpdateManyWithWhereWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyUpdateManyWithWhereWithoutUsers_item_tran_history_requested_byTousersInput[]
+    deleteMany?: item_tran_historyScalarWhereInput | item_tran_historyScalarWhereInput[]
   }
 
   export type logsUpdateManyWithoutUsersNestedInput = {
@@ -16457,6 +16442,20 @@ export namespace Prisma {
     deleteMany?: user_wishlistScalarWhereInput | user_wishlistScalarWhereInput[]
   }
 
+  export type finesUncheckedUpdateManyWithoutUsersNestedInput = {
+    create?: XOR<finesCreateWithoutUsersInput, finesUncheckedCreateWithoutUsersInput> | finesCreateWithoutUsersInput[] | finesUncheckedCreateWithoutUsersInput[]
+    connectOrCreate?: finesCreateOrConnectWithoutUsersInput | finesCreateOrConnectWithoutUsersInput[]
+    upsert?: finesUpsertWithWhereUniqueWithoutUsersInput | finesUpsertWithWhereUniqueWithoutUsersInput[]
+    createMany?: finesCreateManyUsersInputEnvelope
+    set?: finesWhereUniqueInput | finesWhereUniqueInput[]
+    disconnect?: finesWhereUniqueInput | finesWhereUniqueInput[]
+    delete?: finesWhereUniqueInput | finesWhereUniqueInput[]
+    connect?: finesWhereUniqueInput | finesWhereUniqueInput[]
+    update?: finesUpdateWithWhereUniqueWithoutUsersInput | finesUpdateWithWhereUniqueWithoutUsersInput[]
+    updateMany?: finesUpdateManyWithWhereWithoutUsersInput | finesUpdateManyWithWhereWithoutUsersInput[]
+    deleteMany?: finesScalarWhereInput | finesScalarWhereInput[]
+  }
+
   export type item_tranUncheckedUpdateManyWithoutUsersNestedInput = {
     create?: XOR<item_tranCreateWithoutUsersInput, item_tranUncheckedCreateWithoutUsersInput> | item_tranCreateWithoutUsersInput[] | item_tranUncheckedCreateWithoutUsersInput[]
     connectOrCreate?: item_tranCreateOrConnectWithoutUsersInput | item_tranCreateOrConnectWithoutUsersInput[]
@@ -16469,20 +16468,6 @@ export namespace Prisma {
     update?: item_tranUpdateWithWhereUniqueWithoutUsersInput | item_tranUpdateWithWhereUniqueWithoutUsersInput[]
     updateMany?: item_tranUpdateManyWithWhereWithoutUsersInput | item_tranUpdateManyWithWhereWithoutUsersInput[]
     deleteMany?: item_tranScalarWhereInput | item_tranScalarWhereInput[]
-  }
-
-  export type item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput = {
-    create?: XOR<item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput, item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput> | item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput[] | item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput[]
-    connectOrCreate?: item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput[]
-    upsert?: item_tran_historyUpsertWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyUpsertWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput[]
-    createMany?: item_tran_historyCreateManyUsers_item_tran_history_requested_byTousersInputEnvelope
-    set?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
-    disconnect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
-    delete?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
-    connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
-    update?: item_tran_historyUpdateWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyUpdateWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput[]
-    updateMany?: item_tran_historyUpdateManyWithWhereWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyUpdateManyWithWhereWithoutUsers_item_tran_history_requested_byTousersInput[]
-    deleteMany?: item_tran_historyScalarWhereInput | item_tran_historyScalarWhereInput[]
   }
 
   export type item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput = {
@@ -16499,18 +16484,18 @@ export namespace Prisma {
     deleteMany?: item_tran_historyScalarWhereInput | item_tran_historyScalarWhereInput[]
   }
 
-  export type finesUncheckedUpdateManyWithoutUsersNestedInput = {
-    create?: XOR<finesCreateWithoutUsersInput, finesUncheckedCreateWithoutUsersInput> | finesCreateWithoutUsersInput[] | finesUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: finesCreateOrConnectWithoutUsersInput | finesCreateOrConnectWithoutUsersInput[]
-    upsert?: finesUpsertWithWhereUniqueWithoutUsersInput | finesUpsertWithWhereUniqueWithoutUsersInput[]
-    createMany?: finesCreateManyUsersInputEnvelope
-    set?: finesWhereUniqueInput | finesWhereUniqueInput[]
-    disconnect?: finesWhereUniqueInput | finesWhereUniqueInput[]
-    delete?: finesWhereUniqueInput | finesWhereUniqueInput[]
-    connect?: finesWhereUniqueInput | finesWhereUniqueInput[]
-    update?: finesUpdateWithWhereUniqueWithoutUsersInput | finesUpdateWithWhereUniqueWithoutUsersInput[]
-    updateMany?: finesUpdateManyWithWhereWithoutUsersInput | finesUpdateManyWithWhereWithoutUsersInput[]
-    deleteMany?: finesScalarWhereInput | finesScalarWhereInput[]
+  export type item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput = {
+    create?: XOR<item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput, item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput> | item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput[] | item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput[]
+    connectOrCreate?: item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput[]
+    upsert?: item_tran_historyUpsertWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyUpsertWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput[]
+    createMany?: item_tran_historyCreateManyUsers_item_tran_history_requested_byTousersInputEnvelope
+    set?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    disconnect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    delete?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    connect?: item_tran_historyWhereUniqueInput | item_tran_historyWhereUniqueInput[]
+    update?: item_tran_historyUpdateWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyUpdateWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput[]
+    updateMany?: item_tran_historyUpdateManyWithWhereWithoutUsers_item_tran_history_requested_byTousersInput | item_tran_historyUpdateManyWithWhereWithoutUsers_item_tran_history_requested_byTousersInput[]
+    deleteMany?: item_tran_historyScalarWhereInput | item_tran_historyScalarWhereInput[]
   }
 
   export type logsUncheckedUpdateManyWithoutUsersNestedInput = {
@@ -17033,9 +17018,9 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
     fines?: finesCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
     logs?: logsCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
@@ -17056,9 +17041,9 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
     fines?: finesUncheckedCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
     logs?: logsUncheckedCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
@@ -17078,10 +17063,10 @@ export namespace Prisma {
     date_due?: Date | string | null
     date_returned?: Date | string | null
     remarks?: string | null
+    fines?: finesCreateNestedManyWithoutItem_tran_historyInput
+    users_item_tran_history_approved_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_approved_byTousersInput
     library_items?: library_itemsCreateNestedOneWithoutItem_tran_historyInput
     users_item_tran_history_requested_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_requested_byTousersInput
-    users_item_tran_history_approved_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_approved_byTousersInput
-    fines?: finesCreateNestedManyWithoutItem_tran_historyInput
   }
 
   export type item_tran_historyUncheckedCreateWithoutItem_tranInput = {
@@ -17197,9 +17182,9 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
     fines?: finesUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
     logs?: logsUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
@@ -17220,9 +17205,9 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
     fines?: finesUncheckedUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
     logs?: logsUncheckedUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
@@ -17261,6 +17246,85 @@ export namespace Prisma {
     date_due?: DateTimeNullableFilter<"item_tran_history"> | Date | string | null
     date_returned?: DateTimeNullableFilter<"item_tran_history"> | Date | string | null
     remarks?: StringNullableFilter<"item_tran_history"> | string | null
+  }
+
+  export type finesCreateWithoutItem_tran_historyInput = {
+    amount?: Decimal | DecimalJsLike | number | string | null
+    reason?: string | null
+    status?: $Enums.fines_status | null
+    created_at?: Date | string | null
+    paid_at?: Date | string | null
+    users?: usersCreateNestedOneWithoutFinesInput
+  }
+
+  export type finesUncheckedCreateWithoutItem_tran_historyInput = {
+    fine_id?: number
+    user_id?: number | null
+    amount?: Decimal | DecimalJsLike | number | string | null
+    reason?: string | null
+    status?: $Enums.fines_status | null
+    created_at?: Date | string | null
+    paid_at?: Date | string | null
+  }
+
+  export type finesCreateOrConnectWithoutItem_tran_historyInput = {
+    where: finesWhereUniqueInput
+    create: XOR<finesCreateWithoutItem_tran_historyInput, finesUncheckedCreateWithoutItem_tran_historyInput>
+  }
+
+  export type finesCreateManyItem_tran_historyInputEnvelope = {
+    data: finesCreateManyItem_tran_historyInput | finesCreateManyItem_tran_historyInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type usersCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
+    name?: string | null
+    email?: string | null
+    password_hash?: string | null
+    role?: $Enums.users_role | null
+    status?: $Enums.users_status | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    gender?: $Enums.gender | null
+    phone_number?: string | null
+    birth_date?: Date | string | null
+    address?: string | null
+    profile_image_url?: string | null
+    fines?: finesCreateNestedManyWithoutUsersInput
+    item_tran?: item_tranCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
+    logs?: logsCreateNestedManyWithoutUsersInput
+    notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
+    notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
+    user_wishlist?: user_wishlistCreateNestedManyWithoutUsersInput
+  }
+
+  export type usersUncheckedCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
+    user_id?: number
+    name?: string | null
+    email?: string | null
+    password_hash?: string | null
+    role?: $Enums.users_role | null
+    status?: $Enums.users_status | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    gender?: $Enums.gender | null
+    phone_number?: string | null
+    birth_date?: Date | string | null
+    address?: string | null
+    profile_image_url?: string | null
+    fines?: finesUncheckedCreateNestedManyWithoutUsersInput
+    item_tran?: item_tranUncheckedCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
+    logs?: logsUncheckedCreateNestedManyWithoutUsersInput
+    notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
+    notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
+    user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutUsersInput
+  }
+
+  export type usersCreateOrConnectWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
+    where: usersWhereUniqueInput
+    create: XOR<usersCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput, usersUncheckedCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput>
   }
 
   export type library_itemsCreateWithoutItem_tran_historyInput = {
@@ -17321,26 +17385,6 @@ export namespace Prisma {
     create: XOR<library_itemsCreateWithoutItem_tran_historyInput, library_itemsUncheckedCreateWithoutItem_tran_historyInput>
   }
 
-  export type item_tranCreateWithoutItem_tran_historyInput = {
-    status?: $Enums.item_tran_status | null
-    record_status?: $Enums.record_status | null
-    library_items?: library_itemsCreateNestedOneWithoutItem_tranInput
-    users?: usersCreateNestedOneWithoutItem_tranInput
-  }
-
-  export type item_tranUncheckedCreateWithoutItem_tran_historyInput = {
-    tran_id?: number
-    item_id?: number | null
-    status?: $Enums.item_tran_status | null
-    user_id?: number | null
-    record_status?: $Enums.record_status | null
-  }
-
-  export type item_tranCreateOrConnectWithoutItem_tran_historyInput = {
-    where: item_tranWhereUniqueInput
-    create: XOR<item_tranCreateWithoutItem_tran_historyInput, item_tranUncheckedCreateWithoutItem_tran_historyInput>
-  }
-
   export type usersCreateWithoutItem_tran_history_item_tran_history_requested_byTousersInput = {
     name?: string | null
     email?: string | null
@@ -17354,9 +17398,9 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
+    fines?: finesCreateNestedManyWithoutUsersInput
     item_tran?: item_tranCreateNestedManyWithoutUsersInput
     item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
-    fines?: finesCreateNestedManyWithoutUsersInput
     logs?: logsCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
@@ -17377,9 +17421,9 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
+    fines?: finesUncheckedCreateNestedManyWithoutUsersInput
     item_tran?: item_tranUncheckedCreateNestedManyWithoutUsersInput
     item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
-    fines?: finesUncheckedCreateNestedManyWithoutUsersInput
     logs?: logsUncheckedCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
@@ -17391,83 +17435,110 @@ export namespace Prisma {
     create: XOR<usersCreateWithoutItem_tran_history_item_tran_history_requested_byTousersInput, usersUncheckedCreateWithoutItem_tran_history_item_tran_history_requested_byTousersInput>
   }
 
-  export type usersCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
-    name?: string | null
-    email?: string | null
-    password_hash?: string | null
-    role?: $Enums.users_role | null
-    status?: $Enums.users_status | null
-    created_at?: Date | string | null
-    updated_at?: Date | string | null
-    gender?: $Enums.gender | null
-    phone_number?: string | null
-    birth_date?: Date | string | null
-    address?: string | null
-    profile_image_url?: string | null
-    item_tran?: item_tranCreateNestedManyWithoutUsersInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
-    fines?: finesCreateNestedManyWithoutUsersInput
-    logs?: logsCreateNestedManyWithoutUsersInput
-    notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
-    notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
-    user_wishlist?: user_wishlistCreateNestedManyWithoutUsersInput
+  export type item_tranCreateWithoutItem_tran_historyInput = {
+    status?: $Enums.item_tran_status | null
+    record_status?: $Enums.record_status | null
+    library_items?: library_itemsCreateNestedOneWithoutItem_tranInput
+    users?: usersCreateNestedOneWithoutItem_tranInput
   }
 
-  export type usersUncheckedCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
-    user_id?: number
-    name?: string | null
-    email?: string | null
-    password_hash?: string | null
-    role?: $Enums.users_role | null
-    status?: $Enums.users_status | null
-    created_at?: Date | string | null
-    updated_at?: Date | string | null
-    gender?: $Enums.gender | null
-    phone_number?: string | null
-    birth_date?: Date | string | null
-    address?: string | null
-    profile_image_url?: string | null
-    item_tran?: item_tranUncheckedCreateNestedManyWithoutUsersInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
-    fines?: finesUncheckedCreateNestedManyWithoutUsersInput
-    logs?: logsUncheckedCreateNestedManyWithoutUsersInput
-    notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
-    notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
-    user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutUsersInput
-  }
-
-  export type usersCreateOrConnectWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
-    where: usersWhereUniqueInput
-    create: XOR<usersCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput, usersUncheckedCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput>
-  }
-
-  export type finesCreateWithoutItem_tran_historyInput = {
-    amount?: Decimal | DecimalJsLike | number | string | null
-    reason?: string | null
-    status?: $Enums.fines_status | null
-    created_at?: Date | string | null
-    paid_at?: Date | string | null
-    users?: usersCreateNestedOneWithoutFinesInput
-  }
-
-  export type finesUncheckedCreateWithoutItem_tran_historyInput = {
-    fine_id?: number
+  export type item_tranUncheckedCreateWithoutItem_tran_historyInput = {
+    tran_id?: number
+    item_id?: number | null
+    status?: $Enums.item_tran_status | null
     user_id?: number | null
-    amount?: Decimal | DecimalJsLike | number | string | null
-    reason?: string | null
-    status?: $Enums.fines_status | null
-    created_at?: Date | string | null
-    paid_at?: Date | string | null
+    record_status?: $Enums.record_status | null
   }
 
-  export type finesCreateOrConnectWithoutItem_tran_historyInput = {
+  export type item_tranCreateOrConnectWithoutItem_tran_historyInput = {
+    where: item_tranWhereUniqueInput
+    create: XOR<item_tranCreateWithoutItem_tran_historyInput, item_tranUncheckedCreateWithoutItem_tran_historyInput>
+  }
+
+  export type finesUpsertWithWhereUniqueWithoutItem_tran_historyInput = {
     where: finesWhereUniqueInput
+    update: XOR<finesUpdateWithoutItem_tran_historyInput, finesUncheckedUpdateWithoutItem_tran_historyInput>
     create: XOR<finesCreateWithoutItem_tran_historyInput, finesUncheckedCreateWithoutItem_tran_historyInput>
   }
 
-  export type finesCreateManyItem_tran_historyInputEnvelope = {
-    data: finesCreateManyItem_tran_historyInput | finesCreateManyItem_tran_historyInput[]
-    skipDuplicates?: boolean
+  export type finesUpdateWithWhereUniqueWithoutItem_tran_historyInput = {
+    where: finesWhereUniqueInput
+    data: XOR<finesUpdateWithoutItem_tran_historyInput, finesUncheckedUpdateWithoutItem_tran_historyInput>
+  }
+
+  export type finesUpdateManyWithWhereWithoutItem_tran_historyInput = {
+    where: finesScalarWhereInput
+    data: XOR<finesUpdateManyMutationInput, finesUncheckedUpdateManyWithoutItem_tran_historyInput>
+  }
+
+  export type finesScalarWhereInput = {
+    AND?: finesScalarWhereInput | finesScalarWhereInput[]
+    OR?: finesScalarWhereInput[]
+    NOT?: finesScalarWhereInput | finesScalarWhereInput[]
+    fine_id?: IntFilter<"fines"> | number
+    user_id?: IntNullableFilter<"fines"> | number | null
+    item_tran_history_id?: IntNullableFilter<"fines"> | number | null
+    amount?: DecimalNullableFilter<"fines"> | Decimal | DecimalJsLike | number | string | null
+    reason?: StringNullableFilter<"fines"> | string | null
+    status?: Enumfines_statusNullableFilter<"fines"> | $Enums.fines_status | null
+    created_at?: DateTimeNullableFilter<"fines"> | Date | string | null
+    paid_at?: DateTimeNullableFilter<"fines"> | Date | string | null
+  }
+
+  export type usersUpsertWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
+    update: XOR<usersUpdateWithoutItem_tran_history_item_tran_history_approved_byTousersInput, usersUncheckedUpdateWithoutItem_tran_history_item_tran_history_approved_byTousersInput>
+    create: XOR<usersCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput, usersUncheckedCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput>
+    where?: usersWhereInput
+  }
+
+  export type usersUpdateToOneWithWhereWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
+    where?: usersWhereInput
+    data: XOR<usersUpdateWithoutItem_tran_history_item_tran_history_approved_byTousersInput, usersUncheckedUpdateWithoutItem_tran_history_item_tran_history_approved_byTousersInput>
+  }
+
+  export type usersUpdateWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableEnumusers_roleFieldUpdateOperationsInput | $Enums.users_role | null
+    status?: NullableEnumusers_statusFieldUpdateOperationsInput | $Enums.users_status | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumgenderFieldUpdateOperationsInput | $Enums.gender | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
+    fines?: finesUpdateManyWithoutUsersNestedInput
+    item_tran?: item_tranUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
+    logs?: logsUpdateManyWithoutUsersNestedInput
+    notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
+    notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
+    user_wishlist?: user_wishlistUpdateManyWithoutUsersNestedInput
+  }
+
+  export type usersUncheckedUpdateWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
+    user_id?: IntFieldUpdateOperationsInput | number
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableEnumusers_roleFieldUpdateOperationsInput | $Enums.users_role | null
+    status?: NullableEnumusers_statusFieldUpdateOperationsInput | $Enums.users_status | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumgenderFieldUpdateOperationsInput | $Enums.gender | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
+    fines?: finesUncheckedUpdateManyWithoutUsersNestedInput
+    item_tran?: item_tranUncheckedUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
+    logs?: logsUncheckedUpdateManyWithoutUsersNestedInput
+    notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
+    notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
+    user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type library_itemsUpsertWithoutItem_tran_historyInput = {
@@ -17534,32 +17605,6 @@ export namespace Prisma {
     user_wishlist?: user_wishlistUncheckedUpdateManyWithoutLibrary_itemsNestedInput
   }
 
-  export type item_tranUpsertWithoutItem_tran_historyInput = {
-    update: XOR<item_tranUpdateWithoutItem_tran_historyInput, item_tranUncheckedUpdateWithoutItem_tran_historyInput>
-    create: XOR<item_tranCreateWithoutItem_tran_historyInput, item_tranUncheckedCreateWithoutItem_tran_historyInput>
-    where?: item_tranWhereInput
-  }
-
-  export type item_tranUpdateToOneWithWhereWithoutItem_tran_historyInput = {
-    where?: item_tranWhereInput
-    data: XOR<item_tranUpdateWithoutItem_tran_historyInput, item_tranUncheckedUpdateWithoutItem_tran_historyInput>
-  }
-
-  export type item_tranUpdateWithoutItem_tran_historyInput = {
-    status?: NullableEnumitem_tran_statusFieldUpdateOperationsInput | $Enums.item_tran_status | null
-    record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
-    library_items?: library_itemsUpdateOneWithoutItem_tranNestedInput
-    users?: usersUpdateOneWithoutItem_tranNestedInput
-  }
-
-  export type item_tranUncheckedUpdateWithoutItem_tran_historyInput = {
-    tran_id?: IntFieldUpdateOperationsInput | number
-    item_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: NullableEnumitem_tran_statusFieldUpdateOperationsInput | $Enums.item_tran_status | null
-    user_id?: NullableIntFieldUpdateOperationsInput | number | null
-    record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
-  }
-
   export type usersUpsertWithoutItem_tran_history_item_tran_history_requested_byTousersInput = {
     update: XOR<usersUpdateWithoutItem_tran_history_item_tran_history_requested_byTousersInput, usersUncheckedUpdateWithoutItem_tran_history_item_tran_history_requested_byTousersInput>
     create: XOR<usersCreateWithoutItem_tran_history_item_tran_history_requested_byTousersInput, usersUncheckedCreateWithoutItem_tran_history_item_tran_history_requested_byTousersInput>
@@ -17584,9 +17629,9 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
+    fines?: finesUpdateManyWithoutUsersNestedInput
     item_tran?: item_tranUpdateManyWithoutUsersNestedInput
     item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
-    fines?: finesUpdateManyWithoutUsersNestedInput
     logs?: logsUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
@@ -17607,99 +17652,39 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
+    fines?: finesUncheckedUpdateManyWithoutUsersNestedInput
     item_tran?: item_tranUncheckedUpdateManyWithoutUsersNestedInput
     item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
-    fines?: finesUncheckedUpdateManyWithoutUsersNestedInput
     logs?: logsUncheckedUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
   }
 
-  export type usersUpsertWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
-    update: XOR<usersUpdateWithoutItem_tran_history_item_tran_history_approved_byTousersInput, usersUncheckedUpdateWithoutItem_tran_history_item_tran_history_approved_byTousersInput>
-    create: XOR<usersCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput, usersUncheckedCreateWithoutItem_tran_history_item_tran_history_approved_byTousersInput>
-    where?: usersWhereInput
+  export type item_tranUpsertWithoutItem_tran_historyInput = {
+    update: XOR<item_tranUpdateWithoutItem_tran_historyInput, item_tranUncheckedUpdateWithoutItem_tran_historyInput>
+    create: XOR<item_tranCreateWithoutItem_tran_historyInput, item_tranUncheckedCreateWithoutItem_tran_historyInput>
+    where?: item_tranWhereInput
   }
 
-  export type usersUpdateToOneWithWhereWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
-    where?: usersWhereInput
-    data: XOR<usersUpdateWithoutItem_tran_history_item_tran_history_approved_byTousersInput, usersUncheckedUpdateWithoutItem_tran_history_item_tran_history_approved_byTousersInput>
+  export type item_tranUpdateToOneWithWhereWithoutItem_tran_historyInput = {
+    where?: item_tranWhereInput
+    data: XOR<item_tranUpdateWithoutItem_tran_historyInput, item_tranUncheckedUpdateWithoutItem_tran_historyInput>
   }
 
-  export type usersUpdateWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    password_hash?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: NullableEnumusers_roleFieldUpdateOperationsInput | $Enums.users_role | null
-    status?: NullableEnumusers_statusFieldUpdateOperationsInput | $Enums.users_status | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableEnumgenderFieldUpdateOperationsInput | $Enums.gender | null
-    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
-    birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    item_tran?: item_tranUpdateManyWithoutUsersNestedInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
-    fines?: finesUpdateManyWithoutUsersNestedInput
-    logs?: logsUpdateManyWithoutUsersNestedInput
-    notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
-    notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
-    user_wishlist?: user_wishlistUpdateManyWithoutUsersNestedInput
+  export type item_tranUpdateWithoutItem_tran_historyInput = {
+    status?: NullableEnumitem_tran_statusFieldUpdateOperationsInput | $Enums.item_tran_status | null
+    record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
+    library_items?: library_itemsUpdateOneWithoutItem_tranNestedInput
+    users?: usersUpdateOneWithoutItem_tranNestedInput
   }
 
-  export type usersUncheckedUpdateWithoutItem_tran_history_item_tran_history_approved_byTousersInput = {
-    user_id?: IntFieldUpdateOperationsInput | number
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    password_hash?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: NullableEnumusers_roleFieldUpdateOperationsInput | $Enums.users_role | null
-    status?: NullableEnumusers_statusFieldUpdateOperationsInput | $Enums.users_status | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableEnumgenderFieldUpdateOperationsInput | $Enums.gender | null
-    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
-    birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    item_tran?: item_tranUncheckedUpdateManyWithoutUsersNestedInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
-    fines?: finesUncheckedUpdateManyWithoutUsersNestedInput
-    logs?: logsUncheckedUpdateManyWithoutUsersNestedInput
-    notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
-    notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
-    user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
-  }
-
-  export type finesUpsertWithWhereUniqueWithoutItem_tran_historyInput = {
-    where: finesWhereUniqueInput
-    update: XOR<finesUpdateWithoutItem_tran_historyInput, finesUncheckedUpdateWithoutItem_tran_historyInput>
-    create: XOR<finesCreateWithoutItem_tran_historyInput, finesUncheckedCreateWithoutItem_tran_historyInput>
-  }
-
-  export type finesUpdateWithWhereUniqueWithoutItem_tran_historyInput = {
-    where: finesWhereUniqueInput
-    data: XOR<finesUpdateWithoutItem_tran_historyInput, finesUncheckedUpdateWithoutItem_tran_historyInput>
-  }
-
-  export type finesUpdateManyWithWhereWithoutItem_tran_historyInput = {
-    where: finesScalarWhereInput
-    data: XOR<finesUpdateManyMutationInput, finesUncheckedUpdateManyWithoutItem_tran_historyInput>
-  }
-
-  export type finesScalarWhereInput = {
-    AND?: finesScalarWhereInput | finesScalarWhereInput[]
-    OR?: finesScalarWhereInput[]
-    NOT?: finesScalarWhereInput | finesScalarWhereInput[]
-    fine_id?: IntFilter<"fines"> | number
-    user_id?: IntNullableFilter<"fines"> | number | null
-    item_tran_history_id?: IntNullableFilter<"fines"> | number | null
-    amount?: DecimalNullableFilter<"fines"> | Decimal | DecimalJsLike | number | string | null
-    reason?: StringNullableFilter<"fines"> | string | null
-    status?: Enumfines_statusNullableFilter<"fines"> | $Enums.fines_status | null
-    created_at?: DateTimeNullableFilter<"fines"> | Date | string | null
-    paid_at?: DateTimeNullableFilter<"fines"> | Date | string | null
+  export type item_tranUncheckedUpdateWithoutItem_tran_historyInput = {
+    tran_id?: IntFieldUpdateOperationsInput | number
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: NullableEnumitem_tran_statusFieldUpdateOperationsInput | $Enums.item_tran_status | null
+    user_id?: NullableIntFieldUpdateOperationsInput | number | null
+    record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
   }
 
   export type item_tranCreateWithoutLibrary_itemsInput = {
@@ -17735,10 +17720,10 @@ export namespace Prisma {
     date_due?: Date | string | null
     date_returned?: Date | string | null
     remarks?: string | null
-    item_tran?: item_tranCreateNestedOneWithoutItem_tran_historyInput
-    users_item_tran_history_requested_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_requested_byTousersInput
-    users_item_tran_history_approved_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_approved_byTousersInput
     fines?: finesCreateNestedManyWithoutItem_tran_historyInput
+    users_item_tran_history_approved_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_approved_byTousersInput
+    users_item_tran_history_requested_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_requested_byTousersInput
+    item_tran?: item_tranCreateNestedOneWithoutItem_tran_historyInput
   }
 
   export type item_tran_historyUncheckedCreateWithoutLibrary_itemsInput = {
@@ -17935,8 +17920,8 @@ export namespace Prisma {
     address?: string | null
     profile_image_url?: string | null
     item_tran?: item_tranCreateNestedManyWithoutUsersInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
     item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
     logs?: logsCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
@@ -17958,8 +17943,8 @@ export namespace Prisma {
     address?: string | null
     profile_image_url?: string | null
     item_tran?: item_tranUncheckedCreateNestedManyWithoutUsersInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
     item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
     logs?: logsUncheckedCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
@@ -17979,10 +17964,10 @@ export namespace Prisma {
     date_due?: Date | string | null
     date_returned?: Date | string | null
     remarks?: string | null
-    library_items?: library_itemsCreateNestedOneWithoutItem_tran_historyInput
-    item_tran?: item_tranCreateNestedOneWithoutItem_tran_historyInput
-    users_item_tran_history_requested_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_requested_byTousersInput
     users_item_tran_history_approved_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_approved_byTousersInput
+    library_items?: library_itemsCreateNestedOneWithoutItem_tran_historyInput
+    users_item_tran_history_requested_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_requested_byTousersInput
+    item_tran?: item_tranCreateNestedOneWithoutItem_tran_historyInput
   }
 
   export type item_tran_historyUncheckedCreateWithoutFinesInput = {
@@ -18030,8 +18015,8 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
     item_tran?: item_tranUpdateManyWithoutUsersNestedInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
     item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
     logs?: logsUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
@@ -18053,8 +18038,8 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
     item_tran?: item_tranUncheckedUpdateManyWithoutUsersNestedInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
     item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
     logs?: logsUncheckedUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
@@ -18080,10 +18065,10 @@ export namespace Prisma {
     date_due?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_returned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    library_items?: library_itemsUpdateOneWithoutItem_tran_historyNestedInput
-    item_tran?: item_tranUpdateOneWithoutItem_tran_historyNestedInput
-    users_item_tran_history_requested_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_requested_byTousersNestedInput
     users_item_tran_history_approved_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_approved_byTousersNestedInput
+    library_items?: library_itemsUpdateOneWithoutItem_tran_historyNestedInput
+    users_item_tran_history_requested_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_requested_byTousersNestedInput
+    item_tran?: item_tranUpdateOneWithoutItem_tran_historyNestedInput
   }
 
   export type item_tran_historyUncheckedUpdateWithoutFinesInput = {
@@ -18114,10 +18099,10 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    item_tran?: item_tranCreateNestedManyWithoutUsersInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
     fines?: finesCreateNestedManyWithoutUsersInput
+    item_tran?: item_tranCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
     notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistCreateNestedManyWithoutUsersInput
@@ -18137,10 +18122,10 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    item_tran?: item_tranUncheckedCreateNestedManyWithoutUsersInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
     fines?: finesUncheckedCreateNestedManyWithoutUsersInput
+    item_tran?: item_tranUncheckedCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
     user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutUsersInput
@@ -18175,10 +18160,10 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    item_tran?: item_tranUpdateManyWithoutUsersNestedInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
     fines?: finesUpdateManyWithoutUsersNestedInput
+    item_tran?: item_tranUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUpdateManyWithoutUsersNestedInput
@@ -18198,13 +18183,113 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    item_tran?: item_tranUncheckedUpdateManyWithoutUsersNestedInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
     fines?: finesUncheckedUpdateManyWithoutUsersNestedInput
+    item_tran?: item_tranUncheckedUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
     user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
+  }
+
+  export type usersCreateWithoutNotifications_notifications_from_user_idTousersInput = {
+    name?: string | null
+    email?: string | null
+    password_hash?: string | null
+    role?: $Enums.users_role | null
+    status?: $Enums.users_status | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    gender?: $Enums.gender | null
+    phone_number?: string | null
+    birth_date?: Date | string | null
+    address?: string | null
+    profile_image_url?: string | null
+    fines?: finesCreateNestedManyWithoutUsersInput
+    item_tran?: item_tranCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
+    logs?: logsCreateNestedManyWithoutUsersInput
+    notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
+    user_wishlist?: user_wishlistCreateNestedManyWithoutUsersInput
+  }
+
+  export type usersUncheckedCreateWithoutNotifications_notifications_from_user_idTousersInput = {
+    user_id?: number
+    name?: string | null
+    email?: string | null
+    password_hash?: string | null
+    role?: $Enums.users_role | null
+    status?: $Enums.users_status | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    gender?: $Enums.gender | null
+    phone_number?: string | null
+    birth_date?: Date | string | null
+    address?: string | null
+    profile_image_url?: string | null
+    fines?: finesUncheckedCreateNestedManyWithoutUsersInput
+    item_tran?: item_tranUncheckedCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
+    logs?: logsUncheckedCreateNestedManyWithoutUsersInput
+    notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
+    user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutUsersInput
+  }
+
+  export type usersCreateOrConnectWithoutNotifications_notifications_from_user_idTousersInput = {
+    where: usersWhereUniqueInput
+    create: XOR<usersCreateWithoutNotifications_notifications_from_user_idTousersInput, usersUncheckedCreateWithoutNotifications_notifications_from_user_idTousersInput>
+  }
+
+  export type usersCreateWithoutNotifications_notifications_to_user_idTousersInput = {
+    name?: string | null
+    email?: string | null
+    password_hash?: string | null
+    role?: $Enums.users_role | null
+    status?: $Enums.users_status | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    gender?: $Enums.gender | null
+    phone_number?: string | null
+    birth_date?: Date | string | null
+    address?: string | null
+    profile_image_url?: string | null
+    fines?: finesCreateNestedManyWithoutUsersInput
+    item_tran?: item_tranCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
+    logs?: logsCreateNestedManyWithoutUsersInput
+    notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
+    user_wishlist?: user_wishlistCreateNestedManyWithoutUsersInput
+  }
+
+  export type usersUncheckedCreateWithoutNotifications_notifications_to_user_idTousersInput = {
+    user_id?: number
+    name?: string | null
+    email?: string | null
+    password_hash?: string | null
+    role?: $Enums.users_role | null
+    status?: $Enums.users_status | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
+    gender?: $Enums.gender | null
+    phone_number?: string | null
+    birth_date?: Date | string | null
+    address?: string | null
+    profile_image_url?: string | null
+    fines?: finesUncheckedCreateNestedManyWithoutUsersInput
+    item_tran?: item_tranUncheckedCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
+    logs?: logsUncheckedCreateNestedManyWithoutUsersInput
+    notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
+    user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutUsersInput
+  }
+
+  export type usersCreateOrConnectWithoutNotifications_notifications_to_user_idTousersInput = {
+    where: usersWhereUniqueInput
+    create: XOR<usersCreateWithoutNotifications_notifications_to_user_idTousersInput, usersUncheckedCreateWithoutNotifications_notifications_to_user_idTousersInput>
   }
 
   export type library_itemsCreateWithoutNotificationsInput = {
@@ -18265,104 +18350,116 @@ export namespace Prisma {
     create: XOR<library_itemsCreateWithoutNotificationsInput, library_itemsUncheckedCreateWithoutNotificationsInput>
   }
 
-  export type usersCreateWithoutNotifications_notifications_from_user_idTousersInput = {
-    name?: string | null
-    email?: string | null
-    password_hash?: string | null
-    role?: $Enums.users_role | null
-    status?: $Enums.users_status | null
-    created_at?: Date | string | null
-    updated_at?: Date | string | null
-    gender?: $Enums.gender | null
-    phone_number?: string | null
-    birth_date?: Date | string | null
-    address?: string | null
-    profile_image_url?: string | null
-    item_tran?: item_tranCreateNestedManyWithoutUsersInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
-    fines?: finesCreateNestedManyWithoutUsersInput
-    logs?: logsCreateNestedManyWithoutUsersInput
-    notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
-    user_wishlist?: user_wishlistCreateNestedManyWithoutUsersInput
-  }
-
-  export type usersUncheckedCreateWithoutNotifications_notifications_from_user_idTousersInput = {
-    user_id?: number
-    name?: string | null
-    email?: string | null
-    password_hash?: string | null
-    role?: $Enums.users_role | null
-    status?: $Enums.users_status | null
-    created_at?: Date | string | null
-    updated_at?: Date | string | null
-    gender?: $Enums.gender | null
-    phone_number?: string | null
-    birth_date?: Date | string | null
-    address?: string | null
-    profile_image_url?: string | null
-    item_tran?: item_tranUncheckedCreateNestedManyWithoutUsersInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
-    fines?: finesUncheckedCreateNestedManyWithoutUsersInput
-    logs?: logsUncheckedCreateNestedManyWithoutUsersInput
-    notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
-    user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutUsersInput
-  }
-
-  export type usersCreateOrConnectWithoutNotifications_notifications_from_user_idTousersInput = {
-    where: usersWhereUniqueInput
+  export type usersUpsertWithoutNotifications_notifications_from_user_idTousersInput = {
+    update: XOR<usersUpdateWithoutNotifications_notifications_from_user_idTousersInput, usersUncheckedUpdateWithoutNotifications_notifications_from_user_idTousersInput>
     create: XOR<usersCreateWithoutNotifications_notifications_from_user_idTousersInput, usersUncheckedCreateWithoutNotifications_notifications_from_user_idTousersInput>
+    where?: usersWhereInput
   }
 
-  export type usersCreateWithoutNotifications_notifications_to_user_idTousersInput = {
-    name?: string | null
-    email?: string | null
-    password_hash?: string | null
-    role?: $Enums.users_role | null
-    status?: $Enums.users_status | null
-    created_at?: Date | string | null
-    updated_at?: Date | string | null
-    gender?: $Enums.gender | null
-    phone_number?: string | null
-    birth_date?: Date | string | null
-    address?: string | null
-    profile_image_url?: string | null
-    item_tran?: item_tranCreateNestedManyWithoutUsersInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
-    fines?: finesCreateNestedManyWithoutUsersInput
-    logs?: logsCreateNestedManyWithoutUsersInput
-    notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
-    user_wishlist?: user_wishlistCreateNestedManyWithoutUsersInput
+  export type usersUpdateToOneWithWhereWithoutNotifications_notifications_from_user_idTousersInput = {
+    where?: usersWhereInput
+    data: XOR<usersUpdateWithoutNotifications_notifications_from_user_idTousersInput, usersUncheckedUpdateWithoutNotifications_notifications_from_user_idTousersInput>
   }
 
-  export type usersUncheckedCreateWithoutNotifications_notifications_to_user_idTousersInput = {
-    user_id?: number
-    name?: string | null
-    email?: string | null
-    password_hash?: string | null
-    role?: $Enums.users_role | null
-    status?: $Enums.users_status | null
-    created_at?: Date | string | null
-    updated_at?: Date | string | null
-    gender?: $Enums.gender | null
-    phone_number?: string | null
-    birth_date?: Date | string | null
-    address?: string | null
-    profile_image_url?: string | null
-    item_tran?: item_tranUncheckedCreateNestedManyWithoutUsersInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
-    fines?: finesUncheckedCreateNestedManyWithoutUsersInput
-    logs?: logsUncheckedCreateNestedManyWithoutUsersInput
-    notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
-    user_wishlist?: user_wishlistUncheckedCreateNestedManyWithoutUsersInput
+  export type usersUpdateWithoutNotifications_notifications_from_user_idTousersInput = {
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableEnumusers_roleFieldUpdateOperationsInput | $Enums.users_role | null
+    status?: NullableEnumusers_statusFieldUpdateOperationsInput | $Enums.users_status | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumgenderFieldUpdateOperationsInput | $Enums.gender | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
+    fines?: finesUpdateManyWithoutUsersNestedInput
+    item_tran?: item_tranUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
+    logs?: logsUpdateManyWithoutUsersNestedInput
+    notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
+    user_wishlist?: user_wishlistUpdateManyWithoutUsersNestedInput
   }
 
-  export type usersCreateOrConnectWithoutNotifications_notifications_to_user_idTousersInput = {
-    where: usersWhereUniqueInput
+  export type usersUncheckedUpdateWithoutNotifications_notifications_from_user_idTousersInput = {
+    user_id?: IntFieldUpdateOperationsInput | number
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableEnumusers_roleFieldUpdateOperationsInput | $Enums.users_role | null
+    status?: NullableEnumusers_statusFieldUpdateOperationsInput | $Enums.users_status | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumgenderFieldUpdateOperationsInput | $Enums.gender | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
+    fines?: finesUncheckedUpdateManyWithoutUsersNestedInput
+    item_tran?: item_tranUncheckedUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
+    logs?: logsUncheckedUpdateManyWithoutUsersNestedInput
+    notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
+    user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
+  }
+
+  export type usersUpsertWithoutNotifications_notifications_to_user_idTousersInput = {
+    update: XOR<usersUpdateWithoutNotifications_notifications_to_user_idTousersInput, usersUncheckedUpdateWithoutNotifications_notifications_to_user_idTousersInput>
     create: XOR<usersCreateWithoutNotifications_notifications_to_user_idTousersInput, usersUncheckedCreateWithoutNotifications_notifications_to_user_idTousersInput>
+    where?: usersWhereInput
+  }
+
+  export type usersUpdateToOneWithWhereWithoutNotifications_notifications_to_user_idTousersInput = {
+    where?: usersWhereInput
+    data: XOR<usersUpdateWithoutNotifications_notifications_to_user_idTousersInput, usersUncheckedUpdateWithoutNotifications_notifications_to_user_idTousersInput>
+  }
+
+  export type usersUpdateWithoutNotifications_notifications_to_user_idTousersInput = {
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableEnumusers_roleFieldUpdateOperationsInput | $Enums.users_role | null
+    status?: NullableEnumusers_statusFieldUpdateOperationsInput | $Enums.users_status | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumgenderFieldUpdateOperationsInput | $Enums.gender | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
+    fines?: finesUpdateManyWithoutUsersNestedInput
+    item_tran?: item_tranUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
+    logs?: logsUpdateManyWithoutUsersNestedInput
+    notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
+    user_wishlist?: user_wishlistUpdateManyWithoutUsersNestedInput
+  }
+
+  export type usersUncheckedUpdateWithoutNotifications_notifications_to_user_idTousersInput = {
+    user_id?: IntFieldUpdateOperationsInput | number
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password_hash?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableEnumusers_roleFieldUpdateOperationsInput | $Enums.users_role | null
+    status?: NullableEnumusers_statusFieldUpdateOperationsInput | $Enums.users_status | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumgenderFieldUpdateOperationsInput | $Enums.gender | null
+    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
+    birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
+    fines?: finesUncheckedUpdateManyWithoutUsersNestedInput
+    item_tran?: item_tranUncheckedUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
+    logs?: logsUncheckedUpdateManyWithoutUsersNestedInput
+    notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
+    user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
   }
 
   export type library_itemsUpsertWithoutNotificationsInput = {
@@ -18429,118 +18526,6 @@ export namespace Prisma {
     user_wishlist?: user_wishlistUncheckedUpdateManyWithoutLibrary_itemsNestedInput
   }
 
-  export type usersUpsertWithoutNotifications_notifications_from_user_idTousersInput = {
-    update: XOR<usersUpdateWithoutNotifications_notifications_from_user_idTousersInput, usersUncheckedUpdateWithoutNotifications_notifications_from_user_idTousersInput>
-    create: XOR<usersCreateWithoutNotifications_notifications_from_user_idTousersInput, usersUncheckedCreateWithoutNotifications_notifications_from_user_idTousersInput>
-    where?: usersWhereInput
-  }
-
-  export type usersUpdateToOneWithWhereWithoutNotifications_notifications_from_user_idTousersInput = {
-    where?: usersWhereInput
-    data: XOR<usersUpdateWithoutNotifications_notifications_from_user_idTousersInput, usersUncheckedUpdateWithoutNotifications_notifications_from_user_idTousersInput>
-  }
-
-  export type usersUpdateWithoutNotifications_notifications_from_user_idTousersInput = {
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    password_hash?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: NullableEnumusers_roleFieldUpdateOperationsInput | $Enums.users_role | null
-    status?: NullableEnumusers_statusFieldUpdateOperationsInput | $Enums.users_status | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableEnumgenderFieldUpdateOperationsInput | $Enums.gender | null
-    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
-    birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    item_tran?: item_tranUpdateManyWithoutUsersNestedInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
-    fines?: finesUpdateManyWithoutUsersNestedInput
-    logs?: logsUpdateManyWithoutUsersNestedInput
-    notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
-    user_wishlist?: user_wishlistUpdateManyWithoutUsersNestedInput
-  }
-
-  export type usersUncheckedUpdateWithoutNotifications_notifications_from_user_idTousersInput = {
-    user_id?: IntFieldUpdateOperationsInput | number
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    password_hash?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: NullableEnumusers_roleFieldUpdateOperationsInput | $Enums.users_role | null
-    status?: NullableEnumusers_statusFieldUpdateOperationsInput | $Enums.users_status | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableEnumgenderFieldUpdateOperationsInput | $Enums.gender | null
-    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
-    birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    item_tran?: item_tranUncheckedUpdateManyWithoutUsersNestedInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
-    fines?: finesUncheckedUpdateManyWithoutUsersNestedInput
-    logs?: logsUncheckedUpdateManyWithoutUsersNestedInput
-    notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
-    user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
-  }
-
-  export type usersUpsertWithoutNotifications_notifications_to_user_idTousersInput = {
-    update: XOR<usersUpdateWithoutNotifications_notifications_to_user_idTousersInput, usersUncheckedUpdateWithoutNotifications_notifications_to_user_idTousersInput>
-    create: XOR<usersCreateWithoutNotifications_notifications_to_user_idTousersInput, usersUncheckedCreateWithoutNotifications_notifications_to_user_idTousersInput>
-    where?: usersWhereInput
-  }
-
-  export type usersUpdateToOneWithWhereWithoutNotifications_notifications_to_user_idTousersInput = {
-    where?: usersWhereInput
-    data: XOR<usersUpdateWithoutNotifications_notifications_to_user_idTousersInput, usersUncheckedUpdateWithoutNotifications_notifications_to_user_idTousersInput>
-  }
-
-  export type usersUpdateWithoutNotifications_notifications_to_user_idTousersInput = {
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    password_hash?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: NullableEnumusers_roleFieldUpdateOperationsInput | $Enums.users_role | null
-    status?: NullableEnumusers_statusFieldUpdateOperationsInput | $Enums.users_status | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableEnumgenderFieldUpdateOperationsInput | $Enums.gender | null
-    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
-    birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    item_tran?: item_tranUpdateManyWithoutUsersNestedInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
-    fines?: finesUpdateManyWithoutUsersNestedInput
-    logs?: logsUpdateManyWithoutUsersNestedInput
-    notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
-    user_wishlist?: user_wishlistUpdateManyWithoutUsersNestedInput
-  }
-
-  export type usersUncheckedUpdateWithoutNotifications_notifications_to_user_idTousersInput = {
-    user_id?: IntFieldUpdateOperationsInput | number
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    password_hash?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: NullableEnumusers_roleFieldUpdateOperationsInput | $Enums.users_role | null
-    status?: NullableEnumusers_statusFieldUpdateOperationsInput | $Enums.users_status | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableEnumgenderFieldUpdateOperationsInput | $Enums.gender | null
-    phone_number?: NullableStringFieldUpdateOperationsInput | string | null
-    birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    item_tran?: item_tranUncheckedUpdateManyWithoutUsersNestedInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
-    fines?: finesUncheckedUpdateManyWithoutUsersNestedInput
-    logs?: logsUncheckedUpdateManyWithoutUsersNestedInput
-    notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
-    user_wishlist?: user_wishlistUncheckedUpdateManyWithoutUsersNestedInput
-  }
-
   export type usersCreateWithoutUser_wishlistInput = {
     name?: string | null
     email?: string | null
@@ -18554,10 +18539,10 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    item_tran?: item_tranCreateNestedManyWithoutUsersInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
     fines?: finesCreateNestedManyWithoutUsersInput
+    item_tran?: item_tranCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
     logs?: logsCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
@@ -18577,10 +18562,10 @@ export namespace Prisma {
     birth_date?: Date | string | null
     address?: string | null
     profile_image_url?: string | null
-    item_tran?: item_tranUncheckedCreateNestedManyWithoutUsersInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
     fines?: finesUncheckedCreateNestedManyWithoutUsersInput
+    item_tran?: item_tranUncheckedCreateNestedManyWithoutUsersInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_approved_byTousersInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedCreateNestedManyWithoutUsers_item_tran_history_requested_byTousersInput
     logs?: logsUncheckedCreateNestedManyWithoutUsersInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_from_user_idTousersInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedCreateNestedManyWithoutUsers_notifications_to_user_idTousersInput
@@ -18673,10 +18658,10 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    item_tran?: item_tranUpdateManyWithoutUsersNestedInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
     fines?: finesUpdateManyWithoutUsersNestedInput
+    item_tran?: item_tranUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
     logs?: logsUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
@@ -18696,10 +18681,10 @@ export namespace Prisma {
     birth_date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     address?: NullableStringFieldUpdateOperationsInput | string | null
     profile_image_url?: NullableStringFieldUpdateOperationsInput | string | null
-    item_tran?: item_tranUncheckedUpdateManyWithoutUsersNestedInput
-    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
-    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
     fines?: finesUncheckedUpdateManyWithoutUsersNestedInput
+    item_tran?: item_tranUncheckedUpdateManyWithoutUsersNestedInput
+    item_tran_history_item_tran_history_approved_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersNestedInput
+    item_tran_history_item_tran_history_requested_byTousers?: item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersNestedInput
     logs?: logsUncheckedUpdateManyWithoutUsersNestedInput
     notifications_notifications_from_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_from_user_idTousersNestedInput
     notifications_notifications_to_user_idTousers?: notificationsUncheckedUpdateManyWithoutUsers_notifications_to_user_idTousersNestedInput
@@ -18769,6 +18754,35 @@ export namespace Prisma {
     notifications?: notificationsUncheckedUpdateManyWithoutLibrary_itemsNestedInput
   }
 
+  export type finesCreateWithoutUsersInput = {
+    amount?: Decimal | DecimalJsLike | number | string | null
+    reason?: string | null
+    status?: $Enums.fines_status | null
+    created_at?: Date | string | null
+    paid_at?: Date | string | null
+    item_tran_history?: item_tran_historyCreateNestedOneWithoutFinesInput
+  }
+
+  export type finesUncheckedCreateWithoutUsersInput = {
+    fine_id?: number
+    item_tran_history_id?: number | null
+    amount?: Decimal | DecimalJsLike | number | string | null
+    reason?: string | null
+    status?: $Enums.fines_status | null
+    created_at?: Date | string | null
+    paid_at?: Date | string | null
+  }
+
+  export type finesCreateOrConnectWithoutUsersInput = {
+    where: finesWhereUniqueInput
+    create: XOR<finesCreateWithoutUsersInput, finesUncheckedCreateWithoutUsersInput>
+  }
+
+  export type finesCreateManyUsersInputEnvelope = {
+    data: finesCreateManyUsersInput | finesCreateManyUsersInput[]
+    skipDuplicates?: boolean
+  }
+
   export type item_tranCreateWithoutUsersInput = {
     status?: $Enums.item_tran_status | null
     record_status?: $Enums.record_status | null
@@ -18794,45 +18808,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput = {
-    status?: $Enums.item_tran_history_status
-    requested_at?: Date | string | null
-    approved_at?: Date | string | null
-    date_issued?: Date | string | null
-    date_due?: Date | string | null
-    date_returned?: Date | string | null
-    remarks?: string | null
-    library_items?: library_itemsCreateNestedOneWithoutItem_tran_historyInput
-    item_tran?: item_tranCreateNestedOneWithoutItem_tran_historyInput
-    users_item_tran_history_approved_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_approved_byTousersInput
-    fines?: finesCreateNestedManyWithoutItem_tran_historyInput
-  }
-
-  export type item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput = {
-    id?: number
-    item_id?: number | null
-    tran_id?: number | null
-    status?: $Enums.item_tran_history_status
-    approved_by?: number | null
-    requested_at?: Date | string | null
-    approved_at?: Date | string | null
-    date_issued?: Date | string | null
-    date_due?: Date | string | null
-    date_returned?: Date | string | null
-    remarks?: string | null
-    fines?: finesUncheckedCreateNestedManyWithoutItem_tran_historyInput
-  }
-
-  export type item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput = {
-    where: item_tran_historyWhereUniqueInput
-    create: XOR<item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput, item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput>
-  }
-
-  export type item_tran_historyCreateManyUsers_item_tran_history_requested_byTousersInputEnvelope = {
-    data: item_tran_historyCreateManyUsers_item_tran_history_requested_byTousersInput | item_tran_historyCreateManyUsers_item_tran_history_requested_byTousersInput[]
-    skipDuplicates?: boolean
-  }
-
   export type item_tran_historyCreateWithoutUsers_item_tran_history_approved_byTousersInput = {
     status?: $Enums.item_tran_history_status
     requested_at?: Date | string | null
@@ -18841,10 +18816,10 @@ export namespace Prisma {
     date_due?: Date | string | null
     date_returned?: Date | string | null
     remarks?: string | null
-    library_items?: library_itemsCreateNestedOneWithoutItem_tran_historyInput
-    item_tran?: item_tranCreateNestedOneWithoutItem_tran_historyInput
-    users_item_tran_history_requested_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_requested_byTousersInput
     fines?: finesCreateNestedManyWithoutItem_tran_historyInput
+    library_items?: library_itemsCreateNestedOneWithoutItem_tran_historyInput
+    users_item_tran_history_requested_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_requested_byTousersInput
+    item_tran?: item_tranCreateNestedOneWithoutItem_tran_historyInput
   }
 
   export type item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_approved_byTousersInput = {
@@ -18872,32 +18847,42 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type finesCreateWithoutUsersInput = {
-    amount?: Decimal | DecimalJsLike | number | string | null
-    reason?: string | null
-    status?: $Enums.fines_status | null
-    created_at?: Date | string | null
-    paid_at?: Date | string | null
-    item_tran_history?: item_tran_historyCreateNestedOneWithoutFinesInput
+  export type item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput = {
+    status?: $Enums.item_tran_history_status
+    requested_at?: Date | string | null
+    approved_at?: Date | string | null
+    date_issued?: Date | string | null
+    date_due?: Date | string | null
+    date_returned?: Date | string | null
+    remarks?: string | null
+    fines?: finesCreateNestedManyWithoutItem_tran_historyInput
+    users_item_tran_history_approved_byTousers?: usersCreateNestedOneWithoutItem_tran_history_item_tran_history_approved_byTousersInput
+    library_items?: library_itemsCreateNestedOneWithoutItem_tran_historyInput
+    item_tran?: item_tranCreateNestedOneWithoutItem_tran_historyInput
   }
 
-  export type finesUncheckedCreateWithoutUsersInput = {
-    fine_id?: number
-    item_tran_history_id?: number | null
-    amount?: Decimal | DecimalJsLike | number | string | null
-    reason?: string | null
-    status?: $Enums.fines_status | null
-    created_at?: Date | string | null
-    paid_at?: Date | string | null
+  export type item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput = {
+    id?: number
+    item_id?: number | null
+    tran_id?: number | null
+    status?: $Enums.item_tran_history_status
+    approved_by?: number | null
+    requested_at?: Date | string | null
+    approved_at?: Date | string | null
+    date_issued?: Date | string | null
+    date_due?: Date | string | null
+    date_returned?: Date | string | null
+    remarks?: string | null
+    fines?: finesUncheckedCreateNestedManyWithoutItem_tran_historyInput
   }
 
-  export type finesCreateOrConnectWithoutUsersInput = {
-    where: finesWhereUniqueInput
-    create: XOR<finesCreateWithoutUsersInput, finesUncheckedCreateWithoutUsersInput>
+  export type item_tran_historyCreateOrConnectWithoutUsers_item_tran_history_requested_byTousersInput = {
+    where: item_tran_historyWhereUniqueInput
+    create: XOR<item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput, item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput>
   }
 
-  export type finesCreateManyUsersInputEnvelope = {
-    data: finesCreateManyUsersInput | finesCreateManyUsersInput[]
+  export type item_tran_historyCreateManyUsers_item_tran_history_requested_byTousersInputEnvelope = {
+    data: item_tran_historyCreateManyUsers_item_tran_history_requested_byTousersInput | item_tran_historyCreateManyUsers_item_tran_history_requested_byTousersInput[]
     skipDuplicates?: boolean
   }
 
@@ -18929,8 +18914,8 @@ export namespace Prisma {
     message?: string | null
     created_at?: Date | string | null
     resolved_at?: Date | string | null
-    library_items?: library_itemsCreateNestedOneWithoutNotificationsInput
     users_notifications_to_user_idTousers?: usersCreateNestedOneWithoutNotifications_notifications_to_user_idTousersInput
+    library_items?: library_itemsCreateNestedOneWithoutNotificationsInput
   }
 
   export type notificationsUncheckedCreateWithoutUsers_notifications_from_user_idTousersInput = {
@@ -18962,8 +18947,8 @@ export namespace Prisma {
     message?: string | null
     created_at?: Date | string | null
     resolved_at?: Date | string | null
-    library_items?: library_itemsCreateNestedOneWithoutNotificationsInput
     users_notifications_from_user_idTousers?: usersCreateNestedOneWithoutNotifications_notifications_from_user_idTousersInput
+    library_items?: library_itemsCreateNestedOneWithoutNotificationsInput
   }
 
   export type notificationsUncheckedCreateWithoutUsers_notifications_to_user_idTousersInput = {
@@ -19009,6 +18994,22 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type finesUpsertWithWhereUniqueWithoutUsersInput = {
+    where: finesWhereUniqueInput
+    update: XOR<finesUpdateWithoutUsersInput, finesUncheckedUpdateWithoutUsersInput>
+    create: XOR<finesCreateWithoutUsersInput, finesUncheckedCreateWithoutUsersInput>
+  }
+
+  export type finesUpdateWithWhereUniqueWithoutUsersInput = {
+    where: finesWhereUniqueInput
+    data: XOR<finesUpdateWithoutUsersInput, finesUncheckedUpdateWithoutUsersInput>
+  }
+
+  export type finesUpdateManyWithWhereWithoutUsersInput = {
+    where: finesScalarWhereInput
+    data: XOR<finesUpdateManyMutationInput, finesUncheckedUpdateManyWithoutUsersInput>
+  }
+
   export type item_tranUpsertWithWhereUniqueWithoutUsersInput = {
     where: item_tranWhereUniqueInput
     update: XOR<item_tranUpdateWithoutUsersInput, item_tranUncheckedUpdateWithoutUsersInput>
@@ -19023,22 +19024,6 @@ export namespace Prisma {
   export type item_tranUpdateManyWithWhereWithoutUsersInput = {
     where: item_tranScalarWhereInput
     data: XOR<item_tranUpdateManyMutationInput, item_tranUncheckedUpdateManyWithoutUsersInput>
-  }
-
-  export type item_tran_historyUpsertWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput = {
-    where: item_tran_historyWhereUniqueInput
-    update: XOR<item_tran_historyUpdateWithoutUsers_item_tran_history_requested_byTousersInput, item_tran_historyUncheckedUpdateWithoutUsers_item_tran_history_requested_byTousersInput>
-    create: XOR<item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput, item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput>
-  }
-
-  export type item_tran_historyUpdateWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput = {
-    where: item_tran_historyWhereUniqueInput
-    data: XOR<item_tran_historyUpdateWithoutUsers_item_tran_history_requested_byTousersInput, item_tran_historyUncheckedUpdateWithoutUsers_item_tran_history_requested_byTousersInput>
-  }
-
-  export type item_tran_historyUpdateManyWithWhereWithoutUsers_item_tran_history_requested_byTousersInput = {
-    where: item_tran_historyScalarWhereInput
-    data: XOR<item_tran_historyUpdateManyMutationInput, item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersInput>
   }
 
   export type item_tran_historyUpsertWithWhereUniqueWithoutUsers_item_tran_history_approved_byTousersInput = {
@@ -19057,20 +19042,20 @@ export namespace Prisma {
     data: XOR<item_tran_historyUpdateManyMutationInput, item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_approved_byTousersInput>
   }
 
-  export type finesUpsertWithWhereUniqueWithoutUsersInput = {
-    where: finesWhereUniqueInput
-    update: XOR<finesUpdateWithoutUsersInput, finesUncheckedUpdateWithoutUsersInput>
-    create: XOR<finesCreateWithoutUsersInput, finesUncheckedCreateWithoutUsersInput>
+  export type item_tran_historyUpsertWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput = {
+    where: item_tran_historyWhereUniqueInput
+    update: XOR<item_tran_historyUpdateWithoutUsers_item_tran_history_requested_byTousersInput, item_tran_historyUncheckedUpdateWithoutUsers_item_tran_history_requested_byTousersInput>
+    create: XOR<item_tran_historyCreateWithoutUsers_item_tran_history_requested_byTousersInput, item_tran_historyUncheckedCreateWithoutUsers_item_tran_history_requested_byTousersInput>
   }
 
-  export type finesUpdateWithWhereUniqueWithoutUsersInput = {
-    where: finesWhereUniqueInput
-    data: XOR<finesUpdateWithoutUsersInput, finesUncheckedUpdateWithoutUsersInput>
+  export type item_tran_historyUpdateWithWhereUniqueWithoutUsers_item_tran_history_requested_byTousersInput = {
+    where: item_tran_historyWhereUniqueInput
+    data: XOR<item_tran_historyUpdateWithoutUsers_item_tran_history_requested_byTousersInput, item_tran_historyUncheckedUpdateWithoutUsers_item_tran_history_requested_byTousersInput>
   }
 
-  export type finesUpdateManyWithWhereWithoutUsersInput = {
-    where: finesScalarWhereInput
-    data: XOR<finesUpdateManyMutationInput, finesUncheckedUpdateManyWithoutUsersInput>
+  export type item_tran_historyUpdateManyWithWhereWithoutUsers_item_tran_history_requested_byTousersInput = {
+    where: item_tran_historyScalarWhereInput
+    data: XOR<item_tran_historyUpdateManyMutationInput, item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersInput>
   }
 
   export type logsUpsertWithWhereUniqueWithoutUsersInput = {
@@ -19169,10 +19154,10 @@ export namespace Prisma {
     date_due?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_returned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    fines?: finesUpdateManyWithoutItem_tran_historyNestedInput
+    users_item_tran_history_approved_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_approved_byTousersNestedInput
     library_items?: library_itemsUpdateOneWithoutItem_tran_historyNestedInput
     users_item_tran_history_requested_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_requested_byTousersNestedInput
-    users_item_tran_history_approved_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_approved_byTousersNestedInput
-    fines?: finesUpdateManyWithoutItem_tran_historyNestedInput
   }
 
   export type item_tran_historyUncheckedUpdateWithoutItem_tranInput = {
@@ -19312,10 +19297,10 @@ export namespace Prisma {
     date_due?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_returned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    item_tran?: item_tranUpdateOneWithoutItem_tran_historyNestedInput
-    users_item_tran_history_requested_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_requested_byTousersNestedInput
-    users_item_tran_history_approved_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_approved_byTousersNestedInput
     fines?: finesUpdateManyWithoutItem_tran_historyNestedInput
+    users_item_tran_history_approved_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_approved_byTousersNestedInput
+    users_item_tran_history_requested_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_requested_byTousersNestedInput
+    item_tran?: item_tranUpdateOneWithoutItem_tran_historyNestedInput
   }
 
   export type item_tran_historyUncheckedUpdateWithoutLibrary_itemsInput = {
@@ -19399,25 +19384,21 @@ export namespace Prisma {
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type finesCreateManyUsersInput = {
+    fine_id?: number
+    item_tran_history_id?: number | null
+    amount?: Decimal | DecimalJsLike | number | string | null
+    reason?: string | null
+    status?: $Enums.fines_status | null
+    created_at?: Date | string | null
+    paid_at?: Date | string | null
+  }
+
   export type item_tranCreateManyUsersInput = {
     tran_id?: number
     item_id?: number | null
     status?: $Enums.item_tran_status | null
     record_status?: $Enums.record_status | null
-  }
-
-  export type item_tran_historyCreateManyUsers_item_tran_history_requested_byTousersInput = {
-    id?: number
-    item_id?: number | null
-    tran_id?: number | null
-    status?: $Enums.item_tran_history_status
-    approved_by?: number | null
-    requested_at?: Date | string | null
-    approved_at?: Date | string | null
-    date_issued?: Date | string | null
-    date_due?: Date | string | null
-    date_returned?: Date | string | null
-    remarks?: string | null
   }
 
   export type item_tran_historyCreateManyUsers_item_tran_history_approved_byTousersInput = {
@@ -19434,14 +19415,18 @@ export namespace Prisma {
     remarks?: string | null
   }
 
-  export type finesCreateManyUsersInput = {
-    fine_id?: number
-    item_tran_history_id?: number | null
-    amount?: Decimal | DecimalJsLike | number | string | null
-    reason?: string | null
-    status?: $Enums.fines_status | null
-    created_at?: Date | string | null
-    paid_at?: Date | string | null
+  export type item_tran_historyCreateManyUsers_item_tran_history_requested_byTousersInput = {
+    id?: number
+    item_id?: number | null
+    tran_id?: number | null
+    status?: $Enums.item_tran_history_status
+    approved_by?: number | null
+    requested_at?: Date | string | null
+    approved_at?: Date | string | null
+    date_issued?: Date | string | null
+    date_due?: Date | string | null
+    date_returned?: Date | string | null
+    remarks?: string | null
   }
 
   export type logsCreateManyUsersInput = {
@@ -19480,6 +19465,35 @@ export namespace Prisma {
     created_at?: Date | string | null
   }
 
+  export type finesUpdateWithoutUsersInput = {
+    amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableEnumfines_statusFieldUpdateOperationsInput | $Enums.fines_status | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paid_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    item_tran_history?: item_tran_historyUpdateOneWithoutFinesNestedInput
+  }
+
+  export type finesUncheckedUpdateWithoutUsersInput = {
+    fine_id?: IntFieldUpdateOperationsInput | number
+    item_tran_history_id?: NullableIntFieldUpdateOperationsInput | number | null
+    amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableEnumfines_statusFieldUpdateOperationsInput | $Enums.fines_status | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paid_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type finesUncheckedUpdateManyWithoutUsersInput = {
+    fine_id?: IntFieldUpdateOperationsInput | number
+    item_tran_history_id?: NullableIntFieldUpdateOperationsInput | number | null
+    amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: NullableEnumfines_statusFieldUpdateOperationsInput | $Enums.fines_status | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    paid_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type item_tranUpdateWithoutUsersInput = {
     status?: NullableEnumitem_tran_statusFieldUpdateOperationsInput | $Enums.item_tran_status | null
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
@@ -19502,49 +19516,6 @@ export namespace Prisma {
     record_status?: NullableEnumrecord_statusFieldUpdateOperationsInput | $Enums.record_status | null
   }
 
-  export type item_tran_historyUpdateWithoutUsers_item_tran_history_requested_byTousersInput = {
-    status?: Enumitem_tran_history_statusFieldUpdateOperationsInput | $Enums.item_tran_history_status
-    requested_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    date_issued?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    date_due?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    date_returned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    library_items?: library_itemsUpdateOneWithoutItem_tran_historyNestedInput
-    item_tran?: item_tranUpdateOneWithoutItem_tran_historyNestedInput
-    users_item_tran_history_approved_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_approved_byTousersNestedInput
-    fines?: finesUpdateManyWithoutItem_tran_historyNestedInput
-  }
-
-  export type item_tran_historyUncheckedUpdateWithoutUsers_item_tran_history_requested_byTousersInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    item_id?: NullableIntFieldUpdateOperationsInput | number | null
-    tran_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: Enumitem_tran_history_statusFieldUpdateOperationsInput | $Enums.item_tran_history_status
-    approved_by?: NullableIntFieldUpdateOperationsInput | number | null
-    requested_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    date_issued?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    date_due?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    date_returned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    fines?: finesUncheckedUpdateManyWithoutItem_tran_historyNestedInput
-  }
-
-  export type item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    item_id?: NullableIntFieldUpdateOperationsInput | number | null
-    tran_id?: NullableIntFieldUpdateOperationsInput | number | null
-    status?: Enumitem_tran_history_statusFieldUpdateOperationsInput | $Enums.item_tran_history_status
-    approved_by?: NullableIntFieldUpdateOperationsInput | number | null
-    requested_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    date_issued?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    date_due?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    date_returned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    remarks?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
   export type item_tran_historyUpdateWithoutUsers_item_tran_history_approved_byTousersInput = {
     status?: Enumitem_tran_history_statusFieldUpdateOperationsInput | $Enums.item_tran_history_status
     requested_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -19553,10 +19524,10 @@ export namespace Prisma {
     date_due?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     date_returned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
-    library_items?: library_itemsUpdateOneWithoutItem_tran_historyNestedInput
-    item_tran?: item_tranUpdateOneWithoutItem_tran_historyNestedInput
-    users_item_tran_history_requested_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_requested_byTousersNestedInput
     fines?: finesUpdateManyWithoutItem_tran_historyNestedInput
+    library_items?: library_itemsUpdateOneWithoutItem_tran_historyNestedInput
+    users_item_tran_history_requested_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_requested_byTousersNestedInput
+    item_tran?: item_tranUpdateOneWithoutItem_tran_historyNestedInput
   }
 
   export type item_tran_historyUncheckedUpdateWithoutUsers_item_tran_history_approved_byTousersInput = {
@@ -19588,33 +19559,47 @@ export namespace Prisma {
     remarks?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type finesUpdateWithoutUsersInput = {
-    amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: NullableEnumfines_statusFieldUpdateOperationsInput | $Enums.fines_status | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    paid_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    item_tran_history?: item_tran_historyUpdateOneWithoutFinesNestedInput
+  export type item_tran_historyUpdateWithoutUsers_item_tran_history_requested_byTousersInput = {
+    status?: Enumitem_tran_history_statusFieldUpdateOperationsInput | $Enums.item_tran_history_status
+    requested_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    date_issued?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    date_due?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    date_returned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    fines?: finesUpdateManyWithoutItem_tran_historyNestedInput
+    users_item_tran_history_approved_byTousers?: usersUpdateOneWithoutItem_tran_history_item_tran_history_approved_byTousersNestedInput
+    library_items?: library_itemsUpdateOneWithoutItem_tran_historyNestedInput
+    item_tran?: item_tranUpdateOneWithoutItem_tran_historyNestedInput
   }
 
-  export type finesUncheckedUpdateWithoutUsersInput = {
-    fine_id?: IntFieldUpdateOperationsInput | number
-    item_tran_history_id?: NullableIntFieldUpdateOperationsInput | number | null
-    amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: NullableEnumfines_statusFieldUpdateOperationsInput | $Enums.fines_status | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    paid_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  export type item_tran_historyUncheckedUpdateWithoutUsers_item_tran_history_requested_byTousersInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
+    tran_id?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: Enumitem_tran_history_statusFieldUpdateOperationsInput | $Enums.item_tran_history_status
+    approved_by?: NullableIntFieldUpdateOperationsInput | number | null
+    requested_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    date_issued?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    date_due?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    date_returned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    fines?: finesUncheckedUpdateManyWithoutItem_tran_historyNestedInput
   }
 
-  export type finesUncheckedUpdateManyWithoutUsersInput = {
-    fine_id?: IntFieldUpdateOperationsInput | number
-    item_tran_history_id?: NullableIntFieldUpdateOperationsInput | number | null
-    amount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    reason?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: NullableEnumfines_statusFieldUpdateOperationsInput | $Enums.fines_status | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    paid_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  export type item_tran_historyUncheckedUpdateManyWithoutUsers_item_tran_history_requested_byTousersInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    item_id?: NullableIntFieldUpdateOperationsInput | number | null
+    tran_id?: NullableIntFieldUpdateOperationsInput | number | null
+    status?: Enumitem_tran_history_statusFieldUpdateOperationsInput | $Enums.item_tran_history_status
+    approved_by?: NullableIntFieldUpdateOperationsInput | number | null
+    requested_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    approved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    date_issued?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    date_due?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    date_returned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type logsUpdateWithoutUsersInput = {
@@ -19641,8 +19626,8 @@ export namespace Prisma {
     message?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     resolved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    library_items?: library_itemsUpdateOneWithoutNotificationsNestedInput
     users_notifications_to_user_idTousers?: usersUpdateOneWithoutNotifications_notifications_to_user_idTousersNestedInput
+    library_items?: library_itemsUpdateOneWithoutNotificationsNestedInput
   }
 
   export type notificationsUncheckedUpdateWithoutUsers_notifications_from_user_idTousersInput = {
@@ -19676,8 +19661,8 @@ export namespace Prisma {
     message?: NullableStringFieldUpdateOperationsInput | string | null
     created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     resolved_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    library_items?: library_itemsUpdateOneWithoutNotificationsNestedInput
     users_notifications_from_user_idTousers?: usersUpdateOneWithoutNotifications_notifications_from_user_idTousersNestedInput
+    library_items?: library_itemsUpdateOneWithoutNotificationsNestedInput
   }
 
   export type notificationsUncheckedUpdateWithoutUsers_notifications_to_user_idTousersInput = {

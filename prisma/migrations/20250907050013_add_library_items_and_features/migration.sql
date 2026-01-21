@@ -156,6 +156,3 @@ ALTER TABLE `reservations` ADD CONSTRAINT `reservations_item_id_fkey` FOREIGN KE
 
 -- AddForeignKey
 ALTER TABLE `reservations` ADD CONSTRAINT `reservations_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
--- AddForeignKey
-ALTER TABLE `library_cards` ADD CONSTRAINT `library_cards_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;

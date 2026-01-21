@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@/generated/prisma';
-import { withRoleAuth, AuthenticatedRequest } from '@/app/utils/authMiddleware';
+import { withRoleAuth } from '@/app/utils/authMiddleware';
 
 const prisma = new PrismaClient();
 
-export const POST = withRoleAuth(['patron'])(async (req: AuthenticatedRequest) => {
+export const POST = withRoleAuth(['patron'])(async (req) => {
     try {
         if (!req.user) {
             return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
